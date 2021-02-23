@@ -1,6 +1,6 @@
 package com.screenname.controller;
 
-import com.common.dto.Account;
+import com.screenname.dto.Account;
 import com.screenname.form.AccountForm;
 import com.screenname.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.common.dto;
+package com.screenname.dto;
 
 public class Account {
     private String email;

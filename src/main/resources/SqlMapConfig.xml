@@ -3,7 +3,7 @@
 
 <configuration>
     <typeAliases>
-        <typeAlias alias="Account" type="com.common.dto.Account"/>
+        <typeAlias alias="Account" type="com.screenname.dto.Account"/>
     </typeAliases>
 
     <environments default="development">
@@ -11,13 +11,13 @@
             <transactionManager type="JDBC" />
             <dataSource type="POOLED">
                 <property name="driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-                <property name="url" value="jdbc:sqlserver://localhost:1433;database=Social_Network_DB" />
+                <property name="url" value="jdbc:sqlserver://localhost:1433;database=Temp_Capstone_DB" />
                 <property name="username" value="sa" />
                 <property name="password" value="Dockersql123" />
             </dataSource>
         </environment>
     </environments>
     <mappers>
-        <mapper resource="com/common/dao/sql/AccountDAO.xml" />
+        <mapper resource="com/screenname/dao/sql/AccountDAO.xml" />
     </mappers>
 </configuration>

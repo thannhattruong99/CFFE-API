@@ -11,11 +11,11 @@ import java.io.IOException;
 @Configuration
 @SpringBootApplication
 @RestController
-@ComponentScan(basePackages = {"com.util", "com.screenname", "com.common.dao"})
-public class DemoApplication {
+@ComponentScan(basePackages = {"com.util", "com.screenname", "com.screenname.dao"})
+public class CasptoneAPIApplication {
 
     public static void main(String[] args) throws IOException {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(CasptoneAPIApplication.class, args);
     }
 
 }

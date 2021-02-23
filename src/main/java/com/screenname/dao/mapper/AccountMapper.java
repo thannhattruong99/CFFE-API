@@ -1,7 +1,7 @@
-package com.common.dao.mapper;
+package com.screenname.dao.mapper;
 
-import com.common.dao.BaseDAO;
-import com.common.dto.Account;
+import com.common.config.BaseDAO;
+import com.screenname.dto.Account;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ public class AccountMapper extends BaseDAO {
     }
 
     public List<Account> getAll(){
-        List<Account> listAccounts = sqlSession.selectList("com.common.dao.sql.AccountDAO.selectAll");
+        List<Account> listAccounts = sqlSession.selectList("com.screenname.dao.sql.AccountDAO.selectAll");
         return listAccounts;
     }
 }

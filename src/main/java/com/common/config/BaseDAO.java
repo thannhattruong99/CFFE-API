@@ -1,4 +1,4 @@
-package com.common.dao;
+package com.common.config;
 
 import com.util.IDBHelper;
 import org.apache.ibatis.session.SqlSession;
