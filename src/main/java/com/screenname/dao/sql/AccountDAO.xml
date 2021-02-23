@@ -3,7 +3,7 @@
 
 <mapper namespace="com.screenname.dao.sql.AccountDAO">
     <insert id="insert" parameterType="Account" >
-        INSERT INTO ACCOUNT (email, password, fullname, role, status) VALUES (#{email}, #{password}, #{fullname}, #{role}, #{status});
+        INSERT INTO Account (email, password, fullname, role, status) VALUES (#{email}, #{password}, #{fullname}, #{role}, #{status});
     </insert>
 
 <!--    <update id="update" parameterType="Student">-->
@@ -15,7 +15,7 @@
 <!--    </delete>-->
 
     <select id="selectAll" resultMap="result">
-        SELECT * FROM ACCOUNT;
+        SELECT * FROM Account;
     </select>
 
 <!--    <select id="selectByEmail" parameterType="String" resultType="Account">-->
