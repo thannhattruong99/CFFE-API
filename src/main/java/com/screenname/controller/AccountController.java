@@ -35,27 +35,32 @@ public class AccountController {
     }
 
     //    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
-    @RequestMapping(value = "/createAnAccount", method = RequestMethod.POST)
+    @RequestMapping(value = "/createAnAccount_loctp", method = RequestMethod.POST)
     public String createAnAccount(Model model, //
                                   @ModelAttribute("account") @Valid AccountForm account, //
                                   BindingResult result) {
+        String response = "Hay qua loc oi";
         if (result.hasErrors()) {
+            String errorCode = "";
+            String errorMsg = "";
             for (Object object : result.getAllErrors()) {
                 if (object instanceof FieldError) {
                     FieldError fieldError = (FieldError) object;
 
                     System.out.println(fieldError.getCode());
+                    errorCode += " " + fieldError.getCode();
                 }
 
                 if (object instanceof ObjectError) {
                     ObjectError objectError = (ObjectError) object;
 
                     System.out.println(objectError.getCode());
+                    errorMsg += " " + objectError.getCode();
                 }
             }
-            return "error";
+                return "Loi ne may =>> " + errorCode + " : " + errorMsg;
         }
 
-        return "Ngon";
+        return "Duoc day";
     }
 }
