@@ -11,9 +11,9 @@
             <transactionManager type="JDBC" />
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://3.141.164.216:3306/Temp_Capstone_DB" />
-                <property name="username" value="root" />
-                <property name="password" value="Admin@123" />
+                <property name="url" value="jdbc:mysql://capstone.crvfeuuvq4si.us-east-2.rds.amazonaws.com:3306/Temp_Capstone" />
+                <property name="username" value="admin" />
+                <property name="password" value="Admin123" />
             </dataSource>
         </environment>
     </environments>
