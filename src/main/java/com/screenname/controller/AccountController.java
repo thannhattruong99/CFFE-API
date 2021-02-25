@@ -19,7 +19,7 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    @GetMapping("/getAllAccount")
+    @GetMapping("/getAllAccount1111111111")
     public List<Account> sayHello() {
         return accountService.getStudentAll();
     }
