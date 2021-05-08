@@ -19,10 +19,10 @@ public class AccountMapper extends BaseDAO {
     }
 
     public boolean createAccounts(List<Account> accounts){
-        sqlSession.commit(false);
+//        sqlSession.commit(false);
         int result = sqlSession.insert("com.screenname.dao.sql.AccountDAO.xxx", accounts);
         if(result == 2){
-            sqlSession.commit();
+//            sqlSession.commit();
             return true;
         }
         return false;

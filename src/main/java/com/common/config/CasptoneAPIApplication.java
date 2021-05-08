@@ -11,7 +11,7 @@ import java.io.IOException;
 @Configuration
 @SpringBootApplication
 @RestController
-@ComponentScan(basePackages = {"com.util", "com.screenname", "com.screenname.dao"})
+@ComponentScan(basePackages = {"com"})
 public class CasptoneAPIApplication {
 
     public static void main(String[] args) throws IOException {
