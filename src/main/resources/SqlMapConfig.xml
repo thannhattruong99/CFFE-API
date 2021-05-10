@@ -12,9 +12,9 @@
             <transactionManager type="JDBC" />
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://capstone.crvfeuuvq4si.us-east-2.rds.amazonaws.com:3306/Temp_Capstone" />
-                <property name="username" value="admin" />
-                <property name="password" value="Admin123" />
+                <property name="url" value="jdbc:mysql://35.240.220.93:3306/CFFA_DB" />
+                <property name="username" value="cffa-dbserver" />
+                <property name="password" value="sqlserver" />
             </dataSource>
         </environment>
     </environments>

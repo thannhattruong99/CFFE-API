@@ -13,7 +13,8 @@ public class SensorController {
     @RequestMapping(value = "/createSensorReport", method = RequestMethod.POST)
     @ResponseBody
     public String createSensorReport(@RequestBody SensorReportDTO sensorReportDTO){
-        System.out.println("Contain: " + sensorReportDTO.getContain());
+
+        System.out.println(5/0);
         if(sensorService.createReport(sensorReportDTO)){
             return "Insert dc roi";
         }

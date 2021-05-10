@@ -15,7 +15,6 @@ public class SensorReportMapper extends BaseDAO {
     }
 
     public boolean createSensorReport(SensorReportDTO sensorReportDTO){
-        System.out.println("Contain: " + sensorReportDTO.getContain());
         int result = sqlSession.insert("com.sensor.dao.sql.SensorReportDAO.insert", sensorReportDTO);
         sqlSession.commit();
         if(result >= 1){
