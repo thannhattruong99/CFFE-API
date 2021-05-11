@@ -1,9 +1,10 @@
 package com.screenname.dao.mapper;
 
 import com.common.config.BaseDAO;
-import com.screenname.dto.Account;
+import com.screenname.dto.AccountDTO;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
 
@@ -13,18 +14,21 @@ public class AccountMapper extends BaseDAO {
         super(idbHelper);
     }
 
-    public List<Account> getAll(){
-        List<Account> listAccounts = sqlSession.selectList("com.screenname.dao.sql.AccountDAO.selectAll");
-        return listAccounts;
+    public List<AccountDTO> getAll(){
+        List<AccountDTO> listAccountDTOS = sqlSession.selectList("com.screenname.dao.sql.AccountDAO.selectAll");
+        return listAccountDTOS;
     }
 
-    public boolean createAccounts(List<Account> accounts){
-//        sqlSession.commit(false);
-        int result = sqlSession.insert("com.screenname.dao.sql.AccountDAO.xxx", accounts);
-        if(result == 2){
-//            sqlSession.commit();
-            return true;
+    public boolean createAnAccount(AccountDTO accountDTO){
+        try{
+            if(sqlSession.insert("com.screenname.dao.sql.AccountDAO.insert", accountDTO) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+        } finally {
+
         }
-        return false;
+
+        return true;
     }
 }
