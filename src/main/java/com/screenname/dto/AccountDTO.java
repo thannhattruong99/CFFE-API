@@ -1,6 +1,6 @@
 package com.screenname.dto;
 
-public class Account {
+public class AccountDTO {
     private String email;
 
     private String password;
@@ -13,7 +13,7 @@ public class Account {
 
     private String createdDate;
 
-    public Account() {
+    public AccountDTO() {
         super();
     }
 

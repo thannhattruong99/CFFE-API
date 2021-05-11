@@ -1,12 +1,9 @@
 package com.sensor.dao.mapper;
 
 import com.common.config.BaseDAO;
-import com.screenname.dto.Account;
 import com.sensor.dto.SensorReportDTO;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class SensorReportMapper extends BaseDAO {

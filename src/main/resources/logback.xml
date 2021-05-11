@@ -5,16 +5,41 @@
             <pattern>[%d{yyyy-MM-dd'T'HH:mm:ss.sss'Z'}] [%C] [%t] [%L] [%-5p] %m%n</pattern>
         </encoder>
     </appender>
-
-    <appender name = "FILE" class = "ch.qos.logback.core.FileAppender">
-        <File>./log/Log.log</File>
+    <appender name = "INFO_FILE" class = "ch.qos.logback.core.FileAppender">
+        <File>./log/InfoLog.log</File>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd'T'HH:mm:ss.sss'Z'}] [%C] [%t] [%L] [%-5p] %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name = "ERROR_FILE" class = "ch.qos.logback.core.FileAppender">
+        <File>./log/ErrorLog.log</File>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd'T'HH:mm:ss.sss'Z'}] [%C] [%t] [%L] [%-5p] %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name = "WARN_FILE" class = "ch.qos.logback.core.FileAppender">
+        <File>./log/Warn_Log.log</File>
         <encoder>
             <pattern>[%d{yyyy-MM-dd'T'HH:mm:ss.sss'Z'}] [%C] [%t] [%L] [%-5p] %m%n</pattern>
         </encoder>
     </appender>
 
     <root level = "INFO">
-        <appender-ref ref = "FILE"/>
+        <appender-ref ref = "INFO_FILE"/>
+        <appender-ref ref = "STDOUT"/>
+    </root>
+    <root level = "ERROR">
+        <appender-ref ref = "ERROR_FILE"/>
+        <appender-ref ref = "STDOUT"/>
+    </root>
+    <root level = "WARN">
+        <appender-ref ref = "WARN_FILE"/>
+        <appender-ref ref = "STDOUT"/>
+    </root>
+<!--    <root level = "TRACE">-->
+<!--        <appender-ref ref = "STDOUT"/>-->
+<!--    </root>-->
+    <root level = "DEBUG">
         <appender-ref ref = "STDOUT"/>
     </root>
 </configuration>

@@ -1,17 +1,18 @@
 package com.screenname.controller;
 
-import com.screenname.dto.Account;
-import com.screenname.form.AccountForm;
+import com.screenname.dto.AccountDTO;
+import com.screenname.form.AccountFormValidator;
 import com.screenname.service.AccountService;
+import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,12 +21,12 @@ public class AccountController {
     AccountService accountService;
 
     @GetMapping("/getAllAccount")
-    public List<Account> sayHello() {
+    public List<AccountDTO> sayHello() {
         return accountService.getStudentAll();
     }
 
     @GetMapping("/getAllAccountDemo")
-    public List<Account> sayHelloDemo() {
+    public List<AccountDTO> sayHelloDemo() {
         return accountService.getStudentAll();
     }
 
@@ -35,32 +36,26 @@ public class AccountController {
     }
 
     //    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
-    @RequestMapping(value = "/createAnAccount_loctp", method = RequestMethod.POST)
-    public String createAnAccount(Model model, //
-                                  @ModelAttribute("account") @Valid AccountForm account, //
+    @RequestMapping(value = "/createAnAccount", method = RequestMethod.POST)
+    public String createAnAccount(Model model,//
+                                  @Validated @RequestBody  AccountFormValidator account, //
                                   BindingResult result) {
-        String response = "Hay qua loc oi";
         if (result.hasErrors()) {
-            String errorCode = "";
-            String errorMsg = "";
-            for (Object object : result.getAllErrors()) {
-                if (object instanceof FieldError) {
-                    FieldError fieldError = (FieldError) object;
+            return ResponseSupporter.responseResult(ResponseSupporter.mappingErrorCodeAndMsg(result));
+        }
+        List<String> errorCodes;
 
-                    System.out.println(fieldError.getCode());
-                    errorCode += " " + fieldError.getCode();
-                }
-
-                if (object instanceof ObjectError) {
-                    ObjectError objectError = (ObjectError) object;
-
-                    System.out.println(objectError.getCode());
-                    errorMsg += " " + objectError.getCode();
-                }
-            }
-                return "Loi ne may =>> " + errorCode + " : " + errorMsg;
+        errorCodes = accountService.checkAccountBussiness(account);
+        if(errorCodes.size() > 0){
+            return ResponseSupporter.responseResult(ResponseSupporter.mappingErrorCodeAndMsg(errorCodes));
         }
 
-        return "Duoc day";
+        AccountDTO accountDTO = accountService.createAnAccount(account);
+
+        if(accountDTO == null){
+            errorCodes.add("E001");
+            return ResponseSupporter.responseResult(ResponseSupporter.mappingErrorCodeAndMsg(errorCodes));
+        }
+        return ResponseSupporter.responseResult(accountDTO);
     }
 }

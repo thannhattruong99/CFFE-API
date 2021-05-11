@@ -8,30 +8,26 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class AccountForm {
-    @NotEmpty @Email
+public class AccountFormValidator {
+//    @Email
+    @NotEmpty
     private String email;
 
+    @NotNull @Size(min=5, max=10, message = "E002")
     private String password;
 
-    @Size(min=2, max=30)
+//    @NotNull @Min(value = 5, message = "E003") @Max(value = 10, message = "E003")
+    private String confirmPassword;
+
+    @Size(min=2, max=30, message = "E004")
     private String fullname;
 
-    @NotNull @Min(1) @Max(3)
+    @NotNull @Min(value = 1, message = "E005") @Max(value = 3, message = "E005")
     private Integer role;
 
-    @NotNull @Min(1) @Max(3)
     private Integer status;
 
-    public AccountForm(String email, String password, String fullname, Integer role, Integer status) {
-        this.email = email;
-        this.password = password;
-        this.fullname = fullname;
-        this.role = role;
-        this.status = status;
-    }
-
-    public AccountForm() {
+    public AccountFormValidator() {
         super();
     }
 
@@ -73,5 +69,13 @@ public class AccountForm {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }
