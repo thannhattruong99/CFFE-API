@@ -11,13 +11,7 @@ public class Account {
 
     private Integer status;
 
-    public Account(String email, String password, String fullname, Integer role, Integer status) {
-        this.email = email;
-        this.password = password;
-        this.fullname = fullname;
-        this.role = role;
-        this.status = status;
-    }
+    private String createdDate;
 
     public Account() {
         super();
@@ -61,5 +55,13 @@ public class Account {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 }
