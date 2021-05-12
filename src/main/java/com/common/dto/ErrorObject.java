@@ -2,34 +2,22 @@ package com.common.dto;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ErrorObject {
-    private String code;
-    private String message;
+    private Map<String, String> errorCodeAndMsg;
 
     public ErrorObject() {
+        errorCodeAndMsg = new HashMap<>();
     }
 
-    public ErrorObject(String code, String message) {
-        this.code = code;
-        this.message = message;
+    public Map<String, String> getErrorCodeAndMsg() {
+        return errorCodeAndMsg;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public void setErrorCodeAndMsg(Map<String, String> errorCodeAndMsg) {
+        this.errorCodeAndMsg = errorCodeAndMsg;
     }
 }

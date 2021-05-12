@@ -1,6 +1,6 @@
 package com.sensor.dao.mapper;
 
-import com.common.config.BaseDAO;
+import com.common.dao.BaseDAO;
 import com.sensor.dto.SensorReportDTO;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;

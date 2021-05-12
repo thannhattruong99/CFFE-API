@@ -1,12 +1,11 @@
 package com.screenname.dao.mapper;
 
-import com.common.config.BaseDAO;
-import com.screenname.dto.AccountDTO;
+import com.common.dao.BaseDAO;
+import com.screenname.dto.CreateAccountDTO;
+import com.screenname.dto.GetAccountDTO;
+import com.screenname.form.ResponseGetAccountForm;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.util.List;
 
 @Repository
 public class AccountMapper extends BaseDAO {
@@ -14,21 +13,16 @@ public class AccountMapper extends BaseDAO {
         super(idbHelper);
     }
 
-    public List<AccountDTO> getAll(){
-        List<AccountDTO> listAccountDTOS = sqlSession.selectList("com.screenname.dao.sql.AccountDAO.selectAll");
-        return listAccountDTOS;
+    public ResponseGetAccountForm getAccount(GetAccountDTO accountDTO){
+        ResponseGetAccountForm accountForm = sqlSession.selectOne("com.screenname.dao.sql.AccountDAO.getAccount", accountDTO);
+        return accountForm;
     }
 
-    public boolean createAnAccount(AccountDTO accountDTO){
-        try{
-            if(sqlSession.insert("com.screenname.dao.sql.AccountDAO.insert", accountDTO) > 0){
-                this.sqlSession.commit();
-                return true;
-            }
-        } finally {
-
+    public boolean createAnAccount(CreateAccountDTO createAccountDTO){
+        if(sqlSession.insert("com.screenname.dao.sql.AccountDAO.insert", createAccountDTO) > 0){
+            this.sqlSession.commit();
+            return true;
         }
-
-        return true;
+        return false;
     }
 }
