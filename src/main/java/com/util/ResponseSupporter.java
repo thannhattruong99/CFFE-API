@@ -13,18 +13,12 @@ import java.util.*;
 
 
 public class ResponseSupporter {
-    private static final String errorMsgPath = "";
-    private static Map<String, String> errorMsg;
 
     public static AnnotationConfigApplicationContext context =
             new AnnotationConfigApplicationContext(CasptoneAPIApplication.Config.class);
 
-    public ResponseSupporter(Map<String, String> errorMsg) {
-        ResponseSupporter.errorMsg = errorMsg;
-    }
 
-
-    public static String responseResult(Object object){
+    private static String convertObjectToJSon(Object object){
         try {
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             return ow.writeValueAsString(object);
@@ -34,35 +28,40 @@ public class ResponseSupporter {
         }
     }
 
-    public static List<ErrorObject> mappingErrorCodeAndMsg(List<String> errorCodes){
-        List<ErrorObject> errorObjectList = null;
-        if(errorCodes != null && errorCodes.size() > 0){
-            errorObjectList = new ArrayList<>();
-            for (String err: errorCodes) {
-//                errorCodeMappingMsg.put(err, context.getMessage(err, null, Locale.getDefault()));
-                errorObjectList.add(new ErrorObject(err, context.getMessage(err, null, Locale.getDefault())));
-            }
-
-        }
-        return errorObjectList;
+    public static String resonpseResult(Object object){
+        return convertObjectToJSon(object);
     }
 
-    public static List<ErrorObject> mappingErrorCodeAndMsg(BindingResult result){
-        List<ErrorObject> errorObjectList = null;
+    public static String responseErrorResult(List<String> errorCodes){
+        ErrorObject errorObject = null;
+        if(errorCodes != null && errorCodes.size() > 0){
+            Map<String, String> errorCodeAndMsg = new HashMap<>();
+            errorObject = new ErrorObject();
+            for (String err: errorCodes) {
+                errorCodeAndMsg.put(err, context.getMessage(err, null, Locale.getDefault()));
+            }
+            errorObject.setErrorCodeAndMsg(errorCodeAndMsg);
+        }
+        return convertObjectToJSon(errorObject);
+    }
+
+    public static String responseErrorResult(BindingResult result){
+        ErrorObject errorObject = null;
         if(result.hasErrors()){
 
-            errorObjectList = new ArrayList<>();
+            Map<String, String> errorCodeAndMsg = new HashMap<>();
+            errorObject = new ErrorObject();
 
             for (Object object : result.getAllErrors()) {
                 if (object instanceof FieldError) {
                     FieldError fieldError = (FieldError) object;
-                    errorObjectList.add(new ErrorObject(fieldError.getDefaultMessage(),
-                            context.getMessage(fieldError.getDefaultMessage(), null, Locale.getDefault())));
+                    errorCodeAndMsg.put(fieldError.getDefaultMessage(),
+                            context.getMessage(fieldError.getDefaultMessage(), null, Locale.getDefault()));
                 }
             }
-
+            errorObject.setErrorCodeAndMsg(errorCodeAndMsg);
         }
-        return errorObjectList;
+        return convertObjectToJSon(errorObject);
     }
 
     private static String parseObjectToJson(Object object){

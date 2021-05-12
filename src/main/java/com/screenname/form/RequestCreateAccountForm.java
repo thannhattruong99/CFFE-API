@@ -1,19 +1,35 @@
-package com.screenname.dto;
+package com.screenname.form;
 
-public class AccountDTO {
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import java.io.Serializable;
+
+public class RequestCreateAccountForm implements Serializable {
+//    @Email
+    @NotEmpty
     private String email;
 
+    @NotNull(message = "E009") @Size(min=5, max=10, message = "E002")
     private String password;
 
+    @NotNull @Size(min=5, max=10, message = "E002")
+    private String confirmPassword;
+
+    @Size(min=2, max=30, message = "E004")
     private String fullname;
 
+    @NotNull(message = "E009") @Min(value = 1, message = "E005") @Max(value = 3, message = "E005")
     private Integer role;
 
     private Integer status;
 
-    private String createdDate;
-
-    public AccountDTO() {
+    public RequestCreateAccountForm() {
         super();
     }
 
@@ -57,11 +73,11 @@ public class AccountDTO {
         this.status = status;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }
