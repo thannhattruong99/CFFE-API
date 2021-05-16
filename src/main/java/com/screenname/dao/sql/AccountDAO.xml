@@ -26,7 +26,7 @@
             <where>
                 <choose>
                     <when test="searchField == 'fullname'">
-                        fullname like '%' + #{searchValue} +'%'
+                        fullname like '%' #{searchValue} '%'
                     </when>
                     <when test="searchField == 'email'">
                         email like '%' #{searchValue} '%'
@@ -81,7 +81,7 @@
     </resultMap>
     <resultMap id="getAccount" type="ResponseGetAccountForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
-        <collection property="accountLst" ofType="CreateAccountDTO">
+        <collection property="accountLst" ofType="AccountDTO">
             <id property="email" column="email"/>
             <result property="fullname" column="fullname"/>
             <result property="role" column="role"/>
