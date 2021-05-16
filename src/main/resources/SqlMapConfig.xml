@@ -5,6 +5,7 @@
     <typeAliases>
         <typeAlias alias="CreateAccountDTO" type="com.screenname.dto.CreateAccountDTO"/>
         <typeAlias alias="GetAccountDTO" type="com.screenname.dto.GetAccountDTO"/>
+        <typeAlias alias="AccountDTO" type="com.screenname.dto.AccountDTO"/>
         <typeAlias alias="SensorReportDTO" type="com.sensor.dto.SensorReportDTO"/>
         <typeAlias alias="ResponseGetAccountForm" type="com.screenname.form.ResponseGetAccountForm"/>
     </typeAliases>
