@@ -1,10 +1,10 @@
-package com.screenname.controller;
+package com.screenname_example.controller;
 
-import com.screenname.form.RequestCreateAccountForm;
-import com.screenname.form.RequestGetAccountForm;
-import com.screenname.form.ResponseCreateAccountForm;
-import com.screenname.form.ResponseGetAccountForm;
-import com.screenname.service.AccountService;
+import com.screenname_example.form.RequestCreateAccountForm;
+import com.screenname_example.form.RequestGetAccountForm;
+import com.screenname_example.form.ResponseCreateAccountForm;
+import com.screenname_example.form.ResponseGetAccountForm;
+import com.screenname_example.service.AccountService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;

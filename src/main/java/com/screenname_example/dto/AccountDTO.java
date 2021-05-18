@@ -1,8 +1,6 @@
-package com.screenname.form;
+package com.screenname_example.dto;
 
-import java.io.Serializable;
-
-public class ResponseCreateAccountForm implements Serializable {
+public class AccountDTO {
     private String email;
 
     private String fullname;
@@ -11,7 +9,9 @@ public class ResponseCreateAccountForm implements Serializable {
 
     private Integer status;
 
-    public ResponseCreateAccountForm() {
+    private String createdDate;
+
+    public AccountDTO() {
     }
 
     public String getEmail() {
@@ -44,5 +44,13 @@ public class ResponseCreateAccountForm implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 }

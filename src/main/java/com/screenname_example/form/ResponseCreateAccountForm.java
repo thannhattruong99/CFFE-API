@@ -1,11 +1,9 @@
-package com.screenname.dto;
+package com.screenname_example.form;
 
-import com.common.dto.BaseDTO;
+import java.io.Serializable;
 
-public class GetAccountDTO extends BaseDTO {
+public class ResponseCreateAccountForm implements Serializable {
     private String email;
-
-    private String password;
 
     private String fullname;
 
@@ -13,9 +11,7 @@ public class GetAccountDTO extends BaseDTO {
 
     private Integer status;
 
-    private String createdDate;
-
-    public GetAccountDTO() {
+    public ResponseCreateAccountForm() {
     }
 
     public String getEmail() {
@@ -24,14 +20,6 @@ public class GetAccountDTO extends BaseDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFullname() {
@@ -56,13 +44,5 @@ public class GetAccountDTO extends BaseDTO {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
     }
 }

@@ -1,4 +1,4 @@
-package com.screenname.form;
+package com.screenname_example.form;
 
 import com.common.form.RequestGetBaseForm;
 
