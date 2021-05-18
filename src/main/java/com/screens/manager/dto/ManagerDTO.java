@@ -2,22 +2,12 @@ package com.screens.manager.dto;
 
 import com.common.dto.BaseDTO;
 
-import java.sql.Date;
-
 public class ManagerDTO extends BaseDTO {
-    private String employeeCode;
     private String managerName;
+    private String username;
     private String status;
 
     public ManagerDTO() {
-    }
-
-    public String getEmployeeCode() {
-        return employeeCode;
-    }
-
-    public void setEmployeeCode(String employeeCode) {
-        this.employeeCode = employeeCode;
     }
 
     public String getManagerName() {
@@ -26,6 +16,14 @@ public class ManagerDTO extends BaseDTO {
 
     public void setManagerName(String managerName) {
         this.managerName = managerName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getStatus() {

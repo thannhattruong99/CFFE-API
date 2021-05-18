@@ -4,8 +4,8 @@ public class ManagerResponseSupporter {
     private String employeeCode;
     private String managerName;
     private String username;
-    private String store;
-    private String lastUpdated;
+    private String storeId;
+    private String updatedTime;
     private String status;
 
     public String getEmployeeCode() {
@@ -32,20 +32,20 @@ public class ManagerResponseSupporter {
         this.username = username;
     }
 
-    public String getStore() {
-        return store;
+    public String getStoreId() {
+        return storeId;
     }
 
-    public void setStore(String store) {
-        this.store = store;
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
-    public String getLastUpdated() {
-        return lastUpdated;
+    public String getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getStatus() {

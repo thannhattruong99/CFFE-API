@@ -24,7 +24,7 @@
     </environments>
 
     <mappers>
-        <mapper resource="com/screenname/dao/sql/AccountDAO.xml" />
-        <mapper resource="com/screens/manager/dao/sql/ManagerMapper.xml"/>
+        <mapper resource="com/screenname_example/dao/sql/AccountDAO.xml" />
+        <mapper resource="com/screens/manager/dao/sql/ManangerDAO.xml"/>
     </mappers>
 </configuration>

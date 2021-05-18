@@ -3,14 +3,17 @@
 
 <mapper namespace="ManagerDAO">
     <select id="getManagers" resultMap="ResponseManagerListForm">
-        SELECT U.EmployeeCode AS EmployeeCode,
+        SELECT TR.totalOfRecord AS totalOfRecord,
+               U.EmployeeCode AS EmployeeCode,
                U.Fullname AS FullName,
                U.Username AS UserName,
                USM.StoreId AS StoreId,
                U.UpdatedTime AS UpdatedTime,
                S.StatusName AS StatusName
         FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
-                       JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID
+                       JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID,
+            (SELECT COUNT(U.UserId) AS totalOfRecord FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
+            JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID) TR
         <where>
             <if test="searchValue != null">
                 <choose>
@@ -30,37 +33,34 @@
             </if>
         </where>
         ORDER BY
-        <choose>
-            <when test="sortField == 'managername'">
-                U.Fullname
-            </when>
-            <when test="username">
-                U.Username
-            </when>
-            <otherwise>
-                U.EmployeeCode
-            </otherwise>
-        </choose>
-        <if test="isAsc == true">
-            ASC
+        <if test="sortField == null">
+            U.Fullname
         </if>
-        <if test="isAsc == false">
+        <if test="sortField == 'managername'">
+            U.Fullname
+        </if>
+        <if test="sortField == 'username'">
+            U.Username
+        </if>
+        <if test="isDsc == true">
             DESC
+        </if>
+        <if test="isDsc == false">
+            ASC
         </if>
         LIMIT
         #{offSet},
         #{fetchNext}
     </select>
 
-
     <resultMap id="getManagers" type="ResponseManagerListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="managers" ofType="ManagerResponseSupporter">
-            <id property="" column="email"/>
-            <result property="fullname" column="fullname"/>
-            <result property="role" column="role"/>
-            <result property="status" column="status"/>
-            <result property="createdDate" column="createdDate"/>
+            <id property="userName" column="UserName"/>
+            <result property="managerName" column="FullName"/>
+            <result property="storeId" column="StoreId"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="status" column="StatusName"/>
         </collection>
     </resultMap>
 </mapper>
