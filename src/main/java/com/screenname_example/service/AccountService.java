@@ -1,19 +1,18 @@
-package com.screenname.service;
+package com.screenname_example.service;
 
-import com.screenname.dto.CreateAccountDTO;
-import com.screenname.dao.mapper.AccountMapper;
-import com.screenname.dto.GetAccountDTO;
-import com.screenname.form.RequestCreateAccountForm;
-import com.screenname.form.RequestGetAccountForm;
-import com.screenname.form.ResponseCreateAccountForm;
-import com.screenname.form.ResponseGetAccountForm;
+import com.screenname_example.dto.CreateAccountDTO;
+import com.screenname_example.dao.mapper.AccountMapper;
+import com.screenname_example.dto.GetAccountDTO;
+import com.screenname_example.form.RequestCreateAccountForm;
+import com.screenname_example.form.RequestGetAccountForm;
+import com.screenname_example.form.ResponseCreateAccountForm;
+import com.screenname_example.form.ResponseGetAccountForm;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 

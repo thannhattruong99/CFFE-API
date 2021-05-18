@@ -1,7 +1,11 @@
-package com.screenname.dto;
+package com.screenname_example.dto;
 
-public class AccountDTO {
+import com.common.dto.BaseDTO;
+
+public class GetAccountDTO extends BaseDTO {
     private String email;
+
+    private String password;
 
     private String fullname;
 
@@ -11,7 +15,7 @@ public class AccountDTO {
 
     private String createdDate;
 
-    public AccountDTO() {
+    public GetAccountDTO() {
     }
 
     public String getEmail() {
@@ -20,6 +24,14 @@ public class AccountDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFullname() {

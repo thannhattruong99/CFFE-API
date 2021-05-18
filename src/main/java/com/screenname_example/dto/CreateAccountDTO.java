@@ -1,6 +1,4 @@
-package com.screenname.dto;
-
-import com.common.dto.BaseDTO;
+package com.screenname_example.dto;
 
 import java.io.Serializable;
 

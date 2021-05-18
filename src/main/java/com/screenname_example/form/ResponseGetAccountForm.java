@@ -1,9 +1,7 @@
-package com.screenname.form;
+package com.screenname_example.form;
 
 import com.common.form.ResponseGetBaseForm;
-import com.screenname.dto.AccountDTO;
-import com.screenname.dto.CreateAccountDTO;
-import com.screenname.dto.GetAccountDTO;
+import com.screenname_example.dto.AccountDTO;
 
 import java.io.Serializable;
 import java.util.List;

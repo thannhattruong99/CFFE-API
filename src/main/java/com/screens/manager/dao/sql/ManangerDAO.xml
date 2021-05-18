@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ManagerDAO">
+    <select id="getManagers" resultMap="ResponseManagerListForm">
+        SELECT U.EmployeeCode AS EmployeeCode,
+               U.Fullname AS FullName,
+               U.Username AS UserName,
+               USM.StoreId AS StoreId,
+               U.UpdatedTime AS UpdatedTime,
+               S.StatusName AS StatusName
+        FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
+                       JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID
+        <where>
+            <if test="searchValue != null">
+                <choose>
+                    <when test="searchField == 'employeecode'">
+                        U.EmployeeCode like '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'managername'">
+                        U.Fullname like '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'username'">
+                        U.Username like '%' #{searchValue} '%'
+                    </when>
+                </choose>
+            </if>
+            <if test="status != null">
+                U.StatusName = #{status}
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="sortField == 'managername'">
+                U.Fullname
+            </when>
+            <when test="username">
+                U.Username
+            </when>
+            <otherwise>
+                U.EmployeeCode
+            </otherwise>
+        </choose>
+        <if test="isAsc == true">
+            ASC
+        </if>
+        <if test="isAsc == false">
+            DESC
+        </if>
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+
+    <resultMap id="getManagers" type="ResponseManagerListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="managers" ofType="ManagerResponseSupporter">
+            <id property="" column="email"/>
+            <result property="fullname" column="fullname"/>
+            <result property="role" column="role"/>
+            <result property="status" column="status"/>
+            <result property="createdDate" column="createdDate"/>
+        </collection>
+    </resultMap>
+</mapper>
