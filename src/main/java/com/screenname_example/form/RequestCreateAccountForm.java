@@ -1,16 +1,13 @@
 package com.screenname_example.form;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 
 public class RequestCreateAccountForm implements Serializable {
-//    @Email
+    @Email
     @NotEmpty
     private String email;
 
