@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.screens.store.dao.sql.StoreDAO">
+
+    <select id="getStoreList" resultMap="getStoreList">
+        SET @NO = 0;
+        SELECT @NO:=@NO+1 AS No,
+               S.StoreName,
+               S.ImageURL,
+               S.Address,
+               S.UpdatedTime,
+               S.StatusId
+        FROM tblStore S
+    </select>
+
+    <resultMap id="getStoreList" type="ResponseStoreListForm">
+<!--        <result property="totalOfRecord" column="totalOfRecord"/>-->
+        <collection property="storeList" ofType="StoreResponseSupporter">
+            <result property="no" column="No"/>
+            <result property="storeName" column="StoreName"/>
+            <result property="imageURL" column="ImageURL"/>
+<!--            <result property="managerUsername" column="managerUsername"/>-->
+            <result property="address" column="Address"/>
+            <result property="lastUpdated" column="UpdatedTime"/>
+            <result property="status" column="StatusId"/>
+        </collection>
+    </resultMap>
+
+</mapper>
