@@ -1,6 +1,5 @@
 package com.common.form;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.format.annotation.NumberFormat;
 
 public class RequestGetBaseForm {
@@ -11,7 +10,7 @@ public class RequestGetBaseForm {
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private int fetchNext;
     private String sortField;
-    private boolean isAscending;
+    private boolean isDescending;
 
     public RequestGetBaseForm() {
     }
@@ -56,11 +55,11 @@ public class RequestGetBaseForm {
         this.sortField = sortField;
     }
 
-    public boolean isAscending() {
-        return isAscending;
+    public boolean isDescending() {
+        return isDescending;
     }
 
-    public void setAscending(boolean ascending) {
-        isAscending = ascending;
+    public void setDescending(boolean descending) {
+        isDescending = descending;
     }
 }
