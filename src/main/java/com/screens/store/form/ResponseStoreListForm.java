@@ -7,8 +7,7 @@ import java.util.List;
 public class ResponseStoreListForm extends ResponseGetBaseForm {
     private List<StoreResponseSupporter> stores;
 
-    public ResponseStoreListForm(List<StoreResponseSupporter> stores) {
-        this.stores = stores;
+    public ResponseStoreListForm() {
     }
 
     public List<StoreResponseSupporter> getStores() {

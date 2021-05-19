@@ -9,6 +9,8 @@
         <typeAlias alias="ResponseGetAccountForm" type="com.screenname_example.form.ResponseGetAccountForm"/>
         <typeAlias alias="ResponseManagerListForm" type="com.screens.manager.form.ResponseManagerListForm"/>
         <typeAlias alias="ManagerResponseSupporter" type="com.screens.manager.form.ManagerResponseSupporter"/>
+        <typeAlias alias="StoreResponseSupporter" type="com.screens.store.form.StoreResponseSupporter"/>
+        <typeAlias alias="ResponseStoreListForm" type="com.screens.store.form.ResponseStoreListForm"/>
     </typeAliases>
 
     <environments default="development">
@@ -26,5 +28,6 @@
     <mappers>
         <mapper resource="com/screenname_example/dao/sql/AccountDAO.xml" />
         <mapper resource="com/screens/manager/dao/sql/ManangerDAO.xml"/>
+        <mapper resource="com/screens/store/dao/sql/StoreDAO.xml"/>
     </mappers>
 </configuration>

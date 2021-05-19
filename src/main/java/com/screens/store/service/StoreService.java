@@ -22,6 +22,7 @@ public class StoreService {
         ResponseStoreListForm responseStoreListForm = null;
         StoreDTO storeDTO = convertGetStoreListFormToDTO(requestGetStoreListForm);
         try {
+
             responseStoreListForm = storeMapper.getStoreList(storeDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
@@ -32,9 +33,9 @@ public class StoreService {
     private StoreDTO convertGetStoreListFormToDTO(RequestGetStoreListForm requestGetStoreListForm) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setSearchValue(requestGetStoreListForm.getSearchValue().toLowerCase().trim());
-        storeDTO.setSearchField(requestGetStoreListForm.getSortField().toLowerCase().trim());
-        storeDTO.setSortField(requestGetStoreListForm.getSortField().toLowerCase().trim());
-        storeDTO.setAsc(true);
+        storeDTO.setSearchField(requestGetStoreListForm.getSearchField().toLowerCase().trim());
+        storeDTO.setSortField(requestGetStoreListForm.getSortField());
+        storeDTO.setDesc(true);
 
         if(requestGetStoreListForm.getPageNum() > 0){
             storeDTO.setOffSet((requestGetStoreListForm.getPageNum() - 1) * requestGetStoreListForm.getFetchNext());

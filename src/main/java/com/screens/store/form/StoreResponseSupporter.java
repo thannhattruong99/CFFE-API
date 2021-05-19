@@ -1,7 +1,7 @@
 package com.screens.store.form;
 
 public class StoreResponseSupporter {
-    private String no;
+
     private String storeName;
     private String imageURL;
     private String managerUsername;
@@ -10,14 +10,6 @@ public class StoreResponseSupporter {
     private String status;
 
     public StoreResponseSupporter() {
-    }
-
-    public String getNo() {
-        return no;
-    }
-
-    public void setNo(String no) {
-        this.no = no;
     }
 
     public String getStoreName() {

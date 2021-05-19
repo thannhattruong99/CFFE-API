@@ -4,26 +4,75 @@
 <mapper namespace="com.screens.store.dao.sql.StoreDAO">
 
     <select id="getStoreList" resultMap="getStoreList">
-        SET @NO = 0;
-        SELECT @NO:=@NO+1 AS No,
-               S.StoreName,
-               S.ImageURL,
-               S.Address,
-               S.UpdatedTime,
-               S.StatusId
+        SELECT
+            SUPQUE.totalOfRecord,
+            S.StoreName,
+            S.ImageURL,
+            CONCAT_WS(', ',S.Address, TD.DistrictName, TC.CityName) AS Address,
+            TU.Username,
+            S.UpdatedTime,
+            TS.StatusName
         FROM tblStore S
+                LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId),
+            (SELECT COUNT(*) AS totalOfRecord
+            FROM tblStore S
+                LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId)
+            <where>
+                <if test="searchValue != null">
+                    <choose>
+                        <when test="searchField == 'storename'">
+                            S.StoreName LIKE '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'city'">
+                            TC.CityName LIKE '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'district'">
+                            TD.DistrictName LIKE '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'manager'">
+                            TU.Username LIKE '%' #{searchValue} '%'
+                        </when>
+                    </choose>
+                </if>
+            </where>
+                 ) AS SUPQUE
+        <where>
+            <if test="searchValue != null">
+                <choose>
+                    <when test="searchField == 'storename'">
+                        S.StoreName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'city'">
+                        TC.CityName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'district'">
+                        TD.DistrictName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'manager'">
+                        TU.Username LIKE '%' #{searchValue} '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
     </select>
 
     <resultMap id="getStoreList" type="ResponseStoreListForm">
-<!--        <result property="totalOfRecord" column="totalOfRecord"/>-->
-        <collection property="storeList" ofType="StoreResponseSupporter">
-            <result property="no" column="No"/>
-            <result property="storeName" column="StoreName"/>
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreResponseSupporter">
+            <id property="storeName" column="StoreName"/>
             <result property="imageURL" column="ImageURL"/>
-<!--            <result property="managerUsername" column="managerUsername"/>-->
+            <result property="managerUsername" column="Username"/>
             <result property="address" column="Address"/>
             <result property="lastUpdated" column="UpdatedTime"/>
-            <result property="status" column="StatusId"/>
+            <result property="status" column="StatusName"/>
         </collection>
     </resultMap>
 

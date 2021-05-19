@@ -4,8 +4,8 @@ import com.screens.store.form.RequestGetStoreListForm;
 import com.screens.store.form.ResponseStoreListForm;
 import com.screens.store.service.StoreService;
 import com.util.ResponseSupporter;
-import io.swagger.models.Model;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +22,7 @@ public class StoreController {
     @Autowired
     StoreService storeService;
 
-    private static final String MSG_009 = "MSG_009";
+    private static final String MSG_009 = "MSG-009";
 
     @RequestMapping(value = "/getStores", method = RequestMethod.POST)
     public String getStoreList(Model model,

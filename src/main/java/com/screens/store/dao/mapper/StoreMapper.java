@@ -14,6 +14,7 @@ public class StoreMapper extends BaseDAO {
     }
 
     public ResponseStoreListForm getStoreList(StoreDTO storeDTO){
+        System.out.println("aaaaaaaaa = " +storeDTO.getSearchField());
         ResponseStoreListForm storeListForm = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreList",storeDTO);
         return storeListForm;
     }
