@@ -12,7 +12,22 @@
         FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
                        JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID,
             (SELECT COUNT(U.UserId) AS totalOfRecord FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
-            JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID) TR
+            JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID
+            <where>
+                <if test="searchValue != null">
+                    <choose>
+                        <when test="searchField == 'managername'">
+                            U.Fullname like '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'username'">
+                            U.Username like '%' #{searchValue} '%'
+                        </when>
+                    </choose>
+                </if>
+                <if test="status != null">
+                    UPPER(S.StatusName) = #{status}
+                </if>
+            </where>) TR
         <where>
             <if test="searchValue != null">
                 <choose>
@@ -28,26 +43,40 @@
                 UPPER(S.StatusName) = #{status}
             </if>
         </where>
-        ORDER BY
-        U.Fullname
-<!--        <if test="sortField == null">-->
-<!--            U.Fullname-->
-<!--        </if>-->
-<!--        <if test="sortField == 'managername'">-->
-<!--            U.Fullname-->
-<!--        </if>-->
-<!--        <if test="sortField == 'username'">-->
-<!--            U.Username-->
-<!--        </if>-->
-        <if test="isDesc == true">
-            DESC
-        </if>
-        <if test="isDesc == false">
-            ASC
+        ORDER BY U.Fullname
+        <if test="isDesc">
+
         </if>
         LIMIT
         #{offSet},
         #{fetchNext}
+    </select>
+
+    <select id="getManagerDetail" resultMap="getManagerDetail">
+        SELECT
+            U.UserId,
+            U.Fullname,
+            U.Username,
+            U.ImageUrl,
+            U.Gender,
+            U.BirthDate,
+            U.IdentifyCard,
+            U.Phone,
+            U.Email,
+            USM.StoreId,
+            U.Address,
+            C.CityName,
+            D.DistrictName,
+            U.CreatedTime,
+            U.UpdatedTime,
+            U.ReasonInactive,
+            S.StatusName
+        FROM tblUser U
+                 JOIN tblStatus S ON U.statusID = S.StatusId
+                 JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID
+                 JOIN tblDistrict D ON D.DistrictId = U.DistrictId
+                 JOIN tblCity C ON C.CityId = D.CityId
+        WHERE U.userName = #{username}
     </select>
 
     <resultMap id="getManagers" type="ResponseManagerListForm">
@@ -59,5 +88,24 @@
             <result property="updatedTime" column="UpdatedTime"/>
             <result property="status" column="StatusName"/>
         </collection>
+    </resultMap>
+    <resultMap id="getManagerDetail" type="ResponseManagerDetailForm">
+        <result property="userId" column="UserId"/>
+        <result property="fullName" column="Fullname"/>
+        <result property="userName" column="Username"/>
+        <result property="imageUrl" column="ImageUrl"/>
+        <result property="male" column="Gender"/>
+        <result property="birthDate" column="BirthDate"/>
+        <result property="identifyCard" column="IdentifyCard"/>
+        <result property="phone" column="Phone"/>
+        <result property="email" column="Email"/>
+        <result property="storeId" column="StoreId"/>
+        <result property="address" column="Address"/>
+        <result property="cityName" column="CityName"/>
+        <result property="districtName" column="DistrictName"/>
+        <result property="createdTime" column="CreatedTime"/>
+        <result property="updatedTime" column="UpdatedTime"/>
+        <result property="reasonInactive" column="ReasonInactive"/>
+        <result property="StatusName" column="StatusName"/>
     </resultMap>
 </mapper>

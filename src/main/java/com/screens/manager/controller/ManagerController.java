@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
-@RequestMapping("manager")
+@RequestMapping("admin")
 public class ManagerController {
     private static String MSG_009 = "MSG-009";
     @Autowired
