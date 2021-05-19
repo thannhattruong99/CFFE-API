@@ -7,8 +7,7 @@ import java.util.List;
 public class ResponseManagerListForm extends ResponseGetBaseForm {
     private List<ManagerResponseSupporter> managers;
 
-    public ResponseManagerListForm(List<ManagerResponseSupporter> managers) {
-        this.managers = managers;
+    public ResponseManagerListForm() {
     }
 
     public List<ManagerResponseSupporter> getManagers() {

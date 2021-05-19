@@ -2,28 +2,15 @@ package com.screens.manager.form;
 
 import com.common.form.RequestGetBaseForm;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
 public class RequestManagerListForm extends RequestGetBaseForm {
-    private String managerName;
-    private String userName;
+    @Min(value = 0, message = "MSG-009") @Max(value = 2, message = "MSG-009")
     private int status;
 
     public RequestManagerListForm() {
-    }
-
-    public String getManagerName() {
-        return managerName;
-    }
-
-    public void setManagerName(String managerName) {
-        this.managerName = managerName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public int getStatus() {
