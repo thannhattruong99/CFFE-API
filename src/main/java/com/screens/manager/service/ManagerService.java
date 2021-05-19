@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 public class ManagerService {
     private static final Logger logger = LoggerFactory.getLogger(ManagerService.class);
     private static final int DEFAULT_FETCH_NEXT = 15;
+    private static final boolean IS_DESCENDING = false;
     @Autowired
     private ManagerMapper managerMapper;
 
     public ResponseManagerListForm getManagerList(RequestManagerListForm requestForm){
-        System.out.println("Toi day roi ne");
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestManagerListFormToMangerDTO(requestForm, managerDTO);
         ResponseManagerListForm response = null;
@@ -30,12 +30,14 @@ public class ManagerService {
         return response;
     }
 
+    private void convertRequestManagerDetail(){
+
+    }
 
     private void convertRequestManagerListFormToMangerDTO(RequestManagerListForm requestForm, ManagerDTO managerDTO){
-        managerDTO.setSearchValue(requestForm.getSearchValue().trim());
+        managerDTO.setSearchValue(requestForm.getSearchValue());
         managerDTO.setSearchField(requestForm.getSearchField().toLowerCase().trim());
-        managerDTO.setSortField(requestForm.getSortField().toLowerCase().trim());
-        managerDTO.setDesc(requestForm.isDescending());
+        managerDTO.setDesc(IS_DESCENDING);
 
         int offSet = 0;
         if(requestForm.getPageNum() > 0){

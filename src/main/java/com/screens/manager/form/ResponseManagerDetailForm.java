@@ -1,8 +1,6 @@
-package com.screens.manager.dto;
+package com.screens.manager.form;
 
-import com.common.dto.BaseDTO;
-
-public class ManagerDTO extends BaseDTO {
+public class ResponseManagerDetailForm {
     private String userId;
     private String fullName;
     private String userName;
@@ -21,7 +19,7 @@ public class ManagerDTO extends BaseDTO {
     private String reasonInactive;
     private String status;
 
-    public ManagerDTO() {
+    public ResponseManagerDetailForm() {
     }
 
     public String getUserId() {

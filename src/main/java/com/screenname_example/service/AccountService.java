@@ -39,7 +39,6 @@ public class AccountService {
         GetAccountDTO accountDTO = new GetAccountDTO();
         accountDTO.setSearchValue(accountForm.getSearchValue());
         accountDTO.setSearchField(accountForm.getSearchField());
-        accountDTO.setSortField(accountForm.getSortField());
         accountDTO.setDesc(true);
 
         if(accountForm.getPageNum() > 0){

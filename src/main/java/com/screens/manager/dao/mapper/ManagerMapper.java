@@ -2,6 +2,7 @@ package com.screens.manager.dao.mapper;
 
 import com.common.dao.BaseDAO;
 import com.screens.manager.dto.ManagerDTO;
+import com.screens.manager.form.ResponseManagerDetailForm;
 import com.screens.manager.form.ResponseManagerListForm;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,11 @@ public class ManagerMapper extends BaseDAO {
 
     public ResponseManagerListForm getManagers(ManagerDTO managerDTO){
         ResponseManagerListForm responseForm = sqlSession.selectOne("ManagerDAO.getManagers", managerDTO);
+        return responseForm;
+    }
+
+    public ResponseManagerDetailForm getManagerDetail(ManagerDTO managerDTO){
+        ResponseManagerDetailForm responseForm = sqlSession.selectOne( "ManagerDAO.getManagerDetail",managerDTO);
         return responseForm;
     }
 }

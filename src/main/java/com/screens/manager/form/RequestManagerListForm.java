@@ -4,7 +4,6 @@ import com.common.form.RequestGetBaseForm;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 
 public class RequestManagerListForm extends RequestGetBaseForm {
     @Min(value = 0, message = "MSG-009") @Max(value = 2, message = "MSG-009")
