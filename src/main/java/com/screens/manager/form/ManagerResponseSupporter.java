@@ -1,20 +1,11 @@
 package com.screens.manager.form;
 
 public class ManagerResponseSupporter {
-    private String employeeCode;
     private String managerName;
-    private String username;
-    private String store;
-    private String lastUpdated;
+    private String userName;
+    private String storeId;
+    private String updatedTime;
     private String status;
-
-    public String getEmployeeCode() {
-        return employeeCode;
-    }
-
-    public void setEmployeeCode(String employeeCode) {
-        this.employeeCode = employeeCode;
-    }
 
     public String getManagerName() {
         return managerName;
@@ -24,28 +15,28 @@ public class ManagerResponseSupporter {
         this.managerName = managerName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getStore() {
-        return store;
+    public String getStoreId() {
+        return storeId;
     }
 
-    public void setStore(String store) {
-        this.store = store;
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
-    public String getLastUpdated() {
-        return lastUpdated;
+    public String getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getStatus() {
