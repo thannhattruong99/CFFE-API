@@ -5,7 +5,7 @@ public class ResponseManagerDetailForm {
     private String fullName;
     private String userName;
     private String imageURL;
-    private boolean male;
+    private boolean isMale;
     private String birthDate;
     private String identifyCard;
     private String phone;
@@ -55,11 +55,11 @@ public class ResponseManagerDetailForm {
     }
 
     public boolean isMale() {
-        return male;
+        return isMale;
     }
 
     public void setMale(boolean male) {
-        this.male = male;
+        isMale = male;
     }
 
     public String getBirthDate() {

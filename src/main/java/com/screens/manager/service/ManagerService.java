@@ -2,7 +2,9 @@ package com.screens.manager.service;
 
 import com.screens.manager.dao.mapper.ManagerMapper;
 import com.screens.manager.dto.ManagerDTO;
+import com.screens.manager.form.RequestManagerDetailForm;
 import com.screens.manager.form.RequestManagerListForm;
+import com.screens.manager.form.ResponseManagerDetailForm;
 import com.screens.manager.form.ResponseManagerListForm;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
@@ -15,23 +17,36 @@ public class ManagerService {
     private static final Logger logger = LoggerFactory.getLogger(ManagerService.class);
     private static final int DEFAULT_FETCH_NEXT = 15;
     private static final boolean IS_DESCENDING = false;
+
     @Autowired
     private ManagerMapper managerMapper;
 
     public ResponseManagerListForm getManagerList(RequestManagerListForm requestForm){
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestManagerListFormToMangerDTO(requestForm, managerDTO);
-        ResponseManagerListForm response = null;
+        ResponseManagerListForm responseForm = null;
         try {
-            response = managerMapper.getManagers(managerDTO);
+            responseForm = managerMapper.getManagers(managerDTO);
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
         }
-        return response;
+        return responseForm;
     }
 
-    private void convertRequestManagerDetail(){
+    public ResponseManagerDetailForm getManagerDetail(RequestManagerDetailForm requestForm){
+        ManagerDTO managerDTO = new ManagerDTO();
+        convertRequestManagerDetail(requestForm, managerDTO);
+        ResponseManagerDetailForm responseForm = null;
+        try {
+            responseForm = managerMapper.getManagerDetail(managerDTO);
+        }catch (PersistenceException e){
+            logger.error("Error at ManagerService: " + e.getMessage());
+        }
+        return responseForm;
+    }
 
+    private void convertRequestManagerDetail(RequestManagerDetailForm requestForm, ManagerDTO managerDTO){
+        managerDTO.setUserName(requestForm.getUserName());
     }
 
     private void convertRequestManagerListFormToMangerDTO(RequestManagerListForm requestForm, ManagerDTO managerDTO){

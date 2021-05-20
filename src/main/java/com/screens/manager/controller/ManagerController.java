@@ -2,7 +2,9 @@ package com.screens.manager.controller;
 
 import com.screenname_example.form.RequestGetAccountForm;
 import com.screenname_example.form.ResponseGetAccountForm;
+import com.screens.manager.form.RequestManagerDetailForm;
 import com.screens.manager.form.RequestManagerListForm;
+import com.screens.manager.form.ResponseManagerDetailForm;
 import com.screens.manager.form.ResponseManagerListForm;
 import com.screens.manager.service.ManagerService;
 import com.util.ResponseSupporter;
@@ -10,11 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,22 @@ public class ManagerController {
         }
 
         ResponseManagerListForm response = managerService.getManagerList(requestManagerListForm);
+        if(response == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+
+        return ResponseSupporter.resonpseResult(response);
+    }
+
+    @GetMapping(value = "/manager")
+    public String getAccount(@Valid RequestManagerDetailForm requestForm, BindingResult result) {
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseManagerDetailForm response = managerService.getManagerDetail(requestForm);
         if(response == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
