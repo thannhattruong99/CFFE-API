@@ -35,27 +35,9 @@ public class AccountController {
     }
 
     //    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
-    @RequestMapping(value = "/createAnAccount", method = RequestMethod.POST)
-    public String createAnAccount(Model model,//
-                                  @Validated @RequestBody RequestCreateAccountForm account, //
-                                  BindingResult result) {
-        if (result.hasErrors()) {
-            return ResponseSupporter.responseErrorResult(result);
-        }
+    @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
+    public String createAnAccount() {
 
-        List<String> errorCodes;
-
-        errorCodes = accountService.checkAccountBussiness(account);
-        if(errorCodes.size() > 0){
-            return ResponseSupporter.responseErrorResult(errorCodes);
-        }
-
-        ResponseCreateAccountForm responseCreateAccountForm = accountService.createAnAccount(account);
-
-        if(responseCreateAccountForm == null){
-            errorCodes.add(E001);
-            return ResponseSupporter.responseErrorResult(errorCodes);
-        }
-        return ResponseSupporter.resonpseResult(responseCreateAccountForm);
+        return ResponseSupporter.resonpseResult(true);
     }
 }

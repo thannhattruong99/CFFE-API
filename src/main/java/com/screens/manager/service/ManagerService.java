@@ -1,16 +1,16 @@
 package com.screens.manager.service;
 
+import com.screens.city.form.CityResponseSupporter;
 import com.screens.manager.dao.mapper.ManagerMapper;
 import com.screens.manager.dto.ManagerDTO;
-import com.screens.manager.form.RequestManagerDetailForm;
-import com.screens.manager.form.RequestManagerListForm;
-import com.screens.manager.form.ResponseManagerDetailForm;
-import com.screens.manager.form.ResponseManagerListForm;
+import com.screens.manager.form.*;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ManagerService {

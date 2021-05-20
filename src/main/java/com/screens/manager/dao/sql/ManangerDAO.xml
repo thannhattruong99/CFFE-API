@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ManagerDAO">
-    <select id="getManagers" resultMap="getManagers">
+    <select id="getManagers" resultMap="getManagers" useCache="false">
         SELECT TR.totalOfRecord AS totalOfRecord,
                U.Fullname AS FullName,
                U.Username AS UserName,
@@ -15,14 +15,12 @@
             JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID
             <where>
                 <if test="searchValue != null">
-                    <choose>
-                        <when test="searchField == 'managername'">
-                            U.Fullname like '%' #{searchValue} '%'
-                        </when>
-                        <when test="searchField == 'username'">
-                            U.Username like '%' #{searchValue} '%'
-                        </when>
-                    </choose>
+                    <if test="searchField == 'managername'">
+                        U.Fullname like '%' #{searchValue} '%'
+                    </if>
+                    <if test="searchField != 'managername'">
+                        U.Username like '%' #{searchValue} '%'
+                    </if>
                 </if>
                 <if test="status != null">
                     UPPER(S.StatusName) = #{status}
@@ -30,14 +28,12 @@
             </where>) TR
         <where>
             <if test="searchValue != null">
-                <choose>
-                    <when test="searchField == 'managername'">
-                        U.Fullname like '%' #{searchValue} '%'
-                    </when>
-                    <when test="searchField == 'username'">
-                        U.Username like '%' #{searchValue} '%'
-                    </when>
-                </choose>
+                <if test="searchField == 'managername'">
+                    U.Fullname like '%' #{searchValue} '%'
+                </if>
+                <if test="searchField != 'managername'">
+                    U.Username like '%' #{searchValue} '%'
+                </if>
             </if>
             <if test="status != null">
                 UPPER(S.StatusName) = #{status}
@@ -55,7 +51,7 @@
         #{fetchNext}
     </select>
 
-    <select id="getManagerDetail" resultMap="getManagerDetail">
+    <select id="getManagerDetail" resultMap="getManagerDetail" useCache="false">
         SELECT
             U.UserId,
             U.Fullname,

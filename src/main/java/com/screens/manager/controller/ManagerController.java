@@ -1,11 +1,7 @@
 package com.screens.manager.controller;
 
-import com.screenname_example.form.RequestGetAccountForm;
-import com.screenname_example.form.ResponseGetAccountForm;
-import com.screens.manager.form.RequestManagerDetailForm;
-import com.screens.manager.form.RequestManagerListForm;
-import com.screens.manager.form.ResponseManagerDetailForm;
-import com.screens.manager.form.ResponseManagerListForm;
+import com.screens.city.form.CityResponseSupporter;
+import com.screens.manager.form.*;
 import com.screens.manager.service.ManagerService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +22,7 @@ public class ManagerController {
     private ManagerService managerService;
 
     @RequestMapping(value = "/managers", method = RequestMethod.POST)
-    public String getAccount(Model model,//
+    public String getManagers(Model model,//
                              @Validated @RequestBody RequestManagerListForm requestManagerListForm, //
                              BindingResult result) {
         if(result.hasErrors()){
@@ -45,7 +40,7 @@ public class ManagerController {
     }
 
     @GetMapping(value = "/manager")
-    public String getAccount(@Valid RequestManagerDetailForm requestForm, BindingResult result) {
+    public String getManagerDetail(@Valid RequestManagerDetailForm requestForm, BindingResult result) {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
@@ -59,5 +54,4 @@ public class ManagerController {
 
         return ResponseSupporter.resonpseResult(response);
     }
-
 }

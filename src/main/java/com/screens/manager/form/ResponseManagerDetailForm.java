@@ -1,6 +1,8 @@
 package com.screens.manager.form;
 
-public class ResponseManagerDetailForm {
+import java.io.Serializable;
+
+public class ResponseManagerDetailForm implements Serializable {
     private String userId;
     private String fullName;
     private String userName;

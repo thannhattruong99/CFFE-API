@@ -2,7 +2,9 @@ package com.screens.manager.dto;
 
 import com.common.dto.BaseDTO;
 
-public class ManagerDTO extends BaseDTO {
+import java.io.Serializable;
+
+public class ManagerDTO extends BaseDTO implements Serializable {
     private String userId;
     private String fullName;
     private String userName;

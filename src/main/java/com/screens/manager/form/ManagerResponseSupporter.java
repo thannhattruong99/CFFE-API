@@ -1,6 +1,8 @@
 package com.screens.manager.form;
 
-public class ManagerResponseSupporter {
+import java.io.Serializable;
+
+public class ManagerResponseSupporter implements Serializable {
     private String managerName;
     private String userName;
     private String storeId;
