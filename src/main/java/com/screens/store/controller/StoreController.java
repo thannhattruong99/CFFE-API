@@ -1,9 +1,6 @@
 package com.screens.store.controller;
 
-import com.screens.store.form.RequestGetStoreDetailForm;
-import com.screens.store.form.RequestGetStoreListForm;
-import com.screens.store.form.ResponseStoreDetailForm;
-import com.screens.store.form.ResponseStoreListForm;
+import com.screens.store.form.*;
 import com.screens.store.service.StoreService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +31,14 @@ public class StoreController {
             return ResponseSupporter.responseErrorResult(result);
         }
         // Do Get/Search Store
-        ResponseStoreListForm requestGetStoreListForm = storeService.getStoreList(requestForm);
-        if(requestGetStoreListForm == null){
+        ResponseStoreListForm responseStoreListForm = storeService.getStoreList(requestForm);
+        if(responseStoreListForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(requestGetStoreListForm);
+        return ResponseSupporter.resonpseResult(responseStoreListForm);
     }
 
     @GetMapping(value = "/getStoreDetail")
@@ -60,5 +58,27 @@ public class StoreController {
         }
         // Return result
         return ResponseSupporter.resonpseResult(responseStoreDetailForm);
+    }
+
+    @PostMapping(value = "/createStore")
+    public String createStore(Model model,
+                               @Validated @RequestBody RequestCreateStoreForm requestForm,
+                               BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        // TODO: insert img
+
+        // Do Get/Search Store
+        int rs = storeService.createStore(requestForm);
+        if(rs == 0){
+            List<String> errorCodes = new ArrayList<>();
+                errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(rs);
     }
 }

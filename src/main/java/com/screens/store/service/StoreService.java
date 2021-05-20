@@ -2,10 +2,7 @@ package com.screens.store.service;
 
 import com.screens.store.dao.mapper.StoreMapper;
 import com.screens.store.dto.StoreDTO;
-import com.screens.store.form.RequestGetStoreDetailForm;
-import com.screens.store.form.RequestGetStoreListForm;
-import com.screens.store.form.ResponseStoreDetailForm;
-import com.screens.store.form.ResponseStoreListForm;
+import com.screens.store.form.*;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +13,8 @@ import org.springframework.stereotype.Service;
 public class StoreService {
     private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
     private static final int DEFAULT_FETCH_NEXT = 10;
+    private static final int ACTIVE = 1;
+    private static final int INACTIVE = 2;
 
     @Autowired
     StoreMapper storeMapper;
@@ -40,6 +39,28 @@ public class StoreService {
             logger.error("Error Message: " + e.getMessage());
         }
         return responseStoreDetailForm;
+    }
+
+    public int createStore(RequestCreateStoreForm requestForm) {
+        int rs =0;
+        StoreDTO storeDTO = convertCreateStoreFormToDTO(requestForm);
+        try {
+            rs = storeMapper.createStore(storeDTO);
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+        }
+        return rs;
+    }
+
+    private StoreDTO convertCreateStoreFormToDTO(RequestCreateStoreForm requestForm) {
+        StoreDTO storeDTO = new StoreDTO();
+        storeDTO.setStoreName(requestForm.getStoreName());
+        storeDTO.setImageUrl(requestForm.getImageUrl());
+        storeDTO.setAddress(requestForm.getAddress());
+        storeDTO.setDistrictId(requestForm.getDistrictId());
+        storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());
+        storeDTO.setStatusId(ACTIVE);
+        return storeDTO;
     }
 
     private StoreDTO convertGetStoreDetailFormToDTO(RequestGetStoreDetailForm requestForm) {

@@ -128,4 +128,18 @@
         <result property="reasonInactive" column="ReasonInactive"/>
         <result property="status" column="StatusName"/>
     </resultMap>
+
+    <insert id="createStore"  parameterType="StoreDTO">
+        INSERT INTO tblStore (StoreName, ImageURL, Address, AnalyzedTime, CreatedTime,
+                              UpdatedTime, DistrictId, StatusId)
+        VALUES (#{storeName},
+          #{imageUrl},
+          #{address},
+          #{analyzedTime},
+          convert_tz(now(),@@session.time_zone,'+07:00'),
+          convert_tz(now(),@@session.time_zone,'+07:00'),
+          #{districtId},
+          #{statusId})
+    </insert>
+
 </mapper>
