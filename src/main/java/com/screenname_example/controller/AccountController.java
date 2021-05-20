@@ -24,22 +24,9 @@ public class AccountController {
     private static final String E001 = "E001";
     private static final String E000 = "E000";
 
-    @RequestMapping(value = "/getAccount", method = RequestMethod.POST)
-    public String getAccount(Model model,//
-                                       @Validated @RequestBody RequestGetAccountForm account, //
-                                       BindingResult result) {
-        if(result.hasErrors()){
-            return ResponseSupporter.responseErrorResult(result);
-        }
-
-        ResponseGetAccountForm responseGetAccountForm = accountService.getStudent(account);
-        if(responseGetAccountForm == null){
-            List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(E000);
-            return ResponseSupporter.responseErrorResult(errorCodes);
-        }
-
-        return ResponseSupporter.resonpseResult(responseGetAccountForm);
+    @RequestMapping(value = "/auth/login", method = RequestMethod.GET)
+    public String getAccount() {
+        return ResponseSupporter.resonpseResult(true);
     }
 
     @GetMapping("")
