@@ -1,6 +1,8 @@
 package com.screens.city.form;
 
-public class DistrictResponseSupporter {
+import java.io.Serializable;
+
+public class DistrictResponseSupporter implements Serializable {
     private int districtId;
     private String districtName;
 
