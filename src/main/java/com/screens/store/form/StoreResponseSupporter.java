@@ -1,15 +1,50 @@
 package com.screens.store.form;
 
 public class StoreResponseSupporter {
-
+    private String storeId;
     private String storeName;
     private String imageURL;
     private String managerUsername;
+    private String managerUserId;
     private String address;
+    private String city;
+    private String district;
     private String lastUpdated;
     private String status;
 
     public StoreResponseSupporter() {
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getManagerUserId() {
+        return managerUserId;
+    }
+
+    public void setManagerUserId(String managerUserId) {
+        this.managerUserId = managerUserId;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
     public String getStoreName() {

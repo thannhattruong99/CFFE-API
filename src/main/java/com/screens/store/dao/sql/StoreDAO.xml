@@ -3,13 +3,17 @@
 
 <mapper namespace="com.screens.store.dao.sql.StoreDAO">
 
-    <select id="getStoreList" resultMap="getStoreList">
+    <select id="getStoreList" resultMap="getStoreList" useCache="false">
         SELECT
             SUPQUE.totalOfRecord,
+            S.StoreId,
             S.StoreName,
             S.ImageURL,
-            CONCAT_WS(', ',S.Address, TD.DistrictName, TC.CityName) AS Address,
+            S.Address,
+            TD.DistrictName,
+            TC.CityName,
             TU.Username,
+            TU.UserId,
             S.UpdatedTime,
             TS.StatusName
         FROM tblStore S
@@ -47,9 +51,6 @@
         <where>
             <if test="searchValue != null">
                 <choose>
-                    <when test="searchField == 'storename'">
-                        S.StoreName LIKE '%' #{searchValue} '%'
-                    </when>
                     <when test="searchField == 'city'">
                         TC.CityName LIKE '%' #{searchValue} '%'
                     </when>
@@ -59,21 +60,72 @@
                     <when test="searchField == 'manager'">
                         TU.Username LIKE '%' #{searchValue} '%'
                     </when>
+                    <otherwise>
+                        S.StoreName LIKE '%' #{searchValue} '%'
+                    </otherwise>
                 </choose>
             </if>
         </where>
+        ORDER BY
+        S.StoreName
+        LIMIT
+        #{offSet},
+        #{fetchNext}
     </select>
 
     <resultMap id="getStoreList" type="ResponseStoreListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="stores" ofType="StoreResponseSupporter">
-            <id property="storeName" column="StoreName"/>
+            <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
             <result property="imageURL" column="ImageURL"/>
             <result property="managerUsername" column="Username"/>
+            <result property="managerUserId" column="UserId"/>
             <result property="address" column="Address"/>
+            <result property="city" column="CityName"/>
+            <result property="district" column="DistrictName"/>
             <result property="lastUpdated" column="UpdatedTime"/>
             <result property="status" column="StatusName"/>
         </collection>
     </resultMap>
 
+    <select id="getStoreDetail" resultMap="getStoreDetail" useCache="false">
+        SELECT S.StoreId,
+               S.StoreName,
+               S.ImageURL,
+               S.Address,
+               TD.DistrictName,
+               TC.CityName,
+               S.CreatedTime,
+               S.UpdatedTime,
+               S.ReasonInactive,
+               TU.UserId,
+               TU.Username,
+               TU.Fullname,
+               TS.StatusName
+        FROM tblStore S
+                 LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                 LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                 LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                 LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId)
+                 LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+        WHERE
+            S.StoreId = #{storeId}
+    </select>
+
+    <resultMap id="getStoreDetail" type="ResponseStoreDetailForm">
+        <result property="storeId" column="StoreId"/>
+        <result property="storeName" column="StoreName"/>
+        <result property="imageUrl" column="ImageURL"/>
+        <result property="managerName" column="Fullname"/>
+        <result property="managerUsername" column="Username"/>
+        <result property="managerId" column="UserId"/>
+        <result property="address" column="Address"/>
+        <result property="district" column="DistrictName"/>
+        <result property="city" column="CityName"/>
+        <result property="createdTime" column="CreatedTime"/>
+        <result property="updatedTime" column="UpdatedTime"/>
+        <result property="reasonInactive" column="ReasonInactive"/>
+        <result property="status" column="StatusName"/>
+    </resultMap>
 </mapper>

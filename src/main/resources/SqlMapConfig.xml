@@ -11,6 +11,7 @@
         <typeAlias alias="ManagerResponseSupporter" type="com.screens.manager.form.ManagerResponseSupporter"/>
         <typeAlias alias="StoreResponseSupporter" type="com.screens.store.form.StoreResponseSupporter"/>
         <typeAlias alias="ResponseStoreListForm" type="com.screens.store.form.ResponseStoreListForm"/>
+        <typeAlias alias="ResponseStoreDetailForm" type="com.screens.store.form.ResponseStoreDetailForm"/>
     </typeAliases>
 
     <environments default="development">

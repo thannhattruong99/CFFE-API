@@ -2,13 +2,24 @@ package com.screens.store.dto;
 
 import com.common.dto.BaseDTO;
 
-public class StoreDTO extends BaseDTO {
+import java.io.Serializable;
+
+public class StoreDTO extends BaseDTO implements Serializable {
+    private String storeId;
     private String storeName;
     private String city;
     private String district;
     private String managerUsername;
 
     public StoreDTO() {
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public String getStoreName() {
