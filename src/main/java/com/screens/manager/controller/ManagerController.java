@@ -10,20 +10,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Cacheable;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
 @RequestMapping("admin")
+@Cacheable(value = false)
 public class ManagerController {
     private static String MSG_009 = "MSG-009";
     @Autowired
     private ManagerService managerService;
 
     @RequestMapping(value = "/managers", method = RequestMethod.POST)
-    public String getManagers(Model model,//
-                             @Validated @RequestBody RequestManagerListForm requestManagerListForm, //
+    public String getManagers(@Validated @RequestBody RequestManagerListForm requestManagerListForm, //
                              BindingResult result) {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -53,5 +54,15 @@ public class ManagerController {
         }
 
         return ResponseSupporter.resonpseResult(response);
+    }
+
+    @RequestMapping(value = "/manager/create", method = RequestMethod.POST)
+    public String createManager(@Validated @RequestBody RequestCreateManagerForm requestForm, //
+                                BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        return ResponseSupporter.resonpseResult(managerService.createManger(requestForm));
     }
 }
