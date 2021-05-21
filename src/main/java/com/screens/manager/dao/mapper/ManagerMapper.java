@@ -25,4 +25,16 @@ public class ManagerMapper extends BaseDAO {
         return sqlSession.selectOne( "ManagerDAO.getManagerDetail",managerDTO);
     }
 
+    public boolean createManager(ManagerDTO managerDTO){
+        if(sqlSession.insert("ManagerDAO.insertManger", managerDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
+        return false;
+    }
+
+    public int countRecordLikeUserName(ManagerDTO managerDTO){
+        ManagerDTO resultDAO = sqlSession.selectOne("ManagerDAO.getTotalOfManagerLikeUserName", managerDTO);
+        return resultDAO.getAffectedRecords();
+    }
 }

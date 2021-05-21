@@ -10,35 +10,38 @@
                U.UpdatedTime AS UpdatedTime,
                S.StatusName AS StatusName
         FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
-                       JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID,
+                       JOIN tblRole R ON R.RoleId = U.roleId
+                       LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID,
             (SELECT COUNT(U.UserId) AS totalOfRecord FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
-            JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID
-            <where>
-                <if test="searchValue != null">
-                    <if test="searchField == 'managername'">
-                        U.Fullname like '%' #{searchValue} '%'
-                    </if>
-                    <if test="searchField != 'managername'">
-                        U.Username like '%' #{searchValue} '%'
-                    </if>
-                </if>
-                <if test="status != null">
-                    UPPER(S.StatusName) = #{status}
-                </if>
-            </where>) TR
-        <where>
+            JOIN tblRole R ON R.RoleId = U.roleId
+            LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID
+            WHERE
+            UPPER(R.RoleName) = 'MANAGER'
             <if test="searchValue != null">
                 <if test="searchField == 'managername'">
-                    U.Fullname like '%' #{searchValue} '%'
+                    AND  U.Fullname like '%' #{searchValue} '%'
                 </if>
                 <if test="searchField != 'managername'">
-                    U.Username like '%' #{searchValue} '%'
+                    AND  U.Username like '%' #{searchValue} '%'
                 </if>
             </if>
             <if test="status != null">
-                UPPER(S.StatusName) = #{status}
+                AND UPPER(S.StatusName) = #{status}
             </if>
-        </where>
+            ) TR
+        WHERE
+            UPPER(R.RoleName) = 'MANAGER'
+            <if test="searchValue != null">
+                <if test="searchField == 'managername'">
+                    AND  U.Fullname like '%' #{searchValue} '%'
+                </if>
+                <if test="searchField != 'managername'">
+                    AND  U.Username like '%' #{searchValue} '%'
+                </if>
+            </if>
+            <if test="status != null">
+               AND UPPER(S.StatusName) = #{status}
+            </if>
         ORDER BY U.Fullname
         <if test="isDesc">
             DESC
@@ -77,6 +80,18 @@
                  JOIN tblCity C ON C.CityId = D.CityId
         WHERE U.userName = #{userName}
     </select>
+    <insert id="insertManger">
+        INSERT INTO tblUser(Fullname, Username, Password, RoleId, ImageURL, Gender,
+                            BirthDate, IdentifyCard, Phone, Email, Address, DistrictId, statusId, CreatedTime)
+        VALUES(#{fullName}, #{userName}, #{password}, #{roleId},#{imageURL}, #{gender}, #{birthDate}, #{identifyCard},
+               #{phone}, #{email}, #{address}, #{districtId},  #{statusId},
+               convert_tz(now(),@@session.time_zone,#{createdTime}))
+    </insert>
+    <select id="getTotalOfManagerLikeUserName" resultMap="getTotalOfManagerLikeUserName">
+        SELECT COUNT(UserName) AS TotaltOfRecord
+        FROM tblUser
+        WHERE UserName REGEXP #{userNameRegexp} OR UserName = #{userName};
+    </select>
 
     <resultMap id="getManagers" type="ResponseManagerListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
@@ -93,7 +108,7 @@
         <result property="fullName" column="Fullname"/>
         <result property="userName" column="Username"/>
         <result property="imageURL" column="ImageUrl"/>
-        <result property="isMale" column="Gender"/>
+        <result property="gender" column="Gender"/>
         <result property="birthDate" column="BirthDate"/>
         <result property="identifyCard" column="IdentifyCard"/>
         <result property="phone" column="Phone"/>
@@ -106,5 +121,8 @@
         <result property="updatedTime" column="UpdatedTime"/>
         <result property="reasonInactive" column="ReasonInactive"/>
         <result property="status" column="StatusName"/>
+    </resultMap>
+    <resultMap id="getTotalOfManagerLikeUserName" type="ManagerDTO">
+        <result property="affectedRecords" column="TotaltOfRecord"/>
     </resultMap>
 </mapper>

@@ -12,6 +12,7 @@
         <typeAlias alias="ResponseManagerDetailForm" type="com.screens.manager.form.ResponseManagerDetailForm"/>
         <typeAlias alias="CityResponseSupporter" type="com.screens.city.form.CityResponseSupporter"/>
         <typeAlias alias="DistrictResponseSupporter" type="com.screens.city.form.DistrictResponseSupporter"/>
+        <typeAlias alias="ManagerDTO" type="com.screens.manager.dto.ManagerDTO"/>
     </typeAliases>
 
     <environments default="development">
