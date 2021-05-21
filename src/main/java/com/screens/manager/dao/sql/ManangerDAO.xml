@@ -75,7 +75,7 @@
             S.StatusName
         FROM tblUser U
                  JOIN tblStatus S ON U.statusID = S.StatusId
-                 JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID
+                 LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID
                  JOIN tblDistrict D ON D.DistrictId = U.DistrictId
                  JOIN tblCity C ON C.CityId = D.CityId
         WHERE U.userName = #{userName}
