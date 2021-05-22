@@ -14,12 +14,12 @@ import java.util.List;
 @RestController()
 @RequestMapping("city")
 public class CityController {
-    private static String MSG_009 = "MSG-009";
+    private static final String MSG_009 = "MSG-009";
     @Autowired
     private CityService cityService;
 
     @GetMapping(value = "/city_district_lst")
-    public String getCityAndDisctrict(){
+    public String getCityAndDistrict(){
         List<CityDistrictResponseSupporter> responseForm = cityService.getCityDistrict();
         if(responseForm == null){
             List<String> errorCodes = new ArrayList<>();
