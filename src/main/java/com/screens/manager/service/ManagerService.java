@@ -19,7 +19,7 @@ public class ManagerService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(ManagerService.class);
     private static final int DEFAULT_FETCH_NEXT = 15;
     private static final boolean IS_DESCENDING = false;
-    private static final String NUMBER_REGEXP = "[0-9]";
+    private static final String NUMBER_REGEXP = "[0-9]*";
     private static final String TIME_ZONE_VIETNAMESE = "+07:00";
     private static final int PASSWORD_LENGTH = 6;
     private static final int MANAGER_ROLE = 2;
@@ -100,7 +100,7 @@ public class ManagerService extends BaseService {
 
         int responseResult = managerMapper.countRecordLikeUserName(requestDAO);
         if(responseResult > 0){
-            userName = userName.concat(String.valueOf(responseResult).trim());
+            userName = userName.concat(String.valueOf(responseResult + 1).trim());
         }
 
         return userName;
@@ -136,6 +136,8 @@ public class ManagerService extends BaseService {
         if(requestForm.getStatus() == 1){
             status = "ACTIVE";
         }else if(requestForm.getStatus() == 2){
+            status = "INACTIVE";
+        }else if(requestForm.getStatus() == 3){
             status = "PENDING";
         }
         managerDTO.setStatus(status);

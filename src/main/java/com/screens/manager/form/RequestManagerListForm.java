@@ -7,7 +7,7 @@ import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 public class RequestManagerListForm extends RequestGetBaseForm implements Serializable {
-    @Min(value = 0, message = "MSG-009") @Max(value = 2, message = "MSG-009")
+    @Min(value = 0, message = "MSG-009") @Max(value = 3, message = "MSG-009")
     private int status;
 
     public RequestManagerListForm() {
