@@ -1,5 +1,6 @@
 package com.screens.manager.service;
 
+import com.common.service.BaseService;
 import com.screens.manager.dao.mapper.ManagerMapper;
 import com.screens.manager.dto.ManagerDTO;
 import com.screens.manager.form.*;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 
 @Service
-public class ManagerService {
+public class ManagerService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(ManagerService.class);
     private static final int DEFAULT_FETCH_NEXT = 15;
     private static final boolean IS_DESCENDING = false;
@@ -51,25 +52,28 @@ public class ManagerService {
         return responseForm;
     }
 
-    public boolean createManger(RequestCreateManagerForm requestForm){
-        boolean result = false;
+    public ResponseCreateManagerForm createManger(RequestCreateManagerForm requestForm){
+        ResponseCreateManagerForm responseSupporter = new ResponseCreateManagerForm();
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestCreateManagerFormToManagerDTO(requestForm, managerDTO);
         try {
-            result = managerMapper.createManager(managerDTO);
-            if(result){
+            if(managerMapper.createManager(managerDTO)){
+                responseSupporter.setUserName(managerDTO.getUserName());
+
                 String msgContent = "Username: " + managerDTO.getUserName() +
                                     "\nPassword: " + managerDTO.getPassword();
                 if(!EmailHelper.sendEmail(managerDTO.getEmail(), msgContent)){
-                    return false;
+//                    return false;
                 }
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
+            responseSupporter.setError(true);
+            responseSupporter.setErrorCodes(sqlException(e.getMessage()));
         }catch (MessagingException e){
             logger.error("Send email at ManagerService: " + e.getMessage());
         }
-        return result;
+        return responseSupporter;
     }
 
     public void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
@@ -90,12 +94,15 @@ public class ManagerService {
     }
 
     private String generateUserNameFromFullName(String fullName){
-
         String userName = StringHelper.generateUserNameFromFullName(fullName);
         ManagerDTO requestDAO = new ManagerDTO();
         convertUserNameToMangerDTO(userName, requestDAO);
+
         int responseResult = managerMapper.countRecordLikeUserName(requestDAO);
-        userName = userName.concat(String.valueOf(responseResult).trim());
+        if(responseResult > 0){
+            userName = userName.concat(String.valueOf(responseResult).trim());
+        }
+
         return userName;
     }
 
@@ -133,5 +140,4 @@ public class ManagerService {
         }
         managerDTO.setStatus(status);
     }
-
 }

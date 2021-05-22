@@ -1,25 +1,21 @@
 package com.screens.manager.controller;
 
-import com.screens.city.form.CityResponseSupporter;
 import com.screens.manager.form.*;
 import com.screens.manager.service.ManagerService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Cacheable;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
 @RequestMapping("admin")
-@Cacheable(value = false)
 public class ManagerController {
-    private static String MSG_009 = "MSG-009";
+    private static final String MSG_009 = "MSG-009";
     @Autowired
     private ManagerService managerService;
 
@@ -63,6 +59,13 @@ public class ManagerController {
             return ResponseSupporter.responseErrorResult(result);
         }
 
-        return ResponseSupporter.resonpseResult(managerService.createManger(requestForm));
+        ResponseCreateManagerForm responseSupporter = managerService.createManger(requestForm);
+
+        if(responseSupporter.isError()){
+            return ResponseSupporter.responseErrorResult(responseSupporter.getErrorCodes());
+        }else {
+//            userName = userName.concat(String.valueOf(responseResult).trim());
+            return ResponseSupporter.resonpseResult(true);
+        }
     }
 }

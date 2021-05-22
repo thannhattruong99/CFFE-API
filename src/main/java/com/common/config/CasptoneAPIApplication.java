@@ -59,6 +59,6 @@ public class CasptoneAPIApplication {
                 registry.addResourceHandler("/resources/**").setCachePeriod(0);
             }
         };
-
     }
+
 }

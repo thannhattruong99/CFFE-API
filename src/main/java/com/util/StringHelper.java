@@ -3,10 +3,10 @@ package com.util;
 import java.util.Random;
 
 public class StringHelper {
-    private static String CAPITAL_CASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static String LOWER_CASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
-    private static String SPECIAL_CHARACTERS = "!@#$";
-    private static String NUMBERS = "1234567890";
+    private static final String CAPITAL_CASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String LOWER_CASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+    private static final String SPECIAL_CHARACTERS = "!@#$";
+    private static final String NUMBERS = "1234567890";
 
     public static String generateUserNameFromFullName(String fullName){
         String[] parts = fullName.trim().split(" ");
