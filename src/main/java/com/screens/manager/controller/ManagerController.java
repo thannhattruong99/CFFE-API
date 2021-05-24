@@ -1,5 +1,6 @@
 package com.screens.manager.controller;
 
+import com.common.form.ResponseCommonForm;
 import com.screens.manager.form.*;
 import com.screens.manager.service.ManagerService;
 import com.util.ResponseSupporter;
@@ -16,6 +17,8 @@ import java.util.List;
 @RequestMapping("admin")
 public class ManagerController {
     private static final String MSG_009 = "MSG-009";
+    private static final String MSG_063 = "MSG-063";
+
     @Autowired
     private ManagerService managerService;
 
@@ -59,13 +62,12 @@ public class ManagerController {
             return ResponseSupporter.responseErrorResult(result);
         }
 
-        ResponseCreateManagerForm responseSupporter = managerService.createManger(requestForm);
+        ResponseCommonForm responseForm = managerService.createManger(requestForm);
 
-        if(responseSupporter.isError()){
-            return ResponseSupporter.responseErrorResult(responseSupporter.getErrorCodes());
-        }else {
-//            userName = userName.concat(String.valueOf(responseResult).trim());
-            return ResponseSupporter.resonpseResult(true);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
+
+        return ResponseSupporter.resonpseResult(true);
     }
 }

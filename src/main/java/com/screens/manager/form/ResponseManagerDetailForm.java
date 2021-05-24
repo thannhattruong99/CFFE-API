@@ -14,8 +14,6 @@ public class ResponseManagerDetailForm implements Serializable {
     private String email;
     private String storeId;
     private String address;
-    private int districtId;
-    private int statusId;
     private String timeZone;
     private String cityName;
     private String districtName;
@@ -25,22 +23,6 @@ public class ResponseManagerDetailForm implements Serializable {
     private String status;
 
     public ResponseManagerDetailForm() {
-    }
-
-    public int getDistrictId() {
-        return districtId;
-    }
-
-    public void setDistrictId(int districtId) {
-        this.districtId = districtId;
-    }
-
-    public int getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
     }
 
     public String getTimeZone() {
