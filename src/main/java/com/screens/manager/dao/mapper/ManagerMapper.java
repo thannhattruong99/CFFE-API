@@ -37,4 +37,12 @@ public class ManagerMapper extends BaseDAO {
         ManagerDTO resultDAO = sqlSession.selectOne("ManagerDAO.getTotalOfManagerLikeUserName", managerDTO);
         return resultDAO.getAffectedRecords();
     }
+
+    public boolean updateManagerInformation(ManagerDTO managerDTO){
+        if(sqlSession.update("ManagerDAO.updateManagerInformation", managerDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
+        return false;
+    }
 }

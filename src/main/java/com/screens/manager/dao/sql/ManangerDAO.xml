@@ -42,18 +42,12 @@
             <if test="status != null">
                AND UPPER(S.StatusName) = #{status}
             </if>
-        ORDER BY U.Fullname
-        <if test="isDesc">
+        ORDER BY U.CreatedTime
             DESC
-        </if>
-        <if test="!isDesc">
-            ASC
-        </if>
         LIMIT
         #{offSet},
         #{fetchNext}
     </select>
-
     <select id="getManagerDetail" resultMap="getManagerDetail" useCache="false">
         SELECT
             U.UserId,
@@ -87,12 +81,24 @@
                #{phone}, #{email}, #{address}, #{districtId},  #{statusId},
                convert_tz(now(),@@session.time_zone,#{createdTime}))
     </insert>
-    <select id="getTotalOfManagerLikeUserName" resultMap="getTotalOfManagerLikeUserName">
+    <select id="getTotalOfManagerLikeUserName" resultMap="getAffectedRows">
         SELECT COUNT(UserName) AS TotaltOfRecord
         FROM tblUser
         WHERE UserName REGEXP #{userNameRegexp} OR UserName = #{userName};
     </select>
-
+    <update id="updateManagerInformation">
+        UPDATE tblUser
+        Set Fullname = #{fullName},
+            Password = #{password},
+            ImageURL = #{imageURL}, Gender = #{gender},
+            BirthDate = #{birthDate},
+            IdentifyCard = #{identifyCard},
+            Phone = #{phone},
+            Email = #{email},
+            Address= #{address},
+            DistrictId = #{districtId},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+    </update>
     <resultMap id="getManagers" type="ResponseManagerListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="managers" ofType="ManagerResponseSupporter">
@@ -122,7 +128,7 @@
         <result property="reasonInactive" column="ReasonInactive"/>
         <result property="status" column="StatusName"/>
     </resultMap>
-    <resultMap id="getTotalOfManagerLikeUserName" type="ManagerDTO">
+    <resultMap id="getAffectedRows" type="ManagerDTO">
         <result property="affectedRecords" column="TotaltOfRecord"/>
     </resultMap>
 </mapper>

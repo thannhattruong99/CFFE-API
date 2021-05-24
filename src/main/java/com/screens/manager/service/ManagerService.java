@@ -1,5 +1,6 @@
 package com.screens.manager.service;
 
+import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.screens.manager.dao.mapper.ManagerMapper;
 import com.screens.manager.dto.ManagerDTO;
@@ -17,13 +18,6 @@ import javax.mail.MessagingException;
 @Service
 public class ManagerService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(ManagerService.class);
-    private static final int DEFAULT_FETCH_NEXT = 15;
-    private static final boolean IS_DESCENDING = false;
-    private static final String NUMBER_REGEXP = "[0-9]*";
-    private static final String TIME_ZONE_VIETNAMESE = "+07:00";
-    private static final int PASSWORD_LENGTH = 6;
-    private static final int MANAGER_ROLE = 2;
-    private static final int PENDING_STATUS = 3;
 
     @Autowired
     private ManagerMapper managerMapper;
@@ -31,7 +25,7 @@ public class ManagerService extends BaseService {
     public ResponseManagerListForm getManagerList(RequestManagerListForm requestForm){
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestManagerListFormToMangerDTO(requestForm, managerDTO);
-        ResponseManagerListForm responseForm = null;
+        ResponseManagerListForm responseForm = new ResponseManagerListForm();
         try {
             responseForm = managerMapper.getManagers(managerDTO);
         }catch (PersistenceException e){
@@ -52,13 +46,12 @@ public class ManagerService extends BaseService {
         return responseForm;
     }
 
-    public ResponseCreateManagerForm createManger(RequestCreateManagerForm requestForm){
-        ResponseCreateManagerForm responseSupporter = new ResponseCreateManagerForm();
+    public ResponseCommonForm createManger(RequestCreateManagerForm requestForm){
+        ResponseCommonForm response = new ResponseCommonForm();
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestCreateManagerFormToManagerDTO(requestForm, managerDTO);
         try {
             if(managerMapper.createManager(managerDTO)){
-                responseSupporter.setUserName(managerDTO.getUserName());
 
                 String msgContent = "Username: " + managerDTO.getUserName() +
                                     "\nPassword: " + managerDTO.getPassword();
@@ -68,15 +61,15 @@ public class ManagerService extends BaseService {
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
-            responseSupporter.setError(true);
-            responseSupporter.setErrorCodes(sqlException(e.getMessage()));
+            response.setErrorCodes(sqlException(e.getMessage()));
         }catch (MessagingException e){
             logger.error("Send email at ManagerService: " + e.getMessage());
         }
-        return responseSupporter;
+        return response;
     }
 
-    public void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
+//    public ResponseUpdateManagerForm();
+    private void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
         managerDTO.setFullName(requestForm.getFullName());
         managerDTO.setUserName(generateUserNameFromFullName(requestForm.getFullName()));
         managerDTO.setPassword(StringHelper.generatePassword(PASSWORD_LENGTH));
@@ -100,7 +93,7 @@ public class ManagerService extends BaseService {
 
         int responseResult = managerMapper.countRecordLikeUserName(requestDAO);
         if(responseResult > 0){
-            userName = userName.concat(String.valueOf(responseResult + 1).trim());
+            userName = userName.concat(String.valueOf(responseResult).trim());
         }
 
         return userName;
@@ -133,13 +126,27 @@ public class ManagerService extends BaseService {
         }
 
         String status = null;
-        if(requestForm.getStatus() == 1){
+        if(requestForm.getStatusId() == 1){
             status = "ACTIVE";
-        }else if(requestForm.getStatus() == 2){
+        }else if(requestForm.getStatusId() == 2){
             status = "INACTIVE";
-        }else if(requestForm.getStatus() == 3){
+        }else if(requestForm.getStatusId() == 3){
             status = "PENDING";
         }
         managerDTO.setStatus(status);
+    }
+
+    private void convertRequestUpdateManagerFormToManagerDTO(RequestUpdateManagerForm requestForm, ManagerDTO managerDTO){
+        managerDTO.setFullName(requestForm.getFullName());
+        managerDTO.setImageURL("xx/image");
+        managerDTO.setGender(requestForm.getGender());
+        managerDTO.setBirthDate(requestForm.getBirthDate());
+        managerDTO.setIdentifyCard(requestForm.getIdentifyCard());
+        managerDTO.setPhone(requestForm.getPhone());
+        managerDTO.setEmail(requestForm.getEmail());
+        managerDTO.setAddress(requestForm.getAddress());
+        managerDTO.setDistrictId(requestForm.getDistrictId());
+        managerDTO.setStatusId(PENDING_STATUS);
+        managerDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 }
