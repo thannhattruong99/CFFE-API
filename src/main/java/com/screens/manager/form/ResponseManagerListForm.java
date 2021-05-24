@@ -1,10 +1,10 @@
 package com.screens.manager.form;
 
-import com.common.form.ResponseGetBaseForm;
-
+import java.io.Serializable;
 import java.util.List;
 
-public class ResponseManagerListForm extends ResponseGetBaseForm {
+public class ResponseManagerListForm implements Serializable {
+    private int totalOfRecord;
     private List<ManagerResponseSupporter> managers;
 
     public ResponseManagerListForm() {
@@ -16,5 +16,13 @@ public class ResponseManagerListForm extends ResponseGetBaseForm {
 
     public void setManagers(List<ManagerResponseSupporter> managers) {
         this.managers = managers;
+    }
+
+    public int getTotalOfRecord() {
+        return totalOfRecord;
+    }
+
+    public void setTotalOfRecord(int totalOfRecord) {
+        this.totalOfRecord = totalOfRecord;
     }
 }

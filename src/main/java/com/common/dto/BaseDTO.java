@@ -5,8 +5,6 @@ public class BaseDTO {
 
     private String searchField;
 
-    private String sortField;
-
     private boolean isDesc;
 
     private int offSet;
@@ -30,14 +28,6 @@ public class BaseDTO {
 
     public void setSearchField(String searchField) {
         this.searchField = searchField;
-    }
-
-    public String getSortField() {
-        return sortField;
-    }
-
-    public void setSortField(String sortField) {
-        this.sortField = sortField;
     }
 
     public boolean isDesc() {
