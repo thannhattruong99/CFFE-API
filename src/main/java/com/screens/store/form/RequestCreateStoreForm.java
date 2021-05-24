@@ -1,12 +1,26 @@
 package com.screens.store.form;
 
+import org.springframework.lang.Nullable;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class RequestCreateStoreForm implements Serializable {
+    @NotEmpty
     private String storeName;
-    private String imageUrl;
+
+    @Nullable
+    private MultipartFile imageUrl;
+
+    @NotEmpty
     private String address;
+
+    @NotEmpty
     private String analyzedTime;
+
+    @NotNull
     private int districtId;
 
     public RequestCreateStoreForm() {
@@ -28,11 +42,11 @@ public class RequestCreateStoreForm implements Serializable {
         this.storeName = storeName;
     }
 
-    public String getImageUrl() {
+    public MultipartFile getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(MultipartFile imageUrl) {
         this.imageUrl = imageUrl;
     }
 

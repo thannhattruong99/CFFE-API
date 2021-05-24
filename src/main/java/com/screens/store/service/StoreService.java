@@ -55,7 +55,7 @@ public class StoreService {
     private StoreDTO convertCreateStoreFormToDTO(RequestCreateStoreForm requestForm) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreName(requestForm.getStoreName());
-        storeDTO.setImageUrl(requestForm.getImageUrl());
+//        storeDTO.setImageUrl(requestForm.getImageUrl());
         storeDTO.setAddress(requestForm.getAddress());
         storeDTO.setDistrictId(requestForm.getDistrictId());
         storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());
@@ -68,13 +68,13 @@ public class StoreService {
         storeDTO.setStoreId(requestForm.getStoreId());
         return storeDTO;
     }
+
     private StoreDTO convertGetStoreListFormToDTO(RequestGetStoreListForm requestGetStoreListForm) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setSearchValue(requestGetStoreListForm.getSearchValue().toLowerCase().trim());
         storeDTO.setSearchField(requestGetStoreListForm.getSearchField().toLowerCase().trim());
-        storeDTO.setSortField(requestGetStoreListForm.getSortField());
-        storeDTO.setDesc(false);
-
+//        storeDTO.setSortField(requestGetStoreListForm.getSortField());
+        storeDTO.setStatusId(requestGetStoreListForm.getStatusId());
         if(requestGetStoreListForm.getPageNum() > 0){
             storeDTO.setOffSet((requestGetStoreListForm.getPageNum() - 1) * requestGetStoreListForm.getFetchNext());
         }

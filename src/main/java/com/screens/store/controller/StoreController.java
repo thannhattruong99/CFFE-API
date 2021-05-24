@@ -2,14 +2,17 @@ package com.screens.store.controller;
 
 import com.screens.store.form.*;
 import com.screens.store.service.StoreService;
+import com.util.ImageHelper;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,7 @@ public class StoreController {
 
     @Autowired
     StoreService storeService;
+
 
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_035 = "MSG-035";
@@ -63,13 +67,16 @@ public class StoreController {
     @PostMapping(value = "/createStore")
     public String createStore(Model model,
                                @Validated @RequestBody RequestCreateStoreForm requestForm,
-                               BindingResult result){
+                               BindingResult result) throws IOException {
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
 
         // TODO: insert img
+//        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+//        String uploadDir = "/store-img/" + "fakeid";
+//        ImageHelper.saveFile(uploadDir,fileName,multipartFile);
 
         // Do Get/Search Store
         int rs = storeService.createStore(requestForm);

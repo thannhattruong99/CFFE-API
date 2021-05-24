@@ -32,9 +32,6 @@
             <where>
                 <if test="searchValue != null">
                     <choose>
-                        <when test="searchField == 'storename'">
-                            S.StoreName LIKE '%' #{searchValue} '%'
-                        </when>
                         <when test="searchField == 'city'">
                             TC.CityName LIKE '%' #{searchValue} '%'
                         </when>
@@ -44,6 +41,9 @@
                         <when test="searchField == 'manager'">
                             TU.Username LIKE '%' #{searchValue} '%'
                         </when>
+                        <otherwise>
+                            S.StoreName LIKE '%' #{searchValue} '%'
+                        </otherwise>
                     </choose>
                 </if>
             </where>
@@ -65,6 +65,15 @@
                     </otherwise>
                 </choose>
             </if>
+
+        <choose>
+            <when test="statusId == 0">
+                AND S.StatusId = 1
+            </when>
+            <otherwise>
+                AND S.StatusId = #{statusId}
+            </otherwise>
+        </choose>
         </where>
         ORDER BY
         S.StoreName
