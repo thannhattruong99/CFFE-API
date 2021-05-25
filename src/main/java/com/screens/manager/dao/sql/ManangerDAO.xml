@@ -101,11 +101,17 @@
         WHERE UserName = #{userName}
     </update>
     <update id="resetPassword">
-        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName} AND (StatusId = 1 OR StatusId = 3);
+        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName};
     </update>
     <select id="getEmailByUserName" resultMap="getEmailByUser">
         SELECT Email FROM tblUser WHERE UserName = #{userName}
     </select>
+    <select id="getStatusIdByUserName" resultMap="getStatusIdByUserName">
+        SELECT StatusId FROM tblUser WHERE UserName = #{userName}
+    </select>
+    <update id="updateManagerStatus">
+        UPDATE tblUser SET StatusId = #{statusId} WHERE UserName = #{userName};
+    </update>
 
     <resultMap id="getManagers" type="ResponseManagerListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
@@ -141,5 +147,8 @@
     </resultMap>
     <resultMap id="getEmailByUser" type="ManagerDTO">
         <result property="email" column="Email"/>
+    </resultMap>
+    <resultMap id="getStatusIdByUserName" type="ManagerDTO">
+        <result property="statusId" column="StatusId"/>
     </resultMap>
 </mapper>
