@@ -144,7 +144,11 @@ public class ManagerService extends BaseService {
     private ResponseCommonForm checkUpdateStatusBusiness(ManagerDTO managerDTO){
         ResponseCommonForm responseCommonForm = new ResponseCommonForm();
         ManagerDTO resultDAO = managerMapper.getStatusIdAndStoreIdByUserName(managerDTO);
-        if(managerDTO.getStatusId() == INACTIVE_STATUS && resultDAO.getStatusId() == PENDING_STATUS){
+        if (resultDAO == null){
+            ArrayList<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_063);
+            responseCommonForm.setErrorCodes(errorCodes);
+        }else if(managerDTO.getStatusId() == INACTIVE_STATUS && resultDAO.getStatusId() == PENDING_STATUS){
             if(StringHelper.isNullOrEmpty(managerDTO.getReasonInactive())
                     || !StringHelper.isNullOrEmpty(resultDAO.getStoreId())){
                 ArrayList<String> errorCodes = new ArrayList<>();
@@ -248,6 +252,7 @@ public class ManagerService extends BaseService {
         if(!StringHelper.isNullOrEmpty(requestForm.getReasonInactive())){
             managerDTO.setReasonInactive(requestForm.getReasonInactive());
         }
+        managerDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 
 }

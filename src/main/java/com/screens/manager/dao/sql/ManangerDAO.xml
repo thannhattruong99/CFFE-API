@@ -115,7 +115,8 @@
         WHERE U.UserName = #{userName}
     </select>
     <update id="updateManagerStatus">
-        UPDATE tblUser SET StatusId = #{statusId}
+        UPDATE tblUser SET StatusId = #{statusId},
+        UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         <if test="statusId == 2">
             , ReasonInactive = #{reasonInactive}
         </if>
