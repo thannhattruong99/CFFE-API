@@ -155,18 +155,6 @@ public class ManagerService extends BaseService {
         return responseCommonForm;
     }
 
-
-//    private ResponseCommonForm checkUpdateStatusBusiness(RequestUpdateStatusForm requestForm, ManagerDTO managerDTO){
-//        ResponseCommonForm responseCommon = new ResponseCommonForm();
-//        ManagerDTO resultDAO = getStoreIdAndStatusIdByUserName(managerDTO);
-//        checkInactiveStatusBusiness(requestForm, resultDAO);
-//
-//        if()
-//
-//
-//        return responseCommon;
-//    }
-
     private void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
         managerDTO.setFullName(requestForm.getFullName());
         managerDTO.setUserName(generateUserNameFromFullName(requestForm.getFullName()));
