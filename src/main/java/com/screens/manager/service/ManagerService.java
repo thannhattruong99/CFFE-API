@@ -63,7 +63,7 @@ public class ManagerService extends BaseService {
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
-            responseForm.setErrorCodes(sqlException(e.getMessage()));
+            responseForm.setErrorCodes(catchSqlException(e.getMessage()));
         }catch (MessagingException e){
             logger.error("Send email at ManagerService: " + e.getMessage());
         }
@@ -82,7 +82,7 @@ public class ManagerService extends BaseService {
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
-            responseForm.setErrorCodes(sqlException(e.getMessage()));
+            responseForm.setErrorCodes(catchSqlException(e.getMessage()));
         }
         return responseForm;
     }
@@ -114,7 +114,7 @@ public class ManagerService extends BaseService {
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
-            responseForm.setErrorCodes(sqlException(e.getMessage()));
+            responseForm.setErrorCodes(catchSqlException(e.getMessage()));
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -125,46 +125,47 @@ public class ManagerService extends BaseService {
     public ResponseCommonForm updateManagerStatus(RequestUpdateStatusForm requestForm){
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestUpdateStatusFormToManagerDTO(requestForm, managerDTO);
-        ResponseCommonForm responseCommon = checkBusinessUpdateStatus(managerDTO);
-        //if check business failed.
-        if(responseCommon.getErrorCodes() != null){
-            return responseCommon;
-        }else{
+        ResponseCommonForm responseForm = checkUpdateStatusBusiness(managerDTO);
+
+        if(responseForm.getErrorCodes() == null){
             try {
-                //if pass check business, are there failed reason?????
                 managerMapper.updateManagerStatus(managerDTO);
             }catch (PersistenceException e){
                 logger.error("Error at ManagerService: " + e.getMessage());
             }
         }
-        return responseCommon;
+        return responseForm;
     }
 
-    private ResponseCommonForm checkBusinessUpdateStatus(ManagerDTO managerDTO){
-        ResponseCommonForm responseCommon = new ResponseCommonForm();
-        //step 1: get current status
-        int currentStatusId = managerMapper.getStatusIdByUserName(managerDTO);
-
-        //step 2: check business rule
-        //not found manager
-        if(currentStatusId == 0){
-            List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_063);
-            responseCommon.setErrorCodes(errorCodes);
-        }
-        //pending -> inactive must have an inactive reason.
-        else if(currentStatusId == PENDING_STATUS && managerDTO.getStatusId() == INACTIVE_STATUS && !StringHelper.isNullOrEmpty(managerDTO.getReasonInactive())){
-        }
-        //inactive -> pending
-        else if(currentStatusId == INACTIVE_STATUS && managerDTO.getStatusId() == PENDING_STATUS){
-
-        }else {
-            List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_066);
-            responseCommon.setErrorCodes(errorCodes);
-        }
-        return responseCommon;
+    private ManagerDTO getStoreIdAndStatusIdByUserName(ManagerDTO managerDTO){
+        return managerMapper.getStatusIdAndStoreIdByUserName(managerDTO);
     }
+
+    private ResponseCommonForm checkUpdateStatusBusiness(ManagerDTO managerDTO){
+        ResponseCommonForm responseCommonForm = new ResponseCommonForm();
+        ManagerDTO resultDAO = managerMapper.getStatusIdAndStoreIdByUserName(managerDTO);
+        if(managerDTO.getStatusId() == INACTIVE_STATUS && resultDAO.getStatusId() == PENDING_STATUS){
+            if(StringHelper.isNullOrEmpty(managerDTO.getReasonInactive())
+                    || !StringHelper.isNullOrEmpty(resultDAO.getStoreId())){
+                ArrayList<String> errorCodes = new ArrayList<>();
+                errorCodes.add(MSG_066);
+                responseCommonForm.setErrorCodes(errorCodes);
+            }
+        }
+        return responseCommonForm;
+    }
+
+
+//    private ResponseCommonForm checkUpdateStatusBusiness(RequestUpdateStatusForm requestForm, ManagerDTO managerDTO){
+//        ResponseCommonForm responseCommon = new ResponseCommonForm();
+//        ManagerDTO resultDAO = getStoreIdAndStatusIdByUserName(managerDTO);
+//        checkInactiveStatusBusiness(requestForm, resultDAO);
+//
+//        if()
+//
+//
+//        return responseCommon;
+//    }
 
     private void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
         managerDTO.setFullName(requestForm.getFullName());
