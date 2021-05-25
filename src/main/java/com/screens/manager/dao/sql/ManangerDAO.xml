@@ -115,7 +115,11 @@
         WHERE U.UserName = #{userName}
     </select>
     <update id="updateManagerStatus">
-        UPDATE tblUser SET StatusId = #{statusId} WHERE UserName = #{userName};
+        UPDATE tblUser SET StatusId = #{statusId}
+        <if test="statusId == 2">
+            , ReasonInactive = #{reasonInactive}
+        </if>
+        WHERE UserName = #{userName};
     </update>
 
     <resultMap id="getManagers" type="ResponseManagerListForm">
