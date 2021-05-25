@@ -78,6 +78,7 @@ public class ManagerService extends BaseService {
             if(!managerMapper.updateManagerInformation(managerDTO)){
                 List<String> errorCodes = new ArrayList<>();
                 errorCodes.add(MSG_063);
+                responseForm.setErrorCodes(errorCodes);
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
