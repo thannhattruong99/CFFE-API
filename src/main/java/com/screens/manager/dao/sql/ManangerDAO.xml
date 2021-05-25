@@ -101,7 +101,7 @@
         WHERE UserName = #{userName}
     </update>
     <update id="resetPassword">
-        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName} AND (StatusId = 1 OR StatusId = 3);
+        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName};
     </update>
     <select id="getEmailByUserName" resultMap="getEmailByUser">
         SELECT Email FROM tblUser WHERE UserName = #{userName}
