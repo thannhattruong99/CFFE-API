@@ -20,7 +20,7 @@ public class BaseService {
     protected static final String MSG_066 = "MSG-066";
     private static final String DUPLICATE_ERROR_KEY = "Duplicate entry";
 
-    public List<String> sqlException(String errorMsg){
+    public List<String> catchSqlException(String errorMsg){
         List<String> errorCodes = null;
         String[] parts = errorMsg.trim().split("'");
         if(parts[0].contains(DUPLICATE_ERROR_KEY)){

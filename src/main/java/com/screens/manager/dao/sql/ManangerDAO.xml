@@ -106,8 +106,13 @@
     <select id="getEmailByUserName" resultMap="getEmailByUser">
         SELECT Email FROM tblUser WHERE UserName = #{userName}
     </select>
-    <select id="getStatusIdByUserName" resultMap="getStatusIdByUserName">
-        SELECT StatusId FROM tblUser WHERE UserName = #{userName}
+    <select id="getStatusIdAndStoreIdByUserName" resultMap="getStatusIdAndStoreIdByUserName">
+        SELECT U.StatusID, USM.StoreId
+        FROM tblUser U
+        LEFT JOIN tblUserStoreMapping USM
+        ON U.UserID = USM.UserId
+        AND USM.StatusId = 1
+        WHERE U.UserName = #{userName}
     </select>
     <update id="updateManagerStatus">
         UPDATE tblUser SET StatusId = #{statusId} WHERE UserName = #{userName};
@@ -148,7 +153,8 @@
     <resultMap id="getEmailByUser" type="ManagerDTO">
         <result property="email" column="Email"/>
     </resultMap>
-    <resultMap id="getStatusIdByUserName" type="ManagerDTO">
+    <resultMap id="getStatusIdAndStoreIdByUserName" type="ManagerDTO">
         <result property="statusId" column="StatusId"/>
+        <result property="storeId" column="StoreId"/>
     </resultMap>
 </mapper>

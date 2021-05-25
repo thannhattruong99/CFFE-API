@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class RequestUpdateStatusForm implements Serializable {
     @NotEmpty(message = "MSG-001") @Size(min = 1, max = 30, message = "MSG-063")
     private String userName;
-    @Min(value = 1, message = "MSG-065") @Max(value = 3, message = "MSG-065")
+    @Min(value = 2, message = "MSG-065") @Max(value = 3, message = "MSG-065")
     private int statusId;
     @Nullable @Size(min = 1, max = 250, message = "MSG-067")
     private String reasonInactive;

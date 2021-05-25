@@ -59,12 +59,8 @@ public class ManagerMapper extends BaseDAO {
         return resultDAO.getEmail();
     }
 
-    public int getStatusIdByUserName(ManagerDTO managerDTO){
-        ManagerDTO resultDAO = sqlSession.selectOne("ManagerDAO.getStatusIdByUserName", managerDTO);
-        if(resultDAO == null){
-            return 0;
-        }
-        return resultDAO.getStatusId();
+    public ManagerDTO getStatusIdAndStoreIdByUserName(ManagerDTO managerDTO){
+        return sqlSession.selectOne("ManagerDAO.getStatusIdAndStoreIdByUserName", managerDTO);
     }
 
     public boolean updateManagerStatus(ManagerDTO managerDTO){
