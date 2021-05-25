@@ -30,6 +30,7 @@ public class ManagerDTO extends BaseDTO implements Serializable {
     private int affectedRecords;
     private String timeZone;
 
+
     public ManagerDTO() {
     }
 

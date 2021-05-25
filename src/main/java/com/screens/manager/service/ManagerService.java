@@ -121,6 +121,51 @@ public class ManagerService extends BaseService {
 
         return responseForm;
     }
+
+    public ResponseCommonForm updateManagerStatus(RequestUpdateStatusForm requestForm){
+        ManagerDTO managerDTO = new ManagerDTO();
+        convertRequestUpdateStatusFormToManagerDTO(requestForm, managerDTO);
+        ResponseCommonForm responseCommon = checkBusinessUpdateStatus(managerDTO);
+        //if check business failed.
+        if(responseCommon.getErrorCodes() != null){
+            return responseCommon;
+        }else{
+            try {
+                //if pass check business, are there failed reason?????
+                managerMapper.updateManagerStatus(managerDTO);
+            }catch (PersistenceException e){
+                logger.error("Error at ManagerService: " + e.getMessage());
+            }
+        }
+        return responseCommon;
+    }
+
+    private ResponseCommonForm checkBusinessUpdateStatus(ManagerDTO managerDTO){
+        ResponseCommonForm responseCommon = new ResponseCommonForm();
+        //step 1: get current status
+        int currentStatusId = managerMapper.getStatusIdByUserName(managerDTO);
+
+        //step 2: check business rule
+        //not found manager
+        if(currentStatusId == 0){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_063);
+            responseCommon.setErrorCodes(errorCodes);
+        }
+        //pending -> inactive must have an inactive reason.
+        else if(currentStatusId == PENDING_STATUS && managerDTO.getStatusId() == INACTIVE_STATUS && !StringHelper.isNullOrEmpty(managerDTO.getReasonInactive())){
+        }
+        //inactive -> pending
+        else if(currentStatusId == INACTIVE_STATUS && managerDTO.getStatusId() == PENDING_STATUS){
+
+        }else {
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_066);
+            responseCommon.setErrorCodes(errorCodes);
+        }
+        return responseCommon;
+    }
+
     private void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
         managerDTO.setFullName(requestForm.getFullName());
         managerDTO.setUserName(generateUserNameFromFullName(requestForm.getFullName()));
@@ -206,6 +251,14 @@ public class ManagerService extends BaseService {
     private void convertRequestResetPasswordToManagerDTO(RequestResetPasswordForm requestForm, ManagerDTO managerDTO){
         managerDTO.setUserName(requestForm.getUserName());
         managerDTO.setPassword(StringHelper.generatePassword(PASSWORD_LENGTH));
+    }
+
+    private void convertRequestUpdateStatusFormToManagerDTO(RequestUpdateStatusForm requestForm, ManagerDTO managerDTO){
+        managerDTO.setUserName(requestForm.getUserName());
+        managerDTO.setStatusId(requestForm.getStatusId());
+        if(!StringHelper.isNullOrEmpty(requestForm.getReasonInactive())){
+            managerDTO.setReasonInactive(requestForm.getReasonInactive());
+        }
     }
 
 }

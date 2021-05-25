@@ -17,6 +17,7 @@ public class BaseService {
     protected static final String INACTIVE_STATUS_STR = "INACTIVE";
     protected static final String PENDING_STATUS_STR = "ACTIVE";
     protected static final String MSG_063 = "MSG-063";
+    protected static final String MSG_066 = "MSG-066";
     private static final String DUPLICATE_ERROR_KEY = "Duplicate entry";
 
     public List<String> sqlException(String errorMsg){
