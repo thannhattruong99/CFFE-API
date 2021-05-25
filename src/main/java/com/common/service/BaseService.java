@@ -1,9 +1,5 @@
 package com.common.service;
 
-import com.screens.manager.service.ManagerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +10,13 @@ public class BaseService {
     protected static final String TIME_ZONE_VIETNAMESE = "+07:00";
     protected static final int PASSWORD_LENGTH = 6;
     protected static final int MANAGER_ROLE = 2;
+    protected static int ACTIVE_STATUS = 1;
+    protected static int INACTIVE_STATUS = 2;
     protected static final int PENDING_STATUS = 3;
-    protected static final String MSG_009 = "MSG-009";
+    protected static final String ACTIVE_STATUS_STR = "ACTIVE";
+    protected static final String INACTIVE_STATUS_STR = "INACTIVE";
+    protected static final String PENDING_STATUS_STR = "ACTIVE";
+    protected static final String MSG_063 = "MSG-063";
     private static final String DUPLICATE_ERROR_KEY = "Duplicate entry";
 
     public List<String> sqlException(String errorMsg){

@@ -88,9 +88,9 @@
     </select>
     <update id="updateManagerInformation">
         UPDATE tblUser
-        Set Fullname = #{fullName},
-            Password = #{password},
-            ImageURL = #{imageURL}, Gender = #{gender},
+        SET Fullname = #{fullName},
+            ImageURL = #{imageURL},
+            Gender = #{gender},
             BirthDate = #{birthDate},
             IdentifyCard = #{identifyCard},
             Phone = #{phone},
@@ -98,7 +98,15 @@
             Address= #{address},
             DistrictId = #{districtId},
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE UserName = #{userName}
     </update>
+    <update id="resetPassword">
+        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName} AND (StatusId = 1 OR StatusId = 3);
+    </update>
+    <select id="getEmailByUserName" resultMap="getEmailByUser">
+        SELECT Email FROM tblUser WHERE UserName = #{userName}
+    </select>
+
     <resultMap id="getManagers" type="ResponseManagerListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="managers" ofType="ManagerResponseSupporter">
@@ -130,5 +138,8 @@
     </resultMap>
     <resultMap id="getAffectedRows" type="ManagerDTO">
         <result property="affectedRecords" column="TotaltOfRecord"/>
+    </resultMap>
+    <resultMap id="getEmailByUser" type="ManagerDTO">
+        <result property="email" column="Email"/>
     </resultMap>
 </mapper>

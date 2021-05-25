@@ -37,4 +37,9 @@ public class StringHelper {
         }
         return new String(password);
     }
+
+    public static boolean isNullOrEmpty(String str){
+        return (str == null || str.isEmpty());
+    }
+
 }
