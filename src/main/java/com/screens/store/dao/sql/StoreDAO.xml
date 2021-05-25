@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.screens.store.dao.sql.StoreDAO">
+
+    <select id="getStoreList" resultMap="getStoreList" useCache="false">
+        SELECT
+            SUPQUE.totalOfRecord,
+            S.StoreId,
+            S.StoreName,
+            S.ImageURL,
+            S.Address,
+            TD.DistrictName,
+            TC.CityName,
+            TU.Username,
+            TU.UserId,
+            S.UpdatedTime,
+            S.StatusId,
+            TS.StatusName
+        FROM tblStore S
+                LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId),
+            (SELECT COUNT(*) AS totalOfRecord
+            FROM tblStore S
+                LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId)
+            <where>
+                <if test="searchValue != null">
+                    <choose>
+                        <when test="searchField == 'city'">
+                            TC.CityName LIKE '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'district'">
+                            TD.DistrictName LIKE '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'manager'">
+                            TU.Username LIKE '%' #{searchValue} '%'
+                        </when>
+                        <otherwise>
+                            S.StoreName LIKE '%' #{searchValue} '%'
+                        </otherwise>
+                    </choose>
+                </if>
+            </where>
+        <choose>
+            <when test="statusId == 0">
+                AND S.StatusId = 1
+            </when>
+            <otherwise>
+                AND S.StatusId = #{statusId}
+            </otherwise>
+        </choose>
+                 ) AS SUPQUE
+        <where>
+            <if test="searchValue != null">
+                <choose>
+                    <when test="searchField == 'city'">
+                        TC.CityName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'district'">
+                        TD.DistrictName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'manager'">
+                        TU.Username LIKE '%' #{searchValue} '%'
+                    </when>
+                    <otherwise>
+                        S.StoreName LIKE '%' #{searchValue} '%'
+                    </otherwise>
+                </choose>
+            </if>
+
+        <choose>
+            <when test="statusId == 0">
+                AND S.StatusId = 1
+            </when>
+            <otherwise>
+                AND S.StatusId = #{statusId}
+            </otherwise>
+        </choose>
+        </where>
+        ORDER BY
+        S.StoreName
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+    <resultMap id="getStoreList" type="ResponseStoreListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreResponseSupporter">
+            <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <result property="imageURL" column="ImageURL"/>
+            <result property="managerUsername" column="Username"/>
+            <result property="managerUserId" column="UserId"/>
+            <result property="address" column="Address"/>
+            <result property="city" column="CityName"/>
+            <result property="district" column="DistrictName"/>
+            <result property="lastUpdated" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="status" column="StatusName"/>
+        </collection>
+    </resultMap>
+
+    <select id="getStoreDetail" resultMap="getStoreDetail" useCache="false">
+        SELECT S.StoreId,
+               S.StoreName,
+               S.ImageURL,
+               S.Address,
+               TD.DistrictName,
+               TC.CityName,
+               S.CreatedTime,
+               S.UpdatedTime,
+               S.ReasonInactive,
+               TU.UserId,
+               TU.Username,
+               TU.Fullname,
+               S.StatusId,
+               TS.StatusName
+        FROM tblStore S
+                 LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                 LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                 LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                 LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId)
+                 LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+        WHERE
+            S.StoreId = #{storeId}
+    </select>
+
+    <resultMap id="getStoreDetail" type="ResponseStoreDetailForm">
+        <result property="storeId" column="StoreId"/>
+        <result property="storeName" column="StoreName"/>
+        <result property="imageUrl" column="ImageURL"/>
+        <result property="managerName" column="Fullname"/>
+        <result property="managerUsername" column="Username"/>
+        <result property="managerId" column="UserId"/>
+        <result property="address" column="Address"/>
+        <result property="district" column="DistrictName"/>
+        <result property="city" column="CityName"/>
+        <result property="createdTime" column="CreatedTime"/>
+        <result property="updatedTime" column="UpdatedTime"/>
+        <result property="reasonInactive" column="ReasonInactive"/>
+        <result property="statusId" column="StatusId"/>
+        <result property="status" column="StatusName"/>
+    </resultMap>
+
+    <insert id="createStore"  parameterType="StoreDTO">
+        INSERT INTO tblStore (StoreName, ImageURL, Address, AnalyzedTime, CreatedTime,
+                              UpdatedTime, DistrictId, StatusId)
+        VALUES (#{storeName},
+          #{imageUrl},
+          #{address},
+          #{analyzedTime},
+          convert_tz(now(),@@session.time_zone,'+07:00'),
+          convert_tz(now(),@@session.time_zone,'+07:00'),
+          #{districtId},
+          #{statusId})
+    </insert>
+
+    <update id="changeStatus" parameterType="StoreDTO">
+        UPDATE tblStore
+        SET StatusId = #{statusId}
+        WHERE StoreId = #{storeId}
+    </update>
+
+    <select id="getStoreStatus" resultMap="getStoreStatus" useCache="false">
+        SELECT S.StoreId,
+               S.StatusId
+        FROM tblStore S
+        WHERE
+            S.StoreId = #{storeId}
+    </select>
+
+    <resultMap id="getStoreStatus" type="ResponseStoreDetailForm">
+        <result property="storeId" column="StoreId"/>
+        <result property="statusId" column="StatusId"/>
+    </resultMap>
+
+</mapper>
