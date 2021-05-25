@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ManagerService extends BaseService {
@@ -47,7 +49,7 @@ public class ManagerService extends BaseService {
     }
 
     public ResponseCommonForm createManger(RequestCreateManagerForm requestForm){
-        ResponseCommonForm response = new ResponseCommonForm();
+        ResponseCommonForm responseForm = new ResponseCommonForm();
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestCreateManagerFormToManagerDTO(requestForm, managerDTO);
         try {
@@ -61,14 +63,64 @@ public class ManagerService extends BaseService {
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
-            response.setErrorCodes(sqlException(e.getMessage()));
+            responseForm.setErrorCodes(sqlException(e.getMessage()));
         }catch (MessagingException e){
             logger.error("Send email at ManagerService: " + e.getMessage());
         }
-        return response;
+        return responseForm;
     }
 
-//    public ResponseUpdateManagerForm();
+    public ResponseCommonForm updateManagerInformation(RequestUpdateManagerForm requestForm){
+        ResponseCommonForm responseForm = new ResponseCommonForm();
+        ManagerDTO managerDTO = new ManagerDTO();
+        convertRequestUpdateManagerFormToManagerDTO(requestForm, managerDTO);
+        try{
+            if(!managerMapper.updateManagerInformation(managerDTO)){
+                List<String> errorCodes = new ArrayList<>();
+                errorCodes.add(MSG_063);
+                responseForm.setErrorCodes(errorCodes);
+            }
+        }catch (PersistenceException e){
+            logger.error("Error at ManagerService: " + e.getMessage());
+            responseForm.setErrorCodes(sqlException(e.getMessage()));
+        }
+        return responseForm;
+    }
+
+    public ResponseCommonForm resetManagerPassword(RequestResetPasswordForm requestForm){
+        ResponseCommonForm responseForm = new ResponseCommonForm();
+        ManagerDTO managerDTO = new ManagerDTO();
+        convertRequestResetPasswordToManagerDTO(requestForm, managerDTO);
+        try {
+
+            if(!managerMapper.resetPassword(managerDTO)){
+                List<String> errorCodes = new ArrayList<>();
+                errorCodes.add(MSG_063);
+                responseForm.setErrorCodes(errorCodes);
+            }else{
+                String email = "";
+                String msgContent = "Username: " + managerDTO.getUserName() +
+                        "\nPassword: " + managerDTO.getPassword();
+                if(!StringHelper.isNullOrEmpty(requestForm.getEmail())){
+                    email = requestForm.getEmail();
+                }else{
+                    email = managerMapper.getEmailByUserName(managerDTO);
+                }
+
+                if(!EmailHelper.sendEmail(email, msgContent)){
+//                    return false;
+                }
+
+            }
+        }catch (PersistenceException e){
+            logger.error("Error at ManagerService: " + e.getMessage());
+            responseForm.setErrorCodes(sqlException(e.getMessage()));
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        return responseForm;
+    }
     private void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
         managerDTO.setFullName(requestForm.getFullName());
         managerDTO.setUserName(generateUserNameFromFullName(requestForm.getFullName()));
@@ -126,17 +178,18 @@ public class ManagerService extends BaseService {
         }
 
         String status = null;
-        if(requestForm.getStatusId() == 1){
-            status = "ACTIVE";
-        }else if(requestForm.getStatusId() == 2){
-            status = "INACTIVE";
-        }else if(requestForm.getStatusId() == 3){
-            status = "PENDING";
+        if(requestForm.getStatusId() == ACTIVE_STATUS){
+            status = ACTIVE_STATUS_STR;
+        }else if(requestForm.getStatusId() == INACTIVE_STATUS){
+            status = INACTIVE_STATUS_STR;
+        }else if(requestForm.getStatusId() == PENDING_STATUS){
+            status = PENDING_STATUS_STR;
         }
         managerDTO.setStatus(status);
     }
 
     private void convertRequestUpdateManagerFormToManagerDTO(RequestUpdateManagerForm requestForm, ManagerDTO managerDTO){
+        managerDTO.setUserName(requestForm.getUserName());
         managerDTO.setFullName(requestForm.getFullName());
         managerDTO.setImageURL("xx/image");
         managerDTO.setGender(requestForm.getGender());
@@ -149,4 +202,10 @@ public class ManagerService extends BaseService {
         managerDTO.setStatusId(PENDING_STATUS);
         managerDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
+
+    private void convertRequestResetPasswordToManagerDTO(RequestResetPasswordForm requestForm, ManagerDTO managerDTO){
+        managerDTO.setUserName(requestForm.getUserName());
+        managerDTO.setPassword(StringHelper.generatePassword(PASSWORD_LENGTH));
+    }
+
 }

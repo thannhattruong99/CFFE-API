@@ -70,4 +70,34 @@ public class ManagerController {
 
         return ResponseSupporter.resonpseResult(true);
     }
+
+    @RequestMapping(value = "/manager/update", method = RequestMethod.POST)
+    public String updateManagerInformation(@Validated @RequestBody RequestUpdateManagerForm requestForm, //
+                                BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCommonForm responseForm = managerService.updateManagerInformation(requestForm);
+
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @GetMapping(value = "/manager/reset_password")
+    public String resetPassword(@Validated RequestResetPasswordForm requestForm, //
+                                       BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCommonForm responseForm = managerService.resetManagerPassword(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+        return ResponseSupporter.resonpseResult(true);
+    }
 }
