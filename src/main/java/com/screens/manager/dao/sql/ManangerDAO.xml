@@ -78,7 +78,7 @@
         INSERT INTO tblUser(Fullname, Username, Password, RoleId, ImageURL, Gender,
                             BirthDate, IdentifyCard, Phone, Email, Address, DistrictId, statusId, CreatedTime)
         VALUES(#{fullName}, #{userName}, #{password}, #{roleId},#{imageURL}, #{gender}, #{birthDate}, #{identifyCard},
-               #{phone}, #{email}, #{address}, #{districtId},  #{statusId},
+               #{phone}, #{email}, #{address}, #{districtId}, #{statusId},
                convert_tz(now(),@@session.time_zone,#{createdTime}))
     </insert>
     <select id="getTotalOfManagerLikeUserName" resultMap="getAffectedRows">
@@ -115,7 +115,8 @@
         WHERE U.UserName = #{userName}
     </select>
     <update id="updateManagerStatus">
-        UPDATE tblUser SET StatusId = #{statusId}
+        UPDATE tblUser SET StatusId = #{statusId},
+        UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         <if test="statusId == 2">
             , ReasonInactive = #{reasonInactive}
         </if>
