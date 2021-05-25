@@ -9,6 +9,11 @@
         <typeAlias alias="CityResponseSupporter" type="com.screens.city.form.CityResponseSupporter"/>
         <typeAlias alias="DistrictResponseSupporter" type="com.screens.city.form.DistrictResponseSupporter"/>
         <typeAlias alias="ManagerDTO" type="com.screens.manager.dto.ManagerDTO"/>
+        <typeAlias alias="StoreDTO" type="com.screens.store.dto.StoreDTO"/>
+        <typeAlias alias="ResponseStoreDetailForm" type="com.screens.store.form.ResponseStoreDetailForm"/>
+        <typeAlias alias="ResponseStoreListForm" type="com.screens.store.form.ResponseStoreListForm"/>
+        <typeAlias alias="StoreResponseSupporter" type="com.screens.store.form.StoreResponseSupporter"/>
+
     </typeAliases>
 
     <environments default="development">
@@ -25,6 +30,7 @@
 
     <mappers>
         <mapper resource="com/screens/manager/dao/sql/ManangerDAO.xml"/>
+        <mapper resource="com/screens/store/dao/sql/StoreDAO.xml"/>
         <mapper resource="com/screens/city/dao/sql/CityDAO.xml"/>
     </mappers>
 </configuration>
