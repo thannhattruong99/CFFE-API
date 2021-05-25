@@ -53,7 +53,7 @@ public class StoreService extends BaseService {
             storeMapper.createStore(storeDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
-            response.setErrorCodes(sqlException(e.getMessage()));
+            response.setErrorCodes(catchSqlException(e.getMessage()));
         }
         return response;
     }
@@ -71,7 +71,7 @@ public class StoreService extends BaseService {
             }
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
-            response.setErrorCodes(sqlException(e.getMessage()));
+            response.setErrorCodes(catchSqlException(e.getMessage()));
         }
         return response;
     }
