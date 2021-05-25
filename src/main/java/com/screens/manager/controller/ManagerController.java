@@ -48,7 +48,7 @@ public class ManagerController {
         ResponseManagerDetailForm response = managerService.getManagerDetail(requestForm);
         if(response == null){
             List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_009);
+            errorCodes.add(MSG_063);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
 
@@ -64,6 +64,51 @@ public class ManagerController {
 
         ResponseCommonForm responseForm = managerService.createManger(requestForm);
 
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/manager/update", method = RequestMethod.POST)
+    public String updateManagerInformation(@Validated @RequestBody RequestUpdateManagerForm requestForm, //
+                                BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCommonForm responseForm = managerService.updateManagerInformation(requestForm);
+
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @GetMapping(value = "/manager/reset_password")
+    public String resetPassword(@Validated RequestResetPasswordForm requestForm, //
+                                       BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCommonForm responseForm = managerService.resetManagerPassword(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/manager/update_status", method = RequestMethod.POST)
+    public String updateStatus(@Validated @RequestBody RequestUpdateStatusForm requestForm, //
+                               BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCommonForm responseForm = managerService.updateManagerStatus(requestForm);
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }

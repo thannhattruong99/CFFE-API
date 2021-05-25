@@ -110,4 +110,12 @@ public class RequestUpdateManagerForm {
     public void setDistrictId(int districtId) {
         this.districtId = districtId;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }

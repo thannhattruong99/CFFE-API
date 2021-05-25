@@ -45,4 +45,29 @@ public class ManagerMapper extends BaseDAO {
         }
         return false;
     }
+
+    public boolean resetPassword(ManagerDTO managerDTO){
+        if(sqlSession.update("ManagerDAO.resetPassword", managerDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
+        return false;
+    }
+
+    public String getEmailByUserName(ManagerDTO managerDTO){
+        ManagerDTO resultDAO = sqlSession.selectOne("ManagerDAO.getEmailByUserName", managerDTO);
+        return resultDAO.getEmail();
+    }
+
+    public ManagerDTO getStatusIdAndStoreIdByUserName(ManagerDTO managerDTO){
+        return sqlSession.selectOne("ManagerDAO.getStatusIdAndStoreIdByUserName", managerDTO);
+    }
+
+    public boolean updateManagerStatus(ManagerDTO managerDTO){
+        if(sqlSession.update("ManagerDAO.updateManagerStatus", managerDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
+        return false;
+    }
 }
