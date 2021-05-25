@@ -27,7 +27,7 @@ public class StoreController {
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_035 = "MSG-035";
 
-    @PostMapping(value = "/getStores")
+    @PostMapping(value = "/admin/stores/getStores")
     public String getStoreList(Model model,
                                @Validated @RequestBody RequestGetStoreListForm requestForm,
                                BindingResult result){
@@ -46,7 +46,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(responseStoreListForm);
     }
 
-    @GetMapping(value = "/getStoreDetail")
+    @GetMapping(value = "/admin/stores/getStoreDetail")
     public String getStoreDetail(
                                @Validated RequestGetStoreDetailForm requestForm,
                                BindingResult result){
@@ -65,7 +65,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(responseStoreDetailForm);
     }
 
-    @PostMapping(value = "/createStore")
+    @PostMapping(value = "/admin/stores/createStore")
     public String createStore(
                                @Validated @RequestBody RequestCreateStoreForm requestForm,
                                BindingResult result) throws IOException {
@@ -88,7 +88,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(true);
     }
 
-    @PostMapping(value = "/changeStoreStatus")
+    @PostMapping(value = "/admin/stores/changeStoreStatus")
     public String changeStatus(@Validated @RequestBody RequestChangeStoreStatusForm requestForm,
                                BindingResult result){
         // Check Validate
