@@ -1,5 +1,6 @@
 package com.screens.store.controller;
 
+import com.common.form.ResponseCommonForm;
 import com.screens.store.form.*;
 import com.screens.store.service.StoreService;
 import com.util.ImageHelper;
@@ -65,7 +66,7 @@ public class StoreController {
     }
 
     @PostMapping(value = "/createStore")
-    public String createStore(Model model,
+    public String createStore(
                                @Validated @RequestBody RequestCreateStoreForm requestForm,
                                BindingResult result) throws IOException {
         // Check Validate
@@ -78,14 +79,28 @@ public class StoreController {
 //        String uploadDir = "/store-img/" + "fakeid";
 //        ImageHelper.saveFile(uploadDir,fileName,multipartFile);
 
-        // Do Get/Search Store
-        int rs = storeService.createStore(requestForm);
-        if(rs == 0){
-            List<String> errorCodes = new ArrayList<>();
-                errorCodes.add(MSG_009);
-            return ResponseSupporter.responseErrorResult(errorCodes);
+        // Do Create Store
+        ResponseCommonForm rs = storeService.createStore(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(rs);
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @PostMapping(value = "/changeStoreStatus")
+    public String changeStatus(@Validated @RequestBody RequestChangeStoreStatusForm requestForm,
+                               BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Change Status Store
+        ResponseCommonForm rs = storeService.changeStatus(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
     }
 }

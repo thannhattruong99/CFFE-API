@@ -10,9 +10,18 @@ public class StoreResponseSupporter {
     private String city;
     private String district;
     private String lastUpdated;
+    private int statusId;
     private String status;
 
     public StoreResponseSupporter() {
+    }
+
+    public int getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
     }
 
     public String getStoreId() {

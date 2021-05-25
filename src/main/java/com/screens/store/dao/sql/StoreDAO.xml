@@ -15,6 +15,7 @@
             TU.Username,
             TU.UserId,
             S.UpdatedTime,
+            S.StatusId,
             TS.StatusName
         FROM tblStore S
                 LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
@@ -47,6 +48,14 @@
                     </choose>
                 </if>
             </where>
+        <choose>
+            <when test="statusId == 0">
+                AND S.StatusId = 1
+            </when>
+            <otherwise>
+                AND S.StatusId = #{statusId}
+            </otherwise>
+        </choose>
                  ) AS SUPQUE
         <where>
             <if test="searchValue != null">
@@ -94,6 +103,7 @@
             <result property="city" column="CityName"/>
             <result property="district" column="DistrictName"/>
             <result property="lastUpdated" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
             <result property="status" column="StatusName"/>
         </collection>
     </resultMap>
@@ -111,6 +121,7 @@
                TU.UserId,
                TU.Username,
                TU.Fullname,
+               S.StatusId,
                TS.StatusName
         FROM tblStore S
                  LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
@@ -135,6 +146,7 @@
         <result property="createdTime" column="CreatedTime"/>
         <result property="updatedTime" column="UpdatedTime"/>
         <result property="reasonInactive" column="ReasonInactive"/>
+        <result property="statusId" column="StatusId"/>
         <result property="status" column="StatusName"/>
     </resultMap>
 
@@ -150,5 +162,24 @@
           #{districtId},
           #{statusId})
     </insert>
+
+    <update id="changeStatus" parameterType="StoreDTO">
+        UPDATE tblStore
+        SET StatusId = #{statusId}
+        WHERE StoreId = #{storeId}
+    </update>
+
+    <select id="getStoreStatus" resultMap="getStoreStatus" useCache="false">
+        SELECT S.StoreId,
+               S.StatusId
+        FROM tblStore S
+        WHERE
+            S.StoreId = #{storeId}
+    </select>
+
+    <resultMap id="getStoreStatus" type="ResponseStoreDetailForm">
+        <result property="storeId" column="StoreId"/>
+        <result property="statusId" column="StatusId"/>
+    </resultMap>
 
 </mapper>

@@ -15,6 +15,16 @@ public class ResponseStoreDetailForm implements Serializable {
     private String createdTime;
     private String updatedTime;
     private String reasonInactive;
+    private int statusId;
+
+    public int getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
+    }
+
     private String status;
 
     public ResponseStoreDetailForm() {

@@ -22,13 +22,23 @@ public class StoreMapper extends BaseDAO {
     public ResponseStoreDetailForm getStoreDetail(StoreDTO storeDTO) {
         return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreDetail",storeDTO);
     }
+    public ResponseStoreDetailForm getStoreStatus(StoreDTO storeDTO) {
+        return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreStatus",storeDTO);
+    }
 
-    public int createStore(StoreDTO storeDTO) {
-        System.out.println("aaaaaaaaaaaaaaaaaa"+ storeDTO.getAddress());
+    public boolean createStore(StoreDTO storeDTO) {
         if(sqlSession.insert("com.screens.store.dao.sql.StoreDAO.createStore",storeDTO) > 0){
             this.sqlSession.commit();
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
+    }
+
+    public boolean changeStatus(StoreDTO storeDTO) {
+        if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeStatus",storeDTO) > 0){
+            this.sqlSession.commit();
+            return true;
+        }
+        return false;
     }
 }

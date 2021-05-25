@@ -1,5 +1,7 @@
 package com.screens.store.service;
 
+import com.common.form.ResponseCommonForm;
+import com.common.service.BaseService;
 import com.screens.store.dao.mapper.StoreMapper;
 import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.*;
@@ -9,10 +11,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
-public class StoreService {
+public class StoreService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
-    private static final int DEFAULT_FETCH_NEXT = 10;
+    private static final int DEFAULT_FETCH_NEXT = 15;
     private static final int ACTIVE = 1;
     private static final int INACTIVE = 2;
 
@@ -41,17 +46,42 @@ public class StoreService {
         return responseStoreDetailForm;
     }
 
-    public int createStore(RequestCreateStoreForm requestForm) {
-        int rs =0;
+    public ResponseCommonForm createStore(RequestCreateStoreForm requestForm) {
+        ResponseCommonForm response = new ResponseCommonForm();
         StoreDTO storeDTO = convertCreateStoreFormToDTO(requestForm);
         try {
-            rs = storeMapper.createStore(storeDTO);
+            storeMapper.createStore(storeDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
+            response.setErrorCodes(sqlException(e.getMessage()));
         }
-        return rs;
+        return response;
     }
 
+    public ResponseCommonForm changeStatus(RequestChangeStoreStatusForm requestForm) {
+        ResponseCommonForm response = new ResponseCommonForm();
+        StoreDTO storeDTO = convertChangeStatusFormToDTO(requestForm);
+        try {
+            ResponseStoreDetailForm responseStoreDetailForm = storeMapper.getStoreStatus(storeDTO);
+            if (((responseStoreDetailForm.getStatusId() == 2) && (storeDTO.getStatusId() == 3))
+            || ((responseStoreDetailForm.getStatusId() == 3) && (storeDTO.getStatusId() == 2))){
+                storeMapper.changeStatus(storeDTO);
+            } else {
+                System.out.println("Can not change status!!!!!!!!");
+            }
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+            response.setErrorCodes(sqlException(e.getMessage()));
+        }
+        return response;
+    }
+
+    private StoreDTO convertChangeStatusFormToDTO(RequestChangeStoreStatusForm requestForm){
+        StoreDTO storeDTO = new StoreDTO();
+        storeDTO.setStoreId(requestForm.getStoreId());
+        storeDTO.setStatusId(requestForm.getStatusId());
+        return storeDTO;
+    }
     private StoreDTO convertCreateStoreFormToDTO(RequestCreateStoreForm requestForm) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreName(requestForm.getStoreName());
