@@ -17,19 +17,21 @@ public class BaseService {
     protected static final String PENDING_STATUS_STR = "ACTIVE";
     protected static final String MSG_063 = "MSG-063";
     protected static final String MSG_066 = "MSG-066";
+    private static final String MSG_076 = "MSG-076";
     private static final String DUPLICATE_ERROR_KEY = "Duplicate entry";
 
     public List<String> catchSqlException(String errorMsg){
-        List<String> errorCodes = null;
+        List<String> errorCodes = new ArrayList<>();
         String[] parts = errorMsg.trim().split("'");
         if(parts[0].contains(DUPLICATE_ERROR_KEY)){
             String[] subParts = parts[3].split("_");
             //subParts[1] is error field name
             String errorCode = ServiceSupporter.getMsgCodeByMsgKey(DUPLICATE_ERROR_KEY + " " + subParts[1]);
             if(errorCode != null){
-                errorCodes = new ArrayList<>();
                 errorCodes.add(errorCode);
             }
+        }else{
+            errorCodes.add(MSG_076);
         }
         return errorCodes;
     }

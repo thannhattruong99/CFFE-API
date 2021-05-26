@@ -9,8 +9,17 @@ public class ShelfDTO extends BaseDTO {
     private String shelfName;
     private int statusId;
     private String statusName;
+    private int totalOfRecord;
 
     public ShelfDTO() {
+    }
+
+    public int getTotalOfRecord() {
+        return totalOfRecord;
+    }
+
+    public void setTotalOfRecord(int totalOfRecord) {
+        this.totalOfRecord = totalOfRecord;
     }
 
     public String getShelfId() {
