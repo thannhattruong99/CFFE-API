@@ -5,6 +5,7 @@ import com.common.service.BaseService;
 import com.screens.store.dao.mapper.StoreMapper;
 import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,8 +68,22 @@ public class StoreService extends BaseService {
             || ((responseStoreDetailForm.getStatusId() == 3) && (storeDTO.getStatusId() == 2))){
                 storeMapper.changeStatus(storeDTO);
             } else {
-                System.out.println("Can not change status!!!!!!!!");
+                List<String> errorMsg = new ArrayList<>();
+                errorMsg.add("MSG-066");
+                response.setErrorCodes(errorMsg);
             }
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+            response.setErrorCodes(catchSqlException(e.getMessage()));
+        }
+        return response;
+    }
+
+    public ResponseCommonForm updateStoreInfo(RequestUpdateInfoForm requestForm) {
+        ResponseCommonForm response = new ResponseCommonForm();
+        StoreDTO storeDTO = convertUpdateInfoFormToDTO(requestForm);
+        try {
+            storeMapper.updateInfo(storeDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
             response.setErrorCodes(catchSqlException(e.getMessage()));
@@ -80,8 +95,27 @@ public class StoreService extends BaseService {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreId(requestForm.getStoreId());
         storeDTO.setStatusId(requestForm.getStatusId());
+        if (requestForm.getReasonInactive() != null) {
+            storeDTO.setReasonInactive(requestForm.getReasonInactive());
+        }
         return storeDTO;
     }
+
+    private StoreDTO convertUpdateInfoFormToDTO(RequestUpdateInfoForm requestForm) {
+        StoreDTO storeDTO = new StoreDTO();
+        storeDTO.setStoreId(requestForm.getStoreId());
+        if (StringUtils.isNotEmpty(requestForm.getStoreName()))
+            storeDTO.setStoreName(requestForm.getStoreName());
+//        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+//            storeDTO.setImageUrl(requestForm.getImageUrl());
+        if (StringUtils.isNotEmpty(requestForm.getAddress()))
+            storeDTO.setAddress(requestForm.getAddress());
+        if (requestForm.getDistrictId() != 0) {
+            storeDTO.setDistrictId(requestForm.getDistrictId());
+        }
+        return storeDTO;
+    }
+
     private StoreDTO convertCreateStoreFormToDTO(RequestCreateStoreForm requestForm) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreName(requestForm.getStoreName());

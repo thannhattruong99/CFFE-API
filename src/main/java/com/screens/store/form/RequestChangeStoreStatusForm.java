@@ -1,18 +1,33 @@
 package com.screens.store.form;
 
+import org.springframework.lang.Nullable;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class RequestChangeStoreStatusForm {
+public class RequestChangeStoreStatusForm implements Serializable {
     @NotEmpty @NotNull
     private String storeId;
 
-    @Min(value = 1, message = "MSG-009") @Max(value = 3, message = "MSG-009")
+    @Min(value = 1, message = "MSG-065") @Max(value = 3, message = "MSG-065")
     private int statusId;
 
+    @Nullable
+    private String reasonInactive;
+
     public RequestChangeStoreStatusForm() {
+    }
+
+    @Nullable
+    public String getReasonInactive() {
+        return reasonInactive;
+    }
+
+    public void setReasonInactive(@Nullable String reasonInactive) {
+        this.reasonInactive = reasonInactive;
     }
 
     public String getStoreId() {
