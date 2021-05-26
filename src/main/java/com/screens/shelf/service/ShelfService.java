@@ -47,6 +47,5 @@ public class ShelfService extends BaseService {
         if(requestForm.getFetchNext() > 0){
             shelfDTO.setFetchNext(requestForm.getFetchNext());
         }
-
     }
 }
