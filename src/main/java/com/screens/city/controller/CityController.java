@@ -18,7 +18,7 @@ public class CityController {
     @Autowired
     private CityService cityService;
 
-    @GetMapping(value = "/city_district_lst")
+    @GetMapping(value = "/city-district-lst")
     public String getCityAndDistrict(){
         List<CityDistrictResponseSupporter> responseForm = cityService.getCityDistrict();
         if(responseForm == null){
