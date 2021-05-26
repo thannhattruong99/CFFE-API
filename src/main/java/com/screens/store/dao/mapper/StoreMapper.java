@@ -41,4 +41,12 @@ public class StoreMapper extends BaseDAO {
         }
         return false;
     }
+
+    public boolean updateInfo(StoreDTO storeDTO) {
+        if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.updateInfo",storeDTO) > 0){
+            this.sqlSession.commit();
+            return true;
+        }
+        return false;
+    }
 }

@@ -27,7 +27,7 @@ public class StoreController {
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_035 = "MSG-035";
 
-    @PostMapping(value = "/admin/stores/getStores")
+    @PostMapping(value = "/admin/stores")
     public String getStoreList(Model model,
                                @Validated @RequestBody RequestGetStoreListForm requestForm,
                                BindingResult result){
@@ -46,7 +46,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(responseStoreListForm);
     }
 
-    @GetMapping(value = "/admin/stores/getStoreDetail")
+    @GetMapping(value = "/admin/store")
     public String getStoreDetail(
                                @Validated RequestGetStoreDetailForm requestForm,
                                BindingResult result){
@@ -65,7 +65,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(responseStoreDetailForm);
     }
 
-    @PostMapping(value = "/admin/stores/createStore")
+    @PostMapping(value = "/admin/store/create")
     public String createStore(
                                @Validated @RequestBody RequestCreateStoreForm requestForm,
                                BindingResult result) throws IOException {
@@ -88,7 +88,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(true);
     }
 
-    @PostMapping(value = "/admin/stores/changeStoreStatus")
+    @PostMapping(value = "/admin/store/update-status")
     public String changeStatus(@Validated @RequestBody RequestChangeStoreStatusForm requestForm,
                                BindingResult result){
         // Check Validate
@@ -101,6 +101,21 @@ public class StoreController {
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
         // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/admin/store/update", method = RequestMethod.POST)
+    public String updateStoreInfo(@Validated @RequestBody RequestUpdateInfoForm requestForm,
+                                  BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCommonForm responseForm = storeService.updateStoreInfo(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+
         return ResponseSupporter.resonpseResult(true);
     }
 }
