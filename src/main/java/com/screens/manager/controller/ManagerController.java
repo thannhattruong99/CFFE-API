@@ -87,7 +87,7 @@ public class ManagerController {
         return ResponseSupporter.resonpseResult(true);
     }
 
-    @GetMapping(value = "/manager/reset_password")
+    @GetMapping(value = "/manager/reset-password")
     public String resetPassword(@Validated RequestResetPasswordForm requestForm, //
                                        BindingResult result){
         if(result.hasErrors()){
@@ -101,7 +101,7 @@ public class ManagerController {
         return ResponseSupporter.resonpseResult(true);
     }
 
-    @RequestMapping(value = "/manager/update_status", method = RequestMethod.POST)
+    @RequestMapping(value = "/manager/update-status", method = RequestMethod.POST)
     public String updateStatus(@Validated @RequestBody RequestUpdateStatusForm requestForm, //
                                BindingResult result){
         if(result.hasErrors()){
@@ -109,6 +109,21 @@ public class ManagerController {
         }
 
         ResponseCommonForm responseForm = managerService.updateManagerStatus(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/manager/change-password", method = RequestMethod.POST)
+    public String changePassword(@Validated @RequestBody RequestChangePasswordForm requestForm,
+                                 BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCommonForm responseForm = managerService.changePassword(requestForm);
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }

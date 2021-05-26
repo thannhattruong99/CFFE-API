@@ -29,9 +29,18 @@ public class ManagerDTO extends BaseDTO implements Serializable {
     private String userNameRegexp;
     private int affectedRecords;
     private String timeZone;
+    private String newPassword;
 
 
     public ManagerDTO() {
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     public String getUserId() {
