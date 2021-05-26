@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ShelfDAO">
+    <select id="getShelves" resultMap="getShelves">
+        SELECT TR.totalOfRecord, SH.ShelfId, SH.ShelfName, SH.UpdatedTime, SH.StatusId, SH.NumberStacks , STT.StatusName
+        FROM tblShelf SH
+        JOIN tblStore ST ON SH.StoreId = ST.StoreId
+        <if test="statusId != 0">
+            AND SH.StatusId = #{statusId}
+        </if>
+        AND ST.StoreId = #{storeId}
+        JOIN tblUserStoreMapping USM
+        ON ST.StoreId = USM.StoreId
+        AND USM.StatusId = 1
+        JOIN tblUser U
+        ON USM.UserId = U.UserId
+        AND U.Username = #{userName}
+        JOIN tblStatus STT ON SH.StatusId = STT.StatusId,
+        (SELECT COUNT(SH.ShelfId) AS totalOfRecord
+        FROM tblShelf SH
+        JOIN tblStore ST ON SH.StoreId = ST.StoreId
+        <if test="statusId != 0">
+            AND SH.StatusId = #{statusId}
+        </if>
+        AND ST.StoreId = #{storeId}
+        JOIN tblUserStoreMapping USM
+        ON ST.StoreId = USM.StoreId
+        AND USM.StatusId = 1
+        JOIN tblUser U
+        ON USM.UserId = U.UserId
+        AND U.Username = #{userName}
+        JOIN tblStatus STT ON SH.StatusId = STT.StatusId
+        <if test="shelfName == null">
+            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
+        </if>) AS TR
+        <if test="shelfName == null">
+            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
+        </if>
+        ORDER BY SH.ShelfName ASC
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+    <resultMap id="getShelves" type="ResponseShelfListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="shelves" ofType="ShelfResponseSupporter">
+            <id property="shelfId" column="ShelfId"/>
+            <result property="shelfName" column="ShelfName"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="statusName" column="StatusName"/>
+            <result property="numberOfStack" column="NumberStacks"/>
+        </collection>
+    </resultMap>
+</mapper>
