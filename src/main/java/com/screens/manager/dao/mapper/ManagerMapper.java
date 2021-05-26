@@ -7,8 +7,6 @@ import com.screens.manager.form.ResponseManagerListForm;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public class ManagerMapper extends BaseDAO {
 
