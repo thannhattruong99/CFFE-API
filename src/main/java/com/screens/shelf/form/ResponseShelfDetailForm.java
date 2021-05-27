@@ -12,16 +12,20 @@ public class ResponseShelfDetailForm {
     private String reasonInactive;
     private String statusId;
     private String statusName;
-    private String cameraId;
-    private String cameraName;
-    private String imageURL;
-    private String rtspString;
-    private String cameraCreatedTime;
-    private String cameraUpdatedTime;
-    private List<ShelfDetailResponseSupporter> stacks;
+    private CameraResponseFormSupporter camera;
+
+    private List<StackResponseFormSupporter> stacks;
 
 
     public ResponseShelfDetailForm() {
+    }
+
+    public CameraResponseFormSupporter getCamera() {
+        return camera;
+    }
+
+    public void setCamera(CameraResponseFormSupporter camera) {
+        this.camera = camera;
     }
 
     public String getShelfId() {
@@ -96,59 +100,11 @@ public class ResponseShelfDetailForm {
         this.statusName = statusName;
     }
 
-    public String getCameraId() {
-        return cameraId;
-    }
-
-    public void setCameraId(String cameraId) {
-        this.cameraId = cameraId;
-    }
-
-    public String getCameraName() {
-        return cameraName;
-    }
-
-    public void setCameraName(String cameraName) {
-        this.cameraName = cameraName;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public String getRtspString() {
-        return rtspString;
-    }
-
-    public void setRtspString(String rtspString) {
-        this.rtspString = rtspString;
-    }
-
-    public String getCameraCreatedTime() {
-        return cameraCreatedTime;
-    }
-
-    public void setCameraCreatedTime(String cameraCreatedTime) {
-        this.cameraCreatedTime = cameraCreatedTime;
-    }
-
-    public String getCameraUpdatedTime() {
-        return cameraUpdatedTime;
-    }
-
-    public void setCameraUpdatedTime(String cameraUpdatedTime) {
-        this.cameraUpdatedTime = cameraUpdatedTime;
-    }
-
-    public List<ShelfDetailResponseSupporter> getStacks() {
+    public List<StackResponseFormSupporter> getStacks() {
         return stacks;
     }
 
-    public void setStacks(List<ShelfDetailResponseSupporter> stacks) {
+    public void setStacks(List<StackResponseFormSupporter> stacks) {
         this.stacks = stacks;
     }
 }
