@@ -1,6 +1,6 @@
 package com.screens.shelf.form;
 
-public class ShelfDetailResponseSupporter {
+public class StackResponseFormSupporter {
     private String stackId;
     private int position;
     private String cameraId;
@@ -11,7 +11,7 @@ public class ShelfDetailResponseSupporter {
     private int statusId;
     private String statusName;
 
-    public ShelfDetailResponseSupporter() {
+    public StackResponseFormSupporter() {
     }
 
     public String getStackId() {

@@ -2,12 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="CameraDAO">
-<!--    <select id="getPendingCamera" resultMap="getPendingCamera">-->
-<!--        SELECT CameraId, CameraName-->
-<!--        FROM tblCamera-->
-<!--        WHERE StatusId = 3-->
-<!--    </select>-->
-<!--    <resultMap id="getPendingCamera" type="">-->
-
-<!--    </resultMap>-->
+    <select id="getAvailableCameraList" resultMap="getAvailableCameraList">
+        SELECT TR.totalOfRecord, CameraId, CameraName
+        FROM tblCamera,
+             (SELECT COUNT(CameraId) AS totalOfRecord
+             FROM tblCamera
+             WHERE StatusId = 3 AND TypeDetect = #{typeDetect}) TR
+        WHERE StatusId = 3 AND TypeDetect = #{typeDetect}
+        ORDER BY CameraName ASC
+        LIMIT #{offSet}, #{fetchNext}
+    </select>
+    <resultMap id="getAvailableCameraList" type="ResponseAvailableCameraListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="cameras" ofType="AvailableCameraListResponseSupporter">
+            <id property="cameraId" column="CameraId"/>
+            <id property="cameraName" column="CameraName"/>
+        </collection>
+    </resultMap>
 </mapper>
