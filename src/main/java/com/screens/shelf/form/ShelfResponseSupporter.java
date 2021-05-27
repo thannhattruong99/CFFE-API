@@ -50,4 +50,12 @@ public class ShelfResponseSupporter {
     public void setShelfId(String shelfId) {
         this.shelfId = shelfId;
     }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
 }

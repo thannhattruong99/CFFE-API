@@ -29,7 +29,7 @@ public class ManagerService extends BaseService {
     public ResponseManagerListForm getManagerList(RequestManagerListForm requestForm){
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestManagerListFormToMangerDTO(requestForm, managerDTO);
-        ResponseManagerListForm responseForm = new ResponseManagerListForm();
+        ResponseManagerListForm responseForm = null;
         try {
             responseForm = managerMapper.getManagers(managerDTO);
         }catch (PersistenceException e){
@@ -46,6 +46,7 @@ public class ManagerService extends BaseService {
             responseForm = managerMapper.getManagerDetail(managerDTO);
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
+
         }
         return responseForm;
     }
@@ -116,7 +117,6 @@ public class ManagerService extends BaseService {
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
-            responseForm.setErrorCodes(catchSqlException(e.getMessage()));
         } catch (MessagingException e) {
             e.printStackTrace();
         }
