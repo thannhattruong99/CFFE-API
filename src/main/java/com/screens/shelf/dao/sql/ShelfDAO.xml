@@ -48,13 +48,13 @@
                SH.NumberStacks, SH.CreatedTime,
                SH.UpdatedTime, SH.ReasonInactive,
                STT.StatusID, STT.StatusName,
---                camera detail
+        <!--                list of stack-->
                CM.CameraId AS SHCameraId,
                CM.CameraName AS SHCameraName,
                CM.ImageURL, CM.IPAddress,
                CM.RTSPString, CM.CreatedTime AS CameraCreatedTime,
                CM.UpdatedTime AS CameraUpdatedTime,
---                list of stack
+        <!--                list of stack-->
                STK.StackId, STK.Position, P.ProductId,
                P.ProductName, C.CameraId, C.CameraName,
                STK.StatusId AS STKStatusID, STT2.StatusName AS STKStatusName
@@ -65,11 +65,15 @@
                  LEFT JOIN tblShelfCameraMapping SCM ON SH.ShelfId = SCM.ShelfId AND SCM.StatusId = 1
                  LEFT JOIN tblCamera CM ON SCM.CameraId = CM.CameraId
                  LEFT JOIN tblStackProductCameraMapping SPCM ON STK.StackId = SPCM.StackId
+                                                AND SPCM.StatusId != 2
                  JOIN tblStatus STT2 ON STK.StatusId = STT2.StatusId
-                 JOIN tblProduct P ON SPCM.ProductId = P.ProductId
-                 JOIN tblCamera C ON SPCM.CameraId = C.CameraId
+                 LEFT JOIN tblProduct P ON (SPCM.ProductId = P.ProductId AND SPCM.RemoveProductTime IS NULL)
+                 LEFT JOIN tblCamera C ON (SPCM.CameraId = C.CameraId AND SPCM.RemovedCameraTime IS NULL)
         WHERE SH.ShelfId = #{shelfId}
     </select>
+    <update id="updateShelf">
+
+    </update>
 
     <resultMap id="getShelves" type="ResponseShelfListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
@@ -92,13 +96,15 @@
         <result property="reasonInactive" column="reasonInactive"/>
         <result property="statusId" column="StatusId"/>
         <result property="statusName" column="StatusName"/>
-        <result property="cameraId" column="SHCameraId"/>
-        <result property="cameraName" column="SHCameraName"/>
-        <result property="imageURL" column="ImageURL"/>
-        <result property="rtspString" column="RTSPString"/>
-        <result property="createdTime" column="CameraCreatedTime"/>
-        <result property="updatedTime" column="CameraUpdatedTime"/>
-        <collection property="stacks" ofType="ShelfDetailResponseSupporter">
+        <association property="camera" javaType="CameraResponseFormSupporter">
+            <result property="cameraId" column="SHCameraId"/>
+            <result property="cameraName" column="SHCameraName"/>
+            <result property="imageURL" column="ImageURL"/>
+            <result property="rtspString" column="RTSPString"/>
+            <result property="createdTime" column="CameraCreatedTime"/>
+            <result property="updatedTime" column="CameraUpdatedTime"/>
+        </association>
+        <collection property="stacks" ofType="StackResponseFormSupporter">
             <id property="stackId" column="StackId"/>
             <result property="position" column="Position"/>
             <result property="productId" column="ProductId"/>

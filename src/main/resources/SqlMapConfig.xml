@@ -16,12 +16,13 @@
         <typeAlias alias="ShelfResponseSupporter" type="com.screens.shelf.form.ShelfResponseSupporter"/>
         <typeAlias alias="ResponseShelfListForm" type="com.screens.shelf.form.ResponseShelfListForm"/>
         <typeAlias alias="ResponseShelfDetailForm" type="com.screens.shelf.form.ResponseShelfDetailForm"/>
-        <typeAlias alias="ShelfDetailResponseSupporter" type="com.screens.shelf.form.ShelfDetailResponseSupporter"/>
-
+        <typeAlias alias="StackResponseFormSupporter" type="com.screens.shelf.form.StackResponseFormSupporter"/>
+        <typeAlias alias="CameraResponseFormSupporter" type="com.screens.shelf.form.CameraResponseFormSupporter"/>
+        <typeAlias alias="AvailableCameraListResponseSupporter" type="com.screens.camera.form.AvailableCameraListResponseSupporter"/>
+        <typeAlias alias="ResponseAvailableCameraListForm" type="com.screens.camera.form.ResponseAvailableCameraListForm"/>
         <typeAlias alias="ResponseStackDetailForm" type="com.screens.stack.form.ResponseStackDetailForm"/>
         <typeAlias alias="ProductResponseSupporter" type="com.screens.stack.form.ProductResponseSupporter"/>
         <typeAlias alias="CameraResponseSupporter" type="com.screens.stack.form.CameraResponseSupporter"/>
-
     </typeAliases>
 
     <environments default="development">
@@ -41,6 +42,7 @@
         <mapper resource="com/screens/store/dao/sql/StoreDAO.xml"/>
         <mapper resource="com/screens/city/dao/sql/CityDAO.xml"/>
         <mapper resource="com/screens/shelf/dao/sql/ShelfDAO.xml"/>
+        <mapper resource="com/screens/camera/dao/sql/CameraDAO.xml"/>
         <mapper resource="com/screens/stack/dao/sql/StackDAO.xml"/>
     </mappers>
 </configuration>

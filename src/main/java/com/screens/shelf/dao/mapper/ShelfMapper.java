@@ -21,4 +21,5 @@ public class ShelfMapper extends BaseDAO {
     public ResponseShelfDetailForm getShelfDetail(ShelfDTO shelfDTO){
         return sqlSession.selectOne("ShelfDAO.getShelfDetail", shelfDTO);
     }
+
 }
