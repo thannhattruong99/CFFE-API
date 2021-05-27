@@ -14,10 +14,37 @@ public class StoreDTO extends BaseDTO implements Serializable {
     private int cityId;
     private String districtName;
     private int districtId;
+    private String userId;
     private String managerUsername;
+    private String reasonInactive;
     private int statusId;
+    private int totalOfRecord;
 
     public StoreDTO() {
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public int getTotalOfRecord() {
+        return totalOfRecord;
+    }
+
+    public void setTotalOfRecord(int totalOfRecord) {
+        this.totalOfRecord = totalOfRecord;
+    }
+
+    public String getReasonInactive() {
+        return reasonInactive;
+    }
+
+    public void setReasonInactive(String reasonInactive) {
+        this.reasonInactive = reasonInactive;
     }
 
     public int getStatusId() {

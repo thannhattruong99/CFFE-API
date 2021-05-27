@@ -165,8 +165,17 @@
 
     <update id="changeStatus" parameterType="StoreDTO">
         UPDATE tblStore
-        SET StatusId = #{statusId}
+        SET StatusId = #{statusId},
+            ReasonInactive = #{reasonInactive},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
         WHERE StoreId = #{storeId}
+    </update>
+
+    <update id="changeUserStatus" parameterType="StoreDTO">
+        UPDATE tblUser
+        SET StatusId = #{statusId},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE UserId = #{userId}
     </update>
 
     <select id="getStoreStatus" resultMap="getStoreStatus" useCache="false">
@@ -181,5 +190,96 @@
         <result property="storeId" column="StoreId"/>
         <result property="statusId" column="StatusId"/>
     </resultMap>
+
+    <update id="updateInfo" parameterType="StoreDTO">
+        UPDATE tblStore
+        SET
+            <if test="storeName != null">
+                StoreName = #{storeName},
+            </if>
+            <if test="imageUrl != null">
+                ImageURL = #{imageUrl},
+            </if>
+            <if test="address != null">
+                Address = #{address},
+            </if>
+            <if test="districtId != 0">
+                DistrictId = #{districtId},
+            </if>
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StoreId = #{storeId}
+    </update>
+
+    <update id="updateAnalyzedTime" parameterType="StoreDTO">
+        UPDATE tblStore
+        SET
+            AnalyzedTime = #{analyzedTime},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StoreId = #{storeId}
+    </update>
+
+    <select id="checkAvailableManager" resultMap="checkAvailableManager">
+        SELECT COUNT(UserName) AS TotalOfRecord FROM tblUser WHERE UserId = #{userId} AND StatusId = 3
+    </select>
+
+    <resultMap id="checkAvailableManager" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkAvailableStore" resultMap="checkAvailableStore">
+        SELECT COUNT(StoreId) AS TotalOfRecord FROM tblStore WHERE StoreId = #{storeId} AND StatusId = 3
+    </select>
+
+    <resultMap id="checkAvailableStore" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="countStoreById" resultMap="countStoreById">
+        SELECT COUNT(StoreId) AS TotalOfRecord FROM tblStore WHERE StoreId = #{storeId}
+    </select>
+
+    <resultMap id="countStoreById" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="countUserById" resultMap="countUserById">
+        SELECT COUNT(UserName) AS TotalOfRecord FROM tblUser WHERE UserId = #{userId}
+    </select>
+
+    <resultMap id="countUserById" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkStoreManagerMapping" resultMap="checkStoreManagerMapping">
+        SELECT COUNT(UserStoreMappingId) AS TotalOfRecord
+        FROM tblUserStoreMapping
+        WHERE UserId = #{userId}
+            AND StoreId = #{storeId}
+            AND StatusId = 1
+    </select>
+
+    <resultMap id="checkStoreManagerMapping" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <insert id="addMangerToStore"  parameterType="StoreDTO">
+        INSERT INTO tblUserStoreMapping (AddedTime, StoreId, UserId, StatusId)
+        VALUES (
+            convert_tz(now(),@@session.time_zone,'+07:00'),
+            #{storeId},
+            #{userId},
+            #{statusId}
+            )
+    </insert>
+
+    <update id="removeMangerFromStore" parameterType="StoreDTO">
+        UPDATE tblUserStoreMapping
+        SET
+            StatusId = 2,
+            RemovedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StoreId = #{storeId}
+            AND UserId = #{userId}
+            AND StatusId = 1
+    </update>
 
 </mapper>
