@@ -21,7 +21,7 @@ import java.util.List;
 public class StoreController {
 
     @Autowired
-    StoreService storeService;
+    private StoreService storeService;
 
 
     private static final String MSG_009 = "MSG-009";

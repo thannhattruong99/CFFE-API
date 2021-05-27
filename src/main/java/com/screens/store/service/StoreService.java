@@ -18,15 +18,11 @@ import java.util.List;
 @Service
 public class StoreService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
-    private static final int DEFAULT_FETCH_NEXT = 15;
-    private static final int ACTIVE = 1;
-    private static final int INACTIVE = 2;
-    private static final int PENDING = 3;
     private static final int ADD_MANAGER = 1;
     private static final int REMOVE_MANAGER = 2;
 
     @Autowired
-    StoreMapper storeMapper;
+    private StoreMapper storeMapper;
 
     public ResponseStoreListForm getStoreList(RequestGetStoreListForm requestGetStoreListForm){
         ResponseStoreListForm responseStoreListForm = null;
@@ -157,10 +153,10 @@ public class StoreService extends BaseService {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreId(requestForm.getStoreId());
         if (requestForm.getActive() == ADD_MANAGER) {
-            storeDTO.setStatusId(ACTIVE);
+            storeDTO.setStatusId(ACTIVE_STATUS);
         }
         if (requestForm.getActive() == REMOVE_MANAGER) {
-            storeDTO.setStatusId(PENDING);
+            storeDTO.setStatusId(PENDING_STATUS);
         }
         storeDTO.setUserId(requestForm.getUserId());
         return storeDTO;
@@ -205,7 +201,7 @@ public class StoreService extends BaseService {
         storeDTO.setAddress(requestForm.getAddress());
         storeDTO.setDistrictId(requestForm.getDistrictId());
         storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());
-        storeDTO.setStatusId(ACTIVE);
+        storeDTO.setStatusId(ACTIVE_STATUS);
         return storeDTO;
     }
 

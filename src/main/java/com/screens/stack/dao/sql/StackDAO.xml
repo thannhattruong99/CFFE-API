@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.screens.stack.dao.sql.StackDAO">
+
+    <select id="getStackDetail" resultMap="getStackDetail" useCache="false">
+        SELECT
+            STA.StackId AS STACK_StackId,
+            STA.Position AS STACK_Position,
+            STA.CreatedTime AS STACK_CreatedTime,
+            STA.UpdatedTime AS STACK_UpdatedTime,
+            STA.ReasonInactive AS STACK_ReasonInactive,
+            STA.ShelfId AS STACK_ShelfId,
+            SHE.ShelfName AS STACK_ShelfName,
+            STA.StatusId AS STACK_StatusId,
+            ST.StatusName AS STACK_StatusName,
+            TC.CameraId AS STACK_CameraId,
+            TC.CameraName AS CAM_CameraName,
+            TC.ImageURL AS CAM_ImageURL,
+            TC.IPAddress AS CAM_IPAddress,
+            TC.RTSPString AS CAM_RTSPString,
+            TC.TypeDetect AS CAM_TypeDetect,
+            TC.CreatedTime AS CAM_CreatedTime,
+            TC.UpdatedTime AS CAM_UpdatedTime,
+            TC.ReasonInactive AS CAM_ReasonInactive,
+            TC.StatusId AS CAM_StatusId,
+            STC.StatusName AS CAM_StatusName,
+            TP.ProductId AS PRO_ProductId,
+            TP.ProductName AS PRO_ProductName,
+            TP.ImageURL AS PRO_ImageURL,
+            TP.Description AS PRO_Description,
+            TP.CreatedTime  AS PRO_CreatedTime,
+            TP.UpdatedTime  AS PRO_UpdatedTime,
+            TP.ReasonInactive AS PRO_ReasonInactive,
+            TP.StatusId AS PRO_StatusId,
+            STP.StatusName AS PRO_StatusName
+        FROM
+            tblStack STA
+            LEFT JOIN tblShelf SHE ON (STA.ShelfId = SHE.ShelfId)
+            LEFT JOIN tblStatus ST ON (STA.StatusId = ST.StatusId)
+            LEFT JOIN tblStackProductCameraMapping TSPCM ON (STA.StackId = TSPCM.StackId AND TSPCM.StatusId != 2)
+            LEFT JOIN tblCamera TC ON (TSPCM.CameraId = TC.CameraId AND TSPCM.RemovedCameraTime IS NULL )
+            LEFT JOIN tblStatus STC ON (STC.StatusId = TC.StatusId)
+            LEFT JOIN tblProduct TP ON (TSPCM.ProductId = TP.ProductId AND TSPCM.RemoveProductTime IS NULL)
+            LEFT JOIN tblStatus STP ON (STP.StatusId = TP.StatusId)
+        WHERE
+            STA.StackId = #{stackId}
+    </select>
+
+    <resultMap id="getStackDetail" type="ResponseStackDetailForm">
+        <result property="stackId" column="STACK_StackId"/>
+        <result property="position" column="STACK_Position"/>
+        <result property="createTime" column="STACK_CreatedTime"/>
+        <result property="updatedTime" column="STACK_UpdatedTime"/>
+        <result property="reasonInactive" column="STACK_ReasonInactive"/>
+        <result property="shelfId" column="STACK_ShelfId"/>
+        <result property="shelfName" column="STACK_ShelfName"/>
+        <result property="statusId" column="STACK_StatusId"/>
+        <result property="statusName" column="STACK_StatusName"/>
+        <association property="camera" javaType="CameraResponseSupporter">
+            <result property="cameraId" column="STACK_CameraId"/>
+            <result property="cameraName" column="CAM_CameraName"/>
+            <result property="ipAddress" column="CAM_IPAddress"/>
+            <result property="rtspString" column="CAM_RTSPString"/>
+            <result property="typeDetect" column="CAM_TypeDetect"/>
+            <result property="createTime" column="CAM_CreatedTime"/>
+            <result property="updateTime" column="CAM_UpdatedTime"/>
+            <result property="reasonInactive" column="CAM_ReasonInactive"/>
+            <result property="statusId" column="CAM_StatusId"/>
+            <result property="statusName" column="CAM_StatusName"/>
+        </association>
+        <association property="product" javaType="ProductResponseSupporter">
+            <result property="productId" column="PRO_ProductId"/>
+            <result property="productName" column="PRO_ProductName"/>
+            <result property="description" column="PRO_ImageURL"/>
+            <result property="createTime" column="PRO_Description"/>
+            <result property="updateTime" column="PRO_UpdatedTime"/>
+            <result property="reasonInactive" column="PRO_ReasonInactive"/>
+            <result property="statusId" column="PRO_StatusId"/>
+            <result property="statusName" column="PRO_StatusName"/>
+        </association>
+    </resultMap>
+
+
+</mapper>
