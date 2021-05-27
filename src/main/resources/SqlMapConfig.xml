@@ -36,5 +36,6 @@
         <mapper resource="com/screens/store/dao/sql/StoreDAO.xml"/>
         <mapper resource="com/screens/city/dao/sql/CityDAO.xml"/>
         <mapper resource="com/screens/shelf/dao/sql/ShelfDAO.xml"/>
+        <mapper resource="com/screens/camera/dao/sql/CameraDAO.xml"/>
     </mappers>
 </configuration>

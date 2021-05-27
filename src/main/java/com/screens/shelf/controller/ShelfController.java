@@ -20,7 +20,6 @@ import java.util.List;
 @RequestMapping("admin/manager/store")
 public class ShelfController {
     private static final String MSG_009 = "MSG-009";
-    private static final String MSG_063 = "MSG-063";
 
     @Autowired
     private ShelfService shelfService;
@@ -59,4 +58,6 @@ public class ShelfController {
         return ResponseSupporter.resonpseResult(responseForm);
     }
 
+//    @RequestMapping(value = "/shelf/update", method = RequestMethod.POST)
+//    public String updateShelf(@Validated @RequestBody )
 }

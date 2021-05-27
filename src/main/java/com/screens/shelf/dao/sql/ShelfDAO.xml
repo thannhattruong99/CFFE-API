@@ -70,6 +70,9 @@
                  JOIN tblCamera C ON SPCM.CameraId = C.CameraId
         WHERE SH.ShelfId = #{shelfId}
     </select>
+    <update id="updateShelf">
+
+    </update>
 
     <resultMap id="getShelves" type="ResponseShelfListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
