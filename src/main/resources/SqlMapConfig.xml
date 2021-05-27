@@ -23,6 +23,7 @@
         <typeAlias alias="ResponseStackDetailForm" type="com.screens.stack.form.ResponseStackDetailForm"/>
         <typeAlias alias="ProductResponseSupporter" type="com.screens.stack.form.ProductResponseSupporter"/>
         <typeAlias alias="CameraResponseSupporter" type="com.screens.stack.form.CameraResponseSupporter"/>
+        <typeAlias alias="ResponseCategoryDetailForm" type="com.screens.category.form.ResponseCategoryDetailForm"/>
     </typeAliases>
 
     <environments default="development">
@@ -44,5 +45,6 @@
         <mapper resource="com/screens/shelf/dao/sql/ShelfDAO.xml"/>
         <mapper resource="com/screens/camera/dao/sql/CameraDAO.xml"/>
         <mapper resource="com/screens/stack/dao/sql/StackDAO.xml"/>
+        <mapper resource="com/screens/category/dao/sql/CategoryDAO.xml"/>
     </mappers>
 </configuration>
