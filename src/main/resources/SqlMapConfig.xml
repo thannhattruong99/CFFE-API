@@ -15,6 +15,8 @@
         <typeAlias alias="StoreResponseSupporter" type="com.screens.store.form.StoreResponseSupporter"/>
         <typeAlias alias="ShelfResponseSupporter" type="com.screens.shelf.form.ShelfResponseSupporter"/>
         <typeAlias alias="ResponseShelfListForm" type="com.screens.shelf.form.ResponseShelfListForm"/>
+        <typeAlias alias="ResponseShelfDetailForm" type="com.screens.shelf.form.ResponseShelfDetailForm"/>
+        <typeAlias alias="ShelfDetailResponseSupporter" type="com.screens.shelf.form.ShelfDetailResponseSupporter"/>
     </typeAliases>
 
     <environments default="development">

@@ -22,8 +22,8 @@ public class ManagerController {
     @Autowired
     private ManagerService managerService;
 
-    @RequestMapping(value = "/managers", method = RequestMethod.POST)
-    public String getManagers(@Validated @RequestBody RequestManagerListForm requestManagerListForm, //
+    @RequestMapping(value = "/managers", method = RequestMethod.GET)
+    public String getManagers(@Validated RequestManagerListForm requestManagerListForm, //
                              BindingResult result) {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
