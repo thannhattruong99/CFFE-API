@@ -13,7 +13,10 @@
         <typeAlias alias="ResponseStoreDetailForm" type="com.screens.store.form.ResponseStoreDetailForm"/>
         <typeAlias alias="ResponseStoreListForm" type="com.screens.store.form.ResponseStoreListForm"/>
         <typeAlias alias="StoreResponseSupporter" type="com.screens.store.form.StoreResponseSupporter"/>
-
+        <typeAlias alias="ShelfResponseSupporter" type="com.screens.shelf.form.ShelfResponseSupporter"/>
+        <typeAlias alias="ResponseShelfListForm" type="com.screens.shelf.form.ResponseShelfListForm"/>
+        <typeAlias alias="ResponseShelfDetailForm" type="com.screens.shelf.form.ResponseShelfDetailForm"/>
+        <typeAlias alias="ShelfDetailResponseSupporter" type="com.screens.shelf.form.ShelfDetailResponseSupporter"/>
     </typeAliases>
 
     <environments default="development">
@@ -29,8 +32,9 @@
     </environments>
 
     <mappers>
-        <mapper resource="com/screens/manager/dao/sql/ManangerDAO.xml"/>
+        <mapper resource="com/screens/manager/dao/sql/ManagerDAO.xml"/>
         <mapper resource="com/screens/store/dao/sql/StoreDAO.xml"/>
         <mapper resource="com/screens/city/dao/sql/CityDAO.xml"/>
+        <mapper resource="com/screens/shelf/dao/sql/ShelfDAO.xml"/>
     </mappers>
 </configuration>

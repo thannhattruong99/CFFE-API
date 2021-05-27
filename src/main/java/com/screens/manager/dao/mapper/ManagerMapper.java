@@ -2,13 +2,10 @@ package com.screens.manager.dao.mapper;
 
 import com.common.dao.BaseDAO;
 import com.screens.manager.dto.ManagerDTO;
-import com.screens.city.form.CityResponseSupporter;
 import com.screens.manager.form.ResponseManagerDetailForm;
 import com.screens.manager.form.ResponseManagerListForm;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class ManagerMapper extends BaseDAO {
@@ -65,6 +62,22 @@ public class ManagerMapper extends BaseDAO {
 
     public boolean updateManagerStatus(ManagerDTO managerDTO){
         if(sqlSession.update("ManagerDAO.updateManagerStatus", managerDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkUserNameAndPassword(ManagerDTO managerDTO){
+        ManagerDTO resultDAO = sqlSession.selectOne("ManagerDAO.checkUserNameAndPassword", managerDTO);
+        if( resultDAO == null || resultDAO.getAffectedRecords() <= 0){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean updatePassword(ManagerDTO managerDTO){
+        if(sqlSession.update("ManagerDAO.updatePassword", managerDTO) > 0){
             sqlSession.commit(true);
             return true;
         }

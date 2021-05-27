@@ -78,11 +78,11 @@
         INSERT INTO tblUser(Fullname, Username, Password, RoleId, ImageURL, Gender,
                             BirthDate, IdentifyCard, Phone, Email, Address, DistrictId, statusId, CreatedTime)
         VALUES(#{fullName}, #{userName}, #{password}, #{roleId},#{imageURL}, #{gender}, #{birthDate}, #{identifyCard},
-               #{phone}, #{email}, #{address}, #{districtId},  #{statusId},
+               #{phone}, #{email}, #{address}, #{districtId}, #{statusId},
                convert_tz(now(),@@session.time_zone,#{createdTime}))
     </insert>
     <select id="getTotalOfManagerLikeUserName" resultMap="getAffectedRows">
-        SELECT COUNT(UserName) AS TotaltOfRecord
+        SELECT COUNT(UserName) AS TotalOfRecord
         FROM tblUser
         WHERE UserName REGEXP #{userNameRegexp} OR UserName = #{userName};
     </select>
@@ -115,9 +115,19 @@
         WHERE U.UserName = #{userName}
     </select>
     <update id="updateManagerStatus">
-        UPDATE tblUser SET StatusId = #{statusId} WHERE UserName = #{userName};
+        UPDATE tblUser SET StatusId = #{statusId},
+        UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        <if test="statusId == 2">
+            , ReasonInactive = #{reasonInactive}
+        </if>
+        WHERE UserName = #{userName};
     </update>
-
+    <select id="checkUserNameAndPassword" resultMap="checkUser">
+        SELECT COUNT(UserName) AS TotalOfRecord FROM tblUser WHERE UserName = #{userName} AND Password = #{password}
+    </select>
+    <update id="updatePassword">
+        UPDATE tblUser SET Password = #{newPassword} WHERE UserName = #{userName}
+    </update>
     <resultMap id="getManagers" type="ResponseManagerListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="managers" ofType="ManagerResponseSupporter">
@@ -148,7 +158,7 @@
         <result property="status" column="StatusName"/>
     </resultMap>
     <resultMap id="getAffectedRows" type="ManagerDTO">
-        <result property="affectedRecords" column="TotaltOfRecord"/>
+        <result property="affectedRecords" column="TotalOfRecord"/>
     </resultMap>
     <resultMap id="getEmailByUser" type="ManagerDTO">
         <result property="email" column="Email"/>
@@ -156,5 +166,8 @@
     <resultMap id="getStatusIdAndStoreIdByUserName" type="ManagerDTO">
         <result property="statusId" column="StatusId"/>
         <result property="storeId" column="StoreId"/>
+    </resultMap>
+    <resultMap id="checkUser" type="ManagerDTO">
+        <result property="affectedRecords" column="TotalOfRecord"/>
     </resultMap>
 </mapper>

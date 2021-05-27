@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ShelfDAO">
+    <select id="getShelves" resultMap="getShelves">
+        SELECT TR.totalOfRecord, SH.ShelfId, SH.ShelfName, SH.UpdatedTime, SH.StatusId, SH.NumberStacks , STT.StatusName
+        FROM tblShelf SH
+        JOIN tblStore ST ON SH.StoreId = ST.StoreId
+        <if test="statusId != 0">
+            AND SH.StatusId = #{statusId}
+        </if>
+        AND ST.StoreId = #{storeId}
+        JOIN tblUserStoreMapping USM
+        ON ST.StoreId = USM.StoreId
+        AND USM.StatusId = 1
+        JOIN tblUser U
+        ON USM.UserId = U.UserId
+        AND U.Username = #{userName}
+        JOIN tblStatus STT ON SH.StatusId = STT.StatusId,
+        (SELECT COUNT(SH.ShelfId) AS totalOfRecord
+        FROM tblShelf SH
+        JOIN tblStore ST ON SH.StoreId = ST.StoreId
+        <if test="statusId != 0">
+            AND SH.StatusId = #{statusId}
+        </if>
+        AND ST.StoreId = #{storeId}
+        JOIN tblUserStoreMapping USM
+        ON ST.StoreId = USM.StoreId
+        AND USM.StatusId = 1
+        JOIN tblUser U
+        ON USM.UserId = U.UserId
+        AND U.Username = #{userName}
+        JOIN tblStatus STT ON SH.StatusId = STT.StatusId
+        <if test="shelfName == null">
+            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
+        </if>) AS TR
+        <if test="shelfName == null">
+            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
+        </if>
+        ORDER BY SH.ShelfName ASC
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+    <select id="getShelfDetail" resultMap="getShelfDetail">
+        SELECT SH.ShelfId, SH.ShelfName, SH.Description,
+               SH.NumberStacks, SH.CreatedTime,
+               SH.UpdatedTime, SH.ReasonInactive,
+               STT.StatusID, STT.StatusName,
+--                camera detail
+               CM.CameraId AS SHCameraId,
+               CM.CameraName AS SHCameraName,
+               CM.ImageURL, CM.IPAddress,
+               CM.RTSPString, CM.CreatedTime AS CameraCreatedTime,
+               CM.UpdatedTime AS CameraUpdatedTime,
+--                list of stack
+               STK.StackId, STK.Position, P.ProductId,
+               P.ProductName, C.CameraId, C.CameraName,
+               STK.StatusId AS STKStatusID, STT2.StatusName AS STKStatusName
+        FROM tblShelf SH
+                 JOIN tblStore ST ON SH.StoreId = ST.StoreId
+                 JOIN tblStatus STT ON SH.StatusId = STT.StatusId
+                 LEFT JOIN tblStack STK ON SH.ShelfId = STK.ShelfId
+                 LEFT JOIN tblShelfCameraMapping SCM ON SH.ShelfId = SCM.ShelfId AND SCM.StatusId = 1
+                 LEFT JOIN tblCamera CM ON SCM.CameraId = CM.CameraId
+                 LEFT JOIN tblStackProductCameraMapping SPCM ON STK.StackId = SPCM.StackId
+                 JOIN tblStatus STT2 ON STK.StatusId = STT2.StatusId
+                 JOIN tblProduct P ON SPCM.ProductId = P.ProductId
+                 JOIN tblCamera C ON SPCM.CameraId = C.CameraId
+        WHERE SH.ShelfId = #{shelfId}
+    </select>
+
+    <resultMap id="getShelves" type="ResponseShelfListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="shelves" ofType="ShelfResponseSupporter">
+            <id property="shelfId" column="ShelfId"/>
+            <result property="shelfName" column="ShelfName"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="statusName" column="StatusName"/>
+            <result property="numberOfStack" column="NumberStacks"/>
+        </collection>
+    </resultMap>
+    <resultMap id="getShelfDetail" type="ResponseShelfDetailForm">
+        <result property="shelfId" column="ShelfId"/>
+        <result property="shelfName" column="ShelfName"/>
+        <result property="description" column="Description"/>
+        <result property="numberOfStack" column="NumberStack"/>
+        <result property="createdTime" column="CreatedTime"/>
+        <result property="updatedTime" column="UpdatedTime"/>
+        <result property="reasonInactive" column="reasonInactive"/>
+        <result property="statusId" column="StatusId"/>
+        <result property="statusName" column="StatusName"/>
+        <result property="cameraId" column="SHCameraId"/>
+        <result property="cameraName" column="SHCameraName"/>
+        <result property="imageURL" column="ImageURL"/>
+        <result property="rtspString" column="RTSPString"/>
+        <result property="createdTime" column="CameraCreatedTime"/>
+        <result property="updatedTime" column="CameraUpdatedTime"/>
+        <collection property="stacks" ofType="ShelfDetailResponseSupporter">
+            <id property="stackId" column="StackId"/>
+            <result property="position" column="Position"/>
+            <result property="productId" column="ProductId"/>
+            <result property="productName" column="ProductName"/>
+            <result property="cameraId" column="CameraId"/>
+            <result property="cameraName" column="CameraName"/>
+            <result property="statusId" column="STKStatusID"/>
+            <result property="statusName" column="STKStatusName"/>
+        </collection>
+    </resultMap>
+</mapper>

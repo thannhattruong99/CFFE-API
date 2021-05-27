@@ -14,7 +14,6 @@ public class ResponseManagerDetailForm implements Serializable {
     private String email;
     private String storeId;
     private String address;
-    private String timeZone;
     private String cityName;
     private String districtName;
     private String createdTime;
@@ -23,14 +22,6 @@ public class ResponseManagerDetailForm implements Serializable {
     private String status;
 
     public ResponseManagerDetailForm() {
-    }
-
-    public String getTimeZone() {
-        return timeZone;
-    }
-
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
     }
 
     public String getUserId() {

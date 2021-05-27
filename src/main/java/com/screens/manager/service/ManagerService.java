@@ -20,14 +20,16 @@ import java.util.List;
 @Service
 public class ManagerService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(ManagerService.class);
-
+    private static final int PASSWORD_LENGTH = 8;
+    private static final String MSG_068 = "MSG-068";
+    private static final String MSG_007 = "MSG-007";
     @Autowired
     private ManagerMapper managerMapper;
 
     public ResponseManagerListForm getManagerList(RequestManagerListForm requestForm){
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestManagerListFormToMangerDTO(requestForm, managerDTO);
-        ResponseManagerListForm responseForm = new ResponseManagerListForm();
+        ResponseManagerListForm responseForm = null;
         try {
             responseForm = managerMapper.getManagers(managerDTO);
         }catch (PersistenceException e){
@@ -44,6 +46,7 @@ public class ManagerService extends BaseService {
             responseForm = managerMapper.getManagerDetail(managerDTO);
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
+
         }
         return responseForm;
     }
@@ -114,7 +117,6 @@ public class ManagerService extends BaseService {
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
-            responseForm.setErrorCodes(catchSqlException(e.getMessage()));
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -137,14 +139,16 @@ public class ManagerService extends BaseService {
         return responseForm;
     }
 
-    private ManagerDTO getStoreIdAndStatusIdByUserName(ManagerDTO managerDTO){
-        return managerMapper.getStatusIdAndStoreIdByUserName(managerDTO);
-    }
+
 
     private ResponseCommonForm checkUpdateStatusBusiness(ManagerDTO managerDTO){
         ResponseCommonForm responseCommonForm = new ResponseCommonForm();
         ManagerDTO resultDAO = managerMapper.getStatusIdAndStoreIdByUserName(managerDTO);
-        if(managerDTO.getStatusId() == INACTIVE_STATUS && resultDAO.getStatusId() == PENDING_STATUS){
+        if (resultDAO == null){
+            ArrayList<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_063);
+            responseCommonForm.setErrorCodes(errorCodes);
+        }else if(managerDTO.getStatusId() == INACTIVE_STATUS && resultDAO.getStatusId() == PENDING_STATUS){
             if(StringHelper.isNullOrEmpty(managerDTO.getReasonInactive())
                     || !StringHelper.isNullOrEmpty(resultDAO.getStoreId())){
                 ArrayList<String> errorCodes = new ArrayList<>();
@@ -155,17 +159,23 @@ public class ManagerService extends BaseService {
         return responseCommonForm;
     }
 
+    public ResponseCommonForm changePassword(RequestChangePasswordForm requestForm){
+        ManagerDTO managerDTO = new ManagerDTO();
+        convertRequestChangePasswordFormToManagerDTO(requestForm, managerDTO);
+        ResponseCommonForm responseForm = checkChangePasswordBusiness(requestForm, managerDTO);
+        if(responseForm.getErrorCodes() == null){
+            try {
+                    managerMapper.updatePassword(managerDTO);
+            }catch (PersistenceException e){
+                logger.error("Error at ManagerService: " + e.getMessage());
+            }
+        }
+        return responseForm;
+    }
 
-//    private ResponseCommonForm checkUpdateStatusBusiness(RequestUpdateStatusForm requestForm, ManagerDTO managerDTO){
-//        ResponseCommonForm responseCommon = new ResponseCommonForm();
-//        ManagerDTO resultDAO = getStoreIdAndStatusIdByUserName(managerDTO);
-//        checkInactiveStatusBusiness(requestForm, resultDAO);
-//
-//        if()
-//
-//
-//        return responseCommon;
-//    }
+    private ManagerDTO getStoreIdAndStatusIdByUserName(ManagerDTO managerDTO){
+        return managerMapper.getStatusIdAndStoreIdByUserName(managerDTO);
+    }
 
     private void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
         managerDTO.setFullName(requestForm.getFullName());
@@ -201,7 +211,6 @@ public class ManagerService extends BaseService {
         managerDTO.setUserName(userName);
         managerDTO.setUserNameRegexp(userName + NUMBER_REGEXP);
     }
-
 
     private void convertRequestManagerDetailFormToManagerDTO(RequestManagerDetailForm requestForm, ManagerDTO managerDTO){
         managerDTO.setUserName(requestForm.getUserName());
@@ -260,6 +269,33 @@ public class ManagerService extends BaseService {
         if(!StringHelper.isNullOrEmpty(requestForm.getReasonInactive())){
             managerDTO.setReasonInactive(requestForm.getReasonInactive());
         }
+        managerDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 
+    private void convertRequestChangePasswordFormToManagerDTO(RequestChangePasswordForm requestForm, ManagerDTO managerDTO){
+        managerDTO.setUserName(requestForm.getUserName());
+        managerDTO.setPassword(requestForm.getOldPassword());
+        managerDTO.setNewPassword(requestForm.getNewPassword());
+    }
+
+    private ResponseCommonForm checkChangePasswordBusiness(RequestChangePasswordForm requestForm, ManagerDTO managerDTO){
+        ResponseCommonForm responseForm = new ResponseCommonForm();
+        if(requestForm.getNewPassword().equals(requestForm.getRetypePassword())){
+            try{
+                if(!managerMapper.checkUserNameAndPassword(managerDTO)){
+                    ArrayList<String> errorCodes = new ArrayList<>();
+                    errorCodes.add(MSG_068);
+                    responseForm.setErrorCodes(errorCodes);
+                }
+            }catch (PersistenceException e){
+                logger.error("Error at ManagerService: " + e.getMessage());
+            }
+        }else{
+            ArrayList<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_007);
+            responseForm.setErrorCodes(errorCodes);
+        }
+
+        return responseForm;
+    }
 }
