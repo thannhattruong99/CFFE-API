@@ -27,9 +27,8 @@ public class StoreController {
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_035 = "MSG-035";
 
-    @PostMapping(value = "/admin/stores")
-    public String getStoreList(Model model,
-                               @Validated @RequestBody RequestGetStoreListForm requestForm,
+    @GetMapping(value = "/admin/stores")
+    public String getStoreList(@Validated RequestGetStoreListForm requestForm,
                                BindingResult result){
         // Check Validate
         if(result.hasErrors()){
