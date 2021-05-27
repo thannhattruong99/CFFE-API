@@ -107,15 +107,48 @@ public class StoreController {
     @RequestMapping(value = "/admin/store/update", method = RequestMethod.POST)
     public String updateStoreInfo(@Validated @RequestBody RequestUpdateInfoForm requestForm,
                                   BindingResult result){
+        // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-
+        // Do Update Infomation Store
         ResponseCommonForm responseForm = storeService.updateStoreInfo(requestForm);
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
 
+    @RequestMapping(value = "/admin/store/update-analyzed-time", method = RequestMethod.POST)
+    public String updateAnalyzedTime(@Validated @RequestBody RequestUpdateAnalyzedTime requestForm,
+                                  BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Update Infomation Store
+        ResponseCommonForm responseForm = storeService.updateAnalyzedTime(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/admin/store/change-manager", method = RequestMethod.POST)
+    public String changeManager(@Validated @RequestBody RequestChangeManager requestForm,
+                                     BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Update Infomation Store
+        ResponseCommonForm responseForm = storeService.changeManager(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+        // Return result
         return ResponseSupporter.resonpseResult(true);
     }
 }

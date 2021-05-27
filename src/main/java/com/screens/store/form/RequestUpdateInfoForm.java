@@ -8,13 +8,14 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 public class RequestUpdateInfoForm implements Serializable {
-    @NotEmpty(message = "MSG-068")
+    @NotEmpty(message = "MSG-069")
     private String storeId;
 
     @Nullable
     @Size(min = 1, max = 100, message = "MSG-015")
     private String storeName;
 
+    //TODO: Image
 //    @Nullable
 //    private MultipartFile imageUrl;
 

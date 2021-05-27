@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class RequestChangeStoreStatusForm implements Serializable {
-    @NotEmpty @NotNull
+    @NotEmpty(message = "MSG-069")
     private String storeId;
 
     @Min(value = 1, message = "MSG-065") @Max(value = 3, message = "MSG-065")

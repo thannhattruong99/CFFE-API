@@ -2,7 +2,6 @@ package com.screens.store.dao.mapper;
 
 import com.common.dao.BaseDAO;
 import com.screens.store.dto.StoreDTO;
-import com.screens.store.form.ResponseCreateStoreForm;
 import com.screens.store.form.ResponseStoreDetailForm;
 import com.screens.store.form.ResponseStoreListForm;
 import com.util.IDBHelper;
@@ -48,5 +47,83 @@ public class StoreMapper extends BaseDAO {
             return true;
         }
         return false;
+    }
+
+    public boolean updateAnalyzedTime(StoreDTO storeDTO) {
+        if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.updateAnalyzedTime",storeDTO) > 0){
+            this.sqlSession.commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addManager(StoreDTO storeDTO) {
+        if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeStatus",storeDTO) > 0){
+            System.out.println("============== Changed Store Status");
+            if (sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeUserStatus",storeDTO) > 0) {
+                System.out.println("============== Changed Manager Status");
+                if (sqlSession.insert("com.screens.store.dao.sql.StoreDAO.addMangerToStore",storeDTO) > 0) {
+                    System.out.println("============== Add new record Mapping table");
+                    this.sqlSession.commit();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean removeManager(StoreDTO storeDTO) {
+        if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeStatus",storeDTO) > 0){
+            System.out.println("============== Changed Store Status");
+            if (sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeUserStatus",storeDTO) > 0) {
+                System.out.println("============== Changed Manager Status");
+                if (sqlSession.update("com.screens.store.dao.sql.StoreDAO.removeMangerFromStore",storeDTO) > 0) {
+                    System.out.println("============== Change status record Mapping table (status = 2)");
+                    this.sqlSession.commit();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkAvailableManager(StoreDTO storeDTO){
+        StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.checkAvailableManager",storeDTO);
+        if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkAvailableStore(StoreDTO storeDTO){
+        StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.checkAvailableStore",storeDTO);
+        if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean countStoreById(StoreDTO storeDTO) {
+        StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.countStoreById",storeDTO);
+        if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean countUserById(StoreDTO storeDTO) {
+        StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.countUserById",storeDTO);
+        if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkStoreManagerMapping(StoreDTO storeDTO) {
+        StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.checkStoreManagerMapping",storeDTO);
+        if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
     }
 }
