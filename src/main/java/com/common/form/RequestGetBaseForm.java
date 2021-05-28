@@ -1,17 +1,19 @@
 package com.common.form;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.format.annotation.NumberFormat;
+import org.springframework.lang.Nullable;
+
+import javax.ws.rs.DefaultValue;
 
 public class RequestGetBaseForm {
+    @Nullable @DefaultValue("")
     private String searchValue;
+    @Nullable @DefaultValue("")
     private String searchField;
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private int pageNum;
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private int fetchNext;
-    private String sortField;
-    private boolean isAscending;
 
     public RequestGetBaseForm() {
     }
@@ -48,19 +50,4 @@ public class RequestGetBaseForm {
         this.pageNum = pageNum;
     }
 
-    public String getSortField() {
-        return sortField;
-    }
-
-    public void setSortField(String sortField) {
-        this.sortField = sortField;
-    }
-
-    public boolean isAscending() {
-        return isAscending;
-    }
-
-    public void setAscending(boolean ascending) {
-        isAscending = ascending;
-    }
 }

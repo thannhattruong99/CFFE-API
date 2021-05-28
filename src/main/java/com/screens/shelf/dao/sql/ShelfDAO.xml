@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ShelfDAO">
+    <select id="getShelves" resultMap="getShelves">
+        SELECT TR.totalOfRecord, SH.ShelfId, SH.ShelfName, SH.UpdatedTime, SH.StatusId, SH.NumberStacks , STT.StatusName
+        FROM tblShelf SH
+        JOIN tblStore ST ON SH.StoreId = ST.StoreId
+        <if test="statusId != 0">
+            AND SH.StatusId = #{statusId}
+        </if>
+        AND ST.StoreId = #{storeId}
+        JOIN tblUserStoreMapping USM
+        ON ST.StoreId = USM.StoreId
+        AND USM.StatusId = 1
+        JOIN tblUser U
+        ON USM.UserId = U.UserId
+        AND U.Username = #{userName}
+        JOIN tblStatus STT ON SH.StatusId = STT.StatusId,
+        (SELECT COUNT(SH.ShelfId) AS totalOfRecord
+        FROM tblShelf SH
+        JOIN tblStore ST ON SH.StoreId = ST.StoreId
+        <if test="statusId != 0">
+            AND SH.StatusId = #{statusId}
+        </if>
+        AND ST.StoreId = #{storeId}
+        JOIN tblUserStoreMapping USM
+        ON ST.StoreId = USM.StoreId
+        AND USM.StatusId = 1
+        JOIN tblUser U
+        ON USM.UserId = U.UserId
+        AND U.Username = #{userName}
+        JOIN tblStatus STT ON SH.StatusId = STT.StatusId
+        <if test="shelfName == null">
+            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
+        </if>) AS TR
+        <if test="shelfName == null">
+            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
+        </if>
+        ORDER BY SH.ShelfName ASC
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+    <select id="getShelfDetail" resultMap="getShelfDetail">
+        SELECT SH.ShelfId,
+               SH.ShelfName,
+               SH.Description,
+               SH.NumberStacks,
+               SH.CreatedTime,
+               SH.UpdatedTime,
+               SH.ReasonInactive,
+               STT.StatusID,
+               STT.StatusName,
+               CM.CameraId,
+               CM.CameraName,
+               CM.ImageURL,
+               CM.IPAddress,
+               CM.RTSPString,
+               CM.CreatedTime,
+               CM.UpdatedTime
+        FROM tblShelf SH
+                 JOIN tblStore ST ON SH.StoreId = ST.StoreId
+                 JOIN tblStatus STT ON SH.StatusId = STT.StatusId
+                 LEFT JOIN tblShelfCameraMapping SCM ON SH.ShelfId = SCM.ShelfId AND SCM.StatusId = 1
+                 LEFT JOIN tblCamera CM ON SCM.CameraId = CM.CameraId
+        WHERE SH.ShelfId = #{shelfId}
+    </select>
+    <update id="updateShelf">
+        UPDATE tblShelf SET ShelfName = #{shelfName}, Description = #{description}, UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE ShelfId = #{shelfId}
+    </update>
+    <insert id="createShelf" parameterType="ShelfDTO">
+        <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
+            SELECT UUID() AS shelfId FROM tblShelf LIMIT 1
+        </selectKey>
+         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, statusId, StoreId)
+         VALUES (#{shelfId}, #{shelfName}, #{description}, #{numberOfStack}, convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId}, #{storeId})
+<!--        <selectKey keyProperty="shelfId" resultType="string" order="AFTER ">-->
+<!--            select ShelfId-->
+<!--            from tblShelf-->
+<!--            where CreatedTime = (select MAX(CreatedTime)-->
+<!--            from tblShelf-->
+<!--            where StoreId = #{storeId}-->
+<!--            ) AND StoreId = #{storeId};-->
+<!--        </selectKey>-->
+    </insert>
+    <insert id="createStacks">
+        INSERT INTO tblStack(Position, CreatedTime, ShelfId, StatusId) VALUES
+        <foreach item="item" collection="list" separator=",">
+            (#{item.position}, convert_tz(now(),@@session.time_zone,#{item.createdTime}), #{item.shelfId}, #{item.statusId})
+        </foreach>
+    </insert>
+<!--    <select id="check" resultMap="">-->
+<!--        SELECT COUNT(SH.ShelfId) AS totalOfRecord-->
+<!--        FROM tblShelf SH-->
+<!--        JOIN tblStack ST ON SH.ShelfId = ST.ShelfId-->
+<!--        <if test="">-->
+<!--            AND ST.StatusId = 1-->
+<!--        </if>-->
+<!--    </select>-->
+
+    <resultMap id="getShelves" type="ResponseShelfListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="shelves" ofType="ShelfResponseSupporter">
+            <id property="shelfId" column="ShelfId"/>
+            <result property="shelfName" column="ShelfName"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="statusName" column="StatusName"/>
+            <result property="numberOfStack" column="NumberStacks"/>
+        </collection>
+    </resultMap>
+    <resultMap id="getShelfDetail" type="ResponseShelfDetailForm">
+        <result property="shelfId" column="ShelfId"/>
+        <result property="shelfName" column="ShelfName"/>
+        <result property="description" column="Description"/>
+        <result property="numberOfStack" column="NumberStack"/>
+        <result property="createdTime" column="CreatedTime"/>
+        <result property="updatedTime" column="UpdatedTime"/>
+        <result property="reasonInactive" column="reasonInactive"/>
+        <result property="statusId" column="StatusId"/>
+        <result property="statusName" column="StatusName"/>
+        <association property="camera" javaType="CameraResponseFormSupporter">
+            <result property="cameraId" column="CameraId"/>
+            <result property="cameraName" column="CameraName"/>
+            <result property="imageURL" column="ImageURL"/>
+            <result property="rtspString" column="RTSPString"/>
+            <result property="createdTime" column="CreatedTime"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+        </association>
+    </resultMap>
+    <resultMap id="createShelf" type="ShelfDTO">
+        <result property="shelfId" column="shelfId"/>
+    </resultMap>
+</mapper>
