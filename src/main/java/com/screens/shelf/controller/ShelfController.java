@@ -58,7 +58,7 @@ public class ShelfController {
     }
 
     @RequestMapping(value = "/shelf/create", method = RequestMethod.POST)
-    public String updateShelf(@Validated @RequestBody RequestCreateShelfForm requestForm,
+    public String createShelf(@Validated @RequestBody RequestCreateShelfForm requestForm,
                               BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.resonpseResult(result);
@@ -68,6 +68,27 @@ public class ShelfController {
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/shelf/update", method = RequestMethod.POST)
+    public String updateShelf(@Validated @RequestBody RequestUpdateShelfForm requestForm,
+                              BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCommonForm responseForm = shelfService.updateShelf(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/shelf/update-status", method = RequestMethod.POST)
+    public String updateStatus(){
+
         return ResponseSupporter.resonpseResult(true);
     }
 }

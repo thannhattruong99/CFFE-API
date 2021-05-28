@@ -8,9 +8,10 @@ import javax.validation.constraints.Size;
 public class RequestCreateShelfForm {
     @NotEmpty(message = "MSG-069")
     private String storeId;
-    @NotEmpty(message = "MSG-079") @Size(min = 1, max = 100, message = "MSG-080")
+    @NotEmpty(message = "MSG-079")
+    @Size(min = 1, max = 100, message = "MSG-080")
     private String shelfName;
-    @NotEmpty(message = "MSG-017")
+    @Size(min = 1, max = 250, message = "MSG-017")
     private String description;
     @Min(value = 1, message = "MSG-019") @Max(value = 30, message = "MSG-019")
     private int numberOfStack;
