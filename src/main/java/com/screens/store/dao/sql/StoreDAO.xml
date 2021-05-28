@@ -49,12 +49,9 @@
                 </if>
             </where>
         <choose>
-            <when test="statusId == 0">
-                AND S.StatusId = 1
-            </when>
-            <otherwise>
+            <when test="statusId != 0">
                 AND S.StatusId = #{statusId}
-            </otherwise>
+            </when>
         </choose>
                  ) AS SUPQUE
         <where>

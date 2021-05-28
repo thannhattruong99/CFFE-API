@@ -1,8 +1,12 @@
 package com.screens.stack.controller;
 
 import com.screens.stack.form.RequestGetStackDetailForm;
+import com.screens.stack.form.RequestGetStackListForm;
 import com.screens.stack.form.ResponseStackDetailForm;
+import com.screens.stack.form.ResponseStackListForm;
 import com.screens.stack.service.StackService;
+import com.screens.store.form.RequestGetStoreListForm;
+import com.screens.store.form.ResponseStoreListForm;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -21,6 +25,7 @@ public class StackController {
 
 
     private static final String MSG_022 = "MSG-022";
+    private static final String MSG_009 = "MSG-009";
 
     @GetMapping(value = "/admin/manager/store/shelf/stack")
     public String getStackDetail(
@@ -30,7 +35,7 @@ public class StackController {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-        // Do Get Store Detail
+        // Do Get Stack Detail
         ResponseStackDetailForm responseStackDetailForm = stackService.getStackDetail(requestForm);
         if(responseStackDetailForm == null){
             List<String> errorCodes = new ArrayList<>();
@@ -40,5 +45,24 @@ public class StackController {
         // Return result
         return ResponseSupporter.resonpseResult(responseStackDetailForm);
     }
+
+    @GetMapping(value = "/admin/manager/store/shelf/stacks-by-shelf")
+    public String getStackListByShelf(@Validated RequestGetStackListForm requestForm,
+                               BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Get/Search Store
+        ResponseStackListForm responseStackListForm = stackService.getStackListByShelf(requestForm);
+        if(responseStackListForm == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(responseStackListForm);
+    }
+
 
 }

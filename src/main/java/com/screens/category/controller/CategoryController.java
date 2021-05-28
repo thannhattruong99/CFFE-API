@@ -32,7 +32,7 @@ public class CategoryController {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-        // Do Get Store Detail
+        // Do Get Category Detail
         ResponseCategoryDetailForm responseCategoryDetailForm = categoryService.getCategoryDetail(requestForm);
         if(responseCategoryDetailForm == null){
             List<String> errorCodes = new ArrayList<>();

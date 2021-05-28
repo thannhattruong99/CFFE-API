@@ -81,5 +81,12 @@
         </association>
     </resultMap>
 
+    <select id="getStackListByShelf" resultMap="getStackListByShelf" useCache="false">
+
+    </select>
+
+    <resultMap id="getStackListByShelf" type="ResponseStackListForm">
+
+    </resultMap>
 
 </mapper>
