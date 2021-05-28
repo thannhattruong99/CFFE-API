@@ -1,4 +1,4 @@
-package com.screens.manager.form;
+package com.screens.shelf.form;
 
 import org.springframework.lang.Nullable;
 
@@ -6,25 +6,25 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
-public class RequestUpdateStatusForm implements Serializable {
-    @NotEmpty(message = "MSG-001") @Size(min = 1, max = 30, message = "MSG-063")
-    private String userName;
+public class RequestUpdateShelfStatusForm {
+    @NotEmpty(message = "MSG-071")
+    private String shelfId;
     @Min(value = 2, message = "MSG-065") @Max(value = 3, message = "MSG-065")
     private int statusId;
-    @Nullable @Size(min = 1, max = 250, message = "MSG-067")
+    @Nullable
+    @Size(min = 1, max = 250, message = "MSG-067")
     private String reasonInactive;
 
-    public RequestUpdateStatusForm() {
+    public RequestUpdateShelfStatusForm() {
     }
 
-    public String getUserName() {
-        return userName;
+    public String getShelfId() {
+        return shelfId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setShelfId(String shelfId) {
+        this.shelfId = shelfId;
     }
 
     public int getStatusId() {

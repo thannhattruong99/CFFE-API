@@ -2,11 +2,11 @@ package com.screens.shelf.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
-import com.screens.manager.service.ManagerService;
 import com.screens.shelf.dao.mapper.ShelfMapper;
 import com.screens.shelf.dto.ShelfDTO;
 import com.screens.shelf.dto.StackDTO;
 import com.screens.shelf.form.*;
+import com.util.StringHelper;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +87,21 @@ public class ShelfService extends BaseService {
         return responseForm;
     }
 
+    public ResponseCommonForm updateShelfStatus(RequestUpdateShelfStatusForm requestForm){
+        ShelfDTO shelfDTO = new ShelfDTO();
+        convertRequestUpdateStatusFormToShelfDTO(requestForm, shelfDTO);
+        ResponseCommonForm responseForm = checkUpdateStatusBusiness(shelfDTO);
+        if(responseForm == null){
+            try {
+                shelfMapper.updateShelfStatus(shelfDTO);
+            }catch (PersistenceException e){
+                logger.error("Error at ManagerService: " + e.getMessage());
+            }
+        }
+
+        return responseForm;
+    }
+
     private void convertRequestShelfListToShelfDTO(RequestShelfListForm requestForm, ShelfDTO shelfDTO){
         shelfDTO.setUserName(requestForm.getUserName());
         shelfDTO.setStoreId(requestForm.getStoreId());
@@ -131,4 +146,45 @@ public class ShelfService extends BaseService {
         shelfDTO.setDescription(requestForm.getDescription());
         shelfDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
+
+    private void convertRequestUpdateStatusFormToShelfDTO(RequestUpdateShelfStatusForm requestForm, ShelfDTO shelfDTO){
+        shelfDTO.setShelfId(requestForm.getShelfId());
+        shelfDTO.setStatusId(requestForm.getStatusId());
+        if(!StringHelper.isNullOrEmpty(requestForm.getReasonInactive())){
+            shelfDTO.setReasonInactive(requestForm.getReasonInactive());
+        }
+        shelfDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
+    }
+
+    /*
+    * //ShelfDTO shelfDTO is converted from requestForm
+    * */
+    private ResponseCommonForm checkUpdateStatusBusiness(ShelfDTO shelfDTO){
+        ResponseCommonForm responseForm = new ResponseCommonForm();
+        ShelfDTO resultDAO = shelfMapper.getStatusId(shelfDTO);
+
+        // Not found shelf
+        if(resultDAO == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_012);
+            responseForm.setErrorCodes(errorCodes);
+        }
+        //shelf is activating, can not change status
+        else if(resultDAO.getStatusId() == ACTIVE_STATUS){
+            ArrayList<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_076);
+            responseForm.setErrorCodes(errorCodes);
+        }
+        //request inactive, status is pending, check reason inactive is not empty
+        else if (shelfDTO.getStatusId() == INACTIVE_STATUS
+                && resultDAO.getStatusId() == PENDING_STATUS
+                && StringHelper.isNullOrEmpty(shelfDTO.getReasonInactive())){
+                ArrayList<String> errorCodes = new ArrayList<>();
+                errorCodes.add(MSG_066);
+                responseForm.setErrorCodes(errorCodes);
+        }
+        //other wise is true
+        return responseForm;
+    }
+
 }
