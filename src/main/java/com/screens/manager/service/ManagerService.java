@@ -26,6 +26,8 @@ public class ManagerService extends BaseService {
     @Autowired
     private ManagerMapper managerMapper;
 
+
+
     public ResponseManagerListForm getManagerList(RequestManagerListForm requestForm){
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestManagerListFormToMangerDTO(requestForm, managerDTO);
