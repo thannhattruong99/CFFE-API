@@ -148,7 +148,12 @@ public class ManagerService extends BaseService {
             ArrayList<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_063);
             responseCommonForm.setErrorCodes(errorCodes);
-        }else if(managerDTO.getStatusId() == INACTIVE_STATUS && resultDAO.getStatusId() == PENDING_STATUS){
+        }else if(resultDAO.getStatusId() == ACTIVE_STATUS){
+            ArrayList<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_076);
+            responseCommonForm.setErrorCodes(errorCodes);
+        }
+        else if(managerDTO.getStatusId() == INACTIVE_STATUS && resultDAO.getStatusId() == PENDING_STATUS){
             if(StringHelper.isNullOrEmpty(managerDTO.getReasonInactive())
                     || !StringHelper.isNullOrEmpty(resultDAO.getStoreId())){
                 ArrayList<String> errorCodes = new ArrayList<>();

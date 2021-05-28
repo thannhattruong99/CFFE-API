@@ -32,19 +32,20 @@ public class ShelfMapper extends BaseDAO {
                 stack.setShelfId(shelfDTO.getShelfId());
             }
 
-
             if(sqlSession.insert("ShelfDAO.createStacks", shelfDTO.getStacks()) == shelfDTO.getStacks().size()){
                 sqlSession.commit(true);
                 return true;
             }
         }
 
-//        System.out.println("SHELF DTO: " + shelfDTO.getShelfId());
-////        if(result != null){
-////            System.out.println("RESULT: " + result);
-////            return true;
-////        }
+        return false;
+    }
 
+    public boolean updateShelf(ShelfDTO shelfDTO){
+        if(sqlSession.update("ShelfDAO.updateShelf", shelfDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
         return false;
     }
 

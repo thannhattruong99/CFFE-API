@@ -19,6 +19,7 @@ import java.util.List;
 @Service
 public class ShelfService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(ShelfService.class);
+    private static final String MSG_012 = "MSG-012";
     @Autowired
     private ShelfMapper shelfMapper;
 
@@ -54,7 +55,30 @@ public class ShelfService extends BaseService {
         ShelfDTO shelfDTO = new ShelfDTO();
         convertRequestCreateShelfFormToShelfDTO(requestForm, shelfDTO);
         try {
-            shelfMapper.createShelf(shelfDTO);
+            if(!shelfMapper.createShelf(shelfDTO)){
+                List<String> errorCodes = new ArrayList<>();
+                errorCodes.add(MSG_012);
+                responseForm.setErrorCodes(errorCodes);
+            }
+        }catch (PersistenceException e){
+            logger.error("Error at ShelfService: " + e.getMessage());
+            responseForm.setErrorCodes(catchSqlException(e.getMessage()));
+        }
+
+        return responseForm;
+    }
+
+    public ResponseCommonForm updateShelf(RequestUpdateShelfForm requestForm){
+        ResponseCommonForm responseForm = new ResponseCommonForm();
+        ShelfDTO shelfDTO = new ShelfDTO();
+        convertRequestUpdateShelfFormToShelfDTO(requestForm, shelfDTO);
+
+        try{
+            if(!shelfMapper.updateShelf(shelfDTO)){
+                ArrayList<String> errorCodes = new ArrayList<>();
+                errorCodes.add(MSG_012);
+                responseForm.setErrorCodes(errorCodes);
+            }
         }catch (PersistenceException e){
             logger.error("Error at ShelfService: " + e.getMessage());
             responseForm.setErrorCodes(catchSqlException(e.getMessage()));
@@ -69,11 +93,10 @@ public class ShelfService extends BaseService {
         shelfDTO.setShelfName(requestForm.getShelfName());
         shelfDTO.setStatusId(requestForm.getStatusId());
 
-        int offSet = 0;
+        shelfDTO.setOffSet(DEFAULT_OFF_SET);
         if(requestForm.getPageNum() > 0){
-            offSet = (requestForm.getPageNum() - 1) * requestForm.getFetchNext();
+            shelfDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
         }
-        shelfDTO.setOffSet(offSet);
 
         shelfDTO.setFetchNext(DEFAULT_FETCH_NEXT);
         if(requestForm.getFetchNext() > 0){
@@ -102,5 +125,10 @@ public class ShelfService extends BaseService {
         shelfDTO.setStacks(stackDTOS);
     }
 
-
+    private void convertRequestUpdateShelfFormToShelfDTO(RequestUpdateShelfForm requestForm, ShelfDTO shelfDTO){
+        shelfDTO.setShelfId(requestForm.getShelfId());
+        shelfDTO.setShelfName(requestForm.getShelfName());
+        shelfDTO.setDescription(requestForm.getDescription());
+        shelfDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
+    }
 }

@@ -68,7 +68,8 @@
         WHERE SH.ShelfId = #{shelfId}
     </select>
     <update id="updateShelf">
-
+        UPDATE tblShelf SET ShelfName = #{shelfName}, Description = #{description}, UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE ShelfId = #{shelfId}
     </update>
     <insert id="createShelf" parameterType="ShelfDTO">
         <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
@@ -91,6 +92,14 @@
             (#{item.position}, convert_tz(now(),@@session.time_zone,#{item.createdTime}), #{item.shelfId}, #{item.statusId})
         </foreach>
     </insert>
+<!--    <select id="check" resultMap="">-->
+<!--        SELECT COUNT(SH.ShelfId) AS totalOfRecord-->
+<!--        FROM tblShelf SH-->
+<!--        JOIN tblStack ST ON SH.ShelfId = ST.ShelfId-->
+<!--        <if test="">-->
+<!--            AND ST.StatusId = 1-->
+<!--        </if>-->
+<!--    </select>-->
 
     <resultMap id="getShelves" type="ResponseShelfListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>

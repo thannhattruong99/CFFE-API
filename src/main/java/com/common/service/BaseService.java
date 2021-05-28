@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseService {
+    protected  static final int DEFAULT_OFF_SET = 0;
+
     protected static final int DEFAULT_FETCH_NEXT = 15;
     protected static final boolean IS_DESCENDING = false;
     protected static final String NUMBER_REGEXP = "[0-9]*";
@@ -17,7 +19,7 @@ public class BaseService {
     protected static final String PENDING_STATUS_STR = "ACTIVE";
     protected static final String MSG_063 = "MSG-063";
     protected static final String MSG_066 = "MSG-066";
-    private static final String MSG_076 = "MSG-076";
+    protected static final String MSG_076 = "MSG-076";
     private static final String DUPLICATE_ERROR_KEY = "Duplicate entry";
 
     public List<String> catchSqlException(String errorMsg){
