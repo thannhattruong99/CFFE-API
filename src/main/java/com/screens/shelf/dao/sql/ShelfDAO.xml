@@ -92,15 +92,22 @@
             (#{item.position}, convert_tz(now(),@@session.time_zone,#{item.createdTime}), #{item.shelfId}, #{item.statusId})
         </foreach>
     </insert>
-<!--    <select id="check" resultMap="">-->
-<!--        SELECT COUNT(SH.ShelfId) AS totalOfRecord-->
-<!--        FROM tblShelf SH-->
-<!--        JOIN tblStack ST ON SH.ShelfId = ST.ShelfId-->
-<!--        <if test="">-->
-<!--            AND ST.StatusId = 1-->
-<!--        </if>-->
-<!--    </select>-->
-
+    <select id="getStatusId" resultMap="getStatusId">
+        SELECT SH.StatusId
+        FROM tblShelf SH
+        <if test="statusId == 2">
+            JOIN tblStack ST ON SH.ShelfId = ST.ShelfId
+            AND ST.StatusId = 2
+        </if>
+        WHERE SH.ShelfId = #{ShelfId}
+    </select>
+    <update id="updateShelfStatus">
+        UPDATE tblShelf SET StatusId = #{statusId}, UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        <if test="statusId == 2">
+            , ReasonInactive = #{reasonInactive}
+        </if>
+        WHERE ShelfId = #{shelfId}
+    </update>
     <resultMap id="getShelves" type="ResponseShelfListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="shelves" ofType="ShelfResponseSupporter">
@@ -133,5 +140,8 @@
     </resultMap>
     <resultMap id="createShelf" type="ShelfDTO">
         <result property="shelfId" column="shelfId"/>
+    </resultMap>
+    <resultMap id="getStatusId" type="ShelfDTO">
+        <result property="statusId" column="StatusId"/>
     </resultMap>
 </mapper>
