@@ -14,6 +14,7 @@ public class ShelfDTO extends BaseDTO {
     private String statusName;
     private String createdTime;
     private String updatedTime;
+    private String reasonInactive;
     private int numberOfStack;
     private int totalOfRecord;
     private List<StackDTO> stacks;
@@ -115,5 +116,13 @@ public class ShelfDTO extends BaseDTO {
 
     public void setStacks(List<StackDTO> stacks) {
         this.stacks = stacks;
+    }
+
+    public String getReasonInactive() {
+        return reasonInactive;
+    }
+
+    public void setReasonInactive(String reasonInactive) {
+        this.reasonInactive = reasonInactive;
     }
 }

@@ -49,4 +49,16 @@ public class ShelfMapper extends BaseDAO {
         return false;
     }
 
+    public ShelfDTO getStatusId(ShelfDTO shelfDTO){
+        return sqlSession.selectOne("ShelfDAO.getStatusId", shelfDTO);
+    }
+
+    public boolean updateShelfStatus(ShelfDTO shelfDTO){
+        if(sqlSession.update("ShelfDAO.updateShelfStatus", shelfDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
+        return false;
+    }
+
 }

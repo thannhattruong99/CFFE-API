@@ -87,8 +87,15 @@ public class ShelfController {
     }
 
     @RequestMapping(value = "/shelf/update-status", method = RequestMethod.POST)
-    public String updateStatus(){
+    public String updateStatus(@Validated @RequestBody RequestUpdateShelfStatusForm requestForm, BindingResult result){
 
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        ResponseCommonForm responseForm = shelfService.updateShelfStatus(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
         return ResponseSupporter.resonpseResult(true);
     }
 }
