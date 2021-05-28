@@ -14,9 +14,6 @@ public class ResponseShelfDetailForm {
     private String statusName;
     private CameraResponseFormSupporter camera;
 
-    private List<StackResponseFormSupporter> stacks;
-
-
     public ResponseShelfDetailForm() {
     }
 
@@ -100,11 +97,4 @@ public class ResponseShelfDetailForm {
         this.statusName = statusName;
     }
 
-    public List<StackResponseFormSupporter> getStacks() {
-        return stacks;
-    }
-
-    public void setStacks(List<StackResponseFormSupporter> stacks) {
-        this.stacks = stacks;
-    }
 }
