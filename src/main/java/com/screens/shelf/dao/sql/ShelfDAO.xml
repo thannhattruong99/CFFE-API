@@ -70,6 +70,27 @@
     <update id="updateShelf">
 
     </update>
+    <insert id="createShelf" parameterType="ShelfDTO">
+        <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
+            SELECT UUID() AS shelfId FROM tblShelf LIMIT 1
+        </selectKey>
+         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, statusId, StoreId)
+         VALUES (#{shelfId}, #{shelfName}, #{description}, #{numberOfStack}, convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId}, #{storeId})
+<!--        <selectKey keyProperty="shelfId" resultType="string" order="AFTER ">-->
+<!--            select ShelfId-->
+<!--            from tblShelf-->
+<!--            where CreatedTime = (select MAX(CreatedTime)-->
+<!--            from tblShelf-->
+<!--            where StoreId = #{storeId}-->
+<!--            ) AND StoreId = #{storeId};-->
+<!--        </selectKey>-->
+    </insert>
+    <insert id="createStacks">
+        INSERT INTO tblStack(Position, CreatedTime, ShelfId, StatusId) VALUES
+        <foreach item="item" collection="list" separator=",">
+            (#{item.position}, convert_tz(now(),@@session.time_zone,#{item.createdTime}), #{item.shelfId}, #{item.statusId})
+        </foreach>
+    </insert>
 
     <resultMap id="getShelves" type="ResponseShelfListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
@@ -100,5 +121,8 @@
             <result property="createdTime" column="CreatedTime"/>
             <result property="updatedTime" column="UpdatedTime"/>
         </association>
+    </resultMap>
+    <resultMap id="createShelf" type="ShelfDTO">
+        <result property="shelfId" column="shelfId"/>
     </resultMap>
 </mapper>

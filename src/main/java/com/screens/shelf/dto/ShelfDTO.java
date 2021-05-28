@@ -2,16 +2,55 @@ package com.screens.shelf.dto;
 
 import com.common.dto.BaseDTO;
 
+import java.util.List;
+
 public class ShelfDTO extends BaseDTO {
     private String userName;
     private String storeId;
     private String shelfId;
     private String shelfName;
+    private String description;
     private int statusId;
     private String statusName;
+    private String createdTime;
+    private String updatedTime;
+    private int numberOfStack;
     private int totalOfRecord;
+    private List<StackDTO> stacks;
 
     public ShelfDTO() {
+    }
+
+    public int getNumberOfStack() {
+        return numberOfStack;
+    }
+
+    public void setNumberOfStack(int numberOfStack) {
+        this.numberOfStack = numberOfStack;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getTotalOfRecord() {
@@ -68,5 +107,13 @@ public class ShelfDTO extends BaseDTO {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public List<StackDTO> getStacks() {
+        return stacks;
+    }
+
+    public void setStacks(List<StackDTO> stacks) {
+        this.stacks = stacks;
     }
 }
