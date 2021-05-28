@@ -44,31 +44,27 @@
     </select>
 
     <select id="getShelfDetail" resultMap="getShelfDetail">
-        SELECT SH.ShelfId, SH.ShelfName, SH.Description,
-               SH.NumberStacks, SH.CreatedTime,
-               SH.UpdatedTime, SH.ReasonInactive,
-               STT.StatusID, STT.StatusName,
-        <!--                list of stack-->
-               CM.CameraId AS SHCameraId,
-               CM.CameraName AS SHCameraName,
-               CM.ImageURL, CM.IPAddress,
-               CM.RTSPString, CM.CreatedTime AS CameraCreatedTime,
-               CM.UpdatedTime AS CameraUpdatedTime,
-        <!--                list of stack-->
-               STK.StackId, STK.Position, P.ProductId,
-               P.ProductName, C.CameraId, C.CameraName,
-               STK.StatusId AS STKStatusID, STT2.StatusName AS STKStatusName
+        SELECT SH.ShelfId,
+               SH.ShelfName,
+               SH.Description,
+               SH.NumberStacks,
+               SH.CreatedTime,
+               SH.UpdatedTime,
+               SH.ReasonInactive,
+               STT.StatusID,
+               STT.StatusName,
+               CM.CameraId,
+               CM.CameraName,
+               CM.ImageURL,
+               CM.IPAddress,
+               CM.RTSPString,
+               CM.CreatedTime,
+               CM.UpdatedTime
         FROM tblShelf SH
                  JOIN tblStore ST ON SH.StoreId = ST.StoreId
                  JOIN tblStatus STT ON SH.StatusId = STT.StatusId
-                 LEFT JOIN tblStack STK ON SH.ShelfId = STK.ShelfId
                  LEFT JOIN tblShelfCameraMapping SCM ON SH.ShelfId = SCM.ShelfId AND SCM.StatusId = 1
                  LEFT JOIN tblCamera CM ON SCM.CameraId = CM.CameraId
-                 LEFT JOIN tblStackProductCameraMapping SPCM ON STK.StackId = SPCM.StackId
-                                                AND SPCM.StatusId != 2
-                 JOIN tblStatus STT2 ON STK.StatusId = STT2.StatusId
-                 LEFT JOIN tblProduct P ON (SPCM.ProductId = P.ProductId AND SPCM.RemoveProductTime IS NULL)
-                 LEFT JOIN tblCamera C ON (SPCM.CameraId = C.CameraId AND SPCM.RemovedCameraTime IS NULL)
         WHERE SH.ShelfId = #{shelfId}
     </select>
     <update id="updateShelf">
@@ -97,22 +93,12 @@
         <result property="statusId" column="StatusId"/>
         <result property="statusName" column="StatusName"/>
         <association property="camera" javaType="CameraResponseFormSupporter">
-            <result property="cameraId" column="SHCameraId"/>
-            <result property="cameraName" column="SHCameraName"/>
-            <result property="imageURL" column="ImageURL"/>
-            <result property="rtspString" column="RTSPString"/>
-            <result property="createdTime" column="CameraCreatedTime"/>
-            <result property="updatedTime" column="CameraUpdatedTime"/>
-        </association>
-        <collection property="stacks" ofType="StackResponseFormSupporter">
-            <id property="stackId" column="StackId"/>
-            <result property="position" column="Position"/>
-            <result property="productId" column="ProductId"/>
-            <result property="productName" column="ProductName"/>
             <result property="cameraId" column="CameraId"/>
             <result property="cameraName" column="CameraName"/>
-            <result property="statusId" column="STKStatusID"/>
-            <result property="statusName" column="STKStatusName"/>
-        </collection>
+            <result property="imageURL" column="ImageURL"/>
+            <result property="rtspString" column="RTSPString"/>
+            <result property="createdTime" column="CreatedTime"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+        </association>
     </resultMap>
 </mapper>
