@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("admin/store")
 public class CameraController {
     private static final String MSG_009 = "MSG-009";
-    private static final String MSG_063 = "MSG-063";
 
     @Autowired
     private CameraService cameraService;
