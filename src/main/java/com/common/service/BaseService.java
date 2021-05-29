@@ -16,7 +16,7 @@ public class BaseService {
     protected static final int MANAGER_ROLE = 2;
     protected static final String ACTIVE_STATUS_STR = "ACTIVE";
     protected static final String INACTIVE_STATUS_STR = "INACTIVE";
-    protected static final String PENDING_STATUS_STR = "ACTIVE";
+    protected static final String PENDING_STATUS_STR = "PENDING";
     protected static final String MSG_063 = "MSG-063";
     protected static final String MSG_066 = "MSG-066";
     protected static final String MSG_076 = "MSG-076";
