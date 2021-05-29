@@ -10,7 +10,6 @@
              WHERE StatusId = 3 AND TypeDetect = #{typeDetect}) TR
         WHERE StatusId = 3 AND TypeDetect = #{typeDetect}
         ORDER BY CameraName ASC
-        LIMIT #{offSet}, #{fetchNext}
     </select>
     <resultMap id="getAvailableCameraList" type="ResponseAvailableCameraListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>

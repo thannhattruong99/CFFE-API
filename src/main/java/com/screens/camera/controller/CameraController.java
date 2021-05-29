@@ -22,7 +22,7 @@ public class CameraController {
     @Autowired
     private CameraService cameraService;
 
-    @RequestMapping(value = "/available-shelf-lst", method = RequestMethod.GET)
+    @RequestMapping(value = "/available-camera-lst", method = RequestMethod.GET)
     public String getAvailableCameraList(@Validated RequestAvailableCameraListForm requestForm, BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
