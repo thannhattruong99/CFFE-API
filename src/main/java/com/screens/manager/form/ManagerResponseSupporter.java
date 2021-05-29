@@ -4,13 +4,32 @@ import java.io.Serializable;
 
 public class ManagerResponseSupporter implements Serializable {
     private String managerName;
+    private String userId;
     private String userName;
     private String storeId;
     private String updatedTime;
     private String status;
+    private String imageURL;
+
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
     public String getManagerName() {
         return managerName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setManagerName(String managerName) {
