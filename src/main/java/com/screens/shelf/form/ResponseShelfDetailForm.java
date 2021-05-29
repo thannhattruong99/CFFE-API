@@ -12,17 +12,17 @@ public class ResponseShelfDetailForm {
     private String reasonInactive;
     private String statusId;
     private String statusName;
-    private CameraResponseFormSupporter camera;
+    private List<CameraResponseFormSupporter> cameras;
 
     public ResponseShelfDetailForm() {
     }
 
-    public CameraResponseFormSupporter getCamera() {
-        return camera;
+    public List<CameraResponseFormSupporter> getCameras() {
+        return cameras;
     }
 
-    public void setCamera(CameraResponseFormSupporter camera) {
-        this.camera = camera;
+    public void setCameras(List<CameraResponseFormSupporter> cameras) {
+        this.cameras = cameras;
     }
 
     public String getShelfId() {

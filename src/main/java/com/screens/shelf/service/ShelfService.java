@@ -91,7 +91,7 @@ public class ShelfService extends BaseService {
         ShelfDTO shelfDTO = new ShelfDTO();
         convertRequestUpdateStatusFormToShelfDTO(requestForm, shelfDTO);
         ResponseCommonForm responseForm = checkUpdateStatusBusiness(shelfDTO);
-        if(responseForm == null){
+        if(responseForm.getErrorCodes() == null){
             try {
                 shelfMapper.updateShelfStatus(shelfDTO);
             }catch (PersistenceException e){
@@ -103,7 +103,7 @@ public class ShelfService extends BaseService {
     }
 
     private void convertRequestShelfListToShelfDTO(RequestShelfListForm requestForm, ShelfDTO shelfDTO){
-        shelfDTO.setUserName(requestForm.getUserName());
+//        shelfDTO.setUserName(requestForm.getUserName());
         shelfDTO.setStoreId(requestForm.getStoreId());
         shelfDTO.setShelfName(requestForm.getShelfName());
         shelfDTO.setStatusId(requestForm.getStatusId());
@@ -128,12 +128,12 @@ public class ShelfService extends BaseService {
         shelfDTO.setShelfName(requestForm.getShelfName());
         shelfDTO.setDescription(requestForm.getDescription());
         shelfDTO.setNumberOfStack(requestForm.getNumberOfStack());
-        shelfDTO.setStatusId(ACTIVE_STATUS);
+        shelfDTO.setStatusId(PENDING_STATUS);
         shelfDTO.setCreatedTime(TIME_ZONE_VIETNAMESE);
 
         List<StackDTO> stackDTOS = new ArrayList<>();
         for(int i = 0; i < requestForm.getNumberOfStack(); i++){
-            StackDTO stackDTO = new StackDTO(i + 1, TIME_ZONE_VIETNAMESE, "", ACTIVE_STATUS);
+            StackDTO stackDTO = new StackDTO(i + 1, TIME_ZONE_VIETNAMESE, "", PENDING_STATUS);
             stackDTOS.add(stackDTO);
         }
 
@@ -177,11 +177,12 @@ public class ShelfService extends BaseService {
         }
         //request inactive, status is pending, check reason inactive is not empty
         else if (shelfDTO.getStatusId() == INACTIVE_STATUS
-                && resultDAO.getStatusId() == PENDING_STATUS
-                && StringHelper.isNullOrEmpty(shelfDTO.getReasonInactive())){
+                && resultDAO.getStatusId() == PENDING_STATUS){
+            if( resultDAO.getTotalOfRecord() > 0 || StringHelper.isNullOrEmpty(shelfDTO.getReasonInactive())){
                 ArrayList<String> errorCodes = new ArrayList<>();
                 errorCodes.add(MSG_066);
                 responseForm.setErrorCodes(errorCodes);
+            }
         }
         //other wise is true
         return responseForm;
