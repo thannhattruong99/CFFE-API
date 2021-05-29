@@ -215,12 +215,11 @@ public class StoreService extends BaseService {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setSearchValue(requestGetStoreListForm.getSearchValue().toLowerCase().trim());
         storeDTO.setSearchField(requestGetStoreListForm.getSearchField().toLowerCase().trim());
-//        storeDTO.setSortField(requestGetStoreListForm.getSortField());
         storeDTO.setStatusId(requestGetStoreListForm.getStatusId());
         if(requestGetStoreListForm.getPageNum() > 0){
             storeDTO.setOffSet((requestGetStoreListForm.getPageNum() - 1) * requestGetStoreListForm.getFetchNext());
         }
-
+        storeDTO.setCityId(requestGetStoreListForm.getCityId());
         storeDTO.setFetchNext(requestGetStoreListForm.getFetchNext());
         if(requestGetStoreListForm.getFetchNext() <= 0){
             storeDTO.setFetchNext(DEFAULT_FETCH_NEXT);

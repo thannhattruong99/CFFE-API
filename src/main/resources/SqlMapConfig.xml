@@ -23,6 +23,7 @@
         <typeAlias alias="ResponseStackDetailForm" type="com.screens.stack.form.ResponseStackDetailForm"/>
         <typeAlias alias="ProductResponseSupporter" type="com.screens.stack.form.ProductResponseSupporter"/>
         <typeAlias alias="CameraResponseSupporter" type="com.screens.stack.form.CameraResponseSupporter"/>
+        <typeAlias alias="ResponseStackListForm" type="com.screens.stack.form.ResponseStackListForm"/>
         <typeAlias alias="ResponseCategoryDetailForm" type="com.screens.category.form.ResponseCategoryDetailForm"/>
     </typeAliases>
 

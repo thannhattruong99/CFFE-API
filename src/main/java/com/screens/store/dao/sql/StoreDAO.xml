@@ -47,12 +47,17 @@
                         </otherwise>
                     </choose>
                 </if>
+                <choose>
+                    <when test="statusId != 0">
+                        AND S.StatusId = #{statusId}
+                    </when>
+                </choose>
+                <choose>
+                    <when test="cityId != 0">
+                        AND TC.CityId = #{cityId}
+                    </when>
+                </choose>
             </where>
-        <choose>
-            <when test="statusId != 0">
-                AND S.StatusId = #{statusId}
-            </when>
-        </choose>
                  ) AS SUPQUE
         <where>
             <if test="searchValue != null">
@@ -71,15 +76,16 @@
                     </otherwise>
                 </choose>
             </if>
-
-        <choose>
-            <when test="statusId == 0">
-                AND S.StatusId = 1
-            </when>
-            <otherwise>
-                AND S.StatusId = #{statusId}
-            </otherwise>
-        </choose>
+            <choose>
+                <when test="statusId != 0">
+                    AND S.StatusId = #{statusId}
+                </when>
+            </choose>
+            <choose>
+                <when test="cityId != 0">
+                    AND TC.CityId = #{cityId}
+                </when>
+            </choose>
         </where>
         ORDER BY
         S.StoreName

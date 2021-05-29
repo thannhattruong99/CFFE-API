@@ -19,6 +19,8 @@ public class StackMapper extends BaseDAO {
     }
 
     public ResponseStackListForm getStackListByShelf(StackDTO stackDTO) {
+//        ResponseStackListForm temp = new ResponseStackListForm();
+//        return temp;
         return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByShelf",stackDTO);
     }
 }
