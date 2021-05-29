@@ -20,6 +20,8 @@ public class StoreService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
     private static final int ADD_MANAGER = 1;
     private static final int REMOVE_MANAGER = 2;
+    private static final String SEARCH_FIELD_STORE_NAME = "storename";
+
 
     @Autowired
     private StoreMapper storeMapper;
@@ -214,7 +216,7 @@ public class StoreService extends BaseService {
     private StoreDTO convertGetStoreListFormToDTO(RequestGetStoreListForm requestGetStoreListForm) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setSearchValue(requestGetStoreListForm.getSearchValue().toLowerCase().trim());
-        storeDTO.setSearchField(requestGetStoreListForm.getSearchField().toLowerCase().trim());
+        storeDTO.setSearchField(SEARCH_FIELD_STORE_NAME);
         storeDTO.setStatusId(requestGetStoreListForm.getStatusId());
         if(requestGetStoreListForm.getPageNum() > 0){
             storeDTO.setOffSet((requestGetStoreListForm.getPageNum() - 1) * requestGetStoreListForm.getFetchNext());
