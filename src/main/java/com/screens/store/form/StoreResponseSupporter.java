@@ -3,17 +3,53 @@ package com.screens.store.form;
 public class StoreResponseSupporter {
     private String storeId;
     private String storeName;
-    private String imageURL;
+    private String imageUrl;
     private String managerUsername;
     private String managerUserId;
     private String address;
-    private String city;
-    private String district;
-    private String lastUpdated;
+    private int cityId;
+    private String cityName;
+    private int districtId;
+    private String districtName;
+    private String updatedTime;
+    private String reasonInactive;
+    private String analyzedTime;
     private int statusId;
     private String status;
 
     public StoreResponseSupporter() {
+    }
+
+    public int getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
+    }
+
+    public int getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(int districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getReasonInactive() {
+        return reasonInactive;
+    }
+
+    public void setReasonInactive(String reasonInactive) {
+        this.reasonInactive = reasonInactive;
+    }
+
+    public String getAnalyzedTime() {
+        return analyzedTime;
+    }
+
+    public void setAnalyzedTime(String analyzedTime) {
+        this.analyzedTime = analyzedTime;
     }
 
     public int getStatusId() {
@@ -40,20 +76,20 @@ public class StoreResponseSupporter {
         this.managerUserId = managerUserId;
     }
 
-    public String getCity() {
-        return city;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
-    public String getDistrict() {
-        return district;
+    public String getDistrictName() {
+        return districtName;
     }
 
-    public void setDistrict(String district) {
-        this.district = district;
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
     }
 
     public String getStoreName() {
@@ -64,12 +100,12 @@ public class StoreResponseSupporter {
         this.storeName = storeName;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getManagerUsername() {
@@ -88,12 +124,12 @@ public class StoreResponseSupporter {
         this.address = address;
     }
 
-    public String getLastUpdated() {
-        return lastUpdated;
+    public String getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getStatus() {

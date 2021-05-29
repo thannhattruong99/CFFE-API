@@ -10,7 +10,11 @@
             S.StoreName,
             S.ImageURL,
             S.Address,
+            S.AnalyzedTime,
+            S.ReasonInactive,
+            TD.DistrictId,
             TD.DistrictName,
+            TC.CityId,
             TC.CityName,
             TU.Username,
             TU.UserId,
@@ -99,15 +103,19 @@
         <collection property="stores" ofType="StoreResponseSupporter">
             <result property="storeId" column="StoreId"/>
             <result property="storeName" column="StoreName"/>
-            <result property="imageURL" column="ImageURL"/>
+            <result property="imageUrl" column="ImageURL"/>
             <result property="managerUsername" column="Username"/>
             <result property="managerUserId" column="UserId"/>
             <result property="address" column="Address"/>
-            <result property="city" column="CityName"/>
-            <result property="district" column="DistrictName"/>
-            <result property="lastUpdated" column="UpdatedTime"/>
+            <result property="cityName" column="CityName"/>
+            <result property="cityId" column="CityId"/>
+            <result property="districtName" column="DistrictName"/>
+            <result property="districtId" column="DistrictId"/>
+            <result property="updatedTime" column="UpdatedTime"/>
             <result property="statusId" column="StatusId"/>
             <result property="status" column="StatusName"/>
+            <result property="analyzedTime" column="AnalyzedTime"/>
+            <result property="reasonInactive" column="ReasonInactive"/>
         </collection>
     </resultMap>
 
@@ -116,7 +124,10 @@
                S.StoreName,
                S.ImageURL,
                S.Address,
+               S.AnalyzedTime,
+               TD.DistrictId,
                TD.DistrictName,
+               TC.CityId,
                TC.CityName,
                S.CreatedTime,
                S.UpdatedTime,
@@ -124,6 +135,7 @@
                TU.UserId,
                TU.Username,
                TU.Fullname,
+               TU.imageURL AS MANAGER_IMG,
                S.StatusId,
                TS.StatusName
         FROM tblStore S
@@ -143,14 +155,18 @@
         <result property="managerName" column="Fullname"/>
         <result property="managerUsername" column="Username"/>
         <result property="managerId" column="UserId"/>
+        <result property="managerImage" column="MANAGER_IMG"/>
         <result property="address" column="Address"/>
-        <result property="district" column="DistrictName"/>
-        <result property="city" column="CityName"/>
+        <result property="districtId" column="DistrictId"/>
+        <result property="districtName" column="DistrictName"/>
+        <result property="cityId" column="CityId"/>
+        <result property="cityName" column="CityName"/>
         <result property="createdTime" column="CreatedTime"/>
         <result property="updatedTime" column="UpdatedTime"/>
         <result property="reasonInactive" column="ReasonInactive"/>
+        <result property="analyzedTime" column="AnalyzedTime"/>
         <result property="statusId" column="StatusId"/>
-        <result property="status" column="StatusName"/>
+        <result property="statusName" column="StatusName"/>
     </resultMap>
 
     <insert id="createStore"  parameterType="StoreDTO">

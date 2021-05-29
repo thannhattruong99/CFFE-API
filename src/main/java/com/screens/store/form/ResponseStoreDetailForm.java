@@ -9,13 +9,53 @@ public class ResponseStoreDetailForm implements Serializable {
     private String managerName;
     private String managerUsername;
     private String managerId;
+    private String managerImage;
     private String address;
-    private String district;
-    private String city;
+    private int districtId;
+    private String districtName;
+    private int cityId;
+    private String cityName;
     private String createdTime;
     private String updatedTime;
     private String reasonInactive;
+    private String analyzedTime;
     private int statusId;
+    private String statusName;
+
+    public ResponseStoreDetailForm() {
+    }
+
+    public String getManagerImage() {
+        return managerImage;
+    }
+
+    public void setManagerImage(String managerImage) {
+        this.managerImage = managerImage;
+    }
+
+    public int getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(int districtId) {
+        this.districtId = districtId;
+    }
+
+    public int getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getAnalyzedTime() {
+        return analyzedTime;
+    }
+
+    public void setAnalyzedTime(String analyzedTime) {
+        this.analyzedTime = analyzedTime;
+    }
 
     public int getStatusId() {
         return statusId;
@@ -25,25 +65,24 @@ public class ResponseStoreDetailForm implements Serializable {
         this.statusId = statusId;
     }
 
-    private String status;
 
-    public ResponseStoreDetailForm() {
+
+
+
+    public String getDistrictName() {
+        return districtName;
     }
 
-    public String getDistrict() {
-        return district;
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
     }
 
-    public void setDistrict(String district) {
-        this.district = district;
+    public String getCityName() {
+        return cityName;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getManagerId() {
@@ -126,11 +165,11 @@ public class ResponseStoreDetailForm implements Serializable {
         this.reasonInactive = reasonInactive;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStatusName() {
+        return statusName;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 }
