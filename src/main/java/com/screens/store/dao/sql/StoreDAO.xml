@@ -225,6 +225,9 @@
             <if test="districtId != 0">
                 DistrictId = #{districtId},
             </if>
+            <if test="analyzedTime != null">
+                AnalyzedTime = #{analyzedTime},
+            </if>
             UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
         WHERE StoreId = #{storeId}
     </update>
@@ -250,6 +253,16 @@
     </select>
 
     <resultMap id="checkAvailableStore" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkShelf" resultMap="checkShelf">
+        SELECT COUNT(ShelfId) AS TotalOfRecord
+        FROM tblShelf
+        WHERE StoreId = #{storeId} AND (StatusId = 3 OR StatusId = 1)
+    </select>
+
+    <resultMap id="checkShelf" type="StoreDTO">
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
 
