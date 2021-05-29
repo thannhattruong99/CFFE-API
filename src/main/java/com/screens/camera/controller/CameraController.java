@@ -1,7 +1,9 @@
 package com.screens.camera.controller;
 
 import com.screens.camera.form.RequestAvailableCameraListForm;
+import com.screens.camera.form.RequestCameraListForm;
 import com.screens.camera.form.ResponseAvailableCameraListForm;
+import com.screens.camera.form.ResponseCameraListForm;
 import com.screens.camera.service.CameraService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequestMapping("admin/store")
 public class CameraController {
     private static final String MSG_009 = "MSG-009";
+    private static final String MSG_063 = "MSG-063";
 
     @Autowired
     private CameraService cameraService;
@@ -33,6 +36,23 @@ public class CameraController {
         if(responseForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+
+        return ResponseSupporter.resonpseResult(responseForm);
+    }
+
+    @RequestMapping(value = "/cameras", method = RequestMethod.GET)
+    public String getCameras(@Validated RequestCameraListForm requestForm,
+                             BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCameraListForm responseForm = cameraService.getCameraList(requestForm);
+        if(responseForm == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_063);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
 
