@@ -10,6 +10,8 @@ public class BaseService {
     protected static final boolean IS_DESCENDING = false;
     protected static final String NUMBER_REGEXP = "[0-9]*";
     protected static final String TIME_ZONE_VIETNAMESE = "+07:00";
+    protected static final int ADD_ACTION = 1;
+    protected static final int REMOVE_ACTION = 2;
     protected static int ACTIVE_STATUS = 1;
     protected static int INACTIVE_STATUS = 2;
     protected static final int PENDING_STATUS = 3;

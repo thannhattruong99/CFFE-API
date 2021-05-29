@@ -103,7 +103,7 @@ public class ShelfService extends BaseService {
     }
 
     private void convertRequestShelfListToShelfDTO(RequestShelfListForm requestForm, ShelfDTO shelfDTO){
-        shelfDTO.setUserName(requestForm.getUserName());
+//        shelfDTO.setUserName(requestForm.getUserName());
         shelfDTO.setStoreId(requestForm.getStoreId());
         shelfDTO.setShelfName(requestForm.getShelfName());
         shelfDTO.setStatusId(requestForm.getStatusId());
