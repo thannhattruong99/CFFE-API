@@ -11,6 +11,24 @@
         WHERE StatusId = 3 AND TypeDetect = #{typeDetect}
         ORDER BY CameraName ASC
     </select>
+    <select id="getCameraList">
+        SELECT C.CameraId,
+               C.CameraName,
+               C.ImageURL,
+               C.IPAddress,
+               C.TypeDetect,
+               ST.StoreId,
+               C.UpdatedTime,
+               C.StatusId,
+               STT.StatusName
+        FROM tblCamera C
+        JOIN tblStatus STT ON C.StatusId = STT.StatusId
+        LEFT JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
+        LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
+        LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
+        LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2
+        WHERE ST.StoreId = #{storeId}
+    </select>
     <resultMap id="getAvailableCameraList" type="ResponseAvailableCameraListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="cameras" ofType="AvailableCameraListResponseSupporter">

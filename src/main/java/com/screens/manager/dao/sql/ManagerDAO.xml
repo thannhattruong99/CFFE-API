@@ -5,7 +5,9 @@
     <select id="getManagers" resultMap="getManagers" useCache="false">
         SELECT TR.totalOfRecord AS totalOfRecord,
                U.Fullname AS FullName,
+               U.UserId AS UserId,
                U.Username AS UserName,
+               U.ImageURL AS ImageURL,
                USM.StoreId AS StoreId,
                U.UpdatedTime AS UpdatedTime,
                S.StatusName AS StatusName
@@ -129,7 +131,9 @@
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="managers" ofType="ManagerResponseSupporter">
             <id property="userName" column="UserName"/>
+            <result property="userId" column="UserId"/>
             <result property="managerName" column="FullName"/>
+            <result property="imageURL" column="ImageURL"/>
             <result property="storeId" column="StoreId"/>
             <result property="updatedTime" column="UpdatedTime"/>
             <result property="status" column="StatusName"/>
