@@ -103,6 +103,14 @@ public class StoreMapper extends BaseDAO {
         return true;
     }
 
+    public boolean checkShelf(StoreDTO storeDTO){
+        StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.checkShelf",storeDTO);
+        if(resultDAO.getTotalOfRecord() > 0){
+            return false;
+        }
+        return true;
+    }
+
     public boolean countStoreById(StoreDTO storeDTO) {
         StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.countStoreById",storeDTO);
         if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
