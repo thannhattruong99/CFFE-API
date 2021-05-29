@@ -102,7 +102,7 @@ public class ManagerController {
     }
 
     @RequestMapping(value = "/manager/update-status", method = RequestMethod.POST)
-    public String updateStatus(@Validated @RequestBody RequestUpdateStatusForm requestForm, //
+    public String updateStatus(@Validated @RequestBody RequestUpdateManagerStatusForm requestForm, //
                                BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);

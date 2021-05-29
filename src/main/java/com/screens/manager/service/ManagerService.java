@@ -124,7 +124,7 @@ public class ManagerService extends BaseService {
         return responseForm;
     }
 
-    public ResponseCommonForm updateManagerStatus(RequestUpdateStatusForm requestForm){
+    public ResponseCommonForm updateManagerStatus(RequestUpdateManagerStatusForm requestForm){
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestUpdateStatusFormToManagerDTO(requestForm, managerDTO);
         ResponseCommonForm responseForm = checkUpdateStatusBusiness(managerDTO);
@@ -140,22 +140,35 @@ public class ManagerService extends BaseService {
     }
 
 
-
+    /*
+     * //ManagerDTO managerDTO is converted from requestForm
+     * */
     private ResponseCommonForm checkUpdateStatusBusiness(ManagerDTO managerDTO){
         ResponseCommonForm responseCommonForm = new ResponseCommonForm();
         ManagerDTO resultDAO = managerMapper.getStatusIdAndStoreIdByUserName(managerDTO);
+
+        //Not found manager
         if (resultDAO == null){
             ArrayList<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_063);
             responseCommonForm.setErrorCodes(errorCodes);
-        }else if(managerDTO.getStatusId() == INACTIVE_STATUS && resultDAO.getStatusId() == PENDING_STATUS){
-            if(StringHelper.isNullOrEmpty(managerDTO.getReasonInactive())
-                    || !StringHelper.isNullOrEmpty(resultDAO.getStoreId())){
+        }
+        //manager is activating, can not change status
+        else if(resultDAO.getStatusId() == ACTIVE_STATUS){
+            ArrayList<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_076);
+            responseCommonForm.setErrorCodes(errorCodes);
+        }
+        //request inactive, status is pending, check reason inactive is not empty
+        else if(managerDTO.getStatusId() == INACTIVE_STATUS
+                && resultDAO.getStatusId() == PENDING_STATUS
+                && StringHelper.isNullOrEmpty(managerDTO.getReasonInactive())){
                 ArrayList<String> errorCodes = new ArrayList<>();
                 errorCodes.add(MSG_066);
                 responseCommonForm.setErrorCodes(errorCodes);
-            }
+
         }
+        //other wise is true
         return responseCommonForm;
     }
 
@@ -221,11 +234,11 @@ public class ManagerService extends BaseService {
         managerDTO.setSearchField(requestForm.getSearchField().toLowerCase().trim());
         managerDTO.setDesc(IS_DESCENDING);
 
-        int offSet = 0;
+        managerDTO.setOffSet(DEFAULT_OFF_SET);
         if(requestForm.getPageNum() > 0){
-            offSet = (requestForm.getPageNum() - 1) * requestForm.getFetchNext();
+            managerDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
         }
-        managerDTO.setOffSet(offSet);
+
 
         managerDTO.setFetchNext(DEFAULT_FETCH_NEXT);
         if(requestForm.getFetchNext() > 0){
@@ -263,7 +276,7 @@ public class ManagerService extends BaseService {
         managerDTO.setPassword(StringHelper.generatePassword(PASSWORD_LENGTH));
     }
 
-    private void convertRequestUpdateStatusFormToManagerDTO(RequestUpdateStatusForm requestForm, ManagerDTO managerDTO){
+    private void convertRequestUpdateStatusFormToManagerDTO(RequestUpdateManagerStatusForm requestForm, ManagerDTO managerDTO){
         managerDTO.setUserName(requestForm.getUserName());
         managerDTO.setStatusId(requestForm.getStatusId());
         if(!StringHelper.isNullOrEmpty(requestForm.getReasonInactive())){

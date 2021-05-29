@@ -1,14 +1,13 @@
 package com.screens.shelf.controller;
 
-import com.screens.shelf.form.RequestShelfDetailForm;
-import com.screens.shelf.form.RequestShelfListForm;
-import com.screens.shelf.form.ResponseShelfDetailForm;
-import com.screens.shelf.form.ResponseShelfListForm;
+import com.common.form.ResponseCommonForm;
+import com.screens.shelf.form.*;
 import com.screens.shelf.service.ShelfService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,6 +57,45 @@ public class ShelfController {
         return ResponseSupporter.resonpseResult(responseForm);
     }
 
-//    @RequestMapping(value = "/shelf/update", method = RequestMethod.POST)
-//    public String updateShelf(@Validated @RequestBody )
+    @RequestMapping(value = "/shelf/create", method = RequestMethod.POST)
+    public String createShelf(@Validated @RequestBody RequestCreateShelfForm requestForm,
+                              BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.resonpseResult(result);
+        }
+
+        ResponseCommonForm responseForm = shelfService.createShelf(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/shelf/update", method = RequestMethod.POST)
+    public String updateShelf(@Validated @RequestBody RequestUpdateShelfForm requestForm,
+                              BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        ResponseCommonForm responseForm = shelfService.updateShelf(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/shelf/update-status", method = RequestMethod.POST)
+    public String updateStatus(@Validated @RequestBody RequestUpdateShelfStatusForm requestForm, BindingResult result){
+
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        ResponseCommonForm responseForm = shelfService.updateShelfStatus(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+        return ResponseSupporter.resonpseResult(true);
+    }
 }
