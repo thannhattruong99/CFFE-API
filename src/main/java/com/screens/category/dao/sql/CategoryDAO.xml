@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.screens.category.dao.sql.CategoryDAO">
+
+    <select id="getCategoryDetail" resultMap="getCategoryDetail" useCache="false">
+        SELECT
+            TC.CategoryId,
+            TC.CategoryName,
+            TC.StatusId,
+            TS.StatusName
+        FROM
+            tblCategory TC
+            LEFT JOIN tblStatus TS on (TS.StatusId = TC.StatusId)
+        WHERE
+            TC.CategoryId = #{categoryId}
+    </select>
+
+    <resultMap id="getCategoryDetail" type="ResponseCategoryDetailForm">
+        <result property="categoryId" column="CategoryId"/>
+        <result property="categoryName" column="CategoryName"/>
+        <result property="statusId" column="StatusId"/>
+        <result property="statusName" column="StatusName"/>
+    </resultMap>
+
+</mapper>
