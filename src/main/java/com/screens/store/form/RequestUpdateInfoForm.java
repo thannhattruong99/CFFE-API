@@ -4,6 +4,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -26,7 +27,20 @@ public class RequestUpdateInfoForm implements Serializable {
     @Nullable
     private int districtId;
 
+    @Nullable
+    @Pattern(regexp = "([2][0-3]|[0-1][0-9]|[1-9]):[0-5][0-9]:([0-5][0-9]|[6][0])", message = "MSG-072")
+    private String analyzedTime;
+
     public RequestUpdateInfoForm() {
+    }
+
+    @Nullable
+    public String getAnalyzedTime() {
+        return analyzedTime;
+    }
+
+    public void setAnalyzedTime(@Nullable String analyzedTime) {
+        this.analyzedTime = analyzedTime;
     }
 
     public String getStoreId() {

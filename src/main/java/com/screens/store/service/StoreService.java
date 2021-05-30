@@ -64,8 +64,18 @@ public class StoreService extends BaseService {
         StoreDTO storeDTO = convertChangeStatusFormToDTO(requestForm);
         try {
             ResponseStoreDetailForm responseStoreDetailForm = storeMapper.getStoreStatus(storeDTO);
-            if (((responseStoreDetailForm.getStatusId() == 2) && (storeDTO.getStatusId() == 3))
-            || ((responseStoreDetailForm.getStatusId() == 3) && (storeDTO.getStatusId() == 2))){
+            if ((responseStoreDetailForm.getStatusId() == 3) && (storeDTO.getStatusId() == 2)) {
+                System.out.println("ACTION: STORE PENDING => INACTIVE");
+                //check co ton tai shelf nao ko inactive hay khong
+                if (storeMapper.checkShelf(storeDTO)) {
+                    storeMapper.changeStatus(storeDTO);
+                } else {
+                    List<String> errorMsg = new ArrayList<>();
+                    errorMsg.add("MSG-081");
+                    response.setErrorCodes(errorMsg);
+                }
+            } else if ((responseStoreDetailForm.getStatusId() == 2) && (storeDTO.getStatusId() == 3)) {
+                System.out.println("ACTION: STORE INACTIVE => PENDING");
                 storeMapper.changeStatus(storeDTO);
             } else {
                 List<String> errorMsg = new ArrayList<>();
@@ -191,6 +201,9 @@ public class StoreService extends BaseService {
             storeDTO.setAddress(requestForm.getAddress());
         if (requestForm.getDistrictId() != 0) {
             storeDTO.setDistrictId(requestForm.getDistrictId());
+        }
+        if (StringUtils.isNotEmpty(requestForm.getAnalyzedTime())){
+            storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());
         }
         return storeDTO;
     }

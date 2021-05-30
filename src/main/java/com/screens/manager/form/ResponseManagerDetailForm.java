@@ -13,6 +13,7 @@ public class ResponseManagerDetailForm implements Serializable {
     private String phone;
     private String email;
     private String storeId;
+    private String storeName;
     private String address;
     private String cityName;
     private String districtName;
@@ -22,6 +23,14 @@ public class ResponseManagerDetailForm implements Serializable {
     private String status;
 
     public ResponseManagerDetailForm() {
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public String getUserId() {

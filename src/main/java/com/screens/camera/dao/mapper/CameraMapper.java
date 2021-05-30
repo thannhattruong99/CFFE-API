@@ -20,4 +20,12 @@ public class CameraMapper extends BaseDAO {
     public ResponseCameraListForm getCameraList(CameraDTO cameraDTO){
         return sqlSession.selectOne("CameraDAO.getCameraList", cameraDTO);
     }
+
+    public boolean createCamera(CameraDTO cameraDTO){
+        if(sqlSession.insert("CameraDAO.createCamera", cameraDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
+        return false;
+    }
 }
