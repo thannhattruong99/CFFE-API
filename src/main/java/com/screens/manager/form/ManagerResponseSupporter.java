@@ -7,6 +7,7 @@ public class ManagerResponseSupporter implements Serializable {
     private String userId;
     private String userName;
     private String storeId;
+    private String storeName;
     private String updatedTime;
     private String status;
     private String imageURL;
@@ -68,7 +69,14 @@ public class ManagerResponseSupporter implements Serializable {
         this.status = status;
     }
 
-    public ManagerResponseSupporter() {
+    public String getStoreName() {
+        return storeName;
+    }
 
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public ManagerResponseSupporter() {
     }
 }
