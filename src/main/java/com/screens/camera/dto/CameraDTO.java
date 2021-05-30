@@ -12,9 +12,27 @@ public class CameraDTO extends BaseDTO {
     private int typeDetect;
     private String createdTime;
     private String updatedTime;
+    private String reasonInactive;
     private int statusId;
+    private int totalOfRecord;
 
     public CameraDTO() {
+    }
+
+    public int getTotalOfRecord() {
+        return totalOfRecord;
+    }
+
+    public void setTotalOfRecord(int totalOfRecord) {
+        this.totalOfRecord = totalOfRecord;
+    }
+
+    public String getReasonInactive() {
+        return reasonInactive;
+    }
+
+    public void setReasonInactive(String reasonInactive) {
+        this.reasonInactive = reasonInactive;
     }
 
     public String getImageURL() {

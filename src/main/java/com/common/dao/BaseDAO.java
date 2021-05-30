@@ -10,5 +10,6 @@ public class BaseDAO {
     @Autowired
     public BaseDAO(IDBHelper idbHelper) {
         this.sqlSession = idbHelper.openSession();
+        sqlSession.clearCache();
     }
 }

@@ -4,22 +4,9 @@
 <configuration>
     <settings>
         <setting name="cacheEnabled" value="false"/>
-<!--        <setting name="lazyLoadingEnabled" value="true"/>-->
-<!--        <setting name="multipleResultSetsEnabled" value="true"/>-->
-<!--        <setting name="useColumnLabel" value="true"/>-->
-<!--        <setting name="useGeneratedKeys" value="false"/>-->
-<!--        <setting name="autoMappingBehavior" value="PARTIAL"/>-->
-<!--        <setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>-->
-<!--        <setting name="defaultExecutorType" value="SIMPLE"/>-->
-<!--        <setting name="defaultStatementTimeout" value="25"/>-->
-<!--        <setting name="defaultFetchSize" value="100"/>-->
-<!--        <setting name="safeRowBoundsEnabled" value="false"/>-->
-<!--        <setting name="mapUnderscoreToCamelCase" value="false"/>-->
         <setting name="localCacheScope" value="STATEMENT"/>
-<!--        <setting name="jdbcTypeForNull" value="OTHER"/>-->
-<!--        <setting name="lazyLoadTriggerMethods"-->
-<!--                 value="equals,clone,hashCode,toString"/>-->
     </settings>
+
     <typeAliases>
         <typeAlias alias="ResponseManagerListForm" type="com.screens.manager.form.ResponseManagerListForm"/>
         <typeAlias alias="ManagerResponseSupporter" type="com.screens.manager.form.ManagerResponseSupporter"/>
@@ -46,7 +33,7 @@
         <typeAlias alias="ResponseCategoryDetailForm" type="com.screens.category.form.ResponseCategoryDetailForm"/>
         <typeAlias alias="ResponseCameraListForm" type="com.screens.camera.form.ResponseCameraListForm"/>
         <typeAlias alias="ShelfDTO" type="com.screens.shelf.dto.ShelfDTO"/>
-
+        <typeAlias alias="CameraDTO" type="com.screens.camera.dto.CameraDTO"/>
     </typeAliases>
 
     <environments default="development">
@@ -60,7 +47,6 @@
             </dataSource>
         </environment>
     </environments>
-
 
     <mappers>
         <mapper resource="com/screens/manager/dao/sql/ManagerDAO.xml"/>

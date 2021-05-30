@@ -28,4 +28,25 @@ public class CameraMapper extends BaseDAO {
         }
         return false;
     }
+
+    public boolean updateCamera(CameraDTO cameraDTO){
+        if(sqlSession.update("CameraDAO.updateCamera", cameraDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateStatus(CameraDTO cameraDTO){
+        if(sqlSession.update("CameraDAO.updateStatus", cameraDTO) > 0){
+            sqlSession.commit(true);
+            return true;
+        }
+        return false;
+    }
+
+    public CameraDTO countCameraById(CameraDTO cameraDTO){
+        return sqlSession.selectOne("CameraDAO.countCameraById", cameraDTO);
+       
+    }
 }

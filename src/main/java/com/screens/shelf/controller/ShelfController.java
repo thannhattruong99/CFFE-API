@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
-@RequestMapping("admin/store")
+@RequestMapping("manager/store")
 public class ShelfController {
     private static final String MSG_009 = "MSG-009";
 
@@ -96,6 +96,21 @@ public class ShelfController {
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @RequestMapping(value = "/shelf/change-shelf-camera", method = RequestMethod.POST)
+    public String changeShelfCamera(@Validated @RequestBody RequestChangeShelfCameraForm requestForm,
+                                    BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.resonpseResult(result);
+        }
+
+        ResponseCommonForm responseForm = shelfService.changeShelfCamera(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+
         return ResponseSupporter.resonpseResult(true);
     }
 }

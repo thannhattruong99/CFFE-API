@@ -70,8 +70,31 @@
     </select>
     <insert id="createCamera">
         INSERT INTO tblCamera(CameraName, ImageURL, IPAddress, RTSPString, TypeDetect, CreatedTime, StatusId)
-        VALUE(#{cameraName}, #{imageURL}, #{ipAddress}, #{rtspString}, #{typeDetect}, #{createdTime}, #{statusId})
+        VALUE(#{cameraName}, #{imageURL}, #{ipAddress}, #{rtspString}, #{typeDetect}, convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId})
     </insert>
+    <update id="updateCamera">
+        UPDATE tblCamera
+        SET CameraName = #{cameraName},
+            ImageURL = #{imageURL},
+            IPAddress = #{ipAddress},
+            RTSPString = #{rtspString},
+            TypeDetect = #{typeDetect},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE CameraId = #{cameraId}
+    </update>
+    <update id="updateStatus">
+        UPDATE tblCamera
+        SET StatusId = #{statusId}
+        <if test="statusId == 2">
+            , ReasonInactive = #{reasonInactive}
+        </if>
+        WHERE CameraId = #{cameraId}
+    </update>
+    <select id="getCameraStatusById" resultMap="getCameraStatusById">
+        SELECT StatusId
+        FROM tblCamera
+        WHERE CameraId = #{cameraId}
+    </select>
     <resultMap id="getAvailableCameraList" type="ResponseAvailableCameraListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="cameras" ofType="AvailableCameraListResponseSupporter">
@@ -90,5 +113,8 @@
             <result property="statusId" column="StatusId"/>
             <result property="statusName" column="StatusName"/>
         </collection>
+    </resultMap>
+    <resultMap id="getCameraStatusById" type="CameraDTO">
+        <result property="statusId" column="StatusId"/>
     </resultMap>
 </mapper>
