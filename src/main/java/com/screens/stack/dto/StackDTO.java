@@ -8,12 +8,48 @@ public class StackDTO {
     private String reasonInactive;
     private String shelfId;
     private String shelfName;
+    private String productId;
     private ProductDTO productDTO;
+    private String cameraId;
     private CameraDTO cameraDTO;
     private int statusId;
     private String statusName;
+    private int action;
+    private int totalOfRecord;
 
     public StackDTO() {
+    }
+
+    public int getTotalOfRecord() {
+        return totalOfRecord;
+    }
+
+    public void setTotalOfRecord(int totalOfRecord) {
+        this.totalOfRecord = totalOfRecord;
+    }
+
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getCameraId() {
+        return cameraId;
+    }
+
+    public void setCameraId(String cameraId) {
+        this.cameraId = cameraId;
     }
 
     public int getStatusId() {

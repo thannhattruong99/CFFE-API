@@ -35,6 +35,7 @@
         <typeAlias alias="ResponseCameraDetailForm" type="com.screens.camera.form.ResponseCameraDetailForm"/>
         <typeAlias alias="ShelfDTO" type="com.screens.shelf.dto.ShelfDTO"/>
         <typeAlias alias="CameraDTO" type="com.screens.camera.dto.CameraDTO"/>
+        <typeAlias alias="StackDTO" type="com.screens.stack.dto.StackDTO"/>
     </typeAliases>
 
     <environments default="development">
