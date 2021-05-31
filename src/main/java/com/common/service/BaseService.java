@@ -22,6 +22,7 @@ public class BaseService {
     protected static final String MSG_063 = "MSG-063";
     protected static final String MSG_066 = "MSG-066";
     protected static final String MSG_076 = "MSG-076";
+    protected static final String MSG_020 = "MSG-020";
     private static final String DUPLICATE_ERROR_KEY = "Duplicate entry";
 
     public List<String> catchSqlException(String errorMsg){

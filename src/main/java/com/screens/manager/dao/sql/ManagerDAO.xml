@@ -46,7 +46,7 @@
             <if test="status != null">
                AND UPPER(S.StatusName) = #{status}
             </if>
-        ORDER BY U.CreatedTime
+        ORDER BY U.UpdatedTime
             DESC
         LIMIT
         #{offSet},
@@ -82,10 +82,10 @@
     </select>
     <insert id="insertManger">
         INSERT INTO tblUser(Fullname, Username, Password, RoleId, ImageURL, Gender,
-                            BirthDate, IdentifyCard, Phone, Email, Address, DistrictId, statusId, CreatedTime)
+                            BirthDate, IdentifyCard, Phone, Email, Address, DistrictId, statusId, CreatedTime, UpdatedTime)
         VALUES(#{fullName}, #{userName}, #{password}, #{roleId},#{imageURL}, #{gender}, #{birthDate}, #{identifyCard},
                #{phone}, #{email}, #{address}, #{districtId}, #{statusId},
-               convert_tz(now(),@@session.time_zone,#{createdTime}))
+               convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}))
     </insert>
     <select id="getTotalOfManagerLikeUserName" resultMap="getAffectedRows">
         SELECT COUNT(UserName) AS TotalOfRecord

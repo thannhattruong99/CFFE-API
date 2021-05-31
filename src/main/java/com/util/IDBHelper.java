@@ -6,5 +6,5 @@ import org.springframework.context.annotation.Bean;
 
 public interface IDBHelper {
     SqlSessionFactory makeConnection();
-    SqlSession openSession();
+//    SqlSession openSession();
 }

@@ -20,6 +20,11 @@ import java.util.List;
 public class ShelfService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(ShelfService.class);
     private static final String MSG_012 = "MSG-012";
+    private static final String MSG_086 = "MSG-086";
+    private static final String MSG_085 = "MSG-085";
+    private static final String MSG_087 = "MSG-087";
+    private static final String MSG_088 = "MSG-088";
+
     @Autowired
     private ShelfMapper shelfMapper;
 
@@ -55,11 +60,7 @@ public class ShelfService extends BaseService {
         ShelfDTO shelfDTO = new ShelfDTO();
         convertRequestCreateShelfFormToShelfDTO(requestForm, shelfDTO);
         try {
-            if(!shelfMapper.createShelf(shelfDTO)){
-                List<String> errorCodes = new ArrayList<>();
-                errorCodes.add(MSG_012);
-                responseForm.setErrorCodes(errorCodes);
-            }
+            shelfMapper.createShelf(shelfDTO);
         }catch (PersistenceException e){
             logger.error("Error at ShelfService: " + e.getMessage());
             responseForm.setErrorCodes(catchSqlException(e.getMessage()));
@@ -99,6 +100,25 @@ public class ShelfService extends BaseService {
             }
         }
 
+        return responseForm;
+    }
+
+    public ResponseCommonForm changeShelfCamera(RequestChangeShelfCameraForm requestForm){
+        ShelfDTO shelfDTO = new ShelfDTO();
+        convertRequestChangeShelfCameraForm(requestForm, shelfDTO);
+        ResponseCommonForm responseForm = checkChangeShelfCameraBusiness(shelfDTO);
+        if(responseForm.getErrorCodes() == null){
+            try{
+                if(shelfDTO.getAction() == ADD_ACTION){
+                    shelfMapper.addShelfCameraIntoShelf(shelfDTO);
+                }else {
+                    shelfMapper.removeShelfCameraFromShelf(shelfDTO);
+                }
+            }catch (PersistenceException e) {
+                logger.error("Error ShelfService: " + e.getMessage());
+                responseForm.setErrorCodes(catchSqlException(e.getMessage()));
+            }
+        }
         return responseForm;
     }
 
@@ -175,9 +195,8 @@ public class ShelfService extends BaseService {
             errorCodes.add(MSG_076);
             responseForm.setErrorCodes(errorCodes);
         }
-        //request inactive, status is pending, check reason inactive is not empty
-        else if (shelfDTO.getStatusId() == INACTIVE_STATUS
-                && resultDAO.getStatusId() == PENDING_STATUS){
+        //request inactive, check reason inactive is not empty
+        else if (shelfDTO.getStatusId() == INACTIVE_STATUS){
             if( resultDAO.getTotalOfRecord() > 0 || StringHelper.isNullOrEmpty(shelfDTO.getReasonInactive())){
                 ArrayList<String> errorCodes = new ArrayList<>();
                 errorCodes.add(MSG_066);
@@ -188,4 +207,49 @@ public class ShelfService extends BaseService {
         return responseForm;
     }
 
+    private void convertRequestChangeShelfCameraForm(RequestChangeShelfCameraForm requestForm, ShelfDTO shelfDTO){
+        shelfDTO.setShelfId(requestForm.getShelfId());
+        shelfDTO.setCameraId(requestForm.getCameraId());
+        shelfDTO.setAction(requestForm.getAction());
+        shelfDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
+    }
+
+    /*
+     * //ShelfDTO shelfDTO is converted from requestForm
+     * */
+    private ResponseCommonForm checkChangeShelfCameraBusiness(ShelfDTO shelfDTO){
+        ResponseCommonForm responseForm = new ResponseCommonForm();
+
+        ShelfDTO shelfResultDAO = shelfMapper.getShelfStatus(shelfDTO);
+        ShelfDTO cameraResultDAO = shelfMapper.getCameraStatus(shelfDTO);
+
+        ArrayList<String> errorCodes = new ArrayList<>();
+//       check shelf exist and available
+        if(shelfResultDAO == null){
+            errorCodes.add(MSG_085);
+        }
+//        check camera exist and available
+        if(cameraResultDAO  == null){
+            errorCodes.add(MSG_086);
+        }
+
+        if(errorCodes.size() > 0){
+            responseForm.setErrorCodes(errorCodes);
+            return responseForm;
+        }
+
+        if(shelfDTO.getAction() == ADD_ACTION){
+            if(shelfResultDAO.getStatusId() != PENDING_STATUS || cameraResultDAO.getStatusId() != PENDING_STATUS ){
+                errorCodes.add(MSG_087);
+                responseForm.setErrorCodes(errorCodes);
+            }
+        }else if(shelfDTO.getAction() == REMOVE_ACTION){
+            ShelfDTO mappingResultDAO = shelfMapper.getShelfCameraMappingStatus(shelfDTO);
+            if(mappingResultDAO != null){
+                errorCodes.add(MSG_088);
+            }
+        }
+
+        return responseForm;
+    }
 }

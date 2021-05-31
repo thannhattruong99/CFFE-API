@@ -161,7 +161,7 @@ public class ManagerService extends BaseService {
         }
         //request inactive, status is pending, check reason inactive is not empty
         else if(managerDTO.getStatusId() == INACTIVE_STATUS
-                && resultDAO.getStatusId() == PENDING_STATUS
+//                && resultDAO.getStatusId() == PENDING_STATUS
                 && StringHelper.isNullOrEmpty(managerDTO.getReasonInactive())){
                 ArrayList<String> errorCodes = new ArrayList<>();
                 errorCodes.add(MSG_066);
@@ -234,7 +234,6 @@ public class ManagerService extends BaseService {
         managerDTO.setSearchField(requestForm.getSearchField().toLowerCase().trim());
         managerDTO.setDesc(IS_DESCENDING);
 
-        managerDTO.setOffSet(DEFAULT_OFF_SET);
         if(requestForm.getPageNum() > 0){
             managerDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
         }

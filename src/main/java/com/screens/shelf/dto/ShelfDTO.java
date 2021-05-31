@@ -8,9 +8,11 @@ public class ShelfDTO extends BaseDTO {
     private String userName;
     private String storeId;
     private String shelfId;
+    private String cameraId;
     private String shelfName;
     private String description;
     private int statusId;
+    private int action;
     private String statusName;
     private String createdTime;
     private String updatedTime;
@@ -20,6 +22,24 @@ public class ShelfDTO extends BaseDTO {
     private List<StackDTO> stacks;
 
     public ShelfDTO() {
+    }
+
+
+
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
+    }
+
+    public String getCameraId() {
+        return cameraId;
+    }
+
+    public void setCameraId(String cameraId) {
+        this.cameraId = cameraId;
     }
 
     public int getNumberOfStack() {
