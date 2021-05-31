@@ -3,6 +3,7 @@ package com.screens.camera.dao.mapper;
 import com.common.dao.BaseDAO;
 import com.screens.camera.dto.CameraDTO;
 import com.screens.camera.form.ResponseAvailableCameraListForm;
+import com.screens.camera.form.ResponseCameraDetailForm;
 import com.screens.camera.form.ResponseCameraListForm;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
@@ -46,7 +47,10 @@ public class CameraMapper extends BaseDAO {
     }
 
     public CameraDTO countCameraById(CameraDTO cameraDTO){
-        return sqlSession.selectOne("CameraDAO.countCameraById", cameraDTO);
-       
+        return sqlSession.selectOne("CameraDAO.getCameraStatusById", cameraDTO);
+    }
+
+    public ResponseCameraDetailForm getCameraDetailById(CameraDTO cameraDTO){
+        return sqlSession.selectOne("CameraDAO.getCameraDetailById", cameraDTO);
     }
 }

@@ -97,6 +97,18 @@ public class CameraService extends BaseService {
         return responseForm;
     }
 
+    public ResponseCameraDetailForm getCameraDetail(RequestCameraDetailForm requestForm){
+        ResponseCameraDetailForm responseForm = new ResponseCameraDetailForm();
+        CameraDTO cameraDTO = new CameraDTO();
+        convertRequestCameraDetailFormToCameraDTO(requestForm, cameraDTO);
+        try {
+            responseForm = cameraMapper.getCameraDetailById(cameraDTO);
+        }catch (PersistenceException e){
+            logger.error("Error at CameraService: " + e.getMessage());
+        }
+        return responseForm;
+    }
+
     private void convertRequestAvailableCameraListFormToCameraDTO(RequestAvailableCameraListForm requestForm, CameraDTO cameraDTO){
         cameraDTO.setTypeDetect(requestForm.getTypeDetect());
     }
@@ -167,5 +179,10 @@ public class CameraService extends BaseService {
                 responseForm.setErrorCodes(errorCodes);
         }
         return responseForm;
+    }
+
+    private void convertRequestCameraDetailFormToCameraDTO(RequestCameraDetailForm requestForm, CameraDTO cameraDTO){
+        cameraDTO.setStoreId(requestForm.getStoreId());
+        cameraDTO.setCameraId(requestForm.getCameraId());
     }
 }

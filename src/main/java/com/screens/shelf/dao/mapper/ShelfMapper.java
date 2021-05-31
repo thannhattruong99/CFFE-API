@@ -20,6 +20,7 @@ public class ShelfMapper extends BaseDAO {
     }
 
     public ResponseShelfDetailForm getShelfDetail(ShelfDTO shelfDTO){
+        sqlSession.flushStatements();
         return sqlSession.selectOne("ShelfDAO.getShelfDetail", shelfDTO);
     }
 
@@ -50,7 +51,7 @@ public class ShelfMapper extends BaseDAO {
     }
 
     public ShelfDTO getStatusId(ShelfDTO shelfDTO){
-        return sqlSession.selectOne("ShelfDAO.getStatusId", shelfDTO);
+        return sqlSession.selectOne("DAO.getStatusId", shelfDTO);
     }
 
     public boolean updateShelfStatus(ShelfDTO shelfDTO){
@@ -62,17 +63,17 @@ public class ShelfMapper extends BaseDAO {
     }
 
     public ShelfDTO getShelfStatus(ShelfDTO shelfDTO){
-        ShelfDTO result = sqlSession.selectOne("ShelfDAO.getShelfStatus");
+        ShelfDTO result = sqlSession.selectOne("ShelfDAO.getShelfStatus", shelfDTO);
         return result;
     }
 
     public ShelfDTO getCameraStatus(ShelfDTO shelfDTO){
-        ShelfDTO result = sqlSession.selectOne("ShelfDAO.getCameraStatus");
+        ShelfDTO result = sqlSession.selectOne("ShelfDAO.getCameraStatus", shelfDTO);
         return result;
     }
 
     public ShelfDTO getShelfCameraMappingStatus(ShelfDTO shelfDTO){
-        ShelfDTO result = sqlSession.selectOne("ShelfDAO.getShelfCameraMappingStatus");
+        ShelfDTO result = sqlSession.selectOne("ShelfDAO.getShelfCameraMappingStatus", shelfDTO);
         return result;
     }
 
@@ -89,10 +90,12 @@ public class ShelfMapper extends BaseDAO {
     }
 
     public boolean removeShelfCameraFromShelf(ShelfDTO shelfDTO){
+
         if (sqlSession.update("ShelfDAO.removeShelfCameraFromMapping", shelfDTO) > 0){
             if (sqlSession.update("ShelfDAO.removeShelfCameraFromCamera", shelfDTO) > 0){
-                if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf") > 0){
+                if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
                     sqlSession.commit(true);
+                    sqlSession.close();
                     return true;
                 }
             }

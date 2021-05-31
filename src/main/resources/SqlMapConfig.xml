@@ -32,13 +32,14 @@
         <typeAlias alias="ResponseStackListForm" type="com.screens.stack.form.ResponseStackListForm"/>
         <typeAlias alias="ResponseCategoryDetailForm" type="com.screens.category.form.ResponseCategoryDetailForm"/>
         <typeAlias alias="ResponseCameraListForm" type="com.screens.camera.form.ResponseCameraListForm"/>
+        <typeAlias alias="ResponseCameraDetailForm" type="com.screens.camera.form.ResponseCameraDetailForm"/>
         <typeAlias alias="ShelfDTO" type="com.screens.shelf.dto.ShelfDTO"/>
         <typeAlias alias="CameraDTO" type="com.screens.camera.dto.CameraDTO"/>
     </typeAliases>
 
     <environments default="development">
         <environment id="development">
-            <transactionManager type="JDBC" />
+            <transactionManager type="JDBC"/>
             <dataSource type="UNPOOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver" />
                 <property name="url" value="jdbc:mysql://35.247.184.122:3306/CFFA_Database" />

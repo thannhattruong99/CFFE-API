@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
-@RequestMapping("manager/store")
+@RequestMapping("admin")
 public class CameraController {
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_063 = "MSG-063";
@@ -55,6 +55,21 @@ public class CameraController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
 
+        return ResponseSupporter.resonpseResult(responseForm);
+    }
+
+    @RequestMapping(value = "/camera", method = RequestMethod.GET)
+    public String getCameraDetail(@Validated RequestCameraDetailForm requestForm,
+                             BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        ResponseCameraDetailForm responseForm = cameraService.getCameraDetail(requestForm);
+        if(responseForm == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
         return ResponseSupporter.resonpseResult(responseForm);
     }
 

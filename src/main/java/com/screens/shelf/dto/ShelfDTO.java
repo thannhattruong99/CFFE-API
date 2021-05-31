@@ -24,6 +24,8 @@ public class ShelfDTO extends BaseDTO {
     public ShelfDTO() {
     }
 
+
+
     public int getAction() {
         return action;
     }

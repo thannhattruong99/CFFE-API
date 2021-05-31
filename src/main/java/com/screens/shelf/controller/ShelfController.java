@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
-@RequestMapping("manager/store")
+@RequestMapping("admin/manager/store")
 public class ShelfController {
     private static final String MSG_009 = "MSG-009";
 

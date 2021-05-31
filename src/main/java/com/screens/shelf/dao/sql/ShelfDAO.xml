@@ -10,9 +10,6 @@
             AND SH.StatusId = #{statusId}
         </if>
         AND ST.StoreId = #{storeId}
-        JOIN tblUserStoreMapping USM
-        ON ST.StoreId = USM.StoreId
-        AND USM.StatusId = 1
 <!--        JOIN tblUser U
         ON USM.UserId = U.UserId
         AND U.Username = #{userName}-->
@@ -24,9 +21,6 @@
             AND SH.StatusId = #{statusId}
         </if>
         AND ST.StoreId = #{storeId}
-        JOIN tblUserStoreMapping USM
-        ON ST.StoreId = USM.StoreId
-        AND USM.StatusId = 1
  <!--       JOIN tblUser U
         ON USM.UserId = U.UserId
         AND U.Username = #{userName}-->
@@ -37,7 +31,7 @@
         <if test="shelfName == null">
             WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
         </if>
-        ORDER BY SH.ShelfName ASC
+        ORDER BY SH.UpdatedTime DESC
         LIMIT
         #{offSet},
         #{fetchNext}
@@ -75,8 +69,8 @@
         <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
             SELECT UUID() AS shelfId FROM tblShelf LIMIT 1
         </selectKey>
-         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, statusId, StoreId)
-         VALUES (#{shelfId}, #{shelfName}, #{description}, #{numberOfStack}, convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId}, #{storeId})
+         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId)
+         VALUES (#{shelfId}, #{shelfName}, #{description}, #{numberOfStack}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}),#{statusId}, #{storeId})
 <!--        <selectKey keyProperty="shelfId" resultType="string" order="AFTER ">-->
 <!--            select ShelfId-->
 <!--            from tblShelf-->
@@ -87,9 +81,9 @@
 <!--        </selectKey>-->
     </insert>
     <insert id="createStacks">
-        INSERT INTO tblStack(Position, CreatedTime, ShelfId, StatusId) VALUES
+        INSERT INTO tblStack(Position, CreatedTime, UpdatedTime, ShelfId, StatusId) VALUES
         <foreach item="item" collection="list" separator=",">
-            (#{item.position}, convert_tz(now(),@@session.time_zone,#{item.createdTime}), #{item.shelfId}, #{item.statusId})
+            (#{item.position}, convert_tz(now(),@@session.time_zone,#{item.createdTime}), convert_tz(now(),@@session.time_zone,#{item.createdTime}), #{item.shelfId}, #{item.statusId})
         </foreach>
     </insert>
     <select id="getStatusId" resultMap="getStatusId">
@@ -111,41 +105,41 @@
     </update>
 
 <!--    check business change shelf camera-->
-    <select id="getShelfStatus" resultMap="getStatus">
-        SELECT StatusId FROM tblShelf WHERE ShelfId = #{shelfId} and StatusId != 2
+    <select id="getShelfStatus" resultMap="getStatus" flushCache="true">
+        SELECT StatusId FROM tblShelf WHERE ShelfId = #{shelfId} AND StatusId != 2
     </select>
-    <select id="getCameraStatus" resultMap="getStatus">
-        SELECT StatusId FROM tblCamera WHERE cameraId = #{cameraId} and StatusId != 2
+    <select id="getCameraStatus" resultMap="getStatus" flushCache="true">
+        SELECT StatusId FROM tblCamera WHERE cameraId = #{cameraId} AND StatusId != 2 AND typeDetect = 1
     </select>
-    <select id="getShelfCameraMappingStatus" resultMap="getStatus">
+    <select id="getShelfCameraMappingStatus" resultMap="getStatus" flushCache="true">
         SELECT StatusId FROM tblShelfCameraMapping
         WHERE ShelfId = #{shelfId} AND cameraId = #{cameraId} AND StatusId = 1
     </select>
 <!-- add shelf camera into shelf   -->
-    <update id="createShelfCameraOnShelf">
+    <update id="createShelfCameraOnShelf" flushCache="true">
         UPDATE tblShelf
         SET StatusId = 1,
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE ShelfId = #{shelfId}
     </update>
-    <update id="createShelfCameraOnCamera">
+    <update id="createShelfCameraOnCamera" flushCache="true">
         UPDATE tblCamera
         SET StatusId = 1,
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE CameraId = #{cameraId}
     </update>
-    <insert id="createShelfCameraOnMapping">
+    <insert id="createShelfCameraOnMapping" flushCache="true">
         INSERT INTO tblShelfCameraMapping(AddedTime, ShelfId, CameraId, StatusId)
             VALUE(convert_tz(now(),@@session.time_zone,#{updatedTime}), #{shelfId}, #{cameraId}, 1)
     </insert>
 <!--    Remove shelfCamera from shelf-->
-    <update id="removeShelfCameraFromShelf">
+    <update id="removeShelfCameraFromShelf" flushCache="true">
         UPDATE tblShelf
         SET StatusId = 3,
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE ShelfId = #{shelfId}
     </update>
-    <update id="removeShelfCameraFromMapping">
+    <update id="removeShelfCameraFromMapping" flushCache="true">
         UPDATE tblShelfCameraMapping
         SET RemovedTime = convert_tz(now(),@@session.time_zone,#{updatedTime}),
         StatusId = 2
@@ -153,9 +147,9 @@
         AND CameraId = #{cameraId}
         AND StatusId = 1
     </update>
-    <update id="removeShelfCameraFromCamera">
+    <update id="removeShelfCameraFromCamera" flushCache="true">
         UPDATE tblCamera
-        SET StatusId = 2,
+        SET StatusId = 3,
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE CameraId = #{cameraId}
     </update>

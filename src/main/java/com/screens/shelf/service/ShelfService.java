@@ -239,7 +239,9 @@ public class ShelfService extends BaseService {
         }
 
         if(shelfDTO.getAction() == ADD_ACTION){
-            if(shelfDTO.getStatusId() != PENDING_STATUS || cameraResultDAO.getStatusId() != PENDING_STATUS ){
+            System.out.println("shelfDTO.getStatusId(): " + shelfResultDAO.getStatusId());
+            System.out.println("cameraResultDAO.getStatusId(): " + cameraResultDAO.getStatusId());
+            if(shelfResultDAO.getStatusId() != PENDING_STATUS || cameraResultDAO.getStatusId() != PENDING_STATUS ){
                 errorCodes.add(MSG_087);
                 responseForm.setErrorCodes(errorCodes);
             }
