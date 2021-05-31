@@ -6,10 +6,55 @@ public class CameraDTO extends BaseDTO {
     private String storeId;
     private String cameraId;
     private String cameraName;
-    private int statusId;
+    private String imageURL;
+    private String ipAddress;
+    private String rtspString;
     private int typeDetect;
+    private String createdTime;
+    private String updatedTime;
+    private int statusId;
 
     public CameraDTO() {
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public String getRtspString() {
+        return rtspString;
+    }
+
+    public void setRtspString(String rtspString) {
+        this.rtspString = rtspString;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getStoreId() {

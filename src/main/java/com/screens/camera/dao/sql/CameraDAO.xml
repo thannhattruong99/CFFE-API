@@ -68,6 +68,10 @@
          ORDER BY C.CameraName ASC
          LIMIT #{offSet}, #{fetchNext}
     </select>
+    <insert id="createCamera">
+        INSERT INTO tblCamera(CameraName, ImageURL, IPAddress, RTSPString, TypeDetect, CreatedTime, StatusId)
+        VALUE(#{cameraName}, #{imageURL}, #{ipAddress}, #{rtspString}, #{typeDetect}, #{createdTime}, #{statusId})
+    </insert>
     <resultMap id="getAvailableCameraList" type="ResponseAvailableCameraListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="cameras" ofType="AvailableCameraListResponseSupporter">

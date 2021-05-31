@@ -9,11 +9,13 @@
                U.Username AS UserName,
                U.ImageURL AS ImageURL,
                USM.StoreId AS StoreId,
+               ST.StoreName AS StoreName,
                U.UpdatedTime AS UpdatedTime,
                S.StatusName AS StatusName
         FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
                        JOIN tblRole R ON R.RoleId = U.roleId
-                       LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID AND USM.StatusId = 1,
+                       LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID AND USM.StatusId = 1
+                       LEFT JOIN tblStore ST ON USM.StoreId = ST.StoreId AND USM.StatusId = 1,
             (SELECT COUNT(U.UserId) AS totalOfRecord FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
             JOIN tblRole R ON R.RoleId = U.roleId
             LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID AND USM.StatusId = 1
@@ -50,7 +52,7 @@
         #{offSet},
         #{fetchNext}
     </select>
-    <select id="getManagerDetail" resultMap="getManagerDetail" useCache="false">
+    <select id="getManagerDetail" resultMap="getManagerDetail" useCache="false" flushCache="true">
         SELECT
             U.UserId,
             U.Fullname,
@@ -62,6 +64,7 @@
             U.Phone,
             U.Email,
             USM.StoreId,
+            ST.StoreName,
             U.Address,
             C.CityName,
             D.DistrictName,
@@ -72,6 +75,7 @@
         FROM tblUser U
                  JOIN tblStatus S ON U.statusID = S.StatusId
                  LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID AND USM.StatusId = 1
+                 LEFT JOIN tblStore ST ON USM.StoreId = ST.StoreId AND USM.StatusId = 1
                  JOIN tblDistrict D ON D.DistrictId = U.DistrictId
                  JOIN tblCity C ON C.CityId = D.CityId
         WHERE U.userName = #{userName}
@@ -135,6 +139,7 @@
             <result property="managerName" column="FullName"/>
             <result property="imageURL" column="ImageURL"/>
             <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
             <result property="updatedTime" column="UpdatedTime"/>
             <result property="status" column="StatusName"/>
         </collection>
@@ -150,6 +155,7 @@
         <result property="phone" column="Phone"/>
         <result property="email" column="Email"/>
         <result property="storeId" column="StoreId"/>
+        <result property="storeName" column="StoreName"/>
         <result property="address" column="Address"/>
         <result property="cityName" column="CityName"/>
         <result property="districtName" column="DistrictName"/>

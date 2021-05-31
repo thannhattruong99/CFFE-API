@@ -1,5 +1,6 @@
 package com.screens.camera.service;
 
+import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.screens.camera.dao.mapper.CameraMapper;
 import com.screens.camera.dto.CameraDTO;
@@ -46,6 +47,13 @@ public class CameraService extends BaseService {
         }
 
         return responseForm;
+    }
+
+    public ResponseCommonForm createCamera(){
+        ResponseCommonForm responseForm = new ResponseCommonForm();
+
+        return responseForm;
+
     }
 
     private void convertRequestAvailableCameraListFormToCameraDTO(RequestAvailableCameraListForm requestForm, CameraDTO cameraDTO){
