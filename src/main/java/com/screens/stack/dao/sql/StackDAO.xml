@@ -196,6 +196,15 @@
                 3)
     </insert>
 
+    <update id="removeProduct" parameterType="StackDTO">
+        UPDATE tblStackProductCameraMapping
+        SET
+            StatusId = 2,
+            RemoveProductTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StackId = #{stackId}
+            AND ProductId = #{productId}
+            AND StatusId = 3
+    </update>
 
     <select id="checkProductActive" resultMap="checkProductActive">
         SELECT COUNT(ProductId) AS TotalOfRecord FROM tblProduct WHERE ProductId = #{productId} AND StatusId = 1
@@ -214,7 +223,7 @@
     </resultMap>
 
     <select id="checkStackHaveProduct" resultMap="checkStackHaveProduct">
-        SELECT COUNT(StackId) AS TotalOfRecord
+        SELECT COUNT(StackProductCameraMappingId) AS TotalOfRecord
         FROM tblStackProductCameraMapping
         WHERE StackId = #{stackId} AND StatusId = 3
     </select>
@@ -240,6 +249,18 @@
     </select>
 
     <resultMap id="checkProductExist" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkStackProductMapping" resultMap="checkStackProductMapping">
+        SELECT COUNT(StackProductCameraMappingId) AS TotalOfRecord
+        FROM tblStackProductCameraMapping
+        WHERE ProductId = #{productId}
+            AND StackId = #{stackId}
+            AND StatusId = 3
+    </select>
+
+    <resultMap id="checkStackProductMapping" type="StackDTO">
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
 

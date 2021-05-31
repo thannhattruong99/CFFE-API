@@ -88,11 +88,15 @@ public class StackService extends BaseService {
                 }
             }
 
-
             // Remove product
             else if (stackDTO.getAction() == REMOVE_ACTION) {
-                // Check
-
+                // Check product co nam tren stack
+                if (stackMapper.checkStackProductMapping(stackDTO)) {
+                    errorMsg.add("MSG-091");
+                    response.setErrorCodes(errorMsg);
+                } else {
+                    stackMapper.removeProduct(stackDTO);
+                }
 
             }
 

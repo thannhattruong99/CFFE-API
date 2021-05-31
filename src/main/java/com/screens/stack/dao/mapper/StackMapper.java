@@ -31,6 +31,14 @@ public class StackMapper extends BaseDAO {
         return false;
     }
 
+    public boolean removeProduct(StackDTO stackDTO) {
+        if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.removeProduct",stackDTO) > 0){
+            this.sqlSession.commit();
+            return true;
+        }
+        return false;
+    }
+
     public boolean checkProductActive(StackDTO stackDTO) {
         StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkProductActive",stackDTO);
         if(rs.getTotalOfRecord() <= 0){
@@ -71,4 +79,11 @@ public class StackMapper extends BaseDAO {
         return true;
     }
 
+    public boolean checkStackProductMapping(StackDTO stackDTO) {
+        StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackProductMapping",stackDTO);
+        if(rs.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
 }
