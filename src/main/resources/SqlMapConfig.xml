@@ -28,6 +28,7 @@
         <typeAlias alias="ResponseCategoryDetailForm" type="com.screens.category.form.ResponseCategoryDetailForm"/>
         <typeAlias alias="ResponseCameraListForm" type="com.screens.camera.form.ResponseCameraListForm"/>
         <typeAlias alias="ShelfDTO" type="com.screens.shelf.dto.ShelfDTO"/>
+        <typeAlias alias="StackDTO" type="com.screens.stack.dto.StackDTO"/>
 
     </typeAliases>
 

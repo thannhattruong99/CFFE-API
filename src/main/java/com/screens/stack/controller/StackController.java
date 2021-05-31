@@ -1,10 +1,9 @@
 package com.screens.stack.controller;
 
-import com.screens.stack.form.RequestGetStackDetailForm;
-import com.screens.stack.form.RequestGetStackListForm;
-import com.screens.stack.form.ResponseStackDetailForm;
-import com.screens.stack.form.ResponseStackListForm;
+import com.common.form.ResponseCommonForm;
+import com.screens.stack.form.*;
 import com.screens.stack.service.StackService;
+import com.screens.store.form.RequestChangeStoreStatusForm;
 import com.screens.store.form.RequestGetStoreListForm;
 import com.screens.store.form.ResponseStoreListForm;
 import com.util.ResponseSupporter;
@@ -12,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -62,6 +63,22 @@ public class StackController {
         }
         // Return result
         return ResponseSupporter.resonpseResult(responseStackListForm);
+    }
+
+    @PostMapping(value = "/admin/manager/store/shelf/stack/change-product")
+    public String changeProduct(@Validated @RequestBody RequestAddProduct requestForm,
+                               BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Change Status Store
+        ResponseCommonForm rs = stackService.changeProduct(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
     }
 
 

@@ -185,6 +185,62 @@
         </association>
     </resultMap>
 
+    <insert id="addProduct"  parameterType="StackDTO">
+        INSERT INTO tblStackProductCameraMapping (AddedProductTime,
+                                                  StackId,
+                                                  ProductId,
+                                                  StatusId)
+        VALUES (convert_tz(now(),@@session.time_zone,'+07:00'),
+                #{stackId},
+                #{productId},
+                3)
+    </insert>
 
+
+    <select id="checkProductActive" resultMap="checkProductActive">
+        SELECT COUNT(ProductId) AS TotalOfRecord FROM tblProduct WHERE ProductId = #{productId} AND StatusId = 1
+    </select>
+
+    <resultMap id="checkProductActive" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkStackPending" resultMap="checkStackPending">
+        SELECT COUNT(StackId) AS TotalOfRecord FROM tblStack WHERE StackId = #{stackId} AND StatusId = 3
+    </select>
+
+    <resultMap id="checkStackPending" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkStackHaveProduct" resultMap="checkStackHaveProduct">
+        SELECT COUNT(StackId) AS TotalOfRecord
+        FROM tblStackProductCameraMapping
+        WHERE StackId = #{stackId} AND StatusId = 3
+    </select>
+
+    <resultMap id="checkStackHaveProduct" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkStackExist" resultMap="checkStackExist">
+        SELECT COUNT(StackId) AS TotalOfRecord
+        FROM tblStack
+        WHERE StackId = #{stackId}
+    </select>
+
+    <resultMap id="checkStackExist" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkProductExist" resultMap="checkProductExist">
+        SELECT COUNT(ProductId) AS TotalOfRecord
+        FROM tblProduct
+        WHERE ProductId = #{productId}
+    </select>
+
+    <resultMap id="checkProductExist" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
 
 </mapper>
