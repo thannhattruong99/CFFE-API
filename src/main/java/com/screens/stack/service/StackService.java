@@ -145,7 +145,14 @@ public class StackService extends BaseService {
 
             // Remove Camera
             if (stackDTO.getAction() == REMOVE_ACTION) {
-
+                // Check camera co nam tren stack
+                if (!stackMapper.checkStackCameraMapping(stackDTO)) {
+                    errorMsg.add("MSG-094");
+                    response.setErrorCodes(errorMsg);
+                } else {
+                    stackMapper.removeCamera(stackDTO);
+                    System.out.println("RS = SUSSCESS");
+                }
             }
 
         } catch (PersistenceException e) {

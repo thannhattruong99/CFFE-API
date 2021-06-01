@@ -198,6 +198,17 @@
                 3)
     </insert>
 
+    <insert id="addNewRecordMapping"  parameterType="StackDTO">
+        INSERT INTO tblStackProductCameraMapping (AddedProductTime,
+                                                  StackId,
+                                                  ProductId,
+                                                  StatusId)
+        SELECT BB.AddedProductTime,BB.StackId,BB.ProductId,AA.StatusId
+        FROM tblStackProductCameraMapping BB,
+             (SELECT StatusId FROM tblStatus WHERE StatusId = 3) AA
+        WHERE BB.StackId = #{stackId} AND BB.CameraId = #{cameraId} AND BB.StatusId = 1
+    </insert>
+
     <update id="removeProduct" parameterType="StackDTO">
         UPDATE tblStackProductCameraMapping
         SET
@@ -206,6 +217,32 @@
         WHERE StackId = #{stackId}
             AND ProductId = #{productId}
             AND StatusId = 3
+    </update>
+
+    <update id="removeCamera" parameterType="StackDTO">
+        UPDATE tblStackProductCameraMapping
+        SET
+            StatusId = 2,
+            RemovedCameraTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StackId = #{stackId}
+          AND CameraId = #{cameraId}
+          AND StatusId = 1
+    </update>
+
+    <update id="updateCameraPending" parameterType="StackDTO">
+        UPDATE tblCamera
+        SET
+            StatusId = 3,
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE CameraId = #{cameraId}
+    </update>
+
+    <update id="updateStackPending" parameterType="StackDTO">
+        UPDATE tblStack
+        SET
+            StatusId = 3,
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StackId = #{stackId}
     </update>
 
     <select id="checkProductActive" resultMap="checkProductActive">
@@ -281,6 +318,18 @@
     </select>
 
     <resultMap id="checkStackProductMapping" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkStackCameraMapping" resultMap="checkStackCameraMapping">
+        SELECT COUNT(StackProductCameraMappingId) AS TotalOfRecord
+        FROM tblStackProductCameraMapping
+        WHERE CameraId = #{cameraId}
+          AND StackId = #{stackId}
+          AND StatusId = 1
+    </select>
+
+    <resultMap id="checkStackCameraMapping" type="StackDTO">
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
 

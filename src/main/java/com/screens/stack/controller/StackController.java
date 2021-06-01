@@ -65,7 +65,7 @@ public class StackController {
         return ResponseSupporter.resonpseResult(responseStackListForm);
     }
 
-    @PostMapping(value = "/admin/manager/store/shelf/stack/change-product")
+    @PostMapping(value = "/admin/manager/store/shelf/stack/update-product")
     public String changeProduct(@Validated @RequestBody RequestAddProduct requestForm,
                                BindingResult result){
         // Check Validate
@@ -81,7 +81,7 @@ public class StackController {
         return ResponseSupporter.resonpseResult(true);
     }
 
-    @PostMapping(value = "/admin/manager/store/shelf/stack/change-camera")
+    @PostMapping(value = "/admin/manager/store/shelf/stack/update-camera")
     public String changeCamera(@Validated @RequestBody RequestAddCamera requestForm,
                                 BindingResult result){
         // Check Validate
@@ -96,6 +96,22 @@ public class StackController {
         // Return result
         return ResponseSupporter.resonpseResult(true);
     }
+
+//    @PostMapping(value = "/admin/manager/store/shelf/stack/update-status")
+//    public String changeCamera(@Validated @RequestBody RequestUpdateStatus requestForm,
+//                               BindingResult result){
+//        // Check Validate
+//        if(result.hasErrors()){
+//            return ResponseSupporter.responseErrorResult(result);
+//        }
+//        // Do Change Status Store
+//        ResponseCommonForm rs = stackService.changeCamera(requestForm);
+//        if(rs.getErrorCodes() != null){
+//            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+//        }
+//        // Return result
+//        return ResponseSupporter.resonpseResult(true);
+//    }
 
 
 }
