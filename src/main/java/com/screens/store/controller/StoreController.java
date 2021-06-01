@@ -27,7 +27,7 @@ public class StoreController {
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_035 = "MSG-035";
 
-    @GetMapping(value = "/admin/stores")
+    @GetMapping(value = "/admin/manager/stores")
     public String getStoreList(@Validated RequestGetStoreListForm requestForm,
                                BindingResult result){
         // Check Validate
@@ -45,7 +45,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(responseStoreListForm);
     }
 
-    @GetMapping(value = "/admin/store")
+    @GetMapping(value = "/admin/manager/store")
     public String getStoreDetail(
                                @Validated RequestGetStoreDetailForm requestForm,
                                BindingResult result){
@@ -64,7 +64,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(responseStoreDetailForm);
     }
 
-    @PostMapping(value = "/admin/store/create")
+    @PostMapping(value = "/admin/manager/store/create")
     public String createStore(
                                @Validated @RequestBody RequestCreateStoreForm requestForm,
                                BindingResult result) throws IOException {
@@ -87,7 +87,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(true);
     }
 
-    @PostMapping(value = "/admin/store/update-status")
+    @PostMapping(value = "/admin/manager/store/update-status")
     public String changeStatus(@Validated @RequestBody RequestChangeStoreStatusForm requestForm,
                                BindingResult result){
         // Check Validate
@@ -103,7 +103,7 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(true);
     }
 
-    @RequestMapping(value = "/admin/store/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/manager/store/update", method = RequestMethod.POST)
     public String updateStoreInfo(@Validated @RequestBody RequestUpdateInfoForm requestForm,
                                   BindingResult result){
         // Check Validate
@@ -135,7 +135,7 @@ public class StoreController {
 //        return ResponseSupporter.resonpseResult(true);
 //    }
 
-    @RequestMapping(value = "/admin/store/change-manager", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/manager/store/change-manager", method = RequestMethod.POST)
     public String changeManager(@Validated @RequestBody RequestChangeManager requestForm,
                                      BindingResult result){
         // Check Validate

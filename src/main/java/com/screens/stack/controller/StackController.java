@@ -81,5 +81,21 @@ public class StackController {
         return ResponseSupporter.resonpseResult(true);
     }
 
+    @PostMapping(value = "/admin/manager/store/shelf/stack/change-camera")
+    public String changeCamera(@Validated @RequestBody RequestAddCamera requestForm,
+                                BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Change Status Store
+        ResponseCommonForm rs = stackService.changeCamera(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
+
 
 }

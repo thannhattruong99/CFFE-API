@@ -164,6 +164,7 @@
         <association property="camera" javaType="CameraResponseSupporter">
             <result property="cameraId" column="STACK_CameraId"/>
             <result property="cameraName" column="CAM_CameraName"/>
+            <result property="imageUrl" column="CAM_ImageURL"/>
             <result property="ipAddress" column="CAM_IPAddress"/>
             <result property="rtspString" column="CAM_RTSPString"/>
             <result property="typeDetect" column="CAM_TypeDetect"/>
@@ -176,6 +177,7 @@
         <association property="product" javaType="ProductResponseSupporter">
             <result property="productId" column="PRO_ProductId"/>
             <result property="productName" column="PRO_ProductName"/>
+            <result property="imageUrl" column="PRO_ImageURL"/>
             <result property="description" column="PRO_ImageURL"/>
             <result property="createTime" column="PRO_Description"/>
             <result property="updateTime" column="PRO_UpdatedTime"/>
@@ -222,6 +224,14 @@
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
 
+    <select id="checkCameraPending" resultMap="checkCameraPending">
+        SELECT COUNT(CameraId) AS TotalOfRecord FROM tblCamera WHERE CameraId = #{cameraId} AND StatusId = 3
+    </select>
+
+    <resultMap id="checkCameraPending" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
     <select id="checkStackHaveProduct" resultMap="checkStackHaveProduct">
         SELECT COUNT(StackProductCameraMappingId) AS TotalOfRecord
         FROM tblStackProductCameraMapping
@@ -239,6 +249,16 @@
     </select>
 
     <resultMap id="checkStackExist" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkCameraExist" resultMap="checkCameraExist">
+        SELECT COUNT(CameraId) AS TotalOfRecord
+        FROM tblCamera
+        WHERE CameraId = #{cameraId}
+    </select>
+
+    <resultMap id="checkCameraExist" type="StackDTO">
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
 
@@ -263,5 +283,30 @@
     <resultMap id="checkStackProductMapping" type="StackDTO">
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
+
+    <update id="activeStack" parameterType="StackDTO">
+        UPDATE tblStack
+        SET
+            StatusId = 1,
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StackId = #{stackId}
+    </update>
+
+    <update id="activeCamera" parameterType="StackDTO">
+        UPDATE tblCamera
+        SET
+            StatusId = 1,
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE CameraId = #{cameraId}
+    </update>
+
+    <update id="activeMapping" parameterType="StackDTO">
+        UPDATE tblStackProductCameraMapping
+        SET
+            CameraId = #{cameraId},
+            StatusId = 1,
+            AddedCameraTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StackId = #{stackId} AND StatusId = 3
+    </update>
 
 </mapper>

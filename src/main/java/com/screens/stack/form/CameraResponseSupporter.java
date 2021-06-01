@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class CameraResponseSupporter implements Serializable {
     private String cameraId;
     private String cameraName;
+    private String imageUrl;
     private String ipAddress;
     private String rtspString;
     private int typeDetect;
@@ -15,6 +16,14 @@ public class CameraResponseSupporter implements Serializable {
     private String statusName;
 
     public CameraResponseSupporter() {
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getCameraId() {
