@@ -92,7 +92,7 @@ public class StackService extends BaseService {
             if (stackDTO.getAction() == REMOVE_ACTION) {
                 // Check product co nam tren stack
                 if (stackMapper.checkStackProductMapping(stackDTO)) {
-                    errorMsg.add("MSG-091");
+                    errorMsg.add("MSG-092");
                     response.setErrorCodes(errorMsg);
                 } else {
                     stackMapper.removeProduct(stackDTO);
@@ -135,7 +135,7 @@ public class StackService extends BaseService {
                 // Check Camera is pending
                 else if (!stackMapper.checkCameraPending(stackDTO)){
                     System.out.println("*** Camera NOT pending");
-                    errorMsg.add("MSG-089");
+                    errorMsg.add("MSG-093");
                     response.setErrorCodes(errorMsg);
                 } else {
                     stackMapper.addCamera(stackDTO);
