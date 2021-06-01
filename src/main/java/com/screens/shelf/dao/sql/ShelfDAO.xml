@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ShelfDAO">
-    <select id="getShelves" resultMap="getShelves">
+    <select id="getShelves" resultMap="getShelves" flushCache="true">
         SELECT TR.totalOfRecord, SH.ShelfId, SH.ShelfName, SH.UpdatedTime, SH.StatusId, SH.NumberStacks , STT.StatusName
         FROM tblShelf SH
         JOIN tblStore ST ON SH.StoreId = ST.StoreId
@@ -10,12 +10,6 @@
             AND SH.StatusId = #{statusId}
         </if>
         AND ST.StoreId = #{storeId}
-        JOIN tblUserStoreMapping USM
-        ON ST.StoreId = USM.StoreId
-        AND USM.StatusId = 1
-<!--        JOIN tblUser U
-        ON USM.UserId = U.UserId
-        AND U.Username = #{userName}-->
         JOIN tblStatus STT ON SH.StatusId = STT.StatusId,
         (SELECT COUNT(SH.ShelfId) AS totalOfRecord
         FROM tblShelf SH
@@ -24,20 +18,15 @@
             AND SH.StatusId = #{statusId}
         </if>
         AND ST.StoreId = #{storeId}
-        JOIN tblUserStoreMapping USM
-        ON ST.StoreId = USM.StoreId
-        AND USM.StatusId = 1
- <!--       JOIN tblUser U
-        ON USM.UserId = U.UserId
-        AND U.Username = #{userName}-->
         JOIN tblStatus STT ON SH.StatusId = STT.StatusId
-        <if test="shelfName == null">
-            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
-        </if>) AS TR
-        <if test="shelfName == null">
-            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
+        <if test="shelfName != null">
+            WHERE SH.ShelfName LIKE '%' #{shelfName} '%'
         </if>
-        ORDER BY SH.ShelfName ASC
+            ) AS TR
+        <if test="shelfName != null">
+            WHERE SH.ShelfName LIKE '%' #{shelfName} '%'
+        </if>
+        ORDER BY SH.UpdatedTime DESC
         LIMIT
         #{offSet},
         #{fetchNext}
@@ -75,8 +64,8 @@
         <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
             SELECT UUID() AS shelfId FROM tblShelf LIMIT 1
         </selectKey>
-         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, statusId, StoreId)
-         VALUES (#{shelfId}, #{shelfName}, #{description}, #{numberOfStack}, convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId}, #{storeId})
+         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId)
+         VALUES (#{shelfId}, #{shelfName}, #{description}, #{numberOfStack}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}),#{statusId}, #{storeId})
 <!--        <selectKey keyProperty="shelfId" resultType="string" order="AFTER ">-->
 <!--            select ShelfId-->
 <!--            from tblShelf-->
@@ -87,9 +76,9 @@
 <!--        </selectKey>-->
     </insert>
     <insert id="createStacks">
-        INSERT INTO tblStack(Position, CreatedTime, ShelfId, StatusId) VALUES
+        INSERT INTO tblStack(Position, CreatedTime, UpdatedTime, ShelfId, StatusId) VALUES
         <foreach item="item" collection="list" separator=",">
-            (#{item.position}, convert_tz(now(),@@session.time_zone,#{item.createdTime}), #{item.shelfId}, #{item.statusId})
+            (#{item.position}, convert_tz(now(),@@session.time_zone,#{item.createdTime}), convert_tz(now(),@@session.time_zone,#{item.createdTime}), #{item.shelfId}, #{item.statusId})
         </foreach>
     </insert>
     <select id="getStatusId" resultMap="getStatusId">
@@ -101,16 +90,6 @@
             AND ST.StatusId != 2
         </if>) SH2
         WHERE SH1.ShelfId = #{shelfId}
-<!--        SELECT DISTINCT(SH1.ShelfId), SH1.StatusId, SH2.totalOfRecord-->
-<!--        FROM tblShelf SH1 LEFT JOIN-->
-<!--        (SELECT COUNT(SH.ShelfId) AS totalOfRecord, SH.ShelfId-->
-<!--        FROM tblShelf SH-->
-<!--        JOIN tblStack ST ON SH.ShelfId = ST.ShelfId-->
-<!--        <if test="statusId == 2">-->
-<!--            AND ST.StatusId = 1-->
-<!--        </if>-->
-<!--        WHERE SH.ShelfId = #{shelfId}) SH2 ON SH1.ShelfId = SH2.ShelfId-->
-<!--        WHERE SH1.ShelfId = #{shelfId}-->
     </select>
     <update id="updateShelfStatus">
         UPDATE tblShelf SET StatusId = #{statusId}, UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
@@ -119,6 +98,57 @@
         </if>
         WHERE ShelfId = #{shelfId}
     </update>
+
+<!--    check business change shelf camera-->
+    <select id="getShelfStatus" resultMap="getStatus" flushCache="true">
+        SELECT StatusId FROM tblShelf WHERE ShelfId = #{shelfId} AND StatusId != 2
+    </select>
+    <select id="getCameraStatus" resultMap="getStatus" flushCache="true">
+        SELECT StatusId FROM tblCamera WHERE cameraId = #{cameraId} AND StatusId != 2 AND typeDetect = 1
+    </select>
+    <select id="getShelfCameraMappingStatus" resultMap="getStatus" flushCache="true">
+        SELECT StatusId FROM tblShelfCameraMapping
+        WHERE ShelfId = #{shelfId} AND cameraId = #{cameraId} AND StatusId = 1
+    </select>
+<!-- add shelf camera into shelf   -->
+    <update id="createShelfCameraOnShelf" flushCache="true">
+        UPDATE tblShelf
+        SET StatusId = 1,
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE ShelfId = #{shelfId}
+    </update>
+    <update id="createShelfCameraOnCamera" flushCache="true">
+        UPDATE tblCamera
+        SET StatusId = 1,
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE CameraId = #{cameraId}
+    </update>
+    <insert id="createShelfCameraOnMapping" flushCache="true">
+        INSERT INTO tblShelfCameraMapping(AddedTime, ShelfId, CameraId, StatusId)
+            VALUE(convert_tz(now(),@@session.time_zone,#{updatedTime}), #{shelfId}, #{cameraId}, 1)
+    </insert>
+<!--    Remove shelfCamera from shelf-->
+    <update id="removeShelfCameraFromShelf" flushCache="true">
+        UPDATE tblShelf
+        SET StatusId = 3,
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE ShelfId = #{shelfId}
+    </update>
+    <update id="removeShelfCameraFromMapping" flushCache="true">
+        UPDATE tblShelfCameraMapping
+        SET RemovedTime = convert_tz(now(),@@session.time_zone,#{updatedTime}),
+        StatusId = 2
+        WHERE ShelfId = #{shelfId}
+        AND CameraId = #{cameraId}
+        AND StatusId = 1
+    </update>
+    <update id="removeShelfCameraFromCamera" flushCache="true">
+        UPDATE tblCamera
+        SET StatusId = 3,
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE CameraId = #{cameraId}
+    </update>
+
     <resultMap id="getShelves" type="ResponseShelfListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="shelves" ofType="ShelfResponseSupporter">
@@ -155,6 +185,9 @@
     <resultMap id="getStatusId" type="ShelfDTO">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <result property="shelfId" column="ShelfId"/>
+        <result property="statusId" column="StatusId"/>
+    </resultMap>
+    <resultMap id="getStatus" type="ShelfDTO">
         <result property="statusId" column="StatusId"/>
     </resultMap>
 </mapper>

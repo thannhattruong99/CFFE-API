@@ -9,7 +9,7 @@
              FROM tblCamera
              WHERE StatusId = 3 AND TypeDetect = #{typeDetect}) TR
         WHERE StatusId = 3 AND TypeDetect = #{typeDetect}
-        ORDER BY CameraName ASC
+        ORDER BY UpdatedTime DESC
     </select>
     <select id="getCameraList" resultMap="getCameraList">
          SELECT TR.totalOfRecord,
@@ -65,13 +65,93 @@
                  AND C.CameraName like '%' #{cameraName} '%'
              </if>
          </where>
-         ORDER BY C.CameraName ASC
+         ORDER BY C.UpdatedTime DESC
          LIMIT #{offSet}, #{fetchNext}
     </select>
     <insert id="createCamera">
-        INSERT INTO tblCamera(CameraName, ImageURL, IPAddress, RTSPString, TypeDetect, CreatedTime, StatusId)
-        VALUE(#{cameraName}, #{imageURL}, #{ipAddress}, #{rtspString}, #{typeDetect}, #{createdTime}, #{statusId})
+        INSERT INTO tblCamera(CameraName, ImageURL, IPAddress, RTSPString, TypeDetect, CreatedTime, UpdatedTime, StatusId)
+        VALUE(#{cameraName}, #{imageURL}, #{ipAddress}, #{rtspString}, #{typeDetect}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId})
     </insert>
+    <update id="updateCamera">
+        UPDATE tblCamera
+        SET CameraName = #{cameraName},
+            ImageURL = #{imageURL},
+            IPAddress = #{ipAddress},
+            RTSPString = #{rtspString},
+            TypeDetect = #{typeDetect},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE CameraId = #{cameraId}
+    </update>
+    <update id="updateStatus">
+        UPDATE tblCamera
+        SET StatusId = #{statusId}
+        <if test="statusId == 2">
+            , ReasonInactive = #{reasonInactive}
+        </if>
+        WHERE CameraId = #{cameraId}
+    </update>
+    <select id="getCameraStatusById" resultMap="getCameraStatusById">
+        SELECT StatusId
+        FROM tblCamera
+        WHERE CameraId = #{cameraId}
+    </select>
+    <select id="getCameraDetailById" resultMap="getCameraDetailById">
+        SELECT
+        C.CameraId,
+        C.CameraName,
+        C.ImageURL,
+        C.IPAddress,
+        C.TypeDetect,
+        C.UpdatedTime,
+        C.StatusId,
+        STT.StatusName,
+        STT.StatusName,
+        STK.StackId,
+        STK.Position,
+        '' AS ShelfId,
+        '' AS ShelfName,
+        SPCM.AddedCameraTime
+        FROM tblCamera C
+        JOIN tblStatus STT ON C.StatusId = STT.StatusId
+        LEFT JOIN tblStackProductCameraMapping SPCM
+        ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
+        LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
+        LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
+        JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2 AND ST.StoreId IS NOT NULL
+        WHERE C.CameraId = #{cameraId}
+        <if test="storeId != null">
+            AND ST.StoreId = #{storeId}
+        </if>
+
+        UNION ALL
+
+        SELECT
+        C.CameraId,
+        C.CameraName,
+        C.ImageURL,
+        C.IPAddress,
+        C.TypeDetect,
+        STT.StatusName,
+        C.UpdatedTime,
+        C.StatusId,
+        STT.StatusName,
+        '' AS StackId,
+        '' AS Position,
+        SH2.ShelfId,
+        SH2.ShelfName,
+        SCM.AddedTime
+        FROM tblCamera C
+        JOIN tblStatus STT ON C.StatusId = STT.StatusId
+        LEFT JOIN tblStackProductCameraMapping SPCM
+        ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
+        LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1
+        LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1
+        JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2 AND ST2.StoreId IS NOT NULL
+        WHERE C.CameraId = #{cameraId}
+        <if test="storeId != null">
+            AND ST2.StoreId = #{storeId}
+        </if>
+    </select>
     <resultMap id="getAvailableCameraList" type="ResponseAvailableCameraListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="cameras" ofType="AvailableCameraListResponseSupporter">
@@ -90,5 +170,22 @@
             <result property="statusId" column="StatusId"/>
             <result property="statusName" column="StatusName"/>
         </collection>
+    </resultMap>
+    <resultMap id="getCameraStatusById" type="CameraDTO">
+        <result property="statusId" column="StatusId"/>
+    </resultMap>
+    <resultMap id="getCameraDetailById" type="ResponseCameraDetailForm">
+        <result property="cameraId" column="CameraId"/>
+        <result property="cameraName" column="CameraName"/>
+        <result property="imageUrl" column="ImageURL"/>
+        <result property="ipAddress" column="IpAddress"/>
+        <result property="typeDetect" column="TypeDetect"/>
+        <result property="statusId" column="StatusId"/>
+        <result property="statusName" column="StatusName"/>
+        <result property="stackId" column="StackId"/>
+        <result property="position" column="Position"/>
+        <result property="shelfId" column="ShelfId"/>
+        <result property="shelfName" column="ShelfName"/>
+        <result property="addedCameraTime" column="AddedCameraTime"/>
     </resultMap>
 </mapper>

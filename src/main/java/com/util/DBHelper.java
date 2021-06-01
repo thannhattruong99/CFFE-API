@@ -24,9 +24,4 @@ public class DBHelper implements IDBHelper{
         return new SqlSessionFactoryBuilder().build(reader);
     }
 
-    @Override
-    public SqlSession openSession(){
-        return  makeConnection().openSession();
-    }
-
 }
