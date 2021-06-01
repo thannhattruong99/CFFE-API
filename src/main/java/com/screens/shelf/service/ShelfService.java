@@ -123,13 +123,11 @@ public class ShelfService extends BaseService {
     }
 
     private void convertRequestShelfListToShelfDTO(RequestShelfListForm requestForm, ShelfDTO shelfDTO){
-//        shelfDTO.setUserName(requestForm.getUserName());
         shelfDTO.setStoreId(requestForm.getStoreId());
         shelfDTO.setShelfName(requestForm.getShelfName());
         shelfDTO.setStatusId(requestForm.getStatusId());
 
-        shelfDTO.setOffSet(DEFAULT_OFF_SET);
-        if(requestForm.getPageNum() > 0){
+        if(requestForm.getPageNum() > 1){
             shelfDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
         }
 

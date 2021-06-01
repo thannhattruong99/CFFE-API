@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ShelfDAO">
-    <select id="getShelves" resultMap="getShelves">
+    <select id="getShelves" resultMap="getShelves" flushCache="true">
         SELECT TR.totalOfRecord, SH.ShelfId, SH.ShelfName, SH.UpdatedTime, SH.StatusId, SH.NumberStacks , STT.StatusName
         FROM tblShelf SH
         JOIN tblStore ST ON SH.StoreId = ST.StoreId
@@ -10,9 +10,6 @@
             AND SH.StatusId = #{statusId}
         </if>
         AND ST.StoreId = #{storeId}
-<!--        JOIN tblUser U
-        ON USM.UserId = U.UserId
-        AND U.Username = #{userName}-->
         JOIN tblStatus STT ON SH.StatusId = STT.StatusId,
         (SELECT COUNT(SH.ShelfId) AS totalOfRecord
         FROM tblShelf SH
@@ -21,15 +18,13 @@
             AND SH.StatusId = #{statusId}
         </if>
         AND ST.StoreId = #{storeId}
- <!--       JOIN tblUser U
-        ON USM.UserId = U.UserId
-        AND U.Username = #{userName}-->
         JOIN tblStatus STT ON SH.StatusId = STT.StatusId
-        <if test="shelfName == null">
-            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
-        </if>) AS TR
-        <if test="shelfName == null">
-            WHERE SH.ShelfName LIKE '%'#{shelfName}'%'
+        <if test="shelfName != null">
+            WHERE SH.ShelfName LIKE '%' #{shelfName} '%'
+        </if>
+            ) AS TR
+        <if test="shelfName != null">
+            WHERE SH.ShelfName LIKE '%' #{shelfName} '%'
         </if>
         ORDER BY SH.UpdatedTime DESC
         LIMIT
