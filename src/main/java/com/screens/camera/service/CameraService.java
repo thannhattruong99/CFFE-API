@@ -110,6 +110,18 @@ public class CameraService extends BaseService {
     }
 
     private void convertRequestAvailableCameraListFormToCameraDTO(RequestAvailableCameraListForm requestForm, CameraDTO cameraDTO){
+        if(!StringHelper.isNullOrEmpty(requestForm.getCameraName())){
+            cameraDTO.setCameraName(requestForm.getCameraName());
+        }
+
+        if(requestForm.getPageNum() > 0){
+            cameraDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
+        }
+
+        cameraDTO.setFetchNext(DEFAULT_FETCH_NEXT);
+        if(requestForm.getFetchNext() > 0){
+            cameraDTO.setFetchNext(requestForm.getFetchNext());
+        }
         cameraDTO.setTypeDetect(requestForm.getTypeDetect());
     }
 

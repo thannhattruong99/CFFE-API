@@ -7,9 +7,16 @@
         FROM tblCamera,
              (SELECT COUNT(CameraId) AS totalOfRecord
              FROM tblCamera
-             WHERE StatusId = 3 AND TypeDetect = #{typeDetect}) TR
+             WHERE StatusId = 3 AND TypeDetect = #{typeDetect}
+            <if test="cameraName != null">
+                AND CameraName like '%' #{cameraName} '%'
+            </if>) TR
         WHERE StatusId = 3 AND TypeDetect = #{typeDetect}
+        <if test="cameraName != null">
+            AND CameraName like '%' #{cameraName} '%'
+        </if>
         ORDER BY UpdatedTime DESC
+        LIMIT #{offSet}, #{fetchNext}
     </select>
     <select id="getCameraList" resultMap="getCameraList">
          SELECT TR.totalOfRecord,
