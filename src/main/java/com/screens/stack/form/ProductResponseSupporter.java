@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class ProductResponseSupporter implements Serializable {
     private String productId;
     private String productName;
+    private String imageUrl;
     private String description;
     private String createTime;
     private String updateTime;
@@ -13,6 +14,14 @@ public class ProductResponseSupporter implements Serializable {
     private String statusName;
 
     public ProductResponseSupporter() {
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getProductId() {
