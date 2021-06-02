@@ -20,7 +20,7 @@ import java.io.IOException;
 @Configuration
 @SpringBootApplication
 @RestController
-@ComponentScan(basePackages = {"com"})
+@ComponentScan(basePackages = {"com.common"})
 public class CasptoneAPIApplication {
     private static final Logger logger = LoggerFactory.getLogger(CasptoneAPIApplication.class);
     public static void main(String[] args) throws IOException {
