@@ -3,13 +3,20 @@
 
 <mapper namespace="CameraDAO">
     <select id="getAvailableCameraList" resultMap="getAvailableCameraList">
-        SELECT TR.totalOfRecord, CameraId, CameraName
+        SELECT TR.totalOfRecord, CameraId, CameraName, ImageURL
         FROM tblCamera,
              (SELECT COUNT(CameraId) AS totalOfRecord
              FROM tblCamera
-             WHERE StatusId = 3 AND TypeDetect = #{typeDetect}) TR
+             WHERE StatusId = 3 AND TypeDetect = #{typeDetect}
+            <if test="cameraName != null">
+                AND CameraName like '%' #{cameraName} '%'
+            </if>) TR
         WHERE StatusId = 3 AND TypeDetect = #{typeDetect}
+        <if test="cameraName != null">
+            AND CameraName like '%' #{cameraName} '%'
+        </if>
         ORDER BY UpdatedTime DESC
+        LIMIT #{offSet}, #{fetchNext}
     </select>
     <select id="getCameraList" resultMap="getCameraList">
          SELECT TR.totalOfRecord,
@@ -157,6 +164,7 @@
         <collection property="cameras" ofType="AvailableCameraListResponseSupporter">
             <id property="cameraId" column="CameraId"/>
             <result property="cameraName" column="CameraName"/>
+            <result property="imageURL" column="ImageURL"/>
         </collection>
     </resultMap>
     <resultMap id="getCameraList" type="ResponseCameraListForm">

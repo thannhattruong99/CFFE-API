@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ShelfDAO">
-    <select id="getShelves" resultMap="getShelves" flushCache="true">
+    <select id="getShelves" resultMap="getShelves">
         SELECT TR.totalOfRecord, SH.ShelfId, SH.ShelfName, SH.UpdatedTime, SH.StatusId, SH.NumberStacks , STT.StatusName
         FROM tblShelf SH
         JOIN tblStore ST ON SH.StoreId = ST.StoreId
@@ -164,7 +164,7 @@
         <result property="shelfId" column="ShelfId"/>
         <result property="shelfName" column="ShelfName"/>
         <result property="description" column="Description"/>
-        <result property="numberOfStack" column="NumberStack"/>
+        <result property="numberOfStack" column="NumberStacks"/>
         <result property="createdTime" column="CreatedTime"/>
         <result property="updatedTime" column="UpdatedTime"/>
         <result property="reasonInactive" column="reasonInactive"/>

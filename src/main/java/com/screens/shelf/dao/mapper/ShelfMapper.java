@@ -51,7 +51,7 @@ public class ShelfMapper extends BaseDAO {
     }
 
     public ShelfDTO getStatusId(ShelfDTO shelfDTO){
-        return sqlSession.selectOne("DAO.getStatusId", shelfDTO);
+        return sqlSession.selectOne("ShelfDAO.getStatusId", shelfDTO);
     }
 
     public boolean updateShelfStatus(ShelfDTO shelfDTO){
@@ -95,7 +95,6 @@ public class ShelfMapper extends BaseDAO {
             if (sqlSession.update("ShelfDAO.removeShelfCameraFromCamera", shelfDTO) > 0){
                 if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
                     sqlSession.commit(true);
-                    sqlSession.close();
                     return true;
                 }
             }
