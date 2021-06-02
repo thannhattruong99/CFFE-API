@@ -187,6 +187,22 @@
         </association>
     </resultMap>
 
+    <select id="getStackStatus" resultMap="getStackStatus" useCache="false">
+        SELECT STA.StatusId FROM tblStack STA WHERE STA.StackId = #{stackId}
+    </select>
+
+    <resultMap id="getStackStatus" type="ResponseStackDetailForm">
+        <result property="statusId" column="StatusId"/>
+    </resultMap>
+
+    <update id="changeStatus" parameterType="StackDTO">
+        UPDATE tblStack
+        SET StatusId = #{statusId},
+            ReasonInactive = #{reasonInactive},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StackId = #{stackId}
+    </update>
+
     <insert id="addProduct"  parameterType="StackDTO">
         INSERT INTO tblStackProductCameraMapping (AddedProductTime,
                                                   StackId,

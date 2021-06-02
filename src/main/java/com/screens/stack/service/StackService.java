@@ -6,8 +6,8 @@ import com.screens.stack.dao.mapper.StackMapper;
 import com.screens.stack.dto.StackDTO;
 import com.screens.stack.form.*;
 import com.screens.store.dto.StoreDTO;
-import com.screens.store.form.RequestCreateStoreForm;
 import com.screens.store.service.StoreService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,6 +160,51 @@ public class StackService extends BaseService {
             response.setErrorCodes(catchSqlException(e.getMessage()));
         }
         return response;
+    }
+
+    public ResponseCommonForm updateStatus(RequestUpdateStatusForm requestForm) {
+        ResponseCommonForm response = new ResponseCommonForm();
+        StackDTO stackDTO = convertUpdateStatusFormToDTO(requestForm);
+        try {
+            List<String> errorMsg = new ArrayList<>();
+            if (!stackMapper.checkStackExist(stackDTO)) {
+                errorMsg.add("MSG-022");
+                response.setErrorCodes(errorMsg);
+            } else {
+                ResponseStackDetailForm rs = stackMapper.getStackStatus(stackDTO);
+                if ((rs.getStatusId() == 3) && (stackDTO.getStatusId() == 2)
+                        && (StringUtils.isNotEmpty(stackDTO.getReasonInactive()))){
+                    System.out.println("ACTION: PENDING => INACTIVE");
+                    //check co product nao con tren Stack hay ko
+                    if (!stackMapper.checkStackHaveProduct(stackDTO)){
+                        stackMapper.changeStatus(stackDTO);
+                    } else {
+                        errorMsg.add("MSG-095");
+                        response.setErrorCodes(errorMsg);
+                    }
+                } else if((rs.getStatusId() == 2) && (stackDTO.getStatusId() == 3)) {
+                    System.out.println("ACTION: INACTIVE => PENDING");
+                    stackMapper.changeStatus(stackDTO);
+                } else {
+                    errorMsg.add("MSG-066");
+                    response.setErrorCodes(errorMsg);
+                }
+            }
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+            response.setErrorCodes(catchSqlException(e.getMessage()));
+        }
+        return response;
+    }
+
+    private StackDTO convertUpdateStatusFormToDTO(RequestUpdateStatusForm requestForm) {
+        StackDTO stackDTO = new StackDTO();
+        stackDTO.setStackId(requestForm.getStackId());
+        stackDTO.setStatusId(requestForm.getStatusId());
+        if (StringUtils.isNotEmpty(requestForm.getReasonInactive())) {
+            stackDTO.setReasonInactive(requestForm.getReasonInactive());
+        }
+        return stackDTO;
     }
 
     private StackDTO convertChangeCameraFormToDTO (RequestAddCamera requestForm) {

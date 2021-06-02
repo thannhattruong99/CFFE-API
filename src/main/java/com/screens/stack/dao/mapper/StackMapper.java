@@ -19,6 +19,10 @@ public class StackMapper extends BaseDAO {
         return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackDetail",stackDTO);
     }
 
+    public ResponseStackDetailForm getStackStatus(StackDTO stackDTO) {
+        return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackStatus",stackDTO);
+    }
+
     public ResponseStackListForm getStackListByShelf(StackDTO stackDTO) {
         return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByShelf",stackDTO);
     }
@@ -63,6 +67,14 @@ public class StackMapper extends BaseDAO {
 
             }
 
+        }
+        return false;
+    }
+
+    public boolean changeStatus(StackDTO stackDTO) {
+        if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.changeStatus",stackDTO) > 0){
+            this.sqlSession.commit();
+            return true;
         }
         return false;
     }
