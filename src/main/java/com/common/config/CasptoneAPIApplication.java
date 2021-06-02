@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -19,8 +18,7 @@ import java.io.IOException;
 
 @Configuration
 @SpringBootApplication
-@RestController
-@ComponentScan(basePackages = {"com.common"})
+@ComponentScan(basePackages = {"com"})
 public class CasptoneAPIApplication {
     private static final Logger logger = LoggerFactory.getLogger(CasptoneAPIApplication.class);
     public static void main(String[] args) throws IOException {

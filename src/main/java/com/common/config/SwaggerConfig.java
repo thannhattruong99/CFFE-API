@@ -1,14 +1,21 @@
 package com.common.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.assertj.core.util.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springdoc.core.converters.models.Pageable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.ResponseEntity;
-import springfox.documentation.service.*;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.oas.annotations.EnableOpenApi;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -21,9 +28,12 @@ import java.util.List;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
-@EnableSwagger2
-@Import(springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class)
-
+@OpenAPIDefinition(info = @Info(title = "My API", version = "v1"))
+@SecurityScheme(
+        name = "basicAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "basic"
+)
 public class SwaggerConfig {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String DEFAULT_INCLUDE_PATTERN = "ttp://localhost:9090/*";

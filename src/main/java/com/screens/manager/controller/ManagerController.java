@@ -4,6 +4,10 @@ import com.common.form.ResponseCommonForm;
 import com.screens.manager.form.*;
 import com.screens.manager.service.ManagerService;
 import com.util.ResponseSupporter;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +26,7 @@ public class ManagerController {
     @Autowired
     private ManagerService managerService;
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "basicAuth"))
     @RequestMapping(value = "/managers", method = RequestMethod.GET)
     public String getManagers(@Validated RequestManagerListForm requestManagerListForm, //
                              BindingResult result) {
