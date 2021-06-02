@@ -3,7 +3,7 @@
 
 <mapper namespace="CameraDAO">
     <select id="getAvailableCameraList" resultMap="getAvailableCameraList">
-        SELECT TR.totalOfRecord, CameraId, CameraName
+        SELECT TR.totalOfRecord, CameraId, CameraName, ImageURL
         FROM tblCamera,
              (SELECT COUNT(CameraId) AS totalOfRecord
              FROM tblCamera
@@ -157,6 +157,7 @@
         <collection property="cameras" ofType="AvailableCameraListResponseSupporter">
             <id property="cameraId" column="CameraId"/>
             <result property="cameraName" column="CameraName"/>
+            <result property="imageURL" column="ImageURL"/>
         </collection>
     </resultMap>
     <resultMap id="getCameraList" type="ResponseCameraListForm">
