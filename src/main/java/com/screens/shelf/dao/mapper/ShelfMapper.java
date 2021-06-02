@@ -95,7 +95,6 @@ public class ShelfMapper extends BaseDAO {
             if (sqlSession.update("ShelfDAO.removeShelfCameraFromCamera", shelfDTO) > 0){
                 if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
                     sqlSession.commit(true);
-                    sqlSession.close();
                     return true;
                 }
             }
