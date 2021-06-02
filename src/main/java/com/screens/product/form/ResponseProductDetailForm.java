@@ -1,6 +1,7 @@
 package com.screens.product.form;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ResponseProductDetailForm implements Serializable {
     private String productId;
@@ -12,8 +13,17 @@ public class ResponseProductDetailForm implements Serializable {
     private String reasonInactive;
     private int statusId;
     private String statusName;
+    private List<CategoryResonseSupporter> categories;
 
     public ResponseProductDetailForm() {
+    }
+
+    public List<CategoryResonseSupporter> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<CategoryResonseSupporter> categories) {
+        this.categories = categories;
     }
 
     public String getProductId() {

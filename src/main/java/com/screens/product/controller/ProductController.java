@@ -1,7 +1,9 @@
 package com.screens.product.controller;
 
 import com.screens.product.form.RequestGetProductDetailForm;
+import com.screens.product.form.RequestGetProductListForm;
 import com.screens.product.form.ResponseProductDetailForm;
+import com.screens.product.form.ResponseProductListForm;
 import com.screens.product.service.ProductService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    private static final String MSG_009 = "MSG-009";
     private static final String MSG_023 = "MSG-023";
 
     @GetMapping(value = "/admin/product")
@@ -34,6 +37,25 @@ public class ProductController {
         if(res == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_023);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(res);
+    }
+
+    @GetMapping(value = "/admin/products")
+    public String getProductList(
+            @Validated RequestGetProductListForm requestForm,
+            BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Get Product Detail
+        ResponseProductListForm res = productService.getProductList(requestForm);
+        if(res == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result

@@ -3,6 +3,9 @@ package com.screens.product.dao.mapper;
 import com.common.dao.BaseDAO;
 import com.screens.product.dto.ProductDTO;
 import com.screens.product.form.ResponseProductDetailForm;
+import com.screens.product.form.ResponseProductListForm;
+import com.screens.store.dto.StoreDTO;
+import com.screens.store.form.ResponseStoreListForm;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +19,9 @@ public class ProductMapper extends BaseDAO {
     public ResponseProductDetailForm getProductDetail(ProductDTO productDTO) {
         return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductDetail",productDTO);
     }
+
+    public ResponseProductListForm getProductList(ProductDTO productDTO) {
+        return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductList",productDTO);
+    }
+
 }

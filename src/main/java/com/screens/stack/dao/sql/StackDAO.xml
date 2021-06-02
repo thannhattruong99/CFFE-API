@@ -5,7 +5,6 @@
 
     <select id="getStackListByShelf" resultMap="getStackListByShelf" useCache="false">
         SELECT
-            TCOUNT.totalOfRecord,
             STA.StackId AS STACK_StackId,
             STA.Position AS STACK_Position,
             STA.CreatedTime AS STACK_CreatedTime,
@@ -34,7 +33,10 @@
             TP.UpdatedTime  AS PRO_UpdatedTime,
             TP.ReasonInactive AS PRO_ReasonInactive,
             TP.StatusId AS PRO_StatusId,
-            STP.StatusName AS PRO_StatusName
+            STP.StatusName AS PRO_StatusName,
+            CC.CategoryId,
+            CN.CategoryName,
+            TCOUNT.totalOfRecord
         FROM
             tblStack STA
             LEFT JOIN tblShelf SHE ON (STA.ShelfId = SHE.ShelfId)
@@ -43,21 +45,23 @@
             LEFT JOIN tblCamera TC ON (TSPCM.CameraId = TC.CameraId AND TSPCM.RemovedCameraTime IS NULL )
             LEFT JOIN tblStatus STC ON (STC.StatusId = TC.StatusId)
             LEFT JOIN tblProduct TP ON (TSPCM.ProductId = TP.ProductId AND TSPCM.RemoveProductTime IS NULL)
+            LEFT JOIN tblProductCategoryMapping CC ON(TP.ProductId = CC.ProductId)
+            LEFT JOIN tblCategory CN ON(CC.CategoryId = CN.CategoryId)
             LEFT JOIN tblStatus STP ON (STP.StatusId = TP.StatusId),
             (
-                SELECT COUNT(STA.StackId) AS totalOfRecord
-                FROM tblStack STA
-                    LEFT JOIN tblShelf SHE ON (STA.ShelfId = SHE.ShelfId)
-                    LEFT JOIN tblStackProductCameraMapping TSPCM ON (STA.StackId = TSPCM.StackId AND TSPCM.StatusId != 2)
-                    LEFT JOIN tblCamera TC ON (TSPCM.CameraId = TC.CameraId AND TSPCM.RemovedCameraTime IS NULL )
-                    LEFT JOIN tblProduct TP ON (TSPCM.ProductId = TP.ProductId AND TSPCM.RemoveProductTime IS NULL)
-                WHERE
-                      STA.ShelfId = #{shelfId}
-                        <choose>
-                            <when test="statusId != 0">
-                                AND STA.StatusId = #{statusId}
-                            </when>
-                        </choose>
+            SELECT COUNT(STA.StackId) AS totalOfRecord
+            FROM tblStack STA
+            LEFT JOIN tblShelf SHE ON (STA.ShelfId = SHE.ShelfId)
+            LEFT JOIN tblStackProductCameraMapping TSPCM ON (STA.StackId = TSPCM.StackId AND TSPCM.StatusId != 2)
+            LEFT JOIN tblCamera TC ON (TSPCM.CameraId = TC.CameraId AND TSPCM.RemovedCameraTime IS NULL )
+            LEFT JOIN tblProduct TP ON (TSPCM.ProductId = TP.ProductId AND TSPCM.RemoveProductTime IS NULL)
+            WHERE
+            STA.ShelfId = #{shelfId}
+            <choose>
+                <when test="statusId != 0">
+                    AND STA.StatusId = #{statusId}
+                </when>
+            </choose>
 
             ) TCOUNT
         WHERE
@@ -102,6 +106,10 @@
                 <result property="reasonInactive" column="PRO_ReasonInactive"/>
                 <result property="statusId" column="PRO_StatusId"/>
                 <result property="statusName" column="PRO_StatusName"/>
+                <collection property="categories" ofType="CategoryResonseSupporter">
+                    <id property="categoryId" column="CategoryId"/>
+                    <result property="categoryName" column="CategoryName"/>
+                </collection>
             </association>
         </collection>
     </resultMap>

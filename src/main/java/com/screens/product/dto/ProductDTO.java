@@ -1,8 +1,10 @@
 package com.screens.product.dto;
 
+import com.common.dto.BaseDTO;
+
 import java.io.Serializable;
 
-public class ProductDTO implements Serializable {
+public class ProductDTO extends BaseDTO implements Serializable {
     private String productId;
     private String productName;
     private String imageUrl;
@@ -12,8 +14,17 @@ public class ProductDTO implements Serializable {
     private String reasonInactive;
     private int statusId;
     private String statusName;
+    private int categoryId;
 
     public ProductDTO() {
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getProductId() {
