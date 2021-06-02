@@ -63,21 +63,21 @@ public class ProductController {
         return ResponseSupporter.resonpseResult(res);
     }
 
-//    public String createProduct(
-//            @Validated @RequestBody RequestCreateProductForm requestForm,
-//            BindingResult result) throws IOException {
-//        // Check Validate
-//        if(result.hasErrors()){
-//            return ResponseSupporter.responseErrorResult(result);
-//        }
-//
-//        // Do Create Product
-//        ResponseCommonForm rs = storeService.createStore(requestForm);
-//        if(rs.getErrorCodes() != null){
-//            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
-//        }
-//        // Return result
-//        return ResponseSupporter.resonpseResult(true);
-//    }
+    public String createProduct(
+            @Validated @RequestBody RequestCreateProductForm requestForm,
+            BindingResult result) throws IOException {
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        // Do Create Product
+        ResponseCommonForm rs = productService.createProduct(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
 
 }
