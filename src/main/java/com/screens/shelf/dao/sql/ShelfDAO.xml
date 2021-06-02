@@ -164,7 +164,7 @@
         <result property="shelfId" column="ShelfId"/>
         <result property="shelfName" column="ShelfName"/>
         <result property="description" column="Description"/>
-        <result property="numberOfStack" column="NumberStack"/>
+        <result property="numberOfStack" column="NumberStacks"/>
         <result property="createdTime" column="CreatedTime"/>
         <result property="updatedTime" column="UpdatedTime"/>
         <result property="reasonInactive" column="reasonInactive"/>
