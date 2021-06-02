@@ -51,7 +51,7 @@ public class ShelfMapper extends BaseDAO {
     }
 
     public ShelfDTO getStatusId(ShelfDTO shelfDTO){
-        return sqlSession.selectOne("DAO.getStatusId", shelfDTO);
+        return sqlSession.selectOne("ShelfDAO.getStatusId", shelfDTO);
     }
 
     public boolean updateShelfStatus(ShelfDTO shelfDTO){
