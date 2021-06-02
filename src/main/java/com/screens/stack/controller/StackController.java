@@ -3,9 +3,6 @@ package com.screens.stack.controller;
 import com.common.form.ResponseCommonForm;
 import com.screens.stack.form.*;
 import com.screens.stack.service.StackService;
-import com.screens.store.form.RequestChangeStoreStatusForm;
-import com.screens.store.form.RequestGetStoreListForm;
-import com.screens.store.form.ResponseStoreListForm;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -65,7 +62,7 @@ public class StackController {
         return ResponseSupporter.resonpseResult(responseStackListForm);
     }
 
-    @PostMapping(value = "/admin/manager/store/shelf/stack/change-product")
+    @PostMapping(value = "/admin/manager/store/shelf/stack/update-product")
     public String changeProduct(@Validated @RequestBody RequestAddProduct requestForm,
                                BindingResult result){
         // Check Validate
@@ -81,7 +78,7 @@ public class StackController {
         return ResponseSupporter.resonpseResult(true);
     }
 
-    @PostMapping(value = "/admin/manager/store/shelf/stack/change-camera")
+    @PostMapping(value = "/admin/manager/store/shelf/stack/update-camera")
     public String changeCamera(@Validated @RequestBody RequestAddCamera requestForm,
                                 BindingResult result){
         // Check Validate
@@ -90,6 +87,22 @@ public class StackController {
         }
         // Do Change Status Store
         ResponseCommonForm rs = stackService.changeCamera(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @PostMapping(value = "/admin/manager/store/shelf/stack/update-status")
+    public String updateStatus(@Validated @RequestBody RequestUpdateStatusForm requestForm,
+                               BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Change Status Store
+        ResponseCommonForm rs = stackService.updateStatus(requestForm);
         if(rs.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }

@@ -19,6 +19,10 @@ public class StackMapper extends BaseDAO {
         return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackDetail",stackDTO);
     }
 
+    public ResponseStackDetailForm getStackStatus(StackDTO stackDTO) {
+        return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackStatus",stackDTO);
+    }
+
     public ResponseStackListForm getStackListByShelf(StackDTO stackDTO) {
         return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByShelf",stackDTO);
     }
@@ -45,6 +49,30 @@ public class StackMapper extends BaseDAO {
 
     public boolean removeProduct(StackDTO stackDTO) {
         if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.removeProduct",stackDTO) > 0){
+            this.sqlSession.commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeCamera(StackDTO stackDTO) {
+        if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addNewRecordMapping",stackDTO) > 0){
+            if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateCameraPending",stackDTO) > 0){
+                if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateStackPending",stackDTO) > 0){
+                    if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.removeCamera",stackDTO) > 0){
+                        this.sqlSession.commit();
+                        return true;
+                    }
+                }
+
+            }
+
+        }
+        return false;
+    }
+
+    public boolean changeStatus(StackDTO stackDTO) {
+        if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.changeStatus",stackDTO) > 0){
             this.sqlSession.commit();
             return true;
         }
@@ -109,6 +137,14 @@ public class StackMapper extends BaseDAO {
 
     public boolean checkStackProductMapping(StackDTO stackDTO) {
         StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackProductMapping",stackDTO);
+        if(rs.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkStackCameraMapping(StackDTO stackDTO) {
+        StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackCameraMapping",stackDTO);
         if(rs.getTotalOfRecord() <= 0){
             return false;
         }
