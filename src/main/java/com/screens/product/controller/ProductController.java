@@ -1,17 +1,18 @@
 package com.screens.product.controller;
 
-import com.screens.product.form.RequestGetProductDetailForm;
-import com.screens.product.form.RequestGetProductListForm;
-import com.screens.product.form.ResponseProductDetailForm;
-import com.screens.product.form.ResponseProductListForm;
+import com.common.form.ResponseCommonForm;
+import com.screens.product.form.*;
 import com.screens.product.service.ProductService;
+import com.screens.store.form.RequestCreateStoreForm;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,5 +62,22 @@ public class ProductController {
         // Return result
         return ResponseSupporter.resonpseResult(res);
     }
+
+//    public String createProduct(
+//            @Validated @RequestBody RequestCreateProductForm requestForm,
+//            BindingResult result) throws IOException {
+//        // Check Validate
+//        if(result.hasErrors()){
+//            return ResponseSupporter.responseErrorResult(result);
+//        }
+//
+//        // Do Create Product
+//        ResponseCommonForm rs = storeService.createStore(requestForm);
+//        if(rs.getErrorCodes() != null){
+//            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+//        }
+//        // Return result
+//        return ResponseSupporter.resonpseResult(true);
+//    }
 
 }

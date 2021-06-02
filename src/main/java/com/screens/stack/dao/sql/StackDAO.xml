@@ -88,6 +88,7 @@
             <association property="camera" javaType="CameraResponseSupporter">
                 <result property="cameraId" column="STACK_CameraId"/>
                 <result property="cameraName" column="CAM_CameraName"/>
+                <result property="imageUrl" column="CAM_ImageURL"/>
                 <result property="ipAddress" column="CAM_IPAddress"/>
                 <result property="rtspString" column="CAM_RTSPString"/>
                 <result property="typeDetect" column="CAM_TypeDetect"/>
@@ -100,8 +101,9 @@
             <association property="product" javaType="ProductResponseSupporter">
                 <result property="productId" column="PRO_ProductId"/>
                 <result property="productName" column="PRO_ProductName"/>
-                <result property="description" column="PRO_ImageURL"/>
-                <result property="createTime" column="PRO_Description"/>
+                <result property="imageUrl" column="PRO_ImageURL"/>
+                <result property="description" column="PRO_Description"/>
+                <result property="createTime" column="PRO_CreatedTime"/>
                 <result property="updateTime" column="PRO_UpdatedTime"/>
                 <result property="reasonInactive" column="PRO_ReasonInactive"/>
                 <result property="statusId" column="PRO_StatusId"/>
