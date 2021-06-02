@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.screens.product.dao.sql.ProductDAO">
+
+    <select id="getProductDetail" resultMap="getProductDetail" useCache="false">
+        SELECT S.ProductId,
+               S.ProductName,
+               S.ImageURL,
+               S.Description,
+               S.CreatedTime,
+               S.UpdatedTime,
+               S.ReasonInactive,
+               S.StatusId,
+               TS.StatusName
+        FROM tblProduct S
+                 LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+        WHERE
+            S.ProductId = #{productId}
+    </select>
+
+    <resultMap id="getProductDetail" type="ResponseProductDetailForm">
+        <result property="productId" column="ProductId"/>
+        <result property="productName" column="ProductName"/>
+        <result property="imageUrl" column="ImageURL"/>
+        <result property="description" column="Description"/>
+        <result property="createdTime" column="CreatedTime"/>
+        <result property="updatedTime" column="UpdatedTime"/>
+        <result property="reasonInactive" column="ReasonInactive"/>
+        <result property="statusId" column="StatusId"/>
+        <result property="statusName" column="StatusName"/>
+    </resultMap>
+
+
+</mapper>
+
+
+
+
+
