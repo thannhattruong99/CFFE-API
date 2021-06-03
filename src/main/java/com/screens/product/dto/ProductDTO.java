@@ -1,11 +1,10 @@
-package com.screens.stack.form;
+package com.screens.product.dto;
 
-import com.screens.product.form.CategoryResonseSupporter;
+import com.common.dto.BaseDTO;
 
 import java.io.Serializable;
-import java.util.List;
 
-public class ProductResponseSupporter implements Serializable {
+public class ProductDTO extends BaseDTO implements Serializable {
     private String productId;
     private String productName;
     private String imageUrl;
@@ -15,25 +14,17 @@ public class ProductResponseSupporter implements Serializable {
     private String reasonInactive;
     private int statusId;
     private String statusName;
-    private List<CategoryResonseSupporter> categories;
+    private int categoryId;
 
-    public ProductResponseSupporter() {
+    public ProductDTO() {
     }
 
-    public List<CategoryResonseSupporter> getCategories() {
-        return categories;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategories(List<CategoryResonseSupporter> categories) {
-        this.categories = categories;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getProductId() {
@@ -50,6 +41,14 @@ public class ProductResponseSupporter implements Serializable {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getDescription() {
