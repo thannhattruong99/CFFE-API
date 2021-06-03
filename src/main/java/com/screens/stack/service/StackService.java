@@ -90,14 +90,16 @@ public class StackService extends BaseService {
 
             // Remove product
             if (stackDTO.getAction() == REMOVE_ACTION) {
+                System.out.println("ACTION = REMOVE_ACTION");
                 // Check product co nam tren stack
-                if (stackMapper.checkStackProductMapping(stackDTO)) {
+                if (!stackMapper.checkStackProductMapping(stackDTO)) {
                     errorMsg.add("MSG-092");
                     response.setErrorCodes(errorMsg);
-                } else {
+                }
+                // Check Stack Mapping is pending
+                else {
                     stackMapper.removeProduct(stackDTO);
                 }
-
             }
 
         } catch (PersistenceException e) {
@@ -137,7 +139,14 @@ public class StackService extends BaseService {
                     System.out.println("*** Camera NOT pending");
                     errorMsg.add("MSG-093");
                     response.setErrorCodes(errorMsg);
-                } else {
+                }
+                // check stack co product
+                else if (!stackMapper.checkStackHaveProduct(stackDTO)){
+                    System.out.println("*** Stack not have product");
+                    errorMsg.add("MSG-100");
+                    response.setErrorCodes(errorMsg);
+                }
+                else {
                     stackMapper.addCamera(stackDTO);
                     System.out.println("RS = SUSSCESS");
                 }

@@ -17,8 +17,17 @@ public class ProductDTO extends BaseDTO implements Serializable {
     private String statusName;
     private int categoryId;
     private List<Integer> categories;
+    private int totalOfRecord;
 
     public ProductDTO() {
+    }
+
+    public int getTotalOfRecord() {
+        return totalOfRecord;
+    }
+
+    public void setTotalOfRecord(int totalOfRecord) {
+        this.totalOfRecord = totalOfRecord;
     }
 
     public int getCategoryId() {
