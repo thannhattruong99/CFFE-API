@@ -157,6 +157,58 @@
         </foreach>
     </insert>
 
+    <select id="checkProductExist" resultMap="checkProductExist">
+        SELECT COUNT(ProductId) AS TotalOfRecord
+        FROM tblProduct
+        WHERE ProductId = #{productId}
+    </select>
+
+    <resultMap id="checkProductExist" type="ProductDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="getProductStatus" resultMap="getProductStatus" useCache="false">
+        SELECT STA.StatusId FROM tblProduct STA WHERE STA.ProductId = #{productId}
+    </select>
+
+    <resultMap id="getProductStatus" type="ResponseProductDetailForm">
+        <result property="statusId" column="StatusId"/>
+    </resultMap>
+
+    <select id="checkAnyStackHaveProduct" resultMap="checkAnyStackHaveProduct">
+        SELECT COUNT(StackProductCameraMappingId) AS TotalOfRecord
+        FROM tblStackProductCameraMapping
+        WHERE ProductId = #{productId} AND (StatusId = 3 OR StatusId = 1)
+    </select>
+
+    <resultMap id="checkAnyStackHaveProduct" type="ProductDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <update id="changeStatus" parameterType="ProductDTO">
+        UPDATE tblProduct
+        SET StatusId = #{statusId},
+            ReasonInactive = #{reasonInactive},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE ProductId = #{productId}
+    </update>
+
+    <update id="updateInfo" parameterType="ProductDTO">
+        UPDATE tblProduct
+        SET
+        <if test="productName != null">
+            ProductName = #{productName},
+        </if>
+        <if test="imageUrl != null">
+            ImageURL = #{imageUrl},
+        </if>
+        <if test="description != null">
+            Description = #{description},
+        </if>
+        UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE ProductId = #{productId}
+    </update>
+
 </mapper>
 
 
