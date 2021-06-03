@@ -26,6 +26,7 @@
                 C.IPAddress,
                 C.TypeDetect,
                 ST.StoreId,
+                ST.StoreName,
                 C.UpdatedTime,
                 C.StatusId,
                 STT.StatusName
@@ -175,6 +176,7 @@
             <result property="imagerURL" column="ImageURL"/>
             <result property="ipAddress" column="IPAddress"/>
             <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
             <result property="statusId" column="StatusId"/>
             <result property="statusName" column="StatusName"/>
         </collection>
