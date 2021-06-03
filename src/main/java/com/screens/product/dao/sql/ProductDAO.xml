@@ -57,10 +57,16 @@
                         TS.StatusName,
                         TT.totalOfRecord
                 FROM tblProduct S
-                        LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId),
+                        LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                        <if test="categoryId != 0">
+                            LEFT JOIN tblProductCategoryMapping CC ON(S.ProductId = CC.ProductId)
+                        </if>,
                         (
                             SELECT COUNT(S.ProductId) AS totalOfRecord
                             FROM tblProduct S
+                                <if test="categoryId != 0">
+                                LEFT JOIN tblProductCategoryMapping CC ON(S.ProductId = CC.ProductId)
+                                </if>
                             <where>
                                 <if test="searchValue != null">
                                     <choose>
@@ -113,6 +119,28 @@
                     #{fetchNext}
                 ) A2 ON (A1.ProductId = A2.ProductId)
             LEFT JOIN tblCategory CN ON(A1.CategoryId = CN.CategoryId)
+        <where>
+            <if test="searchValue != null">
+                <choose>
+                    <when test="searchField == 'productname'">
+                        A2.ProductName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <otherwise>
+                        A2.ProductName LIKE '%' #{searchValue} '%'
+                    </otherwise>
+                </choose>
+            </if>
+            <choose>
+                <when test="statusId != 0">
+                    AND A2.StatusId = #{statusId}
+                </when>
+            </choose>
+            <choose>
+                <when test="categoryId != 0">
+                    AND A1.CategoryId = #{categoryId}
+                </when>
+            </choose>
+        </where>
     </select>
 
     <resultMap id="getProductList" type="ResponseProductListForm">
