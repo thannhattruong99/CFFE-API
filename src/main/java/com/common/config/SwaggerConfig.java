@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -53,14 +54,14 @@ public class SwaggerConfig {
         ApiInfo apiInfo = new ApiInfo(
                 "Backend API",
                 "This is the best stuff since sliced bread - API",
-                "6.6.6",
-                "https://justrocket.de",
+                "6",
+                "https://localhost:9090",
                 contact,
-                "MIT",
-                "https://justrocket.de",
+                "truongtn",
+                "truongtn",
                 vext);
 
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+        Docket docket = new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo)
                 .pathMapping("/")
                 .apiInfo(ApiInfo.DEFAULT)
@@ -78,7 +79,6 @@ public class SwaggerConfig {
         docket = docket.select()
                 .paths(regex(DEFAULT_INCLUDE_PATTERN))
                 .build();
-//        watch.stop();
         log.debug("Started Swagger in  ms");
         return docket;
     }

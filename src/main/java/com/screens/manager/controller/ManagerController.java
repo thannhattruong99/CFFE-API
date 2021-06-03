@@ -7,6 +7,7 @@ import com.util.ResponseSupporter;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -17,7 +18,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController()
+@RestController("/api/")
 @RequestMapping("admin")
 @SecurityRequirement(name = "basicAuth")
 public class ManagerController {
@@ -27,6 +28,7 @@ public class ManagerController {
     @Autowired
     private ManagerService managerService;
 
+    @ApiResponse(responseCode = "200", description = "This is ok indeed" )
     @RequestMapping(value = "/managers", method = RequestMethod.GET)
     public String getManagers(@Validated RequestManagerListForm requestManagerListForm, //
                              BindingResult result) {
