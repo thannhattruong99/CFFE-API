@@ -157,6 +157,31 @@
         </foreach>
     </insert>
 
+    <select id="checkCategoriesValid" resultMap="checkCategoriesValid">
+        SELECT COUNT(CategoryId) AS TotalOfRecord
+        FROM tblCategory
+        WHERE CategoryId IN
+            <foreach collection="categories" item="element" index="index" open="(" separator=","  close=")">
+                #{element}
+            </foreach>
+    </select>
+
+    <resultMap id="checkCategoriesValid" type="ProductDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <delete id="removeCategories" parameterType="ProductDTO">
+        DELETE FROM tblProductCategoryMapping
+        WHERE ProductId = #{productId}
+    </delete>
+
+    <insert id="addCategories" parameterType="ProductDTO">
+        INSERT INTO tblProductCategoryMapping (ProductId,CategoryId) values
+        <foreach collection="categories" item="element" index="index" open="(" separator="),("  close=")">
+            #{productId},#{element}
+        </foreach>
+    </insert>
+
     <select id="checkProductExist" resultMap="checkProductExist">
         SELECT COUNT(ProductId) AS TotalOfRecord
         FROM tblProduct
@@ -184,6 +209,8 @@
     <resultMap id="checkAnyStackHaveProduct" type="ProductDTO">
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
+
+
 
     <update id="changeStatus" parameterType="ProductDTO">
         UPDATE tblProduct
