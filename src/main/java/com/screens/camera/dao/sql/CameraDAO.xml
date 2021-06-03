@@ -113,12 +113,13 @@
         C.UpdatedTime,
         C.StatusId,
         STT.StatusName,
-        STT.StatusName,
         STK.StackId,
         STK.Position,
-        '' AS ShelfId,
-        '' AS ShelfName,
-        SPCM.AddedCameraTime
+        SH.ShelfId AS ShelfId,
+        SH.ShelfName AS ShelfName,
+        SPCM.AddedCameraTime,
+        ST.StoreId,
+        ST.StoreName
         FROM tblCamera C
         JOIN tblStatus STT ON C.StatusId = STT.StatusId
         LEFT JOIN tblStackProductCameraMapping SPCM
@@ -139,7 +140,6 @@
         C.ImageURL,
         C.IPAddress,
         C.TypeDetect,
-        STT.StatusName,
         C.UpdatedTime,
         C.StatusId,
         STT.StatusName,
@@ -147,11 +147,11 @@
         '' AS Position,
         SH2.ShelfId,
         SH2.ShelfName,
-        SCM.AddedTime
+        SCM.AddedTime,
+        ST2.StoreId,
+        ST2.StoreName
         FROM tblCamera C
         JOIN tblStatus STT ON C.StatusId = STT.StatusId
-        LEFT JOIN tblStackProductCameraMapping SPCM
-        ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
         LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1
         LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1
         JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2 AND ST2.StoreId IS NOT NULL
@@ -190,6 +190,7 @@
         <result property="imageUrl" column="ImageURL"/>
         <result property="ipAddress" column="IpAddress"/>
         <result property="typeDetect" column="TypeDetect"/>
+        <result property="updatedTime" column="UpdatedTime"/>
         <result property="statusId" column="StatusId"/>
         <result property="statusName" column="StatusName"/>
         <result property="stackId" column="StackId"/>
@@ -197,5 +198,7 @@
         <result property="shelfId" column="ShelfId"/>
         <result property="shelfName" column="ShelfName"/>
         <result property="addedCameraTime" column="AddedCameraTime"/>
+        <result property="storeId" column="StoreId"/>
+        <result property="storeName" column="StoreName"/>
     </resultMap>
 </mapper>
