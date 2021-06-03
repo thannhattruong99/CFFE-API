@@ -3,15 +3,14 @@ package com.screens.product.controller;
 import com.common.form.ResponseCommonForm;
 import com.screens.product.form.*;
 import com.screens.product.service.ProductService;
+import com.screens.stack.form.RequestUpdateStatusForm;
 import com.screens.store.form.RequestCreateStoreForm;
+import com.screens.store.form.RequestUpdateInfoForm;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,6 +76,38 @@ public class ProductController {
         ResponseCommonForm rs = productService.createProduct(requestForm);
         if(rs.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @PostMapping(value = "/admin/product/update-status")
+    public String updateStatus(@Validated @RequestBody RequestUpdateStatusProductForm requestForm,
+                               BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Change Status Store
+        ResponseCommonForm rs = productService.updateStatus(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @PostMapping(value = "/admin/product/update")
+    public String updateProductInfo(@Validated @RequestBody RequestUpdateInfoProductForm requestForm,
+                                  BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Update Infomation Store
+        ResponseCommonForm responseForm = productService.updateProductInfo(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
         // Return result
         return ResponseSupporter.resonpseResult(true);

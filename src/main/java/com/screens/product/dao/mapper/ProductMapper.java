@@ -4,8 +4,8 @@ import com.common.dao.BaseDAO;
 import com.screens.product.dto.ProductDTO;
 import com.screens.product.form.ResponseProductDetailForm;
 import com.screens.product.form.ResponseProductListForm;
+import com.screens.stack.dto.StackDTO;
 import com.screens.store.dto.StoreDTO;
-import com.screens.store.form.ResponseStoreListForm;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
@@ -36,4 +36,39 @@ public class ProductMapper extends BaseDAO {
         return false;
     }
 
+    public boolean checkProductExist(ProductDTO productDTO) {
+        ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkProductExist",productDTO);
+        if(rs.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
+
+    public ResponseProductDetailForm getProductStatus(ProductDTO productDTO) {
+        return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductStatus",productDTO);
+    }
+
+    public boolean checkAnyStackHaveProduct(ProductDTO productDTO) {
+        ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkAnyStackHaveProduct",productDTO);
+        if(rs.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean changeStatus(ProductDTO productDTO) {
+        if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.changeStatus",productDTO) > 0){
+            this.sqlSession.commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateInfo(ProductDTO productDTO) {
+        if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.updateInfo",productDTO) > 0){
+            this.sqlSession.commit();
+            return true;
+        }
+        return false;
+    }
 }
