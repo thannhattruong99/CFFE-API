@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("admin")
 public class CameraController {
     private static final String MSG_009 = "MSG-009";
-    private static final String MSG_063 = "MSG-063";
+    private static final String MSG_020 = "MSG-020";
 
     @Autowired
     private CameraService cameraService;
@@ -51,7 +51,7 @@ public class CameraController {
         ResponseCameraListForm responseForm = cameraService.getCameraList(requestForm);
         if(responseForm == null){
             List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_063);
+            errorCodes.add(MSG_020);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
 
