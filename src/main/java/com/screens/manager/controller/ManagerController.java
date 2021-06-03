@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("admin")
+@SecurityRequirement(name = "basicAuth")
 public class ManagerController {
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_063 = "MSG-063";
@@ -26,7 +27,6 @@ public class ManagerController {
     @Autowired
     private ManagerService managerService;
 
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "basicAuth"))
     @RequestMapping(value = "/managers", method = RequestMethod.GET)
     public String getManagers(@Validated RequestManagerListForm requestManagerListForm, //
                              BindingResult result) {
