@@ -36,6 +36,10 @@
         <typeAlias alias="ShelfDTO" type="com.screens.shelf.dto.ShelfDTO"/>
         <typeAlias alias="CameraDTO" type="com.screens.camera.dto.CameraDTO"/>
         <typeAlias alias="StackDTO" type="com.screens.stack.dto.StackDTO"/>
+        <typeAlias alias="ProductDTO" type="com.screens.product.dto.ProductDTO"/>
+        <typeAlias alias="ResponseProductDetailForm" type="com.screens.product.form.ResponseProductDetailForm"/>
+        <typeAlias alias="ResponseProductListForm" type="com.screens.product.form.ResponseProductListForm"/>
+        <typeAlias alias="CategoryResonseSupporter" type="com.screens.product.form.CategoryResonseSupporter"/>
     </typeAliases>
 
     <environments default="development">
@@ -58,5 +62,6 @@
         <mapper resource="com/screens/camera/dao/sql/CameraDAO.xml"/>
         <mapper resource="com/screens/stack/dao/sql/StackDAO.xml"/>
         <mapper resource="com/screens/category/dao/sql/CategoryDAO.xml"/>
+        <mapper resource="com/screens/product/dao/sql/ProductDAO.xml"/>
     </mappers>
 </configuration>

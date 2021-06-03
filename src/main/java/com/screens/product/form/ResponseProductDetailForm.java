@@ -1,23 +1,21 @@
-package com.screens.stack.form;
-
-import com.screens.product.form.CategoryResonseSupporter;
+package com.screens.product.form;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class ProductResponseSupporter implements Serializable {
+public class ResponseProductDetailForm implements Serializable {
     private String productId;
     private String productName;
     private String imageUrl;
     private String description;
-    private String createTime;
-    private String updateTime;
+    private String createdTime;
+    private String updatedTime;
     private String reasonInactive;
     private int statusId;
     private String statusName;
     private List<CategoryResonseSupporter> categories;
 
-    public ProductResponseSupporter() {
+    public ResponseProductDetailForm() {
     }
 
     public List<CategoryResonseSupporter> getCategories() {
@@ -26,14 +24,6 @@ public class ProductResponseSupporter implements Serializable {
 
     public void setCategories(List<CategoryResonseSupporter> categories) {
         this.categories = categories;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getProductId() {
@@ -52,6 +42,14 @@ public class ProductResponseSupporter implements Serializable {
         this.productName = productName;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -60,20 +58,20 @@ public class ProductResponseSupporter implements Serializable {
         this.description = description;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public String getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getReasonInactive() {

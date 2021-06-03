@@ -6,11 +6,20 @@ public class CameraListResponseSupporter {
     private String imagerURL;
     private String ipAddress;
     private String storeId;
+    private String storeName;
     private String updatedTime;
     private int statusId;
     private String statusName;
 
     public CameraListResponseSupporter() {
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public String getCameraId() {

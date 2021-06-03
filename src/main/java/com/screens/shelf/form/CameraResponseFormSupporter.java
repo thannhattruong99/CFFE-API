@@ -2,6 +2,7 @@ package com.screens.shelf.form;
 
 public class CameraResponseFormSupporter {
     private String cameraId;
+    private String ipAddress;;
     private String cameraName;
     private String imageURL;
     private String rtspString;
@@ -9,6 +10,14 @@ public class CameraResponseFormSupporter {
     private String updatedTime;
 
     public CameraResponseFormSupporter() {
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public String getCameraId() {

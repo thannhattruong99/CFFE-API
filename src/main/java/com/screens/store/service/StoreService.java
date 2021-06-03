@@ -36,6 +36,17 @@ public class StoreService extends BaseService {
         return responseStoreListForm;
     }
 
+    public ResponseStoreListForm getStoreListShort(RequestGetStoreListShort requestForm){
+        ResponseStoreListForm responseStoreListForm = null;
+        StoreDTO storeDTO = new StoreDTO();
+        try {
+            responseStoreListForm = storeMapper.getStoreListShort(storeDTO);
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+        }
+        return responseStoreListForm;
+    }
+
     public ResponseStoreDetailForm getStoreDetail(RequestGetStoreDetailForm requestForm) {
         ResponseStoreDetailForm responseStoreDetailForm = null;
         StoreDTO storeDTO = convertGetStoreDetailFormToDTO(requestForm);

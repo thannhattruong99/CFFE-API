@@ -173,6 +173,7 @@
         <collection property="cameras" ofType="CameraResponseFormSupporter">
             <id property="cameraId" column="CameraId"/>
             <result property="cameraName" column="CameraName"/>
+            <result property="ipAddress" column="IPAddress"/>
             <result property="imageURL" column="ImageURL"/>
             <result property="rtspString" column="RTSPString"/>
             <result property="createdTime" column="CMCreatedTime"/>
