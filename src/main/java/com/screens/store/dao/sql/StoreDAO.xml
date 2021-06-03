@@ -119,6 +119,42 @@
         </collection>
     </resultMap>
 
+    <select id="getStoreListShort" resultMap="getStoreListShort" useCache="false">
+        SELECT
+        SUPQUE.totalOfRecord,
+        S.StoreId,
+        S.StoreName
+        FROM tblStore S,
+            (SELECT COUNT(*) AS totalOfRecord
+            FROM tblStore S
+            WHERE S.statusId = 1 OR S.statusId = 2
+            ) AS SUPQUE
+        WHERE S.statusId = 1 OR S.statusId = 2
+        ORDER BY
+        S.StoreName
+    </select>
+
+    <resultMap id="getStoreListShort" type="ResponseStoreListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreResponseSupporter">
+            <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <result property="imageUrl" column="ImageURL"/>
+            <result property="managerUsername" column="Username"/>
+            <result property="managerUserId" column="UserId"/>
+            <result property="address" column="Address"/>
+            <result property="cityName" column="CityName"/>
+            <result property="cityId" column="CityId"/>
+            <result property="districtName" column="DistrictName"/>
+            <result property="districtId" column="DistrictId"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="status" column="StatusName"/>
+            <result property="analyzedTime" column="AnalyzedTime"/>
+            <result property="reasonInactive" column="ReasonInactive"/>
+        </collection>
+    </resultMap>
+
     <select id="getStoreDetail" resultMap="getStoreDetail" useCache="false">
         SELECT S.StoreId,
                S.StoreName,

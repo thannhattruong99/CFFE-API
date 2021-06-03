@@ -136,6 +136,26 @@
         </collection>
     </resultMap>
 
+    <insert id="createProduct"  parameterType="ProductDTO">
+        <selectKey keyProperty="productId" resultType="String" order="BEFORE">
+            SELECT UUID() AS productId FROM tblProduct LIMIT 1
+        </selectKey>
+        INSERT INTO tblProduct (ProductId,ProductName, ImageURL, Description, CreatedTime,
+                              UpdatedTime, StatusId)
+        VALUES (#{productId} ,#{productName},
+                #{imageUrl},
+                #{description},
+                convert_tz(now(),@@session.time_zone,'+07:00'),
+                convert_tz(now(),@@session.time_zone,'+07:00'),
+                #{statusId})
+    </insert>
+
+    <insert id="productAddCategory" parameterType="ProductDTO">
+        INSERT INTO tblProductCategoryMapping (ProductId,CategoryId) values
+        <foreach collection="categories" item="element" index="index" open="(" separator="),("  close=")">
+              #{productId},#{element}
+        </foreach>
+    </insert>
 
 </mapper>
 

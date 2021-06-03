@@ -26,8 +26,12 @@ public class ProductMapper extends BaseDAO {
 
     public boolean createProduct(ProductDTO productDTO) {
         if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.createProduct",productDTO) > 0){
-            this.sqlSession.commit();
-            return true;
+            System.out.println("id =========== "+productDTO.getProductId());
+//            this.sqlSession.commit();
+            if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.productAddCategory",productDTO) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
         }
         return false;
     }

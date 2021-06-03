@@ -18,6 +18,10 @@ public class StoreMapper extends BaseDAO {
         return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreList",storeDTO);
     }
 
+    public ResponseStoreListForm getStoreListShort(StoreDTO storeDTO) {
+        return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreListShort",storeDTO);
+    }
+
     public ResponseStoreDetailForm getStoreDetail(StoreDTO storeDTO) {
         return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreDetail",storeDTO);
     }
