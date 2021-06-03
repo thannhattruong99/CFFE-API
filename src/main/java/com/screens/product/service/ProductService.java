@@ -1,16 +1,16 @@
 package com.screens.product.service;
 
+import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.screens.product.dao.mapper.ProductMapper;
 import com.screens.product.dto.ProductDTO;
-import com.screens.product.form.RequestGetProductDetailForm;
-import com.screens.product.form.RequestGetProductListForm;
-import com.screens.product.form.ResponseProductDetailForm;
-import com.screens.product.form.ResponseProductListForm;
+import com.screens.product.form.*;
 import com.screens.store.dto.StoreDTO;
+import com.screens.store.form.RequestCreateStoreForm;
 import com.screens.store.form.RequestGetStoreListForm;
 import com.screens.store.form.ResponseStoreListForm;
 import com.screens.store.service.StoreService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +46,32 @@ public class ProductService extends BaseService {
         }
         return responseProductListForm;
     }
+
+    public ResponseCommonForm createProduct(RequestCreateProductForm requestForm) {
+        ResponseCommonForm response = new ResponseCommonForm();
+        ProductDTO productDTO = convertCreateProductFormToDTO(requestForm);
+        try {
+            productMapper.createProduct(productDTO);
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+            response.setErrorCodes(catchSqlException(e.getMessage()));
+        }
+        return response;
+    }
+
+    private ProductDTO convertCreateProductFormToDTO(RequestCreateProductForm requestForm) {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductName(requestForm.getProductName());
+        if (StringUtils.isNotEmpty(requestForm.getDescription()))
+            productDTO.setDescription(requestForm.getDescription());
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            productDTO.setImageUrl(requestForm.getImageUrl());
+        if (requestForm.getCategories().size() > 0)
+            productDTO.setCategories(requestForm.getCategories());
+        productDTO.setStatusId(ACTIVE_STATUS);
+        return productDTO;
+    }
+
 
     private ProductDTO converGetProductDetailFormToDTO(RequestGetProductDetailForm requestForm){
         ProductDTO productDTO = new ProductDTO();

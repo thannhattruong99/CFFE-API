@@ -45,6 +45,24 @@ public class StoreController {
         return ResponseSupporter.resonpseResult(responseStoreListForm);
     }
 
+    @GetMapping(value = "/admin/operation-stores")
+    public String getStoreListShort(@Validated RequestGetStoreListShort requestForm,
+                               BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Get/Search Store
+        ResponseStoreListForm responseStoreListForm = storeService.getStoreListShort(requestForm);
+        if(responseStoreListForm == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(responseStoreListForm);
+    }
+
     @GetMapping(value = "/admin/store")
     public String getStoreDetail(
                                @Validated RequestGetStoreDetailForm requestForm,

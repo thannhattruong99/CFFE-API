@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,21 +64,22 @@ public class ProductController {
         return ResponseSupporter.resonpseResult(res);
     }
 
-//    public String createProduct(
-//            @Validated @RequestBody RequestCreateProductForm requestForm,
-//            BindingResult result) throws IOException {
-//        // Check Validate
-//        if(result.hasErrors()){
-//            return ResponseSupporter.responseErrorResult(result);
-//        }
-//
-//        // Do Create Product
-//        ResponseCommonForm rs = storeService.createStore(requestForm);
-//        if(rs.getErrorCodes() != null){
-//            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
-//        }
-//        // Return result
-//        return ResponseSupporter.resonpseResult(true);
-//    }
+    @PostMapping(value = "/admin/product/create")
+    public String createProduct(
+            @Validated @RequestBody RequestCreateProductForm requestForm,
+            BindingResult result) throws IOException {
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        // Do Create Product
+        ResponseCommonForm rs = productService.createProduct(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
 
 }
