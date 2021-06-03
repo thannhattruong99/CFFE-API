@@ -6,6 +6,7 @@ public class ResponseCameraDetailForm {
     private String imageUrl;
     private String ipAddress;
     private int typeDetect;
+    private String updatedTime;
     private int statusId;
     private String statusName;
     private String stackId;
@@ -13,8 +14,34 @@ public class ResponseCameraDetailForm {
     private String shelfId;
     private String shelfName;
     private String addedCameraTime;
+    private String storeId;
+    private String storeName;
 
     public ResponseCameraDetailForm() {
+    }
+
+    public String getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public String getCameraId() {
