@@ -40,81 +40,107 @@
     </resultMap>
 
     <select id="getProductList" resultMap="getProductList" useCache="false">
-        SELECT S.ProductId,
-               CC.CategoryId,
-               CN.CategoryName,
-               S.ProductName,
-               S.ImageURL,
-               S.Description,
-               S.CreatedTime,
-               S.UpdatedTime,
-               S.ReasonInactive,
-               S.StatusId,
-               TS.StatusName,
-               TT.totalOfRecord
-        FROM tblProduct S
-                 LEFT JOIN tblProductCategoryMapping CC ON(S.ProductId = CC.ProductId)
-                 LEFT JOIN tblCategory CN ON(CC.CategoryId = CN.CategoryId)
-                 LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId),
-                (
-                    SELECT COUNT(S.ProductId) AS totalOfRecord
-                    FROM tblProduct S
+        SELECT  A1.CategoryId,
+                CN.CategoryName,
+                A2.*
+        FROM
+            tblProductCategoryMapping A1
+            RIGHT JOIN(
+                SELECT  S.ProductId,
+                        S.ProductName,
+                        S.ImageURL,
+                        S.Description,
+                        S.CreatedTime,
+                        S.UpdatedTime,
+                        S.ReasonInactive,
+                        S.StatusId,
+                        TS.StatusName,
+                        TT.totalOfRecord
+                FROM tblProduct S
+                        LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
                         <if test="categoryId != 0">
                             LEFT JOIN tblProductCategoryMapping CC ON(S.ProductId = CC.ProductId)
-                            LEFT JOIN tblCategory CN ON(CC.CategoryId = CN.CategoryId)
-                        </if>
-                        LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
-                    <where>
-                        <if test="searchValue != null">
-                            <choose>
-                                <when test="searchField == 'productname'">
-                                    S.ProductName LIKE '%' #{searchValue} '%'
-                                </when>
-                                <otherwise>
-                                    S.ProductName LIKE '%' #{searchValue} '%'
-                                </otherwise>
-                            </choose>
-                        </if>
+                        </if>,
+                        (
+                            SELECT COUNT(S.ProductId) AS totalOfRecord
+                            FROM tblProduct S
+                                <if test="categoryId != 0">
+                                LEFT JOIN tblProductCategoryMapping CC ON(S.ProductId = CC.ProductId)
+                                </if>
+                            <where>
+                                <if test="searchValue != null">
+                                    <choose>
+                                        <when test="searchField == 'productname'">
+                                            S.ProductName LIKE '%' #{searchValue} '%'
+                                        </when>
+                                        <otherwise>
+                                            S.ProductName LIKE '%' #{searchValue} '%'
+                                        </otherwise>
+                                    </choose>
+                                </if>
+                                <choose>
+                                    <when test="statusId != 0">
+                                        AND S.StatusId = #{statusId}
+                                    </when>
+                                </choose>
+                                <choose>
+                                    <when test="categoryId != 0">
+                                        AND CC.CategoryId = #{categoryId}
+                                    </when>
+                                </choose>
+                            </where>
+                        ) TT
+                <where>
+                    <if test="searchValue != null">
                         <choose>
-                            <when test="statusId != 0">
-                                AND S.StatusId = #{statusId}
+                            <when test="searchField == 'productname'">
+                                S.ProductName LIKE '%' #{searchValue} '%'
                             </when>
+                            <otherwise>
+                                S.ProductName LIKE '%' #{searchValue} '%'
+                            </otherwise>
                         </choose>
-                        <choose>
-                            <when test="categoryId != 0">
-                                AND CC.CategoryId = #{categoryId}
-                            </when>
-                        </choose>
-                    </where>
-
-        ) TT
+                    </if>
+                    <choose>
+                        <when test="statusId != 0">
+                            AND S.StatusId = #{statusId}
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test="categoryId != 0">
+                            AND CC.CategoryId = #{categoryId}
+                        </when>
+                    </choose>
+                </where>
+                ORDER BY
+                    S.ProductName
+                LIMIT
+                    #{offSet},
+                    #{fetchNext}
+                ) A2 ON (A1.ProductId = A2.ProductId)
+            LEFT JOIN tblCategory CN ON(A1.CategoryId = CN.CategoryId)
         <where>
             <if test="searchValue != null">
                 <choose>
                     <when test="searchField == 'productname'">
-                        S.ProductName LIKE '%' #{searchValue} '%'
+                        A2.ProductName LIKE '%' #{searchValue} '%'
                     </when>
                     <otherwise>
-                        S.ProductName LIKE '%' #{searchValue} '%'
+                        A2.ProductName LIKE '%' #{searchValue} '%'
                     </otherwise>
                 </choose>
             </if>
             <choose>
                 <when test="statusId != 0">
-                    AND S.StatusId = #{statusId}
+                    AND A2.StatusId = #{statusId}
                 </when>
             </choose>
             <choose>
                 <when test="categoryId != 0">
-                    AND CC.CategoryId = #{categoryId}
+                    AND A1.CategoryId = #{categoryId}
                 </when>
             </choose>
         </where>
-        ORDER BY
-        S.ProductName
-        LIMIT
-        #{offSet},
-        #{fetchNext}
     </select>
 
     <resultMap id="getProductList" type="ResponseProductListForm">
@@ -157,6 +183,31 @@
         </foreach>
     </insert>
 
+    <select id="checkCategoriesValid" resultMap="checkCategoriesValid">
+        SELECT COUNT(CategoryId) AS TotalOfRecord
+        FROM tblCategory
+        WHERE CategoryId IN
+            <foreach collection="categories" item="element" index="index" open="(" separator=","  close=")">
+                #{element}
+            </foreach>
+    </select>
+
+    <resultMap id="checkCategoriesValid" type="ProductDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <delete id="removeCategories" parameterType="ProductDTO">
+        DELETE FROM tblProductCategoryMapping
+        WHERE ProductId = #{productId}
+    </delete>
+
+    <insert id="addCategories" parameterType="ProductDTO">
+        INSERT INTO tblProductCategoryMapping (ProductId,CategoryId) values
+        <foreach collection="categories" item="element" index="index" open="(" separator="),("  close=")">
+            #{productId},#{element}
+        </foreach>
+    </insert>
+
     <select id="checkProductExist" resultMap="checkProductExist">
         SELECT COUNT(ProductId) AS TotalOfRecord
         FROM tblProduct
@@ -184,6 +235,8 @@
     <resultMap id="checkAnyStackHaveProduct" type="ProductDTO">
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
+
+
 
     <update id="changeStatus" parameterType="ProductDTO">
         UPDATE tblProduct

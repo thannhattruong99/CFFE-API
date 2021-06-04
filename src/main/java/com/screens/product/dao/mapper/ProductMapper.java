@@ -56,6 +56,12 @@ public class ProductMapper extends BaseDAO {
         return true;
     }
 
+    public int checkCategoriesValid(ProductDTO productDTO) {
+        ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkCategoriesValid",productDTO);
+        System.out.println("===========" + rs.getTotalOfRecord());
+        return rs.getTotalOfRecord();
+    }
+
     public boolean changeStatus(ProductDTO productDTO) {
         if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.changeStatus",productDTO) > 0){
             this.sqlSession.commit();
@@ -68,6 +74,17 @@ public class ProductMapper extends BaseDAO {
         if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.updateInfo",productDTO) > 0){
             this.sqlSession.commit();
             return true;
+        }
+        return false;
+    }
+
+    public boolean addCategories(ProductDTO productDTO) {
+        if(sqlSession.delete("com.screens.product.dao.sql.ProductDAO.removeCategories",productDTO) > 0){
+            if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.addCategories",productDTO) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+
         }
         return false;
     }

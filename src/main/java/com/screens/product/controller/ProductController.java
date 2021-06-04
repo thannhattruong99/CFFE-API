@@ -104,8 +104,24 @@ public class ProductController {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-        // Do Update Infomation Store
+        // Do Update Infomation Stack
         ResponseCommonForm responseForm = productService.updateProductInfo(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+        // Return result
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @PostMapping(value = "/admin/product/update-category")
+    public String updateCategory(@Validated @RequestBody RequestUpdateCategoryForm requestForm,
+                                    BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Update Category
+        ResponseCommonForm responseForm = productService.updateCategory(requestForm);
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }

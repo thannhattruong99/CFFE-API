@@ -112,6 +112,48 @@ public class ProductService extends BaseService {
         }
         return response;
     }
+
+    public ResponseCommonForm updateCategory(RequestUpdateCategoryForm requestForm) {
+        ResponseCommonForm response = new ResponseCommonForm();
+        ProductDTO productDTO = convertUpdateCategoryFormToDTO(requestForm);
+        try {
+            // Check empty
+            if ((productDTO.getCategories() == null)||(productDTO.getCategories().size() <= 0)
+            ||(productDTO.getCategories().size() >3)) {
+                List<String> errorMsg = new ArrayList<>();
+                errorMsg.add("MSG-103");
+                response.setErrorCodes(errorMsg);
+            }
+            //check product
+            else if (!(productMapper.checkProductExist(productDTO))) {
+                List<String> errorMsg = new ArrayList<>();
+                errorMsg.add("MSG-023");
+                response.setErrorCodes(errorMsg);
+            }
+            // check cate valid
+            else if (productMapper.checkCategoriesValid(productDTO) != productDTO.getCategories().size()){
+                List<String> errorMsg = new ArrayList<>();
+                errorMsg.add("MSG-104");
+                response.setErrorCodes(errorMsg);
+            }
+            else {
+                // add moi
+                productMapper.addCategories(productDTO);
+            }
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+            response.setErrorCodes(catchSqlException(e.getMessage()));
+        }
+        return response;
+    }
+
+    private ProductDTO convertUpdateCategoryFormToDTO(RequestUpdateCategoryForm requestForm) {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductId(requestForm.getProductId());
+        productDTO.setCategories(requestForm.getCategories());
+        return productDTO;
+    }
+
     private ProductDTO convertUpdateInfoProductFormToDTO(RequestUpdateInfoProductForm requestForm) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setProductId(requestForm.getProductId());

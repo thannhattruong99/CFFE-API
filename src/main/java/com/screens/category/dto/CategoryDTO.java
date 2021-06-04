@@ -1,8 +1,10 @@
 package com.screens.category.dto;
 
+import com.common.dto.BaseDTO;
+
 import java.io.Serializable;
 
-public class CategoryDTO implements Serializable {
+public class CategoryDTO extends BaseDTO implements Serializable {
     private int categoryId;
     private String categoryName;
     private int statusId;

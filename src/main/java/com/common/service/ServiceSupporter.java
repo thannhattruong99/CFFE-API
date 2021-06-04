@@ -4,7 +4,7 @@ public enum ServiceSupporter {
     MSG_055("Duplicate entry Email","MSG-055"),
     MSG_056("Duplicate entry IdentifyCard","MSG-056"),
     MSG_057("Duplicate entry IPAddress","MSG-057"),
-    MSG_058("Duplicate entry RTSP String","MSG-058"),
+    MSG_058("Duplicate entry RTSPString","MSG-058"),
     MSG_059("Duplicate entry CategoryName","MSG-059"),
     MSG_060("Duplicate entry ProductName","MSG-060"),
     MSG_061("Duplicate entry ShelfName","MSG-061"),

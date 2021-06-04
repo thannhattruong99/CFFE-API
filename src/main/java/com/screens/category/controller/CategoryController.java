@@ -2,7 +2,9 @@ package com.screens.category.controller;
 
 
 import com.screens.category.form.RequestGetCategoryDetailForm;
+import com.screens.category.form.RequestGetCategoryListForm;
 import com.screens.category.form.ResponseCategoryDetailForm;
+import com.screens.category.form.ResponseCategoryListForm;
 import com.screens.category.service.CategoryService;
 import com.screens.stack.form.RequestGetStackDetailForm;
 import com.screens.stack.form.ResponseStackDetailForm;
@@ -23,8 +25,9 @@ public class CategoryController {
     private CategoryService categoryService;
 
     private static final String MSG_029 = "MSG-029";
+    private static final String MSG_009 = "MSG-009";
 
-    @GetMapping(value = "/admin/manager/category")
+    @GetMapping(value = "/admin/category")
     public String getCategoryDetail(
             @Validated RequestGetCategoryDetailForm requestForm,
             BindingResult result){
@@ -41,6 +44,22 @@ public class CategoryController {
         }
         // Return result
         return ResponseSupporter.resonpseResult(responseCategoryDetailForm);
+    }
+
+    @GetMapping(value = "/admin/categories")
+    public String getCategoryList(
+            @Validated RequestGetCategoryListForm requestForm,
+            BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        ResponseCategoryListForm res = categoryService.getCategoryList(requestForm);
+        if(res == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        return ResponseSupporter.resonpseResult(res);
     }
 
 }
