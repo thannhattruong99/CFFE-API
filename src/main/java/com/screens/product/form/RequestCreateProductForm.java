@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class RequestCreateProductForm implements Serializable {
-    @NotEmpty
+    @NotEmpty(message = "MSG-099")
     private String ProductName;
     @Nullable
     private String imageUrl;
