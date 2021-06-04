@@ -296,6 +296,7 @@
             <result property="storeName" column="StoreName"/>
             <result property="statusId" column="StatusId"/>
             <result property="statusName" column="StatusName"/>
+            <result property="updatedTime" column="UpdatedTime"/>
         </collection>
     </resultMap>
     <resultMap id="getCameraStatusById" type="CameraDTO">
