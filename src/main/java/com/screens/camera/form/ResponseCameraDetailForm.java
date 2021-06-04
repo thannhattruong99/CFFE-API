@@ -5,10 +5,13 @@ public class ResponseCameraDetailForm {
     private String cameraName;
     private String imageUrl;
     private String ipAddress;
+    private String rtspString;
     private int typeDetect;
     private String updatedTime;
+    private String createdTime;
     private int statusId;
     private String statusName;
+    private String reasonInactive;
     private String stackId;
     private int position;
     private String shelfId;
@@ -16,8 +19,41 @@ public class ResponseCameraDetailForm {
     private String addedCameraTime;
     private String storeId;
     private String storeName;
+    private String storeImage;
 
     public ResponseCameraDetailForm() {
+    }
+
+    public String getReasonInactive() {
+        return reasonInactive;
+    }
+
+    public void setReasonInactive(String reasonInactive) {
+        this.reasonInactive = reasonInactive;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getRtspString() {
+        return rtspString;
+    }
+
+    public void setRtspString(String rtspString) {
+        this.rtspString = rtspString;
+    }
+
+    public String getStoreImage() {
+        return storeImage;
+    }
+
+    public void setStoreImage(String storeImage) {
+        this.storeImage = storeImage;
     }
 
     public String getUpdatedTime() {

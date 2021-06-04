@@ -161,7 +161,6 @@ public class CameraService extends BaseService {
         cameraDTO.setImageURL("image/test");
         cameraDTO.setIpAddress(requestForm.getIpAddress());
         cameraDTO.setRtspString(requestForm.getRtspString());
-        cameraDTO.setTypeDetect(requestForm.getTypeDetect());
         cameraDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 

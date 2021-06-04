@@ -23,4 +23,89 @@
         <result property="statusName" column="StatusName"/>
     </resultMap>
 
+    <select id="getCategoryList" resultMap="getCategoryList" useCache="false">
+        SELECT
+            TC.CategoryId,
+            TC.CategoryName,
+            TC.StatusId,
+            TS.StatusName,
+               AA.totalOfRecord
+        FROM
+            tblCategory TC
+                LEFT JOIN tblStatus TS on (TS.StatusId = TC.StatusId),
+            (SELECT COUNT(TC.CategoryId) AS totalOfRecord
+                FROM tblCategory TC
+                <where>
+                    <if test="searchValue != null">
+                        <choose>
+                            <when test="searchField == 'categoryname'">
+                                TC.CategoryName LIKE '%' #{searchValue} '%'
+                            </when>
+                            <otherwise>
+                                TC.CategoryName LIKE '%' #{searchValue} '%'
+                            </otherwise>
+                        </choose>
+                    </if>
+                    <choose>
+                        <when test="statusId != 0">
+                            AND TC.StatusId = #{statusId}
+                        </when>
+                    </choose>
+                </where>
+                )   AA
+        <where>
+            <if test="searchValue != null">
+                <choose>
+                    <when test="searchField == 'categoryname'">
+                        TC.CategoryName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <otherwise>
+                        TC.CategoryName LIKE '%' #{searchValue} '%'
+                    </otherwise>
+                </choose>
+            </if>
+            <choose>
+                <when test="statusId != 0">
+                    AND TC.StatusId = #{statusId}
+                </when>
+            </choose>
+        </where>
+        ORDER BY
+            TC.CategoryName
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+    <resultMap id="getCategoryList" type="ResponseCategoryListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="categories" ofType="ResponseCategoryDetailForm">
+            <result property="categoryId" column="CategoryId"/>
+            <result property="categoryName" column="CategoryName"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="statusName" column="StatusName"/>
+        </collection>
+    </resultMap>
+
+    <insert id="createCategory"  parameterType="CategoryDTO">
+        INSERT INTO tblCategory (CategoryName,StatusId)
+        VALUES (#{categoryName},#{statusId})
+    </insert>
+
+    <select id="checkProduct" resultMap="checkProduct">
+        SELECT COUNT(ProductCategoryMappingId) AS TotalOfRecord
+        FROM tblProductCategoryMapping
+        WHERE CategoryId = #{categoryId}
+    </select>
+
+    <resultMap id="checkProduct" type="CategoryDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <update id="changeStatus" parameterType="CategoryDTO">
+        UPDATE tblCategory
+        SET StatusId = #{statusId}
+        WHERE CategoryId = #{categoryId}
+    </update>
+
 </mapper>
