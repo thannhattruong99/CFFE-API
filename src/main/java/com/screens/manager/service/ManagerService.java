@@ -238,7 +238,6 @@ public class ManagerService extends BaseService {
             managerDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
         }
 
-
         managerDTO.setFetchNext(DEFAULT_FETCH_NEXT);
         if(requestForm.getFetchNext() > 0){
             managerDTO.setFetchNext(requestForm.getFetchNext());
