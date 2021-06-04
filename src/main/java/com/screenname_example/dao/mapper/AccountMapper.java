@@ -17,4 +17,9 @@ public class AccountMapper extends BaseDAO {
         return result;
     }
 
+    public AccountDTO login(JwtRequest request){
+        AccountDTO result = sqlSession.selectOne("AccountDAO.login", request);
+        return result;
+    }
+
 }

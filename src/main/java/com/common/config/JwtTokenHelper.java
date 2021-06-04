@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.screenname_example.dto.AccountDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -52,6 +53,11 @@ public class JwtTokenHelper implements Serializable {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return doGenerateToken(claims, userDetails.getUsername());
+    }
+
+    public String generateToken(AccountDTO accountDTO) {
+        Map<String, Object> claims = new HashMap<>();
+        return doGenerateToken(claims, accountDTO.getUserName());
     }
 
     //while creating the token -
