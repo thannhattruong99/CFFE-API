@@ -28,7 +28,7 @@ public class ManagerController {
     @Autowired
     private ManagerService managerService;
 
-    @ApiResponse(responseCode = "200", description = "This is ok indeed" )
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/managers", method = RequestMethod.GET)
     public String getManagers(@Validated RequestManagerListForm requestManagerListForm, //
                              BindingResult result) {

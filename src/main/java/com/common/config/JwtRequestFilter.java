@@ -3,6 +3,7 @@ package com.common.config;
 import com.screenname_example.service.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +31,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String username = null;
         String jwtToken = null;
+        String uri = request.getRequestURI();
+        System.out.println("URI: " + uri);
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
@@ -41,8 +44,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
             }
-        } else {
-            logger.warn("JWT Token does not begin with Bearer String");
+        }
+//        else if(uri.contains("/swagger-ui/index.html") || uri.contains("/api-docs") || uri.contains("/api-docs/swagger-config") || uri.contains("/authenticate")){
+//            logger.warn("Init page openai");
+//        }
+        else{
+                logger.warn("Init page openai");
+//            response.setHeader("Authorization", "Unauthorized");
+//            return;
         }
 
         // Once we get the token validate it.
@@ -62,6 +71,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 // that the current user is authenticated. So it passes the
                 // Spring Security Configurations successfully.
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }else {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
             }
         }
         filterChain.doFilter(request, response);

@@ -16,8 +16,17 @@ public class ResponseCameraDetailForm {
     private String addedCameraTime;
     private String storeId;
     private String storeName;
+    private String storeImage;
 
     public ResponseCameraDetailForm() {
+    }
+
+    public String getStoreImage() {
+        return storeImage;
+    }
+
+    public void setStoreImage(String storeImage) {
+        this.storeImage = storeImage;
     }
 
     public String getUpdatedTime() {
