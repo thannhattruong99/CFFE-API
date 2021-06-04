@@ -3,7 +3,7 @@ package com.screens.camera.form;
 public class CameraListResponseSupporter {
     private String cameraId;
     private String cameraName;
-    private String imagerURL;
+    private String imageURL;
     private String ipAddress;
     private String storeId;
     private String storeName;
@@ -38,12 +38,12 @@ public class CameraListResponseSupporter {
         this.cameraName = cameraName;
     }
 
-    public String getImagerURL() {
-        return imagerURL;
+    public String getImageURL() {
+        return imageURL;
     }
 
-    public void setImagerURL(String imagerURL) {
-        this.imagerURL = imagerURL;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getIpAddress() {
