@@ -9,16 +9,16 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class RequestCreateStoreForm implements Serializable {
-    @NotEmpty
+    @NotEmpty(message = "MSG-106")
     private String storeName;
 
     @Nullable
     private MultipartFile imageUrl;
 
-    @NotEmpty
+    @NotEmpty(message = "MSG-107")
     private String address;
 
-    @NotEmpty
+    @NotEmpty(message = "MSG-108")
     private String analyzedTime;
 
     @NotNull

@@ -1,21 +1,22 @@
 package com.screens.category.service;
 
+import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.screens.category.dao.mapper.CategoryMapper;
 import com.screens.category.dto.CategoryDTO;
-import com.screens.category.form.RequestGetCategoryDetailForm;
-import com.screens.category.form.RequestGetCategoryListForm;
-import com.screens.category.form.ResponseCategoryDetailForm;
-import com.screens.category.form.ResponseCategoryListForm;
+import com.screens.category.form.*;
 import com.screens.store.dto.StoreDTO;
-import com.screens.store.form.RequestGetStoreListForm;
-import com.screens.store.form.ResponseStoreListForm;
+import com.screens.store.form.*;
 import com.screens.store.service.StoreService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CategoryService extends BaseService {
@@ -40,11 +41,74 @@ public class CategoryService extends BaseService {
         ResponseCategoryListForm responseStoreListForm = null;
         CategoryDTO categoryDTO = converGetCategoryListFormToDTO(requestForm);
         try {
-//            responseStoreListForm = categoryMapper.getCategoryList(categoryDTO);
+            responseStoreListForm = categoryMapper.getCategoryList(categoryDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
         }
         return responseStoreListForm;
+    }
+
+    public ResponseCommonForm createCategory(RequestCreateCategoryForm requestForm) {
+        ResponseCommonForm response = new ResponseCommonForm();
+        CategoryDTO categoryDTO = convertCreateCategoryFormToDTO(requestForm);
+        try {
+            categoryMapper.createCategory(categoryDTO);
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+            response.setErrorCodes(catchSqlException(e.getMessage()));
+        }
+        return response;
+    }
+
+    public ResponseCommonForm changeStatus(RequestChangeCategoryStatusForm requestForm) {
+        ResponseCommonForm response = new ResponseCommonForm();
+        CategoryDTO categoryDTO = convertChangeStatusFormToDTO(requestForm);
+        try {
+            ResponseCategoryDetailForm res = categoryMapper.getCategoryDetail(categoryDTO);
+            if (res == null) {
+                List<String> errorMsg = new ArrayList<>();
+                errorMsg.add("MSG-029");
+                response.setErrorCodes(errorMsg);
+            } else {
+                if ((res.getStatusId() == 1) && (categoryDTO.getStatusId() == 2)) {
+                    System.out.println("ACTION: CATEGORY ACTIVE => INACTIVE");
+                    //check co ton tai PRODUCT nao hay khong
+                    if (!categoryMapper.checkHaveProductUsing(categoryDTO)) {
+                        categoryMapper.changeStatus(categoryDTO);
+                    } else {
+                        List<String> errorMsg = new ArrayList<>();
+                        errorMsg.add("MSG-109");
+                        response.setErrorCodes(errorMsg);
+                    }
+                } else if ((res.getStatusId() == 2) && (categoryDTO.getStatusId() == 1)) {
+                    System.out.println("ACTION: CATEGORY INACTIVE => ACTIVE");
+                    categoryMapper.changeStatus(categoryDTO);
+                } else {
+                    List<String> errorMsg = new ArrayList<>();
+                    errorMsg.add("MSG-110");
+                    response.setErrorCodes(errorMsg);
+                }
+            }
+
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+            response.setErrorCodes(catchSqlException(e.getMessage()));
+        }
+        return response;
+    }
+
+    private CategoryDTO convertChangeStatusFormToDTO(RequestChangeCategoryStatusForm requestForm){
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setCategoryId(requestForm.getCategoryId());
+        categoryDTO.setStatusId(requestForm.getStatusId());
+        return categoryDTO;
+    }
+
+    private CategoryDTO convertCreateCategoryFormToDTO(RequestCreateCategoryForm requestForm) {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setCategoryName(requestForm.getCategoryName());
+        categoryDTO.setStatusId(ACTIVE_STATUS);
+        return categoryDTO;
     }
 
     private CategoryDTO converGetCategoryListFormToDTO(RequestGetCategoryListForm requestForm){
