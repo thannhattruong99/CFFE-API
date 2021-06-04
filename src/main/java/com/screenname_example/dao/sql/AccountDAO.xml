@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AccountDAO">
+    <select id="getAccountInformation" resultMap="getAccountInformation">
+        SELECT U.UserName, U.FullName, U.Password, USM.StoreId
+        FROM tblUser U
+        LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserId AND USM.StatusId = 1
+        WHERE U.UserName = #{username}
+    </select>
+    <resultMap id="getAccountInformation" type="AccountDTO">
+        <result property="userName" column="UserName"/>
+        <result property="fullName" column="FullName"/>
+        <result property="password" column="Password"/>
+        <result property="storeId" column="StoreId"/>
+    </resultMap>
+</mapper>

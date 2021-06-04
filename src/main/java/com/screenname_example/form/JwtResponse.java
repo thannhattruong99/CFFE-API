@@ -1,4 +1,4 @@
-package com.common.model;
+package com.screenname_example.form;
 
 import java.io.Serializable;
 

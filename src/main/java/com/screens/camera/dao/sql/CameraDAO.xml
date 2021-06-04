@@ -25,8 +25,7 @@
         (SELECT DISTINCT(Camera.CameraId) FROM
         (SELECT C.CameraId, C.CameraName, ST.StoreId, C.StatusId
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
-        JOIN tblStackProductCameraMapping
-        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 1
+        JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 1
         JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
         LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
         LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2
@@ -36,8 +35,7 @@
         UNION
         SELECT C.CameraId, C.CameraName, ST2.StoreId, C.StatusId
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
-        LEFT JOIN tblStackProductCameraMapping
-        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
+        LEFT JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
         LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
         LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
         LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2
@@ -46,8 +44,7 @@
         LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2
         WHERE C.CameraId NOT IN (SELECT C.CameraId
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
-        JOIN tblStackProductCameraMapping
-        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 1
+        JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 1
         JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
         LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
         LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2
@@ -72,8 +69,7 @@
         (
         SELECT C.CameraId, C.CameraName, C.ImageURL, C.IPAddress, C.TypeDetect, ST.StoreId, ST.StoreName, C.UpdatedTime, C.StatusId, STT.StatusName
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
-        JOIN tblStackProductCameraMapping
-        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 1
+        JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 1
         JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
         LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
         LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2
@@ -83,8 +79,7 @@
         UNION
         SELECT C.CameraId, C.CameraName, C.ImageURL, C.IPAddress, C.TypeDetect, ST2.StoreId, ST2.StoreName,C.UpdatedTime, C.StatusId, STT.StatusName
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
-        LEFT JOIN tblStackProductCameraMapping
-        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
+        LEFT JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
         LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
         LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
         LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2
@@ -93,8 +88,7 @@
         LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2
         WHERE C.CameraId NOT IN (SELECT C.CameraId
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
-        JOIN tblStackProductCameraMapping
-        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 1
+        JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 1
         JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
         LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
         LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2

@@ -40,6 +40,7 @@
         <typeAlias alias="ResponseProductDetailForm" type="com.screens.product.form.ResponseProductDetailForm"/>
         <typeAlias alias="ResponseProductListForm" type="com.screens.product.form.ResponseProductListForm"/>
         <typeAlias alias="CategoryResonseSupporter" type="com.screens.product.form.CategoryResonseSupporter"/>
+        <typeAlias alias="AccountDTO" type="com.screenname_example.dto.AccountDTO"/>
     </typeAliases>
 
     <environments default="development">
@@ -63,5 +64,6 @@
         <mapper resource="com/screens/stack/dao/sql/StackDAO.xml"/>
         <mapper resource="com/screens/category/dao/sql/CategoryDAO.xml"/>
         <mapper resource="com/screens/product/dao/sql/ProductDAO.xml"/>
+        <mapper resource="com/screenname_example/dao/sql/AccountDAO.xml"/>
     </mappers>
 </configuration>

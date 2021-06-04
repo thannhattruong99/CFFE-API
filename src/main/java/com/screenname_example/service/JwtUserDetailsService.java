@@ -1,4 +1,4 @@
-package com.common.service;
+package com.screenname_example.service;
 
 import java.util.ArrayList;
 
