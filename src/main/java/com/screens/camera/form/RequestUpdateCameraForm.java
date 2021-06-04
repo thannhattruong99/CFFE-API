@@ -15,8 +15,6 @@ public class RequestUpdateCameraForm {
     private String ipAddress;
     @NotEmpty(message = "MSG-030")
     private String rtspString;
-    @Min(value = 1, message = "MSG-084") @Max(value = 2, message = "MSG-084")
-    private int typeDetect;
 
     public RequestUpdateCameraForm() {
     }
@@ -62,11 +60,4 @@ public class RequestUpdateCameraForm {
         this.rtspString = rtspString;
     }
 
-    public int getTypeDetect() {
-        return typeDetect;
-    }
-
-    public void setTypeDetect(int typeDetect) {
-        this.typeDetect = typeDetect;
-    }
 }
