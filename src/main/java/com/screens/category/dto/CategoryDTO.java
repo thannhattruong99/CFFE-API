@@ -9,8 +9,17 @@ public class CategoryDTO extends BaseDTO implements Serializable {
     private String categoryName;
     private int statusId;
     private String statusName;
+    private int totalOfRecord;
 
     public CategoryDTO() {
+    }
+
+    public int getTotalOfRecord() {
+        return totalOfRecord;
+    }
+
+    public void setTotalOfRecord(int totalOfRecord) {
+        this.totalOfRecord = totalOfRecord;
     }
 
     public int getCategoryId() {

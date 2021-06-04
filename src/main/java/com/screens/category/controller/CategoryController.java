@@ -1,20 +1,23 @@
 package com.screens.category.controller;
 
 
-import com.screens.category.form.RequestGetCategoryDetailForm;
-import com.screens.category.form.RequestGetCategoryListForm;
-import com.screens.category.form.ResponseCategoryDetailForm;
-import com.screens.category.form.ResponseCategoryListForm;
+import com.common.form.ResponseCommonForm;
+import com.screens.category.form.*;
 import com.screens.category.service.CategoryService;
 import com.screens.stack.form.RequestGetStackDetailForm;
 import com.screens.stack.form.ResponseStackDetailForm;
+import com.screens.store.form.RequestChangeStoreStatusForm;
+import com.screens.store.form.RequestCreateStoreForm;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +63,34 @@ public class CategoryController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         return ResponseSupporter.resonpseResult(res);
+    }
+
+    @PostMapping(value = "/admin/category/create")
+    public String createCategory(
+            @Validated @RequestBody RequestCreateCategoryForm requestForm,
+            BindingResult result) throws IOException {
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        ResponseCommonForm rs = categoryService.createCategory(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @PostMapping(value = "/admin/category/update-status")
+    public String changeStatus(@Validated @RequestBody RequestChangeCategoryStatusForm requestForm,
+                               BindingResult result){
+
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        ResponseCommonForm rs = categoryService.changeStatus(requestForm);
+        if(rs.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        return ResponseSupporter.resonpseResult(true);
     }
 
 }
