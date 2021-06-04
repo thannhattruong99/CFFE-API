@@ -240,7 +240,8 @@
         SH.ShelfName AS ShelfName,
         SPCM.AddedCameraTime,
         ST.StoreId,
-        ST.StoreName
+        ST.StoreName,
+        ST.ImageURL AS StoreImage
         FROM tblCamera C
         JOIN tblStatus STT ON C.StatusId = STT.StatusId
         LEFT JOIN tblStackProductCameraMapping SPCM
@@ -270,7 +271,8 @@
         SH2.ShelfName,
         SCM.AddedTime,
         ST2.StoreId,
-        ST2.StoreName
+        ST2.StoreName,
+        ST2.ImageURL AS StoreImage
         FROM tblCamera C
         JOIN tblStatus STT ON C.StatusId = STT.StatusId
         LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1
@@ -322,5 +324,6 @@
         <result property="addedCameraTime" column="AddedCameraTime"/>
         <result property="storeId" column="StoreId"/>
         <result property="storeName" column="StoreName"/>
+        <result property="storeImage" column="StoreImage"/>
     </resultMap>
 </mapper>
