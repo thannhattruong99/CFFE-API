@@ -170,6 +170,7 @@ public class CameraService extends BaseService {
         if(!StringHelper.isNullOrEmpty(requestForm.getReasonInactive())){
             cameraDTO.setReasonInactive(requestForm.getReasonInactive());
         }
+        cameraDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 
     private ResponseCommonForm checkUpdateCameraStatusBusiness(CameraDTO cameraDTO){
