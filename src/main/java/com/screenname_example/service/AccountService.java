@@ -1,5 +1,6 @@
 package com.screenname_example.service;
 
+import com.common.config.JwtTokenHelper;
 import com.common.service.BaseService;
 import com.screenname_example.dao.mapper.AccountMapper;
 import com.screenname_example.dto.AccountDTO;
@@ -11,9 +12,14 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AccountService extends BaseService {
+    @Autowired
+    private JwtTokenHelper jwtTokenHelper;
+
     @Autowired
     private AccountMapper accountMapper;
 
@@ -26,9 +32,29 @@ public class AccountService extends BaseService {
                 result.getPassword(), new ArrayList<>());
     }
 
-    public AccountDTO checkLogin(JwtRequest request){
+    public AccountDTO loadUserByUsername(String userName){
+        AccountDTO result = accountMapper.getAccountInformation(userName);
+        if(result != null){
+            return result;
+        }else {
+            throw new UsernameNotFoundException("User not found with username: " + userName);
+        }
+
+    }
+
+    public String checkLogin(JwtRequest request){
         try{
-            return accountMapper.login(request);
+            AccountDTO resultDAO = accountMapper.login(request);
+            if(resultDAO != null){
+                Map<String, Object> claims = new HashMap<>();
+                claims.put("UserId", resultDAO.getUserId());
+                claims.put("UserName", resultDAO.getUserName());
+                claims.put("FullName", resultDAO.getFullName());
+                claims.put("StoreId", resultDAO.getStoreId());
+                claims.put("RoleId", resultDAO.getRoleId());
+                return jwtTokenHelper.generateToken(claims, request.getUsername());
+            }
+
         }catch (PersistenceException e){
             System.out.println("VUI VE KHONG QUAO: " + e.getMessage());
         }

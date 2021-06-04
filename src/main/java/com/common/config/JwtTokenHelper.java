@@ -39,7 +39,7 @@ public class JwtTokenHelper implements Serializable {
         return claimsResolver.apply(claims);
     }
     //for retrieveing any information from token we will need the secret key
-    private Claims getAllClaimsFromToken(String token) {
+    public Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
@@ -55,9 +55,8 @@ public class JwtTokenHelper implements Serializable {
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
-    public String generateToken(AccountDTO accountDTO) {
-        Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, accountDTO.getUserName());
+    public String generateToken(Map<String, Object> claims, String sub) {
+        return doGenerateToken(claims, sub);
     }
 
     //while creating the token -
@@ -76,6 +75,11 @@ public class JwtTokenHelper implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public Boolean validateToken(String token, AccountDTO accountDTO) {
+        final String username = getUsernameFromToken(token);
+        return (username.equals(accountDTO.getUserName()) && !isTokenExpired(token));
     }
 
 }

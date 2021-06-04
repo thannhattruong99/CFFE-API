@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +47,13 @@ public class ManagerController {
         return ResponseSupporter.resonpseResult(response);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/manager")
-    public String getManagerDetail(@Valid RequestManagerDetailForm requestForm, BindingResult result) {
+    public String getManagerDetail(@Valid RequestManagerDetailForm requestForm, BindingResult result, HttpServletRequest request) {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-
+        System.out.println("GET MANAGER DETAIL: " + request.getAttribute("StoreId"));
         ResponseManagerDetailForm response = managerService.getManagerDetail(requestForm);
         if(response == null){
             List<String> errorCodes = new ArrayList<>();
