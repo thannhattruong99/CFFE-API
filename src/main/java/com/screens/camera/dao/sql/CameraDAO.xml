@@ -211,7 +211,7 @@
     </update>
     <update id="updateStatus">
         UPDATE tblCamera
-        SET StatusId = #{statusId}
+        SET StatusId = #{statusId}, UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         <if test="statusId == 2">
             , ReasonInactive = #{reasonInactive}
         </if>
