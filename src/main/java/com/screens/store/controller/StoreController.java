@@ -1,7 +1,9 @@
 package com.screens.store.controller;
 
 import com.common.form.ResponseCommonForm;
+import com.screens.store.dto.DocumnentStorageProperties;
 import com.screens.store.form.*;
+import com.screens.store.service.DocumentStorageService;
 import com.screens.store.service.StoreService;
 import com.util.ImageHelper;
 import com.util.ResponseSupporter;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +25,9 @@ public class StoreController {
 
     @Autowired
     private StoreService storeService;
+
+    @Autowired
+    private DocumentStorageService documneStorageService;
 
 
     private static final String MSG_009 = "MSG-009";
@@ -168,4 +174,19 @@ public class StoreController {
         // Return result
         return ResponseSupporter.resonpseResult(true);
     }
+
+    @PostMapping("/uploadImage")
+    public UploadFileResponse uploadFile(@RequestParam("image") MultipartFile file,
+                                         @RequestParam("userId") Integer UserId,
+                                         @RequestParam("docType") String docType) {
+
+        String fileName = documneStorageService.storeFile(file, UserId, docType);
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+        return new UploadFileResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
+    }
+
 }

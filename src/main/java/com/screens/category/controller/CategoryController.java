@@ -4,6 +4,7 @@ package com.screens.category.controller;
 import com.common.form.ResponseCommonForm;
 import com.screens.category.form.*;
 import com.screens.category.service.CategoryService;
+import com.screens.product.form.RequestUpdateInfoProductForm;
 import com.screens.stack.form.RequestGetStackDetailForm;
 import com.screens.stack.form.ResponseStackDetailForm;
 import com.screens.store.form.RequestChangeStoreStatusForm;
@@ -89,6 +90,19 @@ public class CategoryController {
         ResponseCommonForm rs = categoryService.changeStatus(requestForm);
         if(rs.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
+        }
+        return ResponseSupporter.resonpseResult(true);
+    }
+
+    @PostMapping(value = "/admin/category/update")
+    public String updateCategoryInfo(@Validated @RequestBody RequestUpdateInfoCategoryForm requestForm,
+                                    BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        ResponseCommonForm responseForm = categoryService.updateCategoryInfo(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
         return ResponseSupporter.resonpseResult(true);
     }

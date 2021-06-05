@@ -108,4 +108,20 @@
         WHERE CategoryId = #{categoryId}
     </update>
 
+    <update id="updateInfo" parameterType="CategoryDTO">
+        UPDATE tblCategory
+        SET CategoryName = #{categoryName}
+        WHERE CategoryId = #{categoryId}
+    </update>
+
+    <select id="checkCategoryExist" resultMap="checkCategoryExist">
+        SELECT COUNT(CategoryId) AS TotalOfRecord
+        FROM tblCategory
+        WHERE CategoryId = #{categoryId}
+    </select>
+
+    <resultMap id="checkCategoryExist" type="CategoryDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
 </mapper>
