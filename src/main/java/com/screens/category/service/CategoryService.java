@@ -148,7 +148,7 @@ public class CategoryService extends BaseService {
         }
         categoryDTO.setFetchNext(requestForm.getFetchNext());
         if(requestForm.getFetchNext() <= 0){
-            categoryDTO.setFetchNext(DEFAULT_FETCH_NEXT);
+            categoryDTO.setFetchNext(0);
         }
         return categoryDTO;
     }

@@ -119,6 +119,127 @@
         </collection>
     </resultMap>
 
+
+
+    <select id="getStoreListByProduct" resultMap="getStoreListByProduct" useCache="false">
+        SELECT
+            SUPQUE.totalOfRecord,
+            S.StoreId,
+            S.StoreName,
+            S.ImageURL,
+            S.Address,
+            S.AnalyzedTime,
+            S.ReasonInactive,
+            TD.DistrictId,
+            TD.DistrictName,
+            TC.CityId,
+            TC.CityName,
+            TU.Username,
+            TU.UserId,
+            S.UpdatedTime,
+            S.StatusId,
+            TS.StatusName
+        FROM tblStore S
+            LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+            LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+            LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+            LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+            LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId),
+            (SELECT COUNT(*) AS totalOfRecord
+            FROM tblStore S
+            LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+            LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+            LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+            LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+            LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId)
+            <where>
+                <if test="searchValue != null">
+                    <choose>
+                        <when test="searchField == 'city'">
+                            TC.CityName LIKE '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'district'">
+                            TD.DistrictName LIKE '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'manager'">
+                            TU.Username LIKE '%' #{searchValue} '%'
+                        </when>
+                        <otherwise>
+                            S.StoreName LIKE '%' #{searchValue} '%'
+                        </otherwise>
+                    </choose>
+                </if>
+                <choose>
+                    <when test="statusId != 0">
+                        AND S.StatusId = #{statusId}
+                    </when>
+                </choose>
+                <choose>
+                    <when test="cityId != 0">
+                        AND TC.CityId = #{cityId}
+                    </when>
+                </choose>
+            </where>
+        ) AS SUPQUE
+        <where>
+            <if test="searchValue != null">
+                <choose>
+                    <when test="searchField == 'city'">
+                        TC.CityName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'district'">
+                        TD.DistrictName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'manager'">
+                        TU.Username LIKE '%' #{searchValue} '%'
+                    </when>
+                    <otherwise>
+                        S.StoreName LIKE '%' #{searchValue} '%'
+                    </otherwise>
+                </choose>
+            </if>
+            <choose>
+                <when test="statusId != 0">
+                    AND S.StatusId = #{statusId}
+                </when>
+            </choose>
+            <choose>
+                <when test="cityId != 0">
+                    AND TC.CityId = #{cityId}
+                </when>
+            </choose>
+        </where>
+        ORDER BY
+        S.StoreName
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+    <resultMap id="getStoreListByProduct" type="ResponseStoreListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreResponseSupporter">
+            <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <result property="imageUrl" column="ImageURL"/>
+            <result property="managerUsername" column="Username"/>
+            <result property="managerUserId" column="UserId"/>
+            <result property="address" column="Address"/>
+            <result property="cityName" column="CityName"/>
+            <result property="cityId" column="CityId"/>
+            <result property="districtName" column="DistrictName"/>
+            <result property="districtId" column="DistrictId"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="status" column="StatusName"/>
+            <result property="analyzedTime" column="AnalyzedTime"/>
+            <result property="reasonInactive" column="ReasonInactive"/>
+        </collection>
+    </resultMap>
+
+
+
+
     <select id="getStoreListShort" resultMap="getStoreListShort" useCache="false">
         SELECT
         SUPQUE.totalOfRecord,
