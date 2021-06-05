@@ -206,14 +206,12 @@
         SET CameraName = #{cameraName},
             ImageURL = #{imageURL},
             IPAddress = #{ipAddress},
-            RTSPString = #{rtspString},
-            TypeDetect = #{typeDetect},
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE CameraId = #{cameraId}
     </update>
     <update id="updateStatus">
         UPDATE tblCamera
-        SET StatusId = #{statusId}
+        SET StatusId = #{statusId}, UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         <if test="statusId == 2">
             , ReasonInactive = #{reasonInactive}
         </if>
@@ -230,17 +228,21 @@
         C.CameraName,
         C.ImageURL,
         C.IPAddress,
+        C.RTSPString,
         C.TypeDetect,
         C.UpdatedTime,
+        C.CreatedTime,
         C.StatusId,
         STT.StatusName,
+        C.ReasonInactive,
         STK.StackId,
         STK.Position,
         SH.ShelfId AS ShelfId,
         SH.ShelfName AS ShelfName,
         SPCM.AddedCameraTime,
         ST.StoreId,
-        ST.StoreName
+        ST.StoreName,
+        ST.ImageURL AS StoreImage
         FROM tblCamera C
         JOIN tblStatus STT ON C.StatusId = STT.StatusId
         LEFT JOIN tblStackProductCameraMapping SPCM
@@ -260,22 +262,26 @@
         C.CameraName,
         C.ImageURL,
         C.IPAddress,
+        C.RTSPString,
         C.TypeDetect,
         C.UpdatedTime,
+        C.CreatedTime,
         C.StatusId,
         STT.StatusName,
+        C.ReasonInactive,
         '' AS StackId,
         '' AS Position,
         SH2.ShelfId,
         SH2.ShelfName,
         SCM.AddedTime,
         ST2.StoreId,
-        ST2.StoreName
+        ST2.StoreName,
+        ST2.ImageURL AS StoreImage
         FROM tblCamera C
         JOIN tblStatus STT ON C.StatusId = STT.StatusId
         LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1
         LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1
-        JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2 AND ST2.StoreId IS NOT NULL
+        LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2 AND ST2.StoreId IS NOT NULL
         WHERE C.CameraId = #{cameraId}
         <if test="storeId != null">
             AND ST2.StoreId = #{storeId}
@@ -300,6 +306,7 @@
             <result property="storeName" column="StoreName"/>
             <result property="statusId" column="StatusId"/>
             <result property="statusName" column="StatusName"/>
+            <result property="updatedTime" column="UpdatedTime"/>
         </collection>
     </resultMap>
     <resultMap id="getCameraStatusById" type="CameraDTO">
@@ -310,10 +317,13 @@
         <result property="cameraName" column="CameraName"/>
         <result property="imageUrl" column="ImageURL"/>
         <result property="ipAddress" column="IpAddress"/>
+        <result property="rtspString" column="RTSPString"/>
         <result property="typeDetect" column="TypeDetect"/>
         <result property="updatedTime" column="UpdatedTime"/>
+        <result property="createdTime" column="CreatedTime"/>
         <result property="statusId" column="StatusId"/>
         <result property="statusName" column="StatusName"/>
+        <result property="reasonInactive" column="ReasonInactive"/>
         <result property="stackId" column="StackId"/>
         <result property="position" column="Position"/>
         <result property="shelfId" column="ShelfId"/>
@@ -321,5 +331,6 @@
         <result property="addedCameraTime" column="AddedCameraTime"/>
         <result property="storeId" column="StoreId"/>
         <result property="storeName" column="StoreName"/>
+        <result property="storeImage" column="StoreImage"/>
     </resultMap>
 </mapper>
