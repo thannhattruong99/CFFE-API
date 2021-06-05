@@ -38,23 +38,23 @@ import static springfox.documentation.builders.PathSelectors.regex;
         scheme = "bearer"
 )
 public class SwaggerConfig {
+    private final Logger log = LoggerFactory.getLogger(SwaggerConfig.class);
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String DEFAULT_INCLUDE_PATTERN = "http://localhost:9090/*";
-    private final Logger log = LoggerFactory.getLogger(SwaggerConfig.class);
 
     @Bean
     public Docket swaggerSpringfoxDocket() {
         log.debug("Starting Swagger");
         Contact contact = new Contact(
-                "Matyas Albert-Nagy",
-                "https://justrocket.de",
-                "matyas@justrocket.de");
+                "Truong Nhat Than",
+                "https://localhost:9090",
+                "truongtn@gmail.com");
 
         List<VendorExtension> vext = new ArrayList<>();
         ApiInfo apiInfo = new ApiInfo(
                 "Backend API",
                 "This is the best stuff since sliced bread - API",
-                "6",
+                "1",
                 "https://localhost:9090",
                 contact,
                 "truongtn",

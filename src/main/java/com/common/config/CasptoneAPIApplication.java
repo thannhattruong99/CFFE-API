@@ -21,6 +21,7 @@ import java.io.IOException;
 @ComponentScan(basePackages = {"com"})
 public class CasptoneAPIApplication {
     private static final Logger logger = LoggerFactory.getLogger(CasptoneAPIApplication.class);
+
     public static void main(String[] args) throws IOException {
         logger.info("Info message");
         logger.warn("Warn message");

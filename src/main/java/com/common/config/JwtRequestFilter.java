@@ -1,15 +1,16 @@
 package com.common.config;
 
+import com.filter.dto.AuthorDTO;
 import com.screenname_example.dto.AccountDTO;
 import com.screenname_example.service.AccountService;
-import com.screenname_example.service.JwtUserDetailsService;
+import com.util.ReadResourceHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,25 +20,47 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
+    private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
+
+    private static final String ADMIN_AUTHORITY_PATH = "authorities/Admin.properties";
+    private static final String MANAGER_AUTHORITY_PATH = "authorities/Manager.properties";
+    private static final String APPLICATION_AUTHORITY_PATH = "authorities/Application.properties";
+    private static final int ADMIN_ROLE = 1;
+    private static final int MANAGER_ROLE = 2;
+    private static final String USER_ID_STRING = "UserId";
+    private static final String STORE_ID_STRING = "StoreId";
+    private static final String ROLE_ID_STRING = "RoleId";
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String UNAUTHORIZED = "Unauthorized";
+
+
+    private final List<String> adminAuthorities;
+    private final List<String> managerAuthorities;
+    private final List<String> applicationAuthorities;
+
     @Autowired
     private AccountService accountService;
 
     @Autowired
     private JwtTokenHelper jwtTokenHelper;
 
+    public JwtRequestFilter() {
+        adminAuthorities = ReadResourceHelper.loadResource(ADMIN_AUTHORITY_PATH);
+        managerAuthorities = ReadResourceHelper.loadResource(MANAGER_AUTHORITY_PATH);
+        applicationAuthorities = ReadResourceHelper.loadResource(APPLICATION_AUTHORITY_PATH);
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String requestTokenHeader = request.getHeader("Authorization");
+        final String requestTokenHeader = request.getHeader(AUTHORIZATION);
 
         String username = null;
         String jwtToken = null;
         String uri = request.getRequestURI();
-        System.out.println("URI: " + uri);
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
@@ -45,18 +68,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenHelper.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
+                logger.error("Unable to get JWT Token: " + e.getMessage());
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+                logger.error("JWT Token has expired: " + e.getMessage());
             }
         }
-        else if(uri.contains("/swagger-ui/index.html") || uri.contains("/api-docs")
-                || uri.contains("/api-docs/swagger-config") ||
-                uri.contains("/login")){
+        else if(applicationAuthorities.contains(uri)){
             logger.warn("Init page openai");
         }
         else{
-            response.setHeader("Authorization", "Unauthorized");
+            response.setHeader(AUTHORIZATION, UNAUTHORIZED);
             return;
         }
 
@@ -69,12 +90,29 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             // authentication
             if (jwtTokenHelper.validateToken(jwtToken, accountDTO)) {
                 Claims claims = jwtTokenHelper.getAllClaimsFromToken(jwtToken);
-                String storeId = claims.get("StoreId", String.class);
-//                Map<String, Object> claims1 = new HashMap<>(claims);
-                String searchValue = ((HttpServletRequest) request).getParameter("searchValue");
-                ((HttpServletRequest) request).setAttribute("StoreId", storeId);
-                System.out.println("STOREID IN FILTER: " + storeId);
-                System.out.println("searchValue: " + searchValue);
+                int roleId = claims.get(ROLE_ID_STRING, Integer.class);
+
+                //manager authorities
+                if(roleId == MANAGER_ROLE){
+                    if(managerAuthorities.contains(uri)){
+                        String storeId = claims.get(STORE_ID_STRING, String.class);
+                        String userId = claims.get(USER_ID_STRING, String.class);
+                        AuthorDTO authorDTO = new AuthorDTO();
+                        authorDTO.setUserId(userId);
+                        authorDTO.setUserName(username);
+                        authorDTO.setStoreId(storeId);
+                        ((HttpServletRequest) request).setAttribute("AUTHOR", authorDTO);
+                    }else {
+                        response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                        return;
+                    }
+                }else if(roleId == ADMIN_ROLE){
+                    if(!adminAuthorities.contains(uri)){
+                        response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                        return;
+                    }
+                }
+
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         accountDTO, null, null);
                 usernamePasswordAuthenticationToken
@@ -84,7 +122,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 // Spring Security Configurations successfully.
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }else {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, UNAUTHORIZED);
             }
         }
         filterChain.doFilter(request, response);

@@ -5,6 +5,9 @@ import com.common.service.BaseService;
 import com.screenname_example.dao.mapper.AccountMapper;
 import com.screenname_example.dto.AccountDTO;
 import com.screenname_example.form.JwtRequest;
+import com.screens.manager.service.ManagerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +20,7 @@ import java.util.Map;
 
 @Service
 public class AccountService extends BaseService {
+    private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
     @Autowired
     private JwtTokenHelper jwtTokenHelper;
 
@@ -56,7 +60,7 @@ public class AccountService extends BaseService {
             }
 
         }catch (PersistenceException e){
-            System.out.println("VUI VE KHONG QUAO: " + e.getMessage());
+            logger.error("Error at ManagerService: " + e.getMessage());
         }
         return null;
     }

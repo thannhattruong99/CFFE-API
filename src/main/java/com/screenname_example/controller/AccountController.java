@@ -28,6 +28,6 @@ public class AccountController {
 
     @GetMapping("")
     public RedirectView init(){
-        return new RedirectView("/swagger-ui-custom.html");
+        return new RedirectView("/swagger-ui.html");
     }
 }

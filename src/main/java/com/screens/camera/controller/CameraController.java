@@ -38,7 +38,7 @@ public class CameraController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
 
-        return ResponseSupporter.resonpseResult(responseForm);
+        return ResponseSupporter.responseResult(responseForm);
     }
 
     @RequestMapping(value = "/cameras", method = RequestMethod.GET)
@@ -55,7 +55,7 @@ public class CameraController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
 
-        return ResponseSupporter.resonpseResult(responseForm);
+        return ResponseSupporter.responseResult(responseForm);
     }
 
     @RequestMapping(value = "/camera", method = RequestMethod.GET)
@@ -70,7 +70,7 @@ public class CameraController {
             errorCodes.add(MSG_009);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
-        return ResponseSupporter.resonpseResult(responseForm);
+        return ResponseSupporter.responseResult(responseForm);
     }
 
     @RequestMapping(value = "/camera/create", method = RequestMethod.POST)
@@ -87,7 +87,7 @@ public class CameraController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
 
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @RequestMapping(value = "/camera/update", method = RequestMethod.POST)
@@ -104,7 +104,7 @@ public class CameraController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
 
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @RequestMapping(value = "/camera/update-status", method = RequestMethod.POST)
@@ -117,6 +117,6 @@ public class CameraController {
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 }

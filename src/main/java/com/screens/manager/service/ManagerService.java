@@ -2,6 +2,7 @@ package com.screens.manager.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
+import com.filter.dto.AuthorDTO;
 import com.screens.manager.dao.mapper.ManagerMapper;
 import com.screens.manager.dto.ManagerDTO;
 import com.screens.manager.form.*;
@@ -38,9 +39,9 @@ public class ManagerService extends BaseService {
         return responseForm;
     }
 
-    public ResponseManagerDetailForm getManagerDetail(RequestManagerDetailForm requestForm){
+    public ResponseManagerDetailForm getManagerDetail(RequestManagerDetailForm requestForm, AuthorDTO authorDTO){
         ManagerDTO managerDTO = new ManagerDTO();
-        convertRequestManagerDetailFormToManagerDTO(requestForm, managerDTO);
+        convertRequestManagerDetailFormToManagerDTO(requestForm, managerDTO, authorDTO);
         ResponseManagerDetailForm responseForm = null;
         try {
             responseForm = managerMapper.getManagerDetail(managerDTO);
@@ -225,8 +226,12 @@ public class ManagerService extends BaseService {
         managerDTO.setUserNameRegexp(userName + NUMBER_REGEXP);
     }
 
-    private void convertRequestManagerDetailFormToManagerDTO(RequestManagerDetailForm requestForm, ManagerDTO managerDTO){
+    private void convertRequestManagerDetailFormToManagerDTO(RequestManagerDetailForm requestForm, ManagerDTO managerDTO, AuthorDTO authorDTO){
         managerDTO.setUserName(requestForm.getUserName());
+        if(authorDTO != null){
+            managerDTO.setUserName(authorDTO.getUserName());
+        }
+
     }
 
     private void convertRequestManagerListFormToMangerDTO(RequestManagerListForm requestForm, ManagerDTO managerDTO){

@@ -41,7 +41,7 @@ public class StackController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(responseStackDetailForm);
+        return ResponseSupporter.responseResult(responseStackDetailForm);
     }
 
     @GetMapping(value = "/admin/manager/store/shelf/stacks-by-shelf")
@@ -59,7 +59,7 @@ public class StackController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(responseStackListForm);
+        return ResponseSupporter.responseResult(responseStackListForm);
     }
 
     @PostMapping(value = "/admin/manager/store/shelf/stack/update-product")
@@ -75,7 +75,7 @@ public class StackController {
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @PostMapping(value = "/admin/manager/store/shelf/stack/update-camera")
@@ -91,7 +91,7 @@ public class StackController {
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @PostMapping(value = "/admin/manager/store/shelf/stack/update-status")
@@ -107,7 +107,7 @@ public class StackController {
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
 
