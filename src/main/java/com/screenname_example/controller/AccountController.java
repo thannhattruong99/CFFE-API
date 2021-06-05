@@ -15,7 +15,7 @@ public class AccountController {
 
     @RequestMapping(value = "/auth/login", method = RequestMethod.GET)
     public String getAccount() {
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @GetMapping("")

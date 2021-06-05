@@ -36,7 +36,7 @@ public class ManagerController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
 
-        return ResponseSupporter.resonpseResult(response);
+        return ResponseSupporter.responseResult(response);
     }
 
     @GetMapping(value = "/manager")
@@ -52,7 +52,7 @@ public class ManagerController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
 
-        return ResponseSupporter.resonpseResult(response);
+        return ResponseSupporter.responseResult(response);
     }
 
     @RequestMapping(value = "/manager/create", method = RequestMethod.POST)
@@ -68,7 +68,7 @@ public class ManagerController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
 
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @RequestMapping(value = "/manager/update", method = RequestMethod.POST)
@@ -84,7 +84,7 @@ public class ManagerController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
 
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @GetMapping(value = "/manager/reset-password")
@@ -98,7 +98,7 @@ public class ManagerController {
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @RequestMapping(value = "/manager/update-status", method = RequestMethod.POST)
@@ -113,7 +113,7 @@ public class ManagerController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
 
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @RequestMapping(value = "/manager/change-password", method = RequestMethod.POST)
@@ -128,6 +128,6 @@ public class ManagerController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
 
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 }

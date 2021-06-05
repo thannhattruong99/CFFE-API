@@ -38,7 +38,7 @@ public class ShelfController {
             errorCodes.add(MSG_009);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
-        return ResponseSupporter.resonpseResult(responseForm);
+        return ResponseSupporter.responseResult(responseForm);
     }
 
     @RequestMapping(value = "/shelf", method = RequestMethod.GET)
@@ -54,21 +54,21 @@ public class ShelfController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
 
-        return ResponseSupporter.resonpseResult(responseForm);
+        return ResponseSupporter.responseResult(responseForm);
     }
 
     @RequestMapping(value = "/shelf/create", method = RequestMethod.POST)
     public String createShelf(@Validated @RequestBody RequestCreateShelfForm requestForm,
                               BindingResult result){
         if(result.hasErrors()){
-            return ResponseSupporter.resonpseResult(result);
+            return ResponseSupporter.responseResult(result);
         }
 
         ResponseCommonForm responseForm = shelfService.createShelf(requestForm);
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @RequestMapping(value = "/shelf/update", method = RequestMethod.POST)
@@ -83,7 +83,7 @@ public class ShelfController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
 
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @RequestMapping(value = "/shelf/update-status", method = RequestMethod.POST)
@@ -96,14 +96,14 @@ public class ShelfController {
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @RequestMapping(value = "/shelf/change-shelf-camera", method = RequestMethod.POST)
     public String changeShelfCamera(@Validated @RequestBody RequestChangeShelfCameraForm requestForm,
                                     BindingResult result){
         if(result.hasErrors()){
-            return ResponseSupporter.resonpseResult(result);
+            return ResponseSupporter.responseResult(result);
         }
 
         ResponseCommonForm responseForm = shelfService.changeShelfCamera(requestForm);
@@ -111,6 +111,6 @@ public class ShelfController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
 
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 }

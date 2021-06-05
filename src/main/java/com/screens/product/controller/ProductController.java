@@ -3,9 +3,6 @@ package com.screens.product.controller;
 import com.common.form.ResponseCommonForm;
 import com.screens.product.form.*;
 import com.screens.product.service.ProductService;
-import com.screens.stack.form.RequestUpdateStatusForm;
-import com.screens.store.form.RequestCreateStoreForm;
-import com.screens.store.form.RequestUpdateInfoForm;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -41,7 +38,7 @@ public class ProductController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(res);
+        return ResponseSupporter.responseResult(res);
     }
 
     @GetMapping(value = "/admin/products")
@@ -60,7 +57,7 @@ public class ProductController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(res);
+        return ResponseSupporter.responseResult(res);
     }
 
     @PostMapping(value = "/admin/product/create")
@@ -78,7 +75,7 @@ public class ProductController {
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @PostMapping(value = "/admin/product/update-status")
@@ -94,7 +91,7 @@ public class ProductController {
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @PostMapping(value = "/admin/product/update")
@@ -110,7 +107,7 @@ public class ProductController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @PostMapping(value = "/admin/product/update-category")
@@ -126,7 +123,7 @@ public class ProductController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
 }
