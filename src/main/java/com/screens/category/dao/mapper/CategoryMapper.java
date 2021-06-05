@@ -40,8 +40,24 @@ public class CategoryMapper extends BaseDAO {
         return true;
     }
 
+    public boolean checkCategoryExist(CategoryDTO categoryDTO){
+        CategoryDTO resultDAO = sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.checkCategoryExist",categoryDTO);
+        if(resultDAO.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
+
     public boolean changeStatus(CategoryDTO categoryDTO) {
         if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.changeStatus",categoryDTO) > 0){
+            this.sqlSession.commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateInfo(CategoryDTO categoryDTO) {
+        if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.updateInfo",categoryDTO) > 0){
             this.sqlSession.commit();
             return true;
         }
