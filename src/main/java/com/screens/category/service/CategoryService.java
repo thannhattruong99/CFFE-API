@@ -5,6 +5,8 @@ import com.common.service.BaseService;
 import com.screens.category.dao.mapper.CategoryMapper;
 import com.screens.category.dto.CategoryDTO;
 import com.screens.category.form.*;
+import com.screens.product.dto.ProductDTO;
+import com.screens.product.form.RequestUpdateInfoProductForm;
 import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.*;
 import com.screens.store.service.StoreService;
@@ -95,6 +97,31 @@ public class CategoryService extends BaseService {
             response.setErrorCodes(catchSqlException(e.getMessage()));
         }
         return response;
+    }
+
+    public ResponseCommonForm updateCategoryInfo(RequestUpdateInfoCategoryForm requestForm) {
+        ResponseCommonForm response = new ResponseCommonForm();
+        CategoryDTO categoryDTO = convertUpdateInfoCategoryFormToDTO(requestForm);
+        try {
+            if(!categoryMapper.checkCategoryExist(categoryDTO)) {
+                List<String> errorMsg = new ArrayList<>();
+                errorMsg.add("MSG-029");
+                response.setErrorCodes(errorMsg);
+            } else {
+                categoryMapper.updateInfo(categoryDTO);
+            }
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+            response.setErrorCodes(catchSqlException(e.getMessage()));
+        }
+        return response;
+    }
+
+    private CategoryDTO convertUpdateInfoCategoryFormToDTO(RequestUpdateInfoCategoryForm requestForm) {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setCategoryId(requestForm.getCategoryId());
+        categoryDTO.setCategoryName(requestForm.getCategoryName());
+        return categoryDTO;
     }
 
     private CategoryDTO convertChangeStatusFormToDTO(RequestChangeCategoryStatusForm requestForm){
