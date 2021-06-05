@@ -78,7 +78,7 @@ public class StackController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(responseStackListForm);
+        return ResponseSupporter.responseResult(responseStackListForm);
     }
 
     @PostMapping(value = "/admin/manager/store/shelf/stack/update-product")
