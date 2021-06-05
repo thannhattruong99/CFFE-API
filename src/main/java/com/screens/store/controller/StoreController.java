@@ -1,15 +1,11 @@
 package com.screens.store.controller;
 
 import com.common.form.ResponseCommonForm;
-import com.screens.store.dto.DocumnentStorageProperties;
 import com.screens.store.form.*;
 import com.screens.store.service.DocumentStorageService;
 import com.screens.store.service.StoreService;
-import com.util.ImageHelper;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +44,7 @@ public class StoreController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(responseStoreListForm);
+        return ResponseSupporter.responseResult(responseStoreListForm);
     }
 
     @GetMapping(value = "/admin/operation-stores")
@@ -66,7 +62,7 @@ public class StoreController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(responseStoreListForm);
+        return ResponseSupporter.responseResult(responseStoreListForm);
     }
 
     @GetMapping(value = "/admin/store")
@@ -85,7 +81,7 @@ public class StoreController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(responseStoreDetailForm);
+        return ResponseSupporter.responseResult(responseStoreDetailForm);
     }
 
     @PostMapping(value = "/admin/store/create")
@@ -108,7 +104,7 @@ public class StoreController {
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @PostMapping(value = "/admin/store/update-status")
@@ -124,7 +120,7 @@ public class StoreController {
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @RequestMapping(value = "/admin/store/update", method = RequestMethod.POST)
@@ -140,7 +136,7 @@ public class StoreController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
 //    @RequestMapping(value = "/admin/store/update-analyzed-time", method = RequestMethod.POST)
@@ -156,7 +152,7 @@ public class StoreController {
 //            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
 //        }
 //        // Return result
-//        return ResponseSupporter.resonpseResult(true);
+//        return ResponseSupporter.responseResult(true);
 //    }
 
     @RequestMapping(value = "/admin/store/change-manager", method = RequestMethod.POST)
@@ -172,7 +168,7 @@ public class StoreController {
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
         // Return result
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @PostMapping("/uploadImage")

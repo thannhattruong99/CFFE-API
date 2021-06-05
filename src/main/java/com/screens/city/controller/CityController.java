@@ -24,8 +24,8 @@ public class CityController {
         if(responseForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
-            return ResponseSupporter.resonpseResult(errorCodes);
+            return ResponseSupporter.responseResult(errorCodes);
         }
-        return ResponseSupporter.resonpseResult(responseForm);
+        return ResponseSupporter.responseResult(responseForm);
     }
 }
