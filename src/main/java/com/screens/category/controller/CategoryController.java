@@ -4,11 +4,6 @@ package com.screens.category.controller;
 import com.common.form.ResponseCommonForm;
 import com.screens.category.form.*;
 import com.screens.category.service.CategoryService;
-import com.screens.product.form.RequestUpdateInfoProductForm;
-import com.screens.stack.form.RequestGetStackDetailForm;
-import com.screens.stack.form.ResponseStackDetailForm;
-import com.screens.store.form.RequestChangeStoreStatusForm;
-import com.screens.store.form.RequestCreateStoreForm;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -47,7 +42,7 @@ public class CategoryController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
-        return ResponseSupporter.resonpseResult(responseCategoryDetailForm);
+        return ResponseSupporter.responseResult(responseCategoryDetailForm);
     }
 
     @GetMapping(value = "/admin/categories")
@@ -63,7 +58,7 @@ public class CategoryController {
             errorCodes.add(MSG_009);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
-        return ResponseSupporter.resonpseResult(res);
+        return ResponseSupporter.responseResult(res);
     }
 
     @PostMapping(value = "/admin/category/create")
@@ -77,7 +72,7 @@ public class CategoryController {
         if(rs.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @PostMapping(value = "/admin/category/update-status")
@@ -91,7 +86,7 @@ public class CategoryController {
         if(rs.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
     @PostMapping(value = "/admin/category/update")
@@ -104,7 +99,7 @@ public class CategoryController {
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
-        return ResponseSupporter.resonpseResult(true);
+        return ResponseSupporter.responseResult(true);
     }
 
 }

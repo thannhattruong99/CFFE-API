@@ -28,7 +28,7 @@ public class ResponseSupporter {
         }
     }
 
-    public static String resonpseResult(Object object){
+    public static String responseResult(Object object){
         return convertObjectToJSon(object);
     }
 
