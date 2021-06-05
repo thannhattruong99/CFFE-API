@@ -17,7 +17,6 @@ public class ResponseSupporter {
     public static AnnotationConfigApplicationContext context =
             new AnnotationConfigApplicationContext(CasptoneAPIApplication.Config.class);
 
-
     private static String convertObjectToJSon(Object object){
         try {
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -28,7 +27,7 @@ public class ResponseSupporter {
         }
     }
 
-    public static String resonpseResult(Object object){
+    public static String responseResult(Object object){
         return convertObjectToJSon(object);
     }
 
