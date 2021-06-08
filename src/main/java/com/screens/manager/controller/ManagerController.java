@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,11 +51,6 @@ public class ManagerController {
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_063);
             return ResponseSupporter.responseErrorResult(errorCodes);
-        }
-        try {
-            GCPHelper.uploadImage();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return ResponseSupporter.responseResult(response);
     }
