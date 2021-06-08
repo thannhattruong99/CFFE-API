@@ -1,9 +1,10 @@
 package com.screens.store.controller;
 
 import com.common.form.ResponseCommonForm;
+import com.common.form.UploadFileResponse;
 import com.screens.store.form.RequestGetStoreListByProductForm;
 import com.screens.store.form.*;
-import com.screens.store.service.DocumentStorageService;
+import com.util.DocumentStorageHelper;
 import com.screens.store.service.StoreService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class StoreController {
     private StoreService storeService;
 
     @Autowired
-    private DocumentStorageService documneStorageService;
+    private DocumentStorageHelper documneStorageService;
 
 
     private static final String MSG_009 = "MSG-009";
@@ -191,7 +192,7 @@ public class StoreController {
     }
 
     @PostMapping("/uploadImage")
-    public UploadFileResponse uploadFile(@RequestParam("image") MultipartFile file,
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file,
                                          @RequestParam("userId") Integer UserId,
                                          @RequestParam("docType") String docType) {
 
