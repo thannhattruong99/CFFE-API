@@ -115,7 +115,7 @@ public class StoreController {
         // TODO: insert img
 //        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 //        String uploadDir = "/store-img/" + "fakeid";
-//        ImageHelper.saveFile(uploadDir,fileName,multipartFile);
+//        FileHelper.saveFile(uploadDir,fileName,multipartFile);
 
         // Do Create Store
         ResponseCommonForm rs = storeService.createStore(requestForm);
