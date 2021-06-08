@@ -3,6 +3,7 @@ package com.screens.stack.service;
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.screens.stack.dao.mapper.StackMapper;
+import com.screens.stack.dto.RequestGetStackListByProductForm;
 import com.screens.stack.dto.StackDTO;
 import com.screens.stack.form.*;
 import com.screens.store.dto.StoreDTO;
@@ -40,6 +41,17 @@ public class StackService extends BaseService {
         StackDTO stackDTO = convertGetStackListFormToDTO(requestForm);
         try {
             responseStackListForm = stackMapper.getStackListByShelf(stackDTO);
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+        }
+        return responseStackListForm;
+    }
+
+    public ResponseStackListForm getStackListByProductIdStoreId(RequestGetStackListByProductForm requestForm){
+        ResponseStackListForm responseStackListForm = null;
+        StackDTO stackDTO = convertGetStackListByProductIdStoreIdFormToDTO(requestForm);
+        try {
+            responseStackListForm = stackMapper.getStackListByProductIdStoreId(stackDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
         }
@@ -236,6 +248,21 @@ public class StackService extends BaseService {
         StackDTO stackDTO = new StackDTO();
         stackDTO.setShelfId(requestForm.getShelfId());
         stackDTO.setStatusId(requestForm.getStatusId());
+        return stackDTO;
+    }
+
+    private StackDTO convertGetStackListByProductIdStoreIdFormToDTO(RequestGetStackListByProductForm requestForm) {
+        StackDTO stackDTO = new StackDTO();
+        stackDTO.setProductId(requestForm.getProductId());
+        stackDTO.setStoreId(requestForm.getStoreId());
+        stackDTO.setStatusId(requestForm.getStatusId());
+        if(requestForm.getPageNum() > 0){
+            stackDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
+        }
+        stackDTO.setFetchNext(requestForm.getFetchNext());
+        if(requestForm.getFetchNext() <= 0){
+            stackDTO.setFetchNext(DEFAULT_FETCH_NEXT);
+        }
         return stackDTO;
     }
 

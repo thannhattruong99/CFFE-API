@@ -27,6 +27,10 @@ public class StackMapper extends BaseDAO {
         return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByShelf",stackDTO);
     }
 
+    public ResponseStackListForm getStackListByProductIdStoreId(StackDTO stackDTO) {
+        return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByProductIdStoreId",stackDTO);
+    }
+
     public boolean addProduct(StackDTO stackDTO) {
         if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addProduct",stackDTO) > 0){
             this.sqlSession.commit();
