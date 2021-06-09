@@ -101,11 +101,11 @@
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.google.firebase</groupId>
-            <artifactId>firebase-admin</artifactId>
-            <version>7.3.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.google.firebase</groupId>-->
+<!--            <artifactId>firebase-admin</artifactId>-->
+<!--            <version>7.3.0</version>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <finalName>app</finalName>
@@ -125,10 +125,14 @@
                 <artifactId>springdoc-openapi-maven-plugin</artifactId>
                 <version>1.1</version>
             </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <source>9</source>-->
+<!--                    <target>9</target>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>

@@ -6,6 +6,7 @@ import com.screens.manager.dao.mapper.ManagerMapper;
 import com.screens.manager.dto.ManagerDTO;
 import com.screens.manager.form.*;
 import com.util.EmailHelper;
+import com.batches.events.EventPublisher;
 import com.util.StringHelper;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
@@ -23,6 +24,10 @@ public class ManagerService extends BaseService {
     private static final int PASSWORD_LENGTH = 8;
     private static final String MSG_068 = "MSG-068";
     private static final String MSG_007 = "MSG-007";
+
+    @Autowired
+    EventPublisher eventPublisher;
+
     @Autowired
     private ManagerMapper managerMapper;
 
@@ -46,8 +51,10 @@ public class ManagerService extends BaseService {
             responseForm = managerMapper.getManagerDetail(managerDTO);
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
-
         }
+        System.out.println("TOI DAY ROI NE");
+        eventPublisher.publishEvent("Upload file");
+
         return responseForm;
     }
 

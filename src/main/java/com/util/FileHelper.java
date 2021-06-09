@@ -31,8 +31,15 @@ public class FileHelper {
         }
     }
 
-    public static void deleteFile(String relativePathFile) throws FileNotFoundException {
-        File file = ResourceUtils.getFile(CLASS_PATH + relativePathFile);
+    public static void deleteFile(String relativeFilePath) throws FileNotFoundException {
+//        File file = ResourceUtils.getFile(CLASS_PATH + relativeFilePath);
+        File file = ResourceUtils.getFile("/Users/truongtn/Desktop/Desktop/HocTap/Capstone/CapstoneAPI/src/main/resources/videos/example_01.avi");
         file.delete();
+        file = ResourceUtils.getFile("/Users/truongtn/Desktop/Desktop/HocTap/Capstone/CapstoneAPI/src/main/resources/videos/example_01.mp4");
+        file.delete();
+    }
+
+    public static boolean checkExistFile(String relativeFilePath) throws FileNotFoundException {
+        return ResourceUtils.getFile(CLASS_PATH + relativeFilePath).exists();
     }
 }
