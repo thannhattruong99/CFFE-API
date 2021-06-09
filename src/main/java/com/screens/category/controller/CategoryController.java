@@ -89,4 +89,17 @@ public class CategoryController {
         return ResponseSupporter.responseResult(true);
     }
 
+    @PostMapping(value = "/admin/category/update")
+    public String updateCategoryInfo(@Validated @RequestBody RequestUpdateInfoCategoryForm requestForm,
+                                    BindingResult result){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        ResponseCommonForm responseForm = categoryService.updateCategoryInfo(requestForm);
+        if(responseForm.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
+        return ResponseSupporter.responseResult(true);
+    }
+
 }

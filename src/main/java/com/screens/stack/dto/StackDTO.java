@@ -1,6 +1,8 @@
 package com.screens.stack.dto;
 
-public class StackDTO {
+import com.common.dto.BaseDTO;
+
+public class StackDTO extends BaseDTO {
     private String stackId;
     private int position;
     private String createTime;
@@ -16,8 +18,17 @@ public class StackDTO {
     private String statusName;
     private int action;
     private int totalOfRecord;
+    private String storeId;
 
     public StackDTO() {
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public int getTotalOfRecord() {

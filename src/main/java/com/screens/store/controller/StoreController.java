@@ -1,13 +1,18 @@
 package com.screens.store.controller;
 
 import com.common.form.ResponseCommonForm;
+import com.common.form.UploadFileResponse;
+import com.screens.store.form.RequestGetStoreListByProductForm;
 import com.screens.store.form.*;
+import com.util.DocumentStorageHelper;
 import com.screens.store.service.StoreService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +23,9 @@ public class StoreController {
 
     @Autowired
     private StoreService storeService;
+
+    @Autowired
+    private DocumentStorageHelper documneStorageService;
 
 
     private static final String MSG_009 = "MSG-009";
@@ -32,6 +40,24 @@ public class StoreController {
         }
         // Do Get/Search Store
         ResponseStoreListForm responseStoreListForm = storeService.getStoreList(requestForm);
+        if(responseStoreListForm == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        // Return result
+        return ResponseSupporter.responseResult(responseStoreListForm);
+    }
+
+    @GetMapping(value = "/admin/stores-by-product")
+    public String getStoreListByProduct(@Validated RequestGetStoreListByProductForm requestForm,
+                               BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Get/Search Store
+        ResponseStoreListForm responseStoreListForm = storeService.getStoreListByProduct(requestForm);
         if(responseStoreListForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
@@ -90,7 +116,7 @@ public class StoreController {
         // TODO: insert img
 //        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 //        String uploadDir = "/store-img/" + "fakeid";
-//        ImageHelper.saveFile(uploadDir,fileName,multipartFile);
+//        FileHelper.saveFile(uploadDir,fileName,multipartFile);
 
         // Do Create Store
         ResponseCommonForm rs = storeService.createStore(requestForm);
@@ -164,4 +190,19 @@ public class StoreController {
         // Return result
         return ResponseSupporter.responseResult(true);
     }
+
+    @PostMapping("/uploadImage")
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file,
+                                         @RequestParam("userId") Integer UserId,
+                                         @RequestParam("docType") String docType) {
+
+        String fileName = documneStorageService.storeFile(file, UserId, docType);
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+        return new UploadFileResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
+    }
+
 }
