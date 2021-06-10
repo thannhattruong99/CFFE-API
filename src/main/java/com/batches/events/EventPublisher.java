@@ -9,8 +9,8 @@ public class EventPublisher {
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
 
-    public void publishEvent(String eventName) {
-        applicationEventPublisher.publishEvent(new EventCreator(this, eventName));
+    public void publishEvent(String eventName, String relativeFilePath) {
+        applicationEventPublisher.publishEvent(new EventCreator(this, eventName, relativeFilePath));
     }
 
 }

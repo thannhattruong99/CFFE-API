@@ -9,19 +9,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class PythonHelper {
-    private final static String RUN_PYTHON_SOURCE = "/Users/truongtn/Desktop/Desktop/HocTap/Semester8/Python/CoutingPeople/People-Counting-in-Real-Time/Run.py";
+    private final static String RUN_PYTHON_SOURCE = "/Users/truongtn/Desktop/Desktop/HocTap/Semester8/Python/CoutingPeople/People-Counting-in-Real-Time/";
     private final static String PYTHON_3 = "python3";
     private final static String INPUT_OPTION = "--input";
     private final static String OUTPUT_OPTION = "--output";
 
-    public static boolean countPerson(String inputVideoPath, String outputVideoPath) throws IOException, InterruptedException {
+    public static boolean countPerson(String inputVideoPath, String outputVideoPath) throws InterruptedException {
         try{
             Runtime rt = Runtime.getRuntime();
-            String command = PYTHON_3 + " " + RUN_PYTHON_SOURCE + " "
-                    + "--prototxt /Users/truongtn/Desktop/Desktop/HocTap/Semester8/Python/CoutingPeople/People-Counting-in-Real-Time/mobilenet_ssd/MobileNetSSD_deploy.prototxt" +
-                    " --model /Users/truongtn/Desktop/Desktop/HocTap/Semester8/Python/CoutingPeople/People-Counting-in-Real-Time/mobilenet_ssd/MobileNetSSD_deploy.caffemodel"+ " "
-                    + INPUT_OPTION + " " +"/Users/truongtn/Desktop/Desktop/HocTap/Capstone/CapstoneAPI/src/main/resources/videos" + inputVideoPath
-                    + " " + OUTPUT_OPTION + " " + "/Users/truongtn/Desktop/Desktop/HocTap/Capstone/CapstoneAPI/src/main/resources/videos" + outputVideoPath;
+            String command = PYTHON_3 + " " + RUN_PYTHON_SOURCE + "Run.py" + " "
+                    + "--prototxt "+ RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.prototxt" +
+                    " --model " + RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.caffemodel" + " "
+                    + INPUT_OPTION + " " + FileHelper.getResourcePath() + inputVideoPath
+                    + " " + OUTPUT_OPTION + " " + FileHelper.getResourcePath() + outputVideoPath;
             System.out.println("COMMAND: "  + command);
             Process proc = rt.exec(command);
             readConsole(proc);

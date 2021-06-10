@@ -50,7 +50,7 @@ public class GCPHelper {
 
 //        File file = ResourceUtils.getFile("classpath:" + relativeFilePath);
 //        System.out.println("ResourceUtils.getFile(relativeFilePath).getAbsolutePath(): " + file.getAbsolutePath());
-        InputStream inputStream = new FileInputStream("/Users/truongtn/Desktop/Desktop/HocTap/Capstone/CapstoneAPI/src/main/resources/videos/example_01.avi");
+        InputStream inputStream = new FileInputStream(FileHelper.getResourcePath() + relativeFilePath);
 
         Blob blob = bucket.create("detected_video/test.avi", inputStream, "video/avi");
         System.out.println("blob.getMediaLink(): " + blob.getSelfLink());

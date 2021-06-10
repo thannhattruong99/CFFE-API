@@ -52,8 +52,7 @@ public class ManagerService extends BaseService {
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
         }
-        System.out.println("TOI DAY ROI NE");
-        eventPublisher.publishEvent("Upload file");
+//        eventPublisher.publishEvent("Upload file");
 
         return responseForm;
     }

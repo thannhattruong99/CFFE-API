@@ -16,13 +16,14 @@ public class CustomEventListener {
     public void eventListener(EventCreator eventHelper) throws InterruptedException, IOException {
         Thread.sleep(1000);
 
-        if(PythonHelper.countPerson("/example_01.mp4", "/example_01.avi")){
-            System.out.println("Here1111");
+        System.out.println("eventHelper.getRelativeFilePath(): " + eventHelper.getRelativeFilePath());
+        if(PythonHelper.countPerson("videos/input/" + eventHelper.getRelativeFilePath(),
+                "videos/output/1_example_0_video.avi")){
             Thread.sleep(30000);
-            GCPHelper.uploadImage("videos/example_01.avi");
+            GCPHelper.uploadImage("videos/output/1_example_0_video.avi");
             Thread.sleep(25000);
-            FileHelper.deleteFile("videos/example_01.mp4");
-            FileHelper.deleteFile("videos/example_01.avi");
+            FileHelper.deleteFile("videos/input/" + eventHelper.getRelativeFilePath());
+            FileHelper.deleteFile("videos/output/1_example_0_video.avi");
         }
         System.out.println("Here222222");
 
