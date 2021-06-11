@@ -1,6 +1,7 @@
 package com.screens.stack.controller;
 
 import com.common.form.ResponseCommonForm;
+import com.screens.stack.dto.RequestGetStackListByProductForm;
 import com.screens.stack.form.*;
 import com.screens.stack.service.StackService;
 import com.util.ResponseSupporter;
@@ -53,6 +54,24 @@ public class StackController {
         }
         // Do Get/Search Store
         ResponseStackListForm responseStackListForm = stackService.getStackListByShelf(requestForm);
+        if(responseStackListForm == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        // Return result
+        return ResponseSupporter.responseResult(responseStackListForm);
+    }
+
+    @GetMapping(value = "/admin/manager/store/shelf/stacks-by-product-store")
+    public String getStackListByProductIdStoreId(@Validated RequestGetStackListByProductForm requestForm,
+                                      BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Get/Search Store
+        ResponseStackListForm responseStackListForm = stackService.getStackListByProductIdStoreId(requestForm);
         if(responseStackListForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);

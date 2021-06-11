@@ -72,9 +72,6 @@
         </where>
         ORDER BY
             TC.CategoryName
-        LIMIT
-        #{offSet},
-        #{fetchNext}
     </select>
 
     <resultMap id="getCategoryList" type="ResponseCategoryListForm">

@@ -1,9 +1,10 @@
 package com.screens.store.controller;
 
 import com.common.form.ResponseCommonForm;
-import com.screens.store.dto.DocumnentStorageProperties;
+import com.common.form.UploadFileResponse;
+import com.screens.store.form.RequestGetStoreListByProductForm;
 import com.screens.store.form.*;
-import com.screens.store.service.DocumentStorageService;
+import com.util.DocumentStorageHelper;
 import com.screens.store.service.StoreService;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class StoreController {
     private StoreService storeService;
 
     @Autowired
-    private DocumentStorageService documneStorageService;
+    private DocumentStorageHelper documneStorageService;
 
 
     private static final String MSG_009 = "MSG-009";
@@ -39,6 +40,24 @@ public class StoreController {
         }
         // Do Get/Search Store
         ResponseStoreListForm responseStoreListForm = storeService.getStoreList(requestForm);
+        if(responseStoreListForm == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        // Return result
+        return ResponseSupporter.responseResult(responseStoreListForm);
+    }
+
+    @GetMapping(value = "/admin/stores-by-product")
+    public String getStoreListByProduct(@Validated RequestGetStoreListByProductForm requestForm,
+                               BindingResult result){
+        // Check Validate
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        // Do Get/Search Store
+        ResponseStoreListForm responseStoreListForm = storeService.getStoreListByProduct(requestForm);
         if(responseStoreListForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
@@ -97,7 +116,7 @@ public class StoreController {
         // TODO: insert img
 //        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 //        String uploadDir = "/store-img/" + "fakeid";
-//        ImageHelper.saveFile(uploadDir,fileName,multipartFile);
+//        FileHelper.saveFile(uploadDir,fileName,multipartFile);
 
         // Do Create Store
         ResponseCommonForm rs = storeService.createStore(requestForm);
@@ -173,7 +192,7 @@ public class StoreController {
     }
 
     @PostMapping("/uploadImage")
-    public UploadFileResponse uploadFile(@RequestParam("image") MultipartFile file,
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file,
                                          @RequestParam("userId") Integer UserId,
                                          @RequestParam("docType") String docType) {
 

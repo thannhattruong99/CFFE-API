@@ -3,6 +3,7 @@ package com.screens.store.service;
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.screens.store.dao.mapper.StoreMapper;
+import com.screens.store.form.RequestGetStoreListByProductForm;
 import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.*;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,17 @@ public class StoreService extends BaseService {
         StoreDTO storeDTO = convertGetStoreListFormToDTO(requestGetStoreListForm);
         try {
             responseStoreListForm = storeMapper.getStoreList(storeDTO);
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+        }
+        return responseStoreListForm;
+    }
+
+    public ResponseStoreListForm getStoreListByProduct(RequestGetStoreListByProductForm requestForm){
+        ResponseStoreListForm responseStoreListForm = null;
+        StoreDTO storeDTO = convertGetStoreListByProductFormToDTO(requestForm);
+        try {
+            responseStoreListForm = storeMapper.getStoreListByProduct(storeDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
         }
@@ -248,6 +260,22 @@ public class StoreService extends BaseService {
         storeDTO.setCityId(requestGetStoreListForm.getCityId());
         storeDTO.setFetchNext(requestGetStoreListForm.getFetchNext());
         if(requestGetStoreListForm.getFetchNext() <= 0){
+            storeDTO.setFetchNext(DEFAULT_FETCH_NEXT);
+        }
+        return storeDTO;
+    }
+
+    private StoreDTO convertGetStoreListByProductFormToDTO(RequestGetStoreListByProductForm requestForm) {
+        StoreDTO storeDTO = new StoreDTO();
+        storeDTO.setSearchValue(requestForm.getSearchValue().toLowerCase().trim());
+        storeDTO.setSearchField(requestForm.getSearchField().toLowerCase().trim());
+        storeDTO.setStatusId(requestForm.getStatusId());
+        if(requestForm.getPageNum() > 0){
+            storeDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
+        }
+        storeDTO.setProductId(requestForm.getProductId());
+        storeDTO.setFetchNext(requestForm.getFetchNext());
+        if(requestForm.getFetchNext() <= 0){
             storeDTO.setFetchNext(DEFAULT_FETCH_NEXT);
         }
         return storeDTO;
