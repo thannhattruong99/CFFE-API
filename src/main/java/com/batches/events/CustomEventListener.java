@@ -18,12 +18,12 @@ public class CustomEventListener {
 
         System.out.println("eventHelper.getRelativeFilePath(): " + eventHelper.getRelativeFilePath());
         if(PythonHelper.countPerson("videos/input/" + eventHelper.getRelativeFilePath(),
-                "videos/output/1_example_0_video.avi")){
+                "videos/output/" + eventHelper.getRelativeFilePath())){
             Thread.sleep(30000);
-            GCPHelper.uploadImage("videos/output/1_example_0_video.avi");
+            GCPHelper.uploadImage("videos/output/" + eventHelper.getRelativeFilePath());
             Thread.sleep(25000);
             FileHelper.deleteFile("videos/input/" + eventHelper.getRelativeFilePath());
-            FileHelper.deleteFile("videos/output/1_example_0_video.avi");
+            FileHelper.deleteFile("videos/output/" + eventHelper.getRelativeFilePath());
         }
         System.out.println("Here222222");
 

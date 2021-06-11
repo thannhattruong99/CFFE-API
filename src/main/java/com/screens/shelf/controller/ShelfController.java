@@ -1,16 +1,17 @@
 package com.screens.shelf.controller;
 
 import com.common.form.ResponseCommonForm;
+import com.common.form.UploadFileResponse;
 import com.screens.shelf.form.*;
 import com.screens.shelf.service.ShelfService;
+import com.util.DocumentStorageHelper;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,8 @@ public class ShelfController {
 
     @Autowired
     private ShelfService shelfService;
+    @Autowired
+    private DocumentStorageHelper documneStorageService;
 
     @RequestMapping(value = "/shelves", method = RequestMethod.GET)
     public String getShelves(@Validated RequestShelfListForm requestForm,
@@ -112,5 +115,15 @@ public class ShelfController {
         }
 
         return ResponseSupporter.responseResult(true);
+    }
+
+    @PostMapping("/uploadVideo")
+    public UploadFileResponse uploadFile2(@RequestParam("file") MultipartFile file,
+                                          @RequestParam("userId") Integer UserId,
+                                          @RequestParam("docType") String docType) {
+
+        String fileName = shelfService.storeFile(file, UserId, docType);
+        return new UploadFileResponse(fileName, fileName,
+                file.getContentType(), file.getSize());
     }
 }

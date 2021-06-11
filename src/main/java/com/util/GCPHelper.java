@@ -46,13 +46,9 @@ public class GCPHelper {
     public static String uploadImage(String relativeFilePath) throws IOException {
         Bucket bucket  = getBucket(bucketName);
 
-        System.out.println("HERERE");
-
-//        File file = ResourceUtils.getFile("classpath:" + relativeFilePath);
-//        System.out.println("ResourceUtils.getFile(relativeFilePath).getAbsolutePath(): " + file.getAbsolutePath());
         InputStream inputStream = new FileInputStream(FileHelper.getResourcePath() + relativeFilePath);
 
-        Blob blob = bucket.create("detected_video/test.avi", inputStream, "video/avi");
+        Blob blob = bucket.create("detected_video/test.mp4", inputStream, "video/mp4");
         System.out.println("blob.getMediaLink(): " + blob.getSelfLink());
         return blob.getSelfLink();
     }

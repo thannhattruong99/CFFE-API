@@ -205,20 +205,4 @@ public class StoreController {
                 file.getContentType(), file.getSize());
     }
 
-
-//    TruongTN
-    @PostMapping("/uploadImage2")
-    public UploadFileResponse uploadFile2(@RequestParam("file") MultipartFile file,
-                                         @RequestParam("userId") Integer UserId,
-                                         @RequestParam("docType") String docType) {
-
-        String fileName = documneStorageService.storeFile2(file, UserId, docType);
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
-    }
-
 }
