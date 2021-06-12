@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @Service
 public class FileService {
-    private final static String PREFIX_IMAGE_PATH = "/src/main/resources/images";
+    private final static String PREFIX_IMAGE_PATH = "\\src\\main\\resources\\images";
     private final static String IMAGE_FOLDER = "images/";
 
     // upload image

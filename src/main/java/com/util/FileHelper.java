@@ -17,7 +17,7 @@ import java.nio.file.StandardCopyOption;
 
 public class FileHelper {
     private final static String CLASS_PATH = "classpath:";
-    private final static String RESOURCE_PATH = "/src/main/resources/";
+    private final static String RESOURCE_PATH = "\\src\\main\\resources\\";
 
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
     throws  IOException{

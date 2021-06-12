@@ -57,7 +57,7 @@ public class GCPHelper {
         Bucket bucket  = getBucket(bucketName);
         InputStream inputStream = new FileInputStream(FileHelper.getResourcePath() + relativeFilePath);
         Blob blob = bucket.create(fileCloudPath, inputStream, "");
-        return blob.getSelfLink();
+        return blob.getMediaLink();
     }
 
     private static Bucket getBucket(String bucketName) throws IOException {
