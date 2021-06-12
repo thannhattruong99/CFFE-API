@@ -64,8 +64,8 @@
         <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
             SELECT UUID() AS shelfId FROM tblShelf LIMIT 1
         </selectKey>
-         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId)
-         VALUES (#{shelfId}, #{shelfName}, #{description}, #{numberOfStack}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}),#{statusId}, #{storeId})
+         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId, ImageURL)
+         VALUES (#{shelfId}, #{shelfName}, #{description}, #{numberOfStack}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}),#{statusId}, #{storeId}, #{imageURL})
 <!--        <selectKey keyProperty="shelfId" resultType="string" order="AFTER ">-->
 <!--            select ShelfId-->
 <!--            from tblShelf-->

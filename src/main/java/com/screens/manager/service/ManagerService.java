@@ -201,7 +201,7 @@ public class ManagerService extends BaseService {
         managerDTO.setUserName(generateUserNameFromFullName(requestForm.getFullName()));
         managerDTO.setPassword(StringHelper.generatePassword(PASSWORD_LENGTH));
         managerDTO.setRoleId(MANAGER_ROLE);
-        managerDTO.setImageURL("xx/image");
+        managerDTO.setImageURL(requestForm.getImageURL());
         managerDTO.setGender(requestForm.getGender());
         managerDTO.setBirthDate(requestForm.getBirthDate());
         managerDTO.setIdentifyCard(requestForm.getIdentifyCard());
