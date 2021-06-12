@@ -160,6 +160,7 @@ public class ShelfService extends BaseService {
         shelfDTO.setNumberOfStack(requestForm.getNumberOfStack());
         shelfDTO.setStatusId(PENDING_STATUS);
         shelfDTO.setCreatedTime(TIME_ZONE_VIETNAMESE);
+        shelfDTO.setImageURL(requestForm.getImageURL());
 
         List<StackDTO> stackDTOS = new ArrayList<>();
         for(int i = 0; i < requestForm.getNumberOfStack(); i++){
