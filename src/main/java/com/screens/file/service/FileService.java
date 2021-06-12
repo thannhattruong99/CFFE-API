@@ -23,6 +23,7 @@ public class FileService {
         try {
             response.setFilePath(GCPHelper.uploadImage(IMAGE_FOLDER + fileName,
                     IMAGE_FOLDER + StringUtils.cleanPath(file.getOriginalFilename())));
+            FileHelper.deleteFile(IMAGE_FOLDER + fileName);
 
         } catch (IOException e) {
             e.printStackTrace();
