@@ -1,11 +1,11 @@
-package com.screenname_example.service;
+package com.authentication.service;
 
+import com.authentication.form.ResponseLoginForm;
 import com.common.config.JwtTokenHelper;
 import com.common.service.BaseService;
-import com.screenname_example.dao.mapper.AccountMapper;
-import com.screenname_example.dto.AccountDTO;
-import com.screenname_example.form.JwtRequest;
-import com.screens.manager.service.ManagerService;
+import com.authentication.dao.mapper.AccountMapper;
+import com.authentication.dto.AccountDTO;
+import com.authentication.form.RequestLoginForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +27,6 @@ public class AccountService extends BaseService {
     @Autowired
     private AccountMapper accountMapper;
 
-    public UserDetails getAccountDTOInformation(JwtRequest authenticationRequest){
-        AccountDTO result = accountMapper.getAccountInformation(authenticationRequest);
-        if(result == null){
-            return null;
-        }
-        return new org.springframework.security.core.userdetails.User(result.getUserName(),
-                result.getPassword(), new ArrayList<>());
-    }
-
     public AccountDTO loadUserByUsername(String userName){
         AccountDTO result = accountMapper.getAccountInformation(userName);
         if(result != null){
@@ -46,9 +37,10 @@ public class AccountService extends BaseService {
 
     }
 
-    public String checkLogin(JwtRequest request){
+    public ResponseLoginForm checkLogin(RequestLoginForm request){
+        ResponseLoginForm resultDAO = null;
         try{
-            AccountDTO resultDAO = accountMapper.login(request);
+            resultDAO = accountMapper.login(request);
             if(resultDAO != null){
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("UserId", resultDAO.getUserId());
@@ -56,12 +48,12 @@ public class AccountService extends BaseService {
                 claims.put("FullName", resultDAO.getFullName());
                 claims.put("StoreId", resultDAO.getStoreId());
                 claims.put("RoleId", resultDAO.getRoleId());
-                return jwtTokenHelper.generateToken(claims, request.getUsername());
+                resultDAO.setToken(jwtTokenHelper.generateToken(claims, request.getUsername()));
             }
 
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
         }
-        return null;
+        return resultDAO;
     }
 }

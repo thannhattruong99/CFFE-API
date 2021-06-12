@@ -1,8 +1,9 @@
-package com.screenname_example.controller;
+package com.authentication.controller;
 
-import com.screenname_example.form.JwtRequest;
-import com.screenname_example.form.JwtResponse;
-import com.screenname_example.service.AccountService;
+import com.authentication.dto.AccountDTO;
+import com.authentication.form.RequestLoginForm;
+import com.authentication.form.ResponseLoginForm;
+import com.authentication.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,12 @@ public class AccountController {
     private AccountService accountService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody RequestLoginForm authenticationRequest) {
 
-        String token = accountService
+        ResponseLoginForm response = accountService
                 .checkLogin(authenticationRequest);
-        if(token != null){
-            return ResponseEntity.ok(new JwtResponse(token));
+        if(response != null){
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

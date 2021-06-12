@@ -1,6 +1,9 @@
-package com.screenname_example.dto;
+package com.authentication.form;
 
-public class AccountDTO {
+import java.io.Serializable;
+
+public class ResponseLoginForm implements Serializable {
+    private String token;
     private String userId;
     private String userName;
     private String fullName;
@@ -8,10 +11,17 @@ public class AccountDTO {
     private String statusName;
     private int roleId;
     private String roleName;
-    private String password;
     private String storeId;
 
-    public AccountDTO() {
+    public ResponseLoginForm() {
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getUserId() {
@@ -20,6 +30,22 @@ public class AccountDTO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public int getStatusId() {
@@ -54,35 +80,11 @@ public class AccountDTO {
         this.roleName = roleName;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public String getStoreId() {
         return storeId;
     }
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

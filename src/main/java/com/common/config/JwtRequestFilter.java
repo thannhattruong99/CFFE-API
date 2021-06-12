@@ -1,8 +1,8 @@
 package com.common.config;
 
 import com.filter.dto.AuthorDTO;
-import com.screenname_example.dto.AccountDTO;
-import com.screenname_example.service.AccountService;
+import com.authentication.dto.AccountDTO;
+import com.authentication.service.AccountService;
 import com.util.ReadResourceHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

@@ -1,19 +1,19 @@
-package com.screenname_example.form;
+package com.authentication.form;
 
 import java.io.Serializable;
 
-public class JwtRequest implements Serializable {private static final long serialVersionUID = 5926468583005150707L;
+public class RequestLoginForm implements Serializable {private static final long serialVersionUID = 5926468583005150707L;
 
     private String username;
     private String password;
 
     //need default constructor for JSON Parsing
-    public JwtRequest()
+    public RequestLoginForm()
     {
 
     }
 
-    public JwtRequest(String username, String password) {
+    public RequestLoginForm(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
     }
