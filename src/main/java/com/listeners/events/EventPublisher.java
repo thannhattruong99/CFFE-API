@@ -1,4 +1,4 @@
-package com.batches.events;
+package com.listeners.events;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

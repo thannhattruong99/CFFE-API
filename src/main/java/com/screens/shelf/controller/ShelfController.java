@@ -23,8 +23,6 @@ public class ShelfController {
 
     @Autowired
     private ShelfService shelfService;
-    @Autowired
-    private DocumentStorageHelper documneStorageService;
 
     @RequestMapping(value = "/shelves", method = RequestMethod.GET)
     public String getShelves(@Validated RequestShelfListForm requestForm,
@@ -117,7 +115,7 @@ public class ShelfController {
         return ResponseSupporter.responseResult(true);
     }
 
-    @PostMapping("/uploadVideo")
+    @PostMapping("/shelf/uploadVideo")
     public UploadFileResponse uploadFile2(@RequestParam("file") MultipartFile file,
                                           @RequestParam("userId") Integer UserId,
                                           @RequestParam("docType") String docType) {

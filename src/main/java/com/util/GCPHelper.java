@@ -49,7 +49,7 @@ public class GCPHelper {
         InputStream inputStream = new FileInputStream(FileHelper.getResourcePath() + relativeFilePath);
 
         Blob blob = bucket.create("detected_video/test.mp4", inputStream, "video/mp4");
-        System.out.println("blob.getMediaLink(): " + blob.getSelfLink());
+        System.out.println("blob.getMediaLink(): " + blob.getMediaLink());
         return blob.getSelfLink();
     }
 

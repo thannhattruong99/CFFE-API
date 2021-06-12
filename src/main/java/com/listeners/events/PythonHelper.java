@@ -1,7 +1,6 @@
-package com.batches.events;
+package com.listeners.events;
 
 import com.util.FileHelper;
-import com.util.GCPHelper;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -14,21 +13,23 @@ public class PythonHelper {
     private final static String INPUT_OPTION = "--input";
     private final static String OUTPUT_OPTION = "--output";
 
-    public static boolean countPerson(String inputVideoPath, String outputVideoPath) throws InterruptedException {
+    public static int countPerson(String inputVideoPath, String outputVideoPath) throws InterruptedException {
+        int numberOfPerson = 0;
         try{
             Runtime rt = Runtime.getRuntime();
-            String command = PYTHON_3 + " " + RUN_PYTHON_SOURCE + "Run.py" + " "
-                    + "--prototxt "+ RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.prototxt" +
+            String command = PYTHON_3 + " " + RUN_PYTHON_SOURCE + "Run.py"
+                    + " --prototxt "+ RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.prototxt" +
                     " --model " + RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.caffemodel" + " "
                     + INPUT_OPTION + " " + FileHelper.getResourcePath() + inputVideoPath
                     + " " + OUTPUT_OPTION + " " + FileHelper.getResourcePath() + outputVideoPath;
             System.out.println("COMMAND: "  + command);
             Process proc = rt.exec(command);
-            readConsole(proc);
+            numberOfPerson = readConsole(proc);
             if(proc.isAlive()){
-                System.out.println("Con song day ne");
+//                System.out.println("Con song day ne");
             }
             System.out.println("proc.waitFor(): " + proc.waitFor());
+//            insert db
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -36,8 +37,7 @@ public class PythonHelper {
             e.printStackTrace();
         }
 
-
-        return true;
+        return numberOfPerson;
     }
 
     private static void watch(final Process process) {
@@ -56,7 +56,7 @@ public class PythonHelper {
         }.start();
     }
 
-    private static void readConsole(Process proc) throws IOException {
+    private static int readConsole(Process proc) throws IOException {
         BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(proc.getInputStream()));
 
@@ -66,15 +66,17 @@ public class PythonHelper {
 // Read the output from the command
         System.out.println("Here is the standard output of the command:\n");
         String s = null;
+        int numberOfPerson = 0;
         while ((s = stdInput.readLine()) != null) {
             System.out.println(s);
+            numberOfPerson = Integer.parseInt(s);
         }
-
+//        int numberOfPerson = Integer.parseInt(s);
 // Read any errors from the attempted command
         System.out.println("Here is the standard error of the command (if any):\n");
         while ((s = stdError.readLine()) != null) {
             System.out.println(s);
         }
-
+        return numberOfPerson;
     }
 }

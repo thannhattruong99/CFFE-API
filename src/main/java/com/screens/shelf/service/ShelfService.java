@@ -1,7 +1,6 @@
 package com.screens.shelf.service;
 
-import com.batches.events.EventPublisher;
-import com.common.dto.DocumnentStorageProperties;
+import com.listeners.events.EventPublisher;
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.screens.shelf.dao.mapper.ShelfMapper;
@@ -15,14 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
