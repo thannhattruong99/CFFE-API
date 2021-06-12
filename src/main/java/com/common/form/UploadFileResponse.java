@@ -1,4 +1,4 @@
-package com.screens.store.form;
+package com.common.form;
 
 public class UploadFileResponse {
     private String fileName;

@@ -1,25 +1,19 @@
-package com.screens.store.service;
+package com.util;
 
 
-import com.screens.store.dto.DocumnentStorageProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+import com.common.dto.DocumnentStorageProperties;
 import org.springframework.stereotype.Service;
-import org.springframework.util.SocketUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
-public class DocumentStorageService {
+public class DocumentStorageHelper {
 //    private final Path fileStorageLocation;
 
 //    @Autowired
@@ -38,7 +32,14 @@ public class DocumentStorageService {
 
     public String storeFile(MultipartFile file, Integer userId, String docType) {
         System.out.println("Toi day roi neeeeeeeeeeeeeeeeee");
-        Path fileStorageLocation = Paths.get("..\\src\\main\\resources\\messages");
+//        Path fileStorageLocation = Paths.get("\\src\\main\\resources\\messages");
+
+        String userDirectory = Paths.get("")
+                .toAbsolutePath()
+                .toString();
+        System.out.println("========================== "+userDirectory);
+
+        Path fileStorageLocation = Paths.get(userDirectory+ "\\src\\main\\resources\\files");
         try {
             Files.createDirectories(fileStorageLocation);
         } catch (Exception ex) {
@@ -58,7 +59,13 @@ public class DocumentStorageService {
             } catch(Exception e) {
                 fileExtension = "ahihih do nngoc";
             }
-            fileName = userId + "_" + docType + fileExtension;
+            String fileNameZero;
+            try {
+                fileNameZero = originalFileName.substring(0,originalFileName.lastIndexOf(".")-1);
+            } catch(Exception e) {
+                fileNameZero = "ahihih do nngoc";
+            }
+            fileName = userId +"_" +  fileNameZero+"_" + docType + fileExtension;
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -103,6 +110,5 @@ public class DocumentStorageService {
         return "test";
 //        return docStorageRepo.getUploadDocumnetPath(userId, docType);
     }
-
 
 }

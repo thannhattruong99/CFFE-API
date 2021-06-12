@@ -1,7 +1,7 @@
 //package com.screens.store.dao.mapper;
 //
 //import com.common.dao.BaseDAO;
-//import com.screens.store.dto.DocumnentStorageProperties;
+//import com.common.dto.DocumnentStorageProperties;
 //import com.util.IDBHelper;
 //import org.springframework.stereotype.Repository;
 //
