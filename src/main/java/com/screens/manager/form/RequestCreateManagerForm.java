@@ -25,7 +25,7 @@ public class RequestCreateManagerForm {
     @Max(value = 2, message = "MSG-054")
     private int gender;
     @Nullable
-    private byte[] image;
+    private String imageURL;
     @NotEmpty(message = "MSG-036")
     @Size(min = 1, max = 250, message = "MSG-037")
     private String address;
@@ -75,12 +75,13 @@ public class RequestCreateManagerForm {
         this.gender = gender;
     }
 
-    public byte[] getImage() {
-        return image;
+    @Nullable
+    public String getImageURL() {
+        return imageURL;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setImageURL(@Nullable String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getAddress() {
