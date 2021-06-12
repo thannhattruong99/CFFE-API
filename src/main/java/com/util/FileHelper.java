@@ -106,12 +106,12 @@ public class FileHelper {
         return fileName;
     }
 
-    public static String storeImage(MultipartFile file) {
+    public static String storeImage(MultipartFile file, String prefixPath) {
         String userDirectory = Paths.get("")
                 .toAbsolutePath()
                 .toString();
 
-        Path fileStorageLocation = Paths.get(userDirectory+ "/src/main/resources/videos/input");
+        Path fileStorageLocation = Paths.get(userDirectory + prefixPath);
         try {
             Files.createDirectories(fileStorageLocation);
         } catch (Exception ex) {

@@ -2,7 +2,10 @@ package com.screens.file.controller;
 
 
 import com.common.form.UploadFileResponse;
+import com.screens.file.form.ResponseUploadImage;
+import com.screens.file.service.FileService;
 import com.screens.shelf.service.ShelfService;
+import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,15 +17,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
 
     @Autowired
-    private ShelfService shelfService;
+    private FileService fileService;
 
     @PostMapping("/upload-image")
-    public UploadFileResponse uploadImage(@RequestParam("file") MultipartFile file) {
+    public String uploadImage(@RequestParam("file") MultipartFile file) {
 
-        String fileName = shelfService.storeFile(file);
-        return new UploadFileResponse(fileName, fileName,
-                file.getContentType(), file.getSize());
+        ResponseUploadImage response = fileService.storeImage(file);
+        if(response != null){
+            return ResponseSupporter.responseResult(response);
+        }
+        return ResponseSupporter.responseResult("loi roi");
     }
-
 
 }

@@ -53,6 +53,13 @@ public class GCPHelper {
         return blob.getSelfLink();
     }
 
+    public static String uploadImage(String relativeFilePath, String fileCloudPath) throws IOException {
+        Bucket bucket  = getBucket(bucketName);
+        InputStream inputStream = new FileInputStream(FileHelper.getResourcePath() + relativeFilePath);
+        Blob blob = bucket.create(fileCloudPath, inputStream, "");
+        return blob.getSelfLink();
+    }
+
     private static Bucket getBucket(String bucketName) throws IOException {
         GoogleCredentials credentials = GoogleCredentials.fromStream(
                 new FileInputStream(ResourceUtils.getFile("classpath:" +"capstone-project-sm21-78b453757e26.json")))
