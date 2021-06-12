@@ -148,7 +148,6 @@
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE CameraId = #{cameraId}
     </update>
-
     <resultMap id="getShelves" type="ResponseShelfListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="shelves" ofType="ShelfResponseSupporter">
