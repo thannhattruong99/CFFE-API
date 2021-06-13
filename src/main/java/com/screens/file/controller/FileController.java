@@ -13,20 +13,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController()
 public class FileController {
+    private static final String MSG_111 = "MSG-011";
 
     @Autowired
     private FileService fileService;
 
     @PostMapping("/upload-image")
     public String uploadImage(@RequestParam("file") MultipartFile file) {
-
-        ResponseUploadImage response = fileService.storeImage(file);
-        if(response != null){
-            return ResponseSupporter.responseResult(response);
+        ResponseUploadImage response = fileService.uploadImageToStorage(file);
+        if(response.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(response.getErrorCodes());
         }
-        return ResponseSupporter.responseResult("loi roi");
+        return ResponseSupporter.responseResult(response);
     }
 
 }
