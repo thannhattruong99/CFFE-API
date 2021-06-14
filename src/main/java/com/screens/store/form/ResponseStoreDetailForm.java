@@ -18,7 +18,6 @@ public class ResponseStoreDetailForm implements Serializable {
     private String createdTime;
     private String updatedTime;
     private String reasonInactive;
-    private String analyzedTime;
     private int statusId;
     private String statusName;
 
@@ -49,14 +48,6 @@ public class ResponseStoreDetailForm implements Serializable {
         this.cityId = cityId;
     }
 
-    public String getAnalyzedTime() {
-        return analyzedTime;
-    }
-
-    public void setAnalyzedTime(String analyzedTime) {
-        this.analyzedTime = analyzedTime;
-    }
-
     public int getStatusId() {
         return statusId;
     }
@@ -64,10 +55,6 @@ public class ResponseStoreDetailForm implements Serializable {
     public void setStatusId(int statusId) {
         this.statusId = statusId;
     }
-
-
-
-
 
     public String getDistrictName() {
         return districtName;

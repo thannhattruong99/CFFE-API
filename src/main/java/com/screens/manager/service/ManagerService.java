@@ -9,6 +9,7 @@ import com.screens.manager.dto.ManagerDTO;
 import com.screens.manager.form.*;
 import com.util.EmailHelper;
 import com.util.StringHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -202,7 +203,12 @@ public class ManagerService extends BaseService {
         managerDTO.setUserName(generateUserNameFromFullName(requestForm.getFullName()));
         managerDTO.setPassword(StringHelper.generatePassword(PASSWORD_LENGTH));
         managerDTO.setRoleId(MANAGER_ROLE);
-        managerDTO.setImageURL(requestForm.getImageURL());
+        if (StringUtils.isNotEmpty(requestForm.getImageURL())) {
+            managerDTO.setImageURL(requestForm.getImageURL());
+        } else {
+            managerDTO.setImageURL(DEFAULT_IMAGE);
+        }
+
         managerDTO.setGender(requestForm.getGender());
         managerDTO.setBirthDate(requestForm.getBirthDate());
         managerDTO.setIdentifyCard(requestForm.getIdentifyCard());
@@ -268,7 +274,9 @@ public class ManagerService extends BaseService {
     private void convertRequestUpdateManagerFormToManagerDTO(RequestUpdateManagerForm requestForm, ManagerDTO managerDTO){
         managerDTO.setUserName(requestForm.getUserName());
         managerDTO.setFullName(requestForm.getFullName());
-        managerDTO.setImageURL("xx/image");
+        if (StringUtils.isNotEmpty(requestForm.getImageURL())) {
+            managerDTO.setImageURL(requestForm.getImageURL());
+        }
         managerDTO.setGender(requestForm.getGender());
         managerDTO.setBirthDate(requestForm.getBirthDate());
         managerDTO.setIdentifyCard(requestForm.getIdentifyCard());
