@@ -2,6 +2,7 @@ package com.screens.store.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
+import com.filter.dto.AuthorDTO;
 import com.screens.store.dao.mapper.StoreMapper;
 import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.*;
@@ -58,9 +59,9 @@ public class StoreService extends BaseService {
         return responseStoreListForm;
     }
 
-    public ResponseStoreDetailForm getStoreDetail(RequestGetStoreDetailForm requestForm) {
+    public ResponseStoreDetailForm getStoreDetail(RequestGetStoreDetailForm requestForm, AuthorDTO authorDTO) {
         ResponseStoreDetailForm responseStoreDetailForm = null;
-        StoreDTO storeDTO = convertGetStoreDetailFormToDTO(requestForm);
+        StoreDTO storeDTO = convertGetStoreDetailFormToDTO(requestForm,authorDTO);
         try {
             responseStoreDetailForm = storeMapper.getStoreDetail(storeDTO);
         } catch (PersistenceException e) {
@@ -243,9 +244,12 @@ public class StoreService extends BaseService {
         return storeDTO;
     }
 
-    private StoreDTO convertGetStoreDetailFormToDTO(RequestGetStoreDetailForm requestForm) {
+    private StoreDTO convertGetStoreDetailFormToDTO(RequestGetStoreDetailForm requestForm, AuthorDTO authorDTO) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreId(requestForm.getStoreId());
+        if (authorDTO != null) {
+            storeDTO.setStoreId(authorDTO.getStoreId());
+        }
         return storeDTO;
     }
 

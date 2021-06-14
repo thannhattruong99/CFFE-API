@@ -26,9 +26,9 @@ import java.util.List;
 public class JwtRequestFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
-    private static final String ADMIN_AUTHORITY_PATH = "authorities/Admin.properties";
-    private static final String MANAGER_AUTHORITY_PATH = "authorities/Manager.properties";
-    private static final String APPLICATION_AUTHORITY_PATH = "authorities/Application.properties";
+    private static final String ADMIN_AUTHORITY_PATH = "authorities\\Admin.properties";
+    private static final String MANAGER_AUTHORITY_PATH = "authorities\\Manager.properties";
+    private static final String APPLICATION_AUTHORITY_PATH = "authorities\\Application.properties";
     private static final int ADMIN_ROLE = 1;
     private static final int MANAGER_ROLE = 2;
     private static final String USER_ID_STRING = "UserId";
@@ -57,6 +57,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(AUTHORIZATION);
+
+        System.out.println("=========" + adminAuthorities.size());
+        System.out.println("========="+ request.getRequestURI());
 
         String username = null;
         String jwtToken = null;

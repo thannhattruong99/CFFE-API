@@ -1,20 +1,26 @@
 package com.screens.store.controller;
 
 import com.common.form.ResponseCommonForm;
+import com.filter.dto.AuthorDTO;
 import com.screens.store.form.*;
 import com.screens.store.service.StoreService;
 import com.util.DocumentStorageHelper;
 import com.util.ResponseSupporter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@RestController("")
+@RequestMapping("admin")
+@SecurityRequirement(name = "basicAuth")
 public class StoreController {
 
     @Autowired
@@ -81,16 +87,23 @@ public class StoreController {
         return ResponseSupporter.responseResult(responseStoreListForm);
     }
 
-    @GetMapping(value = "/admin/store")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/store")
     public String getStoreDetail(
                                @Validated RequestGetStoreDetailForm requestForm,
-                               BindingResult result){
+                               BindingResult result,
+                               HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+
+        // if nguoi thuc hien la admin => authorDTO = null
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
+
+
         // Do Get Store Detail
-        ResponseStoreDetailForm responseStoreDetailForm = storeService.getStoreDetail(requestForm);
+        ResponseStoreDetailForm responseStoreDetailForm = storeService.getStoreDetail(requestForm,authorDTO);
         if(responseStoreDetailForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_035);
