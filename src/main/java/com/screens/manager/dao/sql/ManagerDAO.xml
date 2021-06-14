@@ -95,7 +95,9 @@
     <update id="updateManagerInformation">
         UPDATE tblUser
         SET Fullname = #{fullName},
-            ImageURL = #{imageURL},
+            <if test="imageURL != null">
+                ImageURL = #{imageURL},
+            </if>
             Gender = #{gender},
             BirthDate = #{birthDate},
             IdentifyCard = #{identifyCard},
