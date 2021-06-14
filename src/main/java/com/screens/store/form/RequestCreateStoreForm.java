@@ -16,21 +16,10 @@ public class RequestCreateStoreForm implements Serializable {
     @NotEmpty(message = "MSG-107")
     private String address;
 
-    @NotEmpty(message = "MSG-108")
-    private String analyzedTime;
-
     @NotNull
     private int districtId;
 
     public RequestCreateStoreForm() {
-    }
-
-    public String getAnalyzedTime() {
-        return analyzedTime;
-    }
-
-    public void setAnalyzedTime(String analyzedTime) {
-        this.analyzedTime = analyzedTime;
     }
 
     public String getStoreName() {

@@ -147,8 +147,11 @@ public class CameraService extends BaseService {
 
     private void convertRequestCreateCameraFormToCameraDTO(RequestCreateCameraForm requestForm, CameraDTO cameraDTO){
         cameraDTO.setCameraName(requestForm.getCameraName());
-        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl())){
             cameraDTO.setImageURL(requestForm.getImageUrl());
+        } else {
+            cameraDTO.setImageURL(DEFAULT_IMAGE);
+        }
         cameraDTO.setIpAddress(requestForm.getIpAddress());
         cameraDTO.setRtspString(requestForm.getRtspString());
         cameraDTO.setTypeDetect(requestForm.getTypeDetect());

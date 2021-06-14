@@ -175,8 +175,11 @@ public class ProductService extends BaseService {
         productDTO.setProductName(requestForm.getProductName());
         if (StringUtils.isNotEmpty(requestForm.getDescription()))
             productDTO.setDescription(requestForm.getDescription());
-        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl())){
             productDTO.setImageUrl(requestForm.getImageUrl());
+        } else {
+            productDTO.setImageUrl(DEFAULT_IMAGE);
+        }
         if (requestForm.getCategories().size() > 0)
             productDTO.setCategories(requestForm.getCategories());
         productDTO.setStatusId(ACTIVE_STATUS);

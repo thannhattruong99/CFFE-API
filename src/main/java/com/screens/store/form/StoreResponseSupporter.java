@@ -13,7 +13,6 @@ public class StoreResponseSupporter {
     private String districtName;
     private String updatedTime;
     private String reasonInactive;
-    private String analyzedTime;
     private int statusId;
     private String status;
 
@@ -42,14 +41,6 @@ public class StoreResponseSupporter {
 
     public void setReasonInactive(String reasonInactive) {
         this.reasonInactive = reasonInactive;
-    }
-
-    public String getAnalyzedTime() {
-        return analyzedTime;
-    }
-
-    public void setAnalyzedTime(String analyzedTime) {
-        this.analyzedTime = analyzedTime;
     }
 
     public int getStatusId() {
