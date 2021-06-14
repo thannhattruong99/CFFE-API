@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -18,6 +22,8 @@ import java.io.IOException;
 
 @Configuration
 @SpringBootApplication
+@RestController
+@EnableAsync
 @ComponentScan(basePackages = {"com"})
 public class CasptoneAPIApplication {
     private static final Logger logger = LoggerFactory.getLogger(CasptoneAPIApplication.class);
@@ -53,6 +59,11 @@ public class CasptoneAPIApplication {
                 registry.addResourceHandler("/resources/**").setCachePeriod(0);
             }
         };
+    }
+
+    @Bean
+    TaskExecutor taskExecutor() {
+        return new SimpleAsyncTaskExecutor();
     }
 
 }

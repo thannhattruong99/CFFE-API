@@ -102,4 +102,9 @@ public class ShelfMapper extends BaseDAO {
 
         return false;
     }
+
+    public boolean insertHotSpot(){
+
+        return false;
+    }
 }

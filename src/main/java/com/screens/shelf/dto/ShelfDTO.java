@@ -19,12 +19,19 @@ public class ShelfDTO extends BaseDTO {
     private String reasonInactive;
     private int numberOfStack;
     private int totalOfRecord;
+    private String imageURL;
     private List<StackDTO> stacks;
 
     public ShelfDTO() {
     }
 
+    public String getImageURL() {
+        return imageURL;
+    }
 
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
     public int getAction() {
         return action;

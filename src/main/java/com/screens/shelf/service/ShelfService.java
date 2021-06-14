@@ -1,17 +1,21 @@
 package com.screens.shelf.service;
 
+import com.listeners.events.EventPublisher;
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.screens.shelf.dao.mapper.ShelfMapper;
 import com.screens.shelf.dto.ShelfDTO;
 import com.screens.shelf.dto.StackDTO;
 import com.screens.shelf.form.*;
+import com.util.FileHelper;
 import com.util.StringHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,8 @@ public class ShelfService extends BaseService {
 
     @Autowired
     private ShelfMapper shelfMapper;
+    @Autowired
+    EventPublisher eventPublisher;
 
     public ResponseShelfListForm getShelfList(RequestShelfListForm requestForm){
         ResponseShelfListForm responseForm = null;
@@ -122,6 +128,13 @@ public class ShelfService extends BaseService {
         return responseForm;
     }
 
+    //    TruongTN
+    public String storeFile(MultipartFile file, Integer userId, String docType) {
+        String fileName = FileHelper.storeVideo(file, userId, docType);
+        eventPublisher.publishEvent("Upload file", fileName);
+        return fileName;
+    }
+
     private void convertRequestShelfListToShelfDTO(RequestShelfListForm requestForm, ShelfDTO shelfDTO){
         shelfDTO.setStoreId(requestForm.getStoreId());
         shelfDTO.setShelfName(requestForm.getShelfName());
@@ -148,6 +161,8 @@ public class ShelfService extends BaseService {
         shelfDTO.setNumberOfStack(requestForm.getNumberOfStack());
         shelfDTO.setStatusId(PENDING_STATUS);
         shelfDTO.setCreatedTime(TIME_ZONE_VIETNAMESE);
+        if(StringUtils.isNotEmpty(requestForm.getImageURL()))
+            shelfDTO.setImageURL(requestForm.getImageURL());
 
         List<StackDTO> stackDTOS = new ArrayList<>();
         for(int i = 0; i < requestForm.getNumberOfStack(); i++){
@@ -163,6 +178,8 @@ public class ShelfService extends BaseService {
         shelfDTO.setShelfName(requestForm.getShelfName());
         shelfDTO.setDescription(requestForm.getDescription());
         shelfDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            shelfDTO.setImageURL(requestForm.getImageUrl());
     }
 
     private void convertRequestUpdateStatusFormToShelfDTO(RequestUpdateShelfStatusForm requestForm, ShelfDTO shelfDTO){

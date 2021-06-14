@@ -112,12 +112,6 @@ public class StoreController {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-
-        // TODO: insert img
-//        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-//        String uploadDir = "/store-img/" + "fakeid";
-//        FileHelper.saveFile(uploadDir,fileName,multipartFile);
-
         // Do Create Store
         ResponseCommonForm rs = storeService.createStore(requestForm);
         if(rs.getErrorCodes() != null){
@@ -191,18 +185,18 @@ public class StoreController {
         return ResponseSupporter.responseResult(true);
     }
 
-    @PostMapping("/uploadImage")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file,
-                                         @RequestParam("userId") Integer UserId,
-                                         @RequestParam("docType") String docType) {
-
-        String fileName = documneStorageService.storeFile(file, UserId, docType);
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
-    }
+//    @PostMapping("/uploadImage")
+//    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file,
+//                                         @RequestParam("userId") Integer UserId,
+//                                         @RequestParam("docType") String docType) {
+//
+//        String fileName = documneStorageService.storeFile(file, UserId, docType);
+//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                .path("/downloadFile/")
+//                .path(fileName)
+//                .toUriString();
+//        return new UploadFileResponse(fileName, fileDownloadUri,
+//                file.getContentType(), file.getSize());
+//    }
 
 }

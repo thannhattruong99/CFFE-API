@@ -7,6 +7,7 @@ import com.screens.camera.dto.CameraDTO;
 import com.screens.camera.form.*;
 import com.screens.manager.service.ManagerService;
 import com.util.StringHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,7 +148,8 @@ public class CameraService extends BaseService {
 
     private void convertRequestCreateCameraFormToCameraDTO(RequestCreateCameraForm requestForm, CameraDTO cameraDTO){
         cameraDTO.setCameraName(requestForm.getCameraName());
-        cameraDTO.setImageURL("image/test");
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            cameraDTO.setImageURL(requestForm.getImageUrl());
         cameraDTO.setIpAddress(requestForm.getIpAddress());
         cameraDTO.setRtspString(requestForm.getRtspString());
         cameraDTO.setTypeDetect(requestForm.getTypeDetect());
@@ -158,7 +160,8 @@ public class CameraService extends BaseService {
     private void convertRequestUpdateCameraFormToCameraDTO(RequestUpdateCameraForm requestForm, CameraDTO cameraDTO){
         cameraDTO.setCameraId(requestForm.getCameraId());
         cameraDTO.setCameraName(requestForm.getCameraName());
-        cameraDTO.setImageURL("image/test");
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            cameraDTO.setImageURL(requestForm.getImageUrl());
         cameraDTO.setIpAddress(requestForm.getIpAddress());
         cameraDTO.setRtspString(requestForm.getRtspString());
         cameraDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);

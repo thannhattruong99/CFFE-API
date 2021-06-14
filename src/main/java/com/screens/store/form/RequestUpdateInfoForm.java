@@ -13,6 +13,9 @@ public class RequestUpdateInfoForm implements Serializable {
     private String storeId;
 
     @Nullable
+    private String imageUrl;
+
+    @Nullable
     @Size(min = 1, max = 100, message = "MSG-015")
     private String storeName;
 
@@ -60,14 +63,14 @@ public class RequestUpdateInfoForm implements Serializable {
         this.storeName = storeName;
     }
 
-//    @Nullable
-//    public MultipartFile getImageUrl() {
-//        return imageUrl;
-//    }
-//
-//    public void setImageUrl(@Nullable MultipartFile imageUrl) {
-//        this.imageUrl = imageUrl;
-//    }
+    @Nullable
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(@Nullable String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     @Nullable
     public String getAddress() {

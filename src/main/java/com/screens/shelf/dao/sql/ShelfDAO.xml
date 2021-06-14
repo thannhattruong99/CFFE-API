@@ -57,15 +57,32 @@
         WHERE SH.ShelfId = #{shelfId}
     </select>
     <update id="updateShelf">
-        UPDATE tblShelf SET ShelfName = #{shelfName}, Description = #{description}, UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        UPDATE tblShelf
+        SET ShelfName = #{shelfName},
+            <if test="imageUrl != null">
+                ImageURL = #{imageUrl},
+            </if>
+            Description = #{description},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE ShelfId = #{shelfId}
     </update>
     <insert id="createShelf" parameterType="ShelfDTO">
         <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
             SELECT UUID() AS shelfId FROM tblShelf LIMIT 1
         </selectKey>
-         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId)
-         VALUES (#{shelfId}, #{shelfName}, #{description}, #{numberOfStack}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}),#{statusId}, #{storeId})
+         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId, ImageURL)
+         VALUES (#{shelfId},
+           #{shelfName},
+           #{description},
+           #{numberOfStack},
+           convert_tz(now(),
+           @@session.time_zone,#{createdTime}),
+           convert_tz(now(),
+           @@session.time_zone,
+           #{createdTime}),
+           #{statusId},
+           #{storeId},
+           #{imageURL})
 <!--        <selectKey keyProperty="shelfId" resultType="string" order="AFTER ">-->
 <!--            select ShelfId-->
 <!--            from tblShelf-->
@@ -148,7 +165,6 @@
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE CameraId = #{cameraId}
     </update>
-
     <resultMap id="getShelves" type="ResponseShelfListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="shelves" ofType="ShelfResponseSupporter">
