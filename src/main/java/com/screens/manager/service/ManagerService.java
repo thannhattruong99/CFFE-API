@@ -263,7 +263,7 @@ public class ManagerService extends BaseService {
     private void convertRequestUpdateManagerFormToManagerDTO(RequestUpdateManagerForm requestForm, ManagerDTO managerDTO){
         managerDTO.setUserName(requestForm.getUserName());
         managerDTO.setFullName(requestForm.getFullName());
-        managerDTO.setImageURL("xx/image");
+        managerDTO.setImageURL(requestForm.getImageURL());
         managerDTO.setGender(requestForm.getGender());
         managerDTO.setBirthDate(requestForm.getBirthDate());
         managerDTO.setIdentifyCard(requestForm.getIdentifyCard());
