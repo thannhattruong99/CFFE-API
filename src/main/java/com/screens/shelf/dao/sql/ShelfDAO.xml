@@ -44,7 +44,6 @@
                STT.StatusName,
                CM.CameraId,
                CM.CameraName,
-               CM.ImageURL,
                CM.IPAddress,
                CM.RTSPString,
                CM.CreatedTime AS CMCreatedTime,
@@ -59,9 +58,6 @@
     <update id="updateShelf">
         UPDATE tblShelf
         SET ShelfName = #{shelfName},
-            <if test="imageUrl != null">
-                ImageURL = #{imageUrl},
-            </if>
             Description = #{description},
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE ShelfId = #{shelfId}
@@ -70,7 +66,7 @@
         <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
             SELECT UUID() AS shelfId FROM tblShelf LIMIT 1
         </selectKey>
-         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId, ImageURL)
+         INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId)
          VALUES (#{shelfId},
            #{shelfName},
            #{description},
@@ -81,8 +77,7 @@
            @@session.time_zone,
            #{createdTime}),
            #{statusId},
-           #{storeId},
-           #{imageURL})
+           #{storeId})
 <!--        <selectKey keyProperty="shelfId" resultType="string" order="AFTER ">-->
 <!--            select ShelfId-->
 <!--            from tblShelf-->
@@ -190,7 +185,6 @@
             <id property="cameraId" column="CameraId"/>
             <result property="cameraName" column="CameraName"/>
             <result property="ipAddress" column="IPAddress"/>
-            <result property="imageURL" column="ImageURL"/>
             <result property="rtspString" column="RTSPString"/>
             <result property="createdTime" column="CMCreatedTime"/>
             <result property="updatedTime" column="CMUpdatedTime"/>

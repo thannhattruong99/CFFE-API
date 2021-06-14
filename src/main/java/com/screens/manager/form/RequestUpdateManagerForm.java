@@ -26,7 +26,7 @@ public class RequestUpdateManagerForm {
     @Min(value= 0, message = "MSG-054")
     @Max(value = 2, message = "MSG-054")
     private int gender;
-    @NotEmpty(message = "MSG-026")
+    @Nullable
     private String imageURL;
     @NotEmpty(message = "MSG-036")
     @Size(min = 1, max = 250, message = "MSG-037")
@@ -86,11 +86,12 @@ public class RequestUpdateManagerForm {
         this.gender = gender;
     }
 
+    @Nullable
     public String getImageURL() {
         return imageURL;
     }
 
-    public void setImageURL(String imageURL) {
+    public void setImageURL(@Nullable String imageURL) {
         this.imageURL = imageURL;
     }
 

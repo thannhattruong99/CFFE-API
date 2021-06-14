@@ -92,6 +92,7 @@
             </choose>
         </where>
         ORDER BY
+        S.UpdatedTime DESC,
         S.StoreName
         LIMIT
         #{offSet},
