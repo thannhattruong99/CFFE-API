@@ -13,7 +13,7 @@ public class RequestCreateStoreForm implements Serializable {
     private String storeName;
 
     @Nullable
-    private MultipartFile imageUrl;
+    private String imageUrl;
 
     @NotEmpty(message = "MSG-107")
     private String address;
@@ -43,11 +43,11 @@ public class RequestCreateStoreForm implements Serializable {
         this.storeName = storeName;
     }
 
-    public MultipartFile getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(MultipartFile imageUrl) {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 

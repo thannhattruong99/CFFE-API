@@ -237,7 +237,8 @@ public class StoreService extends BaseService {
     private StoreDTO convertCreateStoreFormToDTO(RequestCreateStoreForm requestForm) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreName(requestForm.getStoreName());
-//        storeDTO.setImageUrl(requestForm.getImageUrl());
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            storeDTO.setImageUrl(requestForm.getImageUrl());
         storeDTO.setAddress(requestForm.getAddress());
         storeDTO.setDistrictId(requestForm.getDistrictId());
         storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());

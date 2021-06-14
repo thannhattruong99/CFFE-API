@@ -112,12 +112,6 @@ public class StoreController {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-
-        // TODO: insert img
-//        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-//        String uploadDir = "/store-img/" + "fakeid";
-//        FileHelper.saveFile(uploadDir,fileName,multipartFile);
-
         // Do Create Store
         ResponseCommonForm rs = storeService.createStore(requestForm);
         if(rs.getErrorCodes() != null){
