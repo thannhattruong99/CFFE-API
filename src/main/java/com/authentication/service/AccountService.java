@@ -1,20 +1,18 @@
 package com.authentication.service;
 
-import com.authentication.form.ResponseLoginForm;
-import com.common.config.JwtTokenHelper;
-import com.common.service.BaseService;
 import com.authentication.dao.mapper.AccountMapper;
 import com.authentication.dto.AccountDTO;
 import com.authentication.form.RequestLoginForm;
+import com.authentication.form.ResponseLoginForm;
+import com.common.config.JwtTokenHelper;
+import com.common.service.BaseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

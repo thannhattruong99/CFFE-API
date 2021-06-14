@@ -1,11 +1,9 @@
 package com.screens.product.form;
 
 import com.common.form.RequestGetBaseForm;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 public class RequestGetProductListForm extends RequestGetBaseForm implements Serializable {

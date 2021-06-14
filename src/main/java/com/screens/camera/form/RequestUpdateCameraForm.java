@@ -2,7 +2,9 @@ package com.screens.camera.form;
 
 import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class RequestUpdateCameraForm {
     @NotEmpty(message = "MSG-024")

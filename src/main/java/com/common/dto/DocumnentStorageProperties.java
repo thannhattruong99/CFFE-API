@@ -1,6 +1,5 @@
 package com.common.dto;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;

@@ -1,7 +1,6 @@
 package com.util;
 
 import com.common.dto.DocumnentStorageProperties;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;

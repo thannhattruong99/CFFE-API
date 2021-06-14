@@ -1,7 +1,5 @@
 package com.screens.stack.form;
 
-import com.common.form.RequestGetBaseForm;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;

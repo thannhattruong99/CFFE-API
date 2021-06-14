@@ -5,7 +5,6 @@ import com.common.dao.BaseDAO;
 import com.screens.category.dto.CategoryDTO;
 import com.screens.category.form.ResponseCategoryDetailForm;
 import com.screens.category.form.ResponseCategoryListForm;
-import com.screens.store.dto.StoreDTO;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 

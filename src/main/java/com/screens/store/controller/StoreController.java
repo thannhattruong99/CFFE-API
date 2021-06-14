@@ -1,18 +1,14 @@
 package com.screens.store.controller;
 
 import com.common.form.ResponseCommonForm;
-import com.common.form.UploadFileResponse;
-import com.screens.store.form.RequestGetStoreListByProductForm;
 import com.screens.store.form.*;
-import com.util.DocumentStorageHelper;
 import com.screens.store.service.StoreService;
+import com.util.DocumentStorageHelper;
 import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;

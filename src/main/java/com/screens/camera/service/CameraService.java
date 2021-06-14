@@ -5,7 +5,6 @@ import com.common.service.BaseService;
 import com.screens.camera.dao.mapper.CameraMapper;
 import com.screens.camera.dto.CameraDTO;
 import com.screens.camera.form.*;
-import com.screens.manager.service.ManagerService;
 import com.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;

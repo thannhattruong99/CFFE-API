@@ -1,6 +1,5 @@
 package com.screens.category.form;
 
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 public class RequestGetCategoryDetailForm implements Serializable {

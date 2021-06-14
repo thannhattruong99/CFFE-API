@@ -1,6 +1,5 @@
 package com.authentication.controller;
 
-import com.authentication.dto.AccountDTO;
 import com.authentication.form.RequestLoginForm;
 import com.authentication.form.ResponseLoginForm;
 import com.authentication.service.AccountService;

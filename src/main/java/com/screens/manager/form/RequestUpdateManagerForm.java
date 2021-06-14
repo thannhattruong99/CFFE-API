@@ -1,6 +1,5 @@
 package com.screens.manager.form;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.lang.Nullable;
 

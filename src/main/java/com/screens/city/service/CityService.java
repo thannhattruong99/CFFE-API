@@ -4,7 +4,6 @@ import com.screens.city.dao.mapper.CityMapper;
 import com.screens.city.form.CityDistrictResponseSupporter;
 import com.screens.city.form.CityResponseSupporter;
 import com.screens.city.form.DistrictResponseSupporter;
-import com.screens.manager.service.ManagerService;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

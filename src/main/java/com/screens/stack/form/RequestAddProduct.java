@@ -1,7 +1,6 @@
 package com.screens.stack.form;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class RequestAddProduct implements Serializable {
