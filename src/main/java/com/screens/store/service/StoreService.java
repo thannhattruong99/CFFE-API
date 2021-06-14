@@ -127,17 +127,17 @@ public class StoreService extends BaseService {
         return response;
     }
 
-    public ResponseCommonForm updateAnalyzedTime(RequestUpdateAnalyzedTime requestForm) {
-        ResponseCommonForm response = new ResponseCommonForm();
-        StoreDTO storeDTO = convertUpdateAnalyzedTimeFormToDTO(requestForm);
-        try {
-            storeMapper.updateAnalyzedTime(storeDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
-            response.setErrorCodes(catchSqlException(e.getMessage()));
-        }
-        return response;
-    }
+//    public ResponseCommonForm updateAnalyzedTime(RequestUpdateAnalyzedTime requestForm) {
+//        ResponseCommonForm response = new ResponseCommonForm();
+//        StoreDTO storeDTO = convertUpdateAnalyzedTimeFormToDTO(requestForm);
+//        try {
+//            storeMapper.updateAnalyzedTime(storeDTO);
+//        } catch (PersistenceException e) {
+//            logger.error("Error Message: " + e.getMessage());
+//            response.setErrorCodes(catchSqlException(e.getMessage()));
+//        }
+//        return response;
+//    }
 
     public ResponseCommonForm changeManager(RequestChangeManager requestForm) {
         ResponseCommonForm response = new ResponseCommonForm();
@@ -199,12 +199,12 @@ public class StoreService extends BaseService {
         return storeDTO;
     }
 
-    private StoreDTO convertUpdateAnalyzedTimeFormToDTO(RequestUpdateAnalyzedTime requestForm){
-        StoreDTO storeDTO = new StoreDTO();
-        storeDTO.setStoreId(requestForm.getStoreId());
-        storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());
-        return storeDTO;
-    }
+//    private StoreDTO convertUpdateAnalyzedTimeFormToDTO(RequestUpdateAnalyzedTime requestForm){
+//        StoreDTO storeDTO = new StoreDTO();
+//        storeDTO.setStoreId(requestForm.getStoreId());
+//        storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());
+//        return storeDTO;
+//    }
 
     private StoreDTO convertChangeStatusFormToDTO(RequestChangeStoreStatusForm requestForm){
         StoreDTO storeDTO = new StoreDTO();
@@ -228,9 +228,6 @@ public class StoreService extends BaseService {
         if (requestForm.getDistrictId() != 0) {
             storeDTO.setDistrictId(requestForm.getDistrictId());
         }
-        if (StringUtils.isNotEmpty(requestForm.getAnalyzedTime())){
-            storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());
-        }
         return storeDTO;
     }
 
@@ -244,7 +241,6 @@ public class StoreService extends BaseService {
         }
         storeDTO.setAddress(requestForm.getAddress());
         storeDTO.setDistrictId(requestForm.getDistrictId());
-        storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());
         storeDTO.setStatusId(PENDING_STATUS);
         return storeDTO;
     }
