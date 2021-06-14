@@ -157,6 +157,8 @@ public class ProductService extends BaseService {
     private ProductDTO convertUpdateInfoProductFormToDTO(RequestUpdateInfoProductForm requestForm) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setProductId(requestForm.getProductId());
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            productDTO.setImageUrl(requestForm.getImageUrl());
         if (StringUtils.isNotEmpty(requestForm.getProductName()))
             productDTO.setProductName(requestForm.getProductName());
         if (StringUtils.isNotEmpty(requestForm.getImageUrl()))

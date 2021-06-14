@@ -9,6 +9,7 @@ import com.screens.shelf.dto.StackDTO;
 import com.screens.shelf.form.*;
 import com.util.FileHelper;
 import com.util.StringHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,7 +161,8 @@ public class ShelfService extends BaseService {
         shelfDTO.setNumberOfStack(requestForm.getNumberOfStack());
         shelfDTO.setStatusId(PENDING_STATUS);
         shelfDTO.setCreatedTime(TIME_ZONE_VIETNAMESE);
-        shelfDTO.setImageURL(requestForm.getImageURL());
+        if(StringUtils.isNotEmpty(requestForm.getImageURL()))
+            shelfDTO.setImageURL(requestForm.getImageURL());
 
         List<StackDTO> stackDTOS = new ArrayList<>();
         for(int i = 0; i < requestForm.getNumberOfStack(); i++){
@@ -176,6 +178,8 @@ public class ShelfService extends BaseService {
         shelfDTO.setShelfName(requestForm.getShelfName());
         shelfDTO.setDescription(requestForm.getDescription());
         shelfDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            shelfDTO.setImageURL(requestForm.getImageUrl());
     }
 
     private void convertRequestUpdateStatusFormToShelfDTO(RequestUpdateShelfStatusForm requestForm, ShelfDTO shelfDTO){

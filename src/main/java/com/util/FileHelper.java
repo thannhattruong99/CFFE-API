@@ -14,10 +14,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 public class FileHelper {
     private final static String CLASS_PATH = "classpath:";
-    private final static String RESOURCE_PATH = "/src/main/resources/";
+    private final static String RESOURCE_PATH = "\\src\\main\\resources\\";
 
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
     throws  IOException{
@@ -102,6 +105,44 @@ public class FileHelper {
             return fileName;
         } catch (IOException ex) {
             System.out.println("Could not store file " + fileName + ". Please try again!"+ ex);
+        }
+        return fileName;
+    }
+
+    /**
+     * Get image user upload to store on server.
+     * @param file image user upload
+     * @param suffixPath path on server
+     * @return fileName of image on server
+     */
+    public static String storeImageOnServer(MultipartFile file, String suffixPath) {
+        String fileName = "";
+        // Get full path directory on server
+        String userDirectory = Paths.get("")
+                .toAbsolutePath()
+                .toString();
+        Path fileStorageLocation = Paths.get(userDirectory + suffixPath);
+
+        // create Directories
+        try {
+            Files.createDirectories(fileStorageLocation);
+        } catch (Exception ex) {
+            System.out.println("Could not create the directory where the uploaded files will be stored.");
+            return fileName;
+        }
+
+        // change file name by UUID
+        // Copy file to the target location (Replacing existing file with the same name)
+        try {
+            String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+            LocalDateTime timeNow = LocalDateTime.now();
+            fileName = UUID.randomUUID().toString() + '-' + dtf.format(timeNow) + fileExtension;
+            Path targetLocation = fileStorageLocation.resolve(fileName);
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            System.out.println("Could not store file. Please try again!"+ ex);
         }
         return fileName;
     }

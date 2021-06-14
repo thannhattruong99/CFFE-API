@@ -1,5 +1,7 @@
 package com.screens.shelf.form;
 
+import org.springframework.lang.Nullable;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -15,16 +17,18 @@ public class RequestCreateShelfForm {
     private String description;
     @Min(value = 1, message = "MSG-019") @Max(value = 30, message = "MSG-019")
     private int numberOfStack;
+    @Nullable
     private String imageURL;
 
     public RequestCreateShelfForm() {
     }
 
+    @Nullable
     public String getImageURL() {
         return imageURL;
     }
 
-    public void setImageURL(String imageURL) {
+    public void setImageURL(@Nullable String imageURL) {
         this.imageURL = imageURL;
     }
 

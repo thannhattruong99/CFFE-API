@@ -1,5 +1,7 @@
 package com.screens.shelf.form;
 
+import org.springframework.lang.Nullable;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -12,8 +14,19 @@ public class RequestUpdateShelfForm {
     @NotEmpty(message = "MSG-016")
     @Size(min = 1, max = 250, message = "MSG-017")
     private String description;
+    @Nullable
+    private String imageUrl;
 
     public RequestUpdateShelfForm() {
+    }
+
+    @Nullable
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(@Nullable String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getShelfId() {
