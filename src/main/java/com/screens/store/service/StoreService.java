@@ -6,12 +6,14 @@ import com.screens.store.dao.mapper.StoreMapper;
 import com.screens.store.form.RequestGetStoreListByProductForm;
 import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.*;
+import com.util.FileHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -235,7 +237,8 @@ public class StoreService extends BaseService {
     private StoreDTO convertCreateStoreFormToDTO(RequestCreateStoreForm requestForm) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreName(requestForm.getStoreName());
-//        storeDTO.setImageUrl(requestForm.getImageUrl());
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            storeDTO.setImageUrl(requestForm.getImageUrl());
         storeDTO.setAddress(requestForm.getAddress());
         storeDTO.setDistrictId(requestForm.getDistrictId());
         storeDTO.setAnalyzedTime(requestForm.getAnalyzedTime());

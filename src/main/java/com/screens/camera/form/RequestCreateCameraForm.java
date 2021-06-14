@@ -8,7 +8,7 @@ public class RequestCreateCameraForm {
     @NotEmpty(message = "MSG-082") @Size(min = 1, max = 100, message = "MSG-083")
     private String cameraName;
     @Nullable
-    private byte[] imageURL;
+    private String imageUrl;
     @NotEmpty(message = "MSG-031") @Pattern(regexp = "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$", message = "MSG-032")
     private String ipAddress;
     @NotEmpty(message = "MSG-030")
@@ -20,6 +20,15 @@ public class RequestCreateCameraForm {
 
     }
 
+    @Nullable
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(@Nullable String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getCameraName() {
         return cameraName;
     }
@@ -28,14 +37,7 @@ public class RequestCreateCameraForm {
         this.cameraName = cameraName;
     }
 
-    @Nullable
-    public byte[] getImageURL() {
-        return imageURL;
-    }
 
-    public void setImageURL(@Nullable byte[] imageURL) {
-        this.imageURL = imageURL;
-    }
 
     public String getIpAddress() {
         return ipAddress;
