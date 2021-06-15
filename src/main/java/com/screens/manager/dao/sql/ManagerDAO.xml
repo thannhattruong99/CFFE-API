@@ -97,7 +97,7 @@
     <update id="updateManagerInformation">
         UPDATE tblUser
         SET Fullname = #{fullName},
-            <if test="imageUrl != null">
+            <if test="imageURL != null">
                 ImageURL = #{imageURL},
             </if>
             Gender = #{gender},
@@ -152,7 +152,7 @@
         <result property="userId" column="UserId"/>
         <result property="fullName" column="Fullname"/>
         <result property="userName" column="Username"/>
-        <result property="imageURL" column="ImageUrl"/>
+        <result property="imageURL" column="imageURL"/>
         <result property="gender" column="Gender"/>
         <result property="birthDate" column="BirthDate"/>
         <result property="identifyCard" column="IdentifyCard"/>
