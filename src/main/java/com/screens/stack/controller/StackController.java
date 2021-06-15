@@ -51,15 +51,18 @@ public class StackController {
         return ResponseSupporter.responseResult(responseStackDetailForm);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/admin/manager/store/shelf/stacks-by-shelf")
     public String getStackListByShelf(@Validated RequestGetStackListForm requestForm,
-                               BindingResult result){
+                                        BindingResult result,
+                                        HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
         // Do Get/Search Store
-        ResponseStackListForm responseStackListForm = stackService.getStackListByShelf(requestForm);
+        ResponseStackListForm responseStackListForm = stackService.getStackListByShelf(requestForm,authorDTO);
         if(responseStackListForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
@@ -69,15 +72,18 @@ public class StackController {
         return ResponseSupporter.responseResult(responseStackListForm);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/admin/manager/store/shelf/stacks-by-product-store")
     public String getStackListByProductIdStoreId(@Validated RequestGetStackListByProductForm requestForm,
-                                      BindingResult result){
+                                      BindingResult result,
+                                                 HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
         // Do Get/Search Store
-        ResponseStackListForm responseStackListForm = stackService.getStackListByProductIdStoreId(requestForm);
+        ResponseStackListForm responseStackListForm = stackService.getStackListByProductIdStoreId(requestForm,authorDTO);
         if(responseStackListForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);

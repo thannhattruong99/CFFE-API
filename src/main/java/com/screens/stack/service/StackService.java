@@ -42,25 +42,39 @@ public class StackService extends BaseService {
         return responseStackDetailForm;
     }
 
-    public ResponseStackListForm getStackListByShelf(RequestGetStackListForm requestForm){
+    public ResponseStackListForm getStackListByShelf(RequestGetStackListForm requestForm, AuthorDTO authorDTO){
         ResponseStackListForm responseStackListForm = null;
-        StackDTO stackDTO = convertGetStackListFormToDTO(requestForm);
-        try {
-            responseStackListForm = stackMapper.getStackListByShelf(stackDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
+        int authorStatus = checkAuthor(authorDTO);
+        if (authorStatus == MANAGER_WITHIN_STORE) {
+            StackDTO stackDTO = convertGetStackListFormToDTO(requestForm,authorDTO);
+            try {
+                //check stack in store
+                if (stackMapper.stackIsExistInStore(stackDTO)) {
+                    responseStackListForm = stackMapper.getStackListByShelf(stackDTO);
+                }
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+            }
         }
         return responseStackListForm;
     }
 
-    public ResponseStackListForm getStackListByProductIdStoreId(RequestGetStackListByProductForm requestForm){
+    public ResponseStackListForm getStackListByProductIdStoreId(RequestGetStackListByProductForm requestForm,AuthorDTO authorDTO){
         ResponseStackListForm responseStackListForm = null;
-        StackDTO stackDTO = convertGetStackListByProductIdStoreIdFormToDTO(requestForm);
-        try {
-            responseStackListForm = stackMapper.getStackListByProductIdStoreId(stackDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
+        int authorStatus = checkAuthor(authorDTO);
+        if (authorStatus == MANAGER_WITHIN_STORE) {
+            StackDTO stackDTO = convertGetStackListByProductIdStoreIdFormToDTO(requestForm,authorDTO);
+            try {
+                if (stackMapper.stackIsExistInStore(stackDTO)) {
+                    responseStackListForm = stackMapper.getStackListByProductIdStoreId(stackDTO);
+                }
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+            }
         }
+
+
+
         return responseStackListForm;
     }
 
@@ -251,17 +265,18 @@ public class StackService extends BaseService {
         return stackDTO;
     }
 
-    private StackDTO convertGetStackListFormToDTO(RequestGetStackListForm requestForm) {
+    private StackDTO convertGetStackListFormToDTO(RequestGetStackListForm requestForm, AuthorDTO authorDTO) {
         StackDTO stackDTO = new StackDTO();
         stackDTO.setShelfId(requestForm.getShelfId());
         stackDTO.setStatusId(requestForm.getStatusId());
+        stackDTO.setStoreId(authorDTO.getStoreId());
         return stackDTO;
     }
 
-    private StackDTO convertGetStackListByProductIdStoreIdFormToDTO(RequestGetStackListByProductForm requestForm) {
+    private StackDTO convertGetStackListByProductIdStoreIdFormToDTO(RequestGetStackListByProductForm requestForm,AuthorDTO authorDTO) {
         StackDTO stackDTO = new StackDTO();
         stackDTO.setProductId(requestForm.getProductId());
-        stackDTO.setStoreId(requestForm.getStoreId());
+        stackDTO.setStoreId(authorDTO.getStoreId());
         stackDTO.setStatusId(requestForm.getStatusId());
         if(requestForm.getPageNum() > 0){
             stackDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
