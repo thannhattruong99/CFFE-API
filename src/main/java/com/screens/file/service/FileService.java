@@ -25,20 +25,20 @@ public class FileService {
         List<String> errorMsg = new ArrayList<>();
 
         // check size file
-        if(file.isEmpty() || file.getSize()==0){
-            errorMsg.add("MSG-112");
-            response.setErrorCodes(errorMsg);
-        }
-        // check type file
-        else if(!(file.getContentType().toLowerCase().equals("image/jpg")
-                || file.getContentType().toLowerCase().equals("image/jpeg")
-                || file.getContentType().toLowerCase().equals("image/png"))){
-            errorMsg.add("MSG-113");
-            response.setErrorCodes(errorMsg);
-        }
-        if (response.getErrorCodes() != null) {
-            return response;
-        }
+//        if(file.isEmpty() || file.getSize()==0){
+//            errorMsg.add("MSG-112");
+//            response.setErrorCodes(errorMsg);
+//        }
+//        // check type file
+//        else if(!(file.getContentType().toLowerCase().equals("image/jpg")
+//                || file.getContentType().toLowerCase().equals("image/jpeg")
+//                || file.getContentType().toLowerCase().equals("image/png"))){
+//            errorMsg.add("MSG-113");
+//            response.setErrorCodes(errorMsg);
+//        }
+//        if (response.getErrorCodes() != null) {
+//            return response;
+//        }
 
         // upload file to server
         String fileName = FileHelper.storeImageOnServer(file, SUFFIX_IMAGE_PATH);
@@ -49,10 +49,11 @@ public class FileService {
         }
         // get file on server upload to storage
         try {
+            System.out.println(" ============== Hieu here!!!!");
             response.setFilePath(GCPHelper.uploadImage(IMAGE_FOLDER_SERVER + fileName,
                     IMAGE_FOLDER_CLOUD + StringUtils.cleanPath(fileName)));
             FileHelper.deleteFile(IMAGE_FOLDER_SERVER + fileName);
-
+            System.out.println(" ============== filePath : "+response.getFilePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
