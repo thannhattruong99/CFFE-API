@@ -2,6 +2,7 @@ package com.screens.stack.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
+import com.filter.dto.AuthorDTO;
 import com.screens.stack.dao.mapper.StackMapper;
 import com.screens.stack.dto.RequestGetStackListByProductForm;
 import com.screens.stack.dto.StackDTO;
@@ -57,8 +58,9 @@ public class StackService extends BaseService {
         return responseStackListForm;
     }
 
-    public ResponseCommonForm changeProduct(RequestAddProduct requestForm) {
+    public ResponseCommonForm changeProduct(RequestAddProduct requestForm, AuthorDTO authorDTO) {
         ResponseCommonForm response = new ResponseCommonForm();
+        // check phải là manager và có storeID
         StackDTO stackDTO = convertChangeProductFormToDTO(requestForm);
         try {
             List<String> errorMsg = new ArrayList<>();
@@ -66,7 +68,7 @@ public class StackService extends BaseService {
             // Add product
              if(stackDTO.getAction() == ADD_ACTION) {
                 System.out.println("ACTION = ADD_ACTION");
-                // Check Stack co ton tai
+                // Check Stack co ton tai trong store
                 if (!stackMapper.checkStackExist(stackDTO)) {
                     errorMsg.add("MSG-022");
                     response.setErrorCodes(errorMsg);
