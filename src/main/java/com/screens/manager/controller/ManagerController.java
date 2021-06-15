@@ -135,12 +135,14 @@ public class ManagerController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/manager/change-password", method = RequestMethod.POST)
     public String changePassword(@Validated @RequestBody RequestChangePasswordForm requestForm,
-                                 BindingResult result){
+                                 BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
 
-        ResponseCommonForm responseForm = managerService.changePassword(requestForm);
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute(AUTHOR);
+
+        ResponseCommonForm responseForm = managerService.changePassword(requestForm, authorDTO);
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }

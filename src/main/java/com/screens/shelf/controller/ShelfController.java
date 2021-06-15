@@ -106,12 +106,17 @@ public class ShelfController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelf/update-status", method = RequestMethod.POST)
-    public String updateStatus(@Validated @RequestBody RequestUpdateShelfStatusForm requestForm, BindingResult result){
+    public String updateStatus(@Validated @RequestBody RequestUpdateShelfStatusForm requestForm,
+                               BindingResult result, HttpServletRequest request){
 
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-        ResponseCommonForm responseForm = shelfService.updateShelfStatus(requestForm);
+
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute(AUTHOR);
+
+        ResponseCommonForm responseForm = shelfService.updateShelfStatus(requestForm, authorDTO);
+
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
@@ -121,12 +126,14 @@ public class ShelfController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelf/change-shelf-camera", method = RequestMethod.POST)
     public String changeShelfCamera(@Validated @RequestBody RequestChangeShelfCameraForm requestForm,
-                                    BindingResult result){
+                                    BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseResult(result);
         }
 
-        ResponseCommonForm responseForm = shelfService.changeShelfCamera(requestForm);
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute(AUTHOR);
+
+        ResponseCommonForm responseForm = shelfService.changeShelfCamera(requestForm, authorDTO);
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
@@ -134,6 +141,8 @@ public class ShelfController {
         return ResponseSupporter.responseResult(true);
     }
 
+
+//    chua check auth
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/shelf/uploadVideo")
     public UploadFileResponse uploadFile2(@RequestParam("file") MultipartFile file,

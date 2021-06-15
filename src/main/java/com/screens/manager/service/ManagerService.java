@@ -182,9 +182,9 @@ public class ManagerService extends BaseService {
         return responseCommonForm;
     }
 
-    public ResponseCommonForm changePassword(RequestChangePasswordForm requestForm){
+    public ResponseCommonForm changePassword(RequestChangePasswordForm requestForm, AuthorDTO authorDTO){
         ManagerDTO managerDTO = new ManagerDTO();
-        convertRequestChangePasswordFormToManagerDTO(requestForm, managerDTO);
+        convertRequestChangePasswordFormToManagerDTO(requestForm, managerDTO, authorDTO);
         ResponseCommonForm responseForm = checkChangePasswordBusiness(requestForm, managerDTO);
         if(responseForm.getErrorCodes() == null){
             try {
@@ -307,8 +307,11 @@ public class ManagerService extends BaseService {
         managerDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 
-    private void convertRequestChangePasswordFormToManagerDTO(RequestChangePasswordForm requestForm, ManagerDTO managerDTO){
+    private void convertRequestChangePasswordFormToManagerDTO(RequestChangePasswordForm requestForm, ManagerDTO managerDTO, AuthorDTO authorDTO){
         managerDTO.setUserName(requestForm.getUserName());
+        if(authorDTO != null){
+            managerDTO.setUserName(authorDTO.getUserName());
+        }
         managerDTO.setPassword(requestForm.getOldPassword());
         managerDTO.setNewPassword(requestForm.getNewPassword());
     }
@@ -327,7 +330,7 @@ public class ManagerService extends BaseService {
             }
         }else{
             ArrayList<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_007);
+            errorCodes.add(MSG_076);
             responseForm.setErrorCodes(errorCodes);
         }
 
