@@ -24,6 +24,7 @@ public class BaseService {
     protected static final String MSG_076 = "MSG-076";
     protected static final String MSG_020 = "MSG-020";
     private static final String DUPLICATE_ERROR_KEY = "Duplicate entry";
+    protected static final String DEFAULT_IMAGE = "https://storage.googleapis.com/capstone_storeage/images/default-image.jpg";
 
     public List<String> catchSqlException(String errorMsg){
         List<String> errorCodes = new ArrayList<>();

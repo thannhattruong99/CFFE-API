@@ -176,6 +176,7 @@ public class StoreController {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+
         // Do Update Infomation Store
         ResponseCommonForm responseForm = storeService.changeManager(requestForm);
         if(responseForm.getErrorCodes() != null){
