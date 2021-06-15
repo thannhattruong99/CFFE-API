@@ -2,6 +2,7 @@ package com.screens.camera.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
+import com.filter.dto.AuthorDTO;
 import com.screens.camera.dao.mapper.CameraMapper;
 import com.screens.camera.dto.CameraDTO;
 import com.screens.camera.form.*;
@@ -37,15 +38,17 @@ public class CameraService extends BaseService {
         return responseForm;
     }
 
-    public ResponseCameraListForm getCameraList(RequestCameraListForm requestForm){
+    public ResponseCameraListForm getCameraList(RequestCameraListForm requestForm, AuthorDTO authorDTO){
         ResponseCameraListForm responseForm = new ResponseCameraListForm();
+
         CameraDTO cameraDTO = new CameraDTO();
-        convertRequestCameraListFormToCameraDTO(requestForm, cameraDTO);
+        convertRequestCameraListFormToCameraDTO(requestForm, cameraDTO, authorDTO);
         try {
             responseForm = cameraMapper.getCameraList(cameraDTO);
         }catch (PersistenceException e){
             logger.error("Error at CameraService: " + e.getMessage());
         }
+
 
         return responseForm;
     }
@@ -97,10 +100,10 @@ public class CameraService extends BaseService {
         return responseForm;
     }
 
-    public ResponseCameraDetailForm getCameraDetail(RequestCameraDetailForm requestForm){
+    public ResponseCameraDetailForm getCameraDetail(RequestCameraDetailForm requestForm, AuthorDTO authorDTO){
         ResponseCameraDetailForm responseForm = new ResponseCameraDetailForm();
         CameraDTO cameraDTO = new CameraDTO();
-        convertRequestCameraDetailFormToCameraDTO(requestForm, cameraDTO);
+        convertRequestCameraDetailFormToCameraDTO(requestForm, cameraDTO, authorDTO);
         try {
             responseForm = cameraMapper.getCameraDetailById(cameraDTO);
         }catch (PersistenceException e){
@@ -125,10 +128,14 @@ public class CameraService extends BaseService {
         cameraDTO.setTypeDetect(requestForm.getTypeDetect());
     }
 
-    private void convertRequestCameraListFormToCameraDTO(RequestCameraListForm requestForm, CameraDTO cameraDTO){
+    private void convertRequestCameraListFormToCameraDTO(RequestCameraListForm requestForm, CameraDTO cameraDTO, AuthorDTO authorDTO){
         if(!StringHelper.isNullOrEmpty(requestForm.getStoreId())){
             cameraDTO.setStoreId(requestForm.getStoreId());
+            if(authorDTO != null){
+                cameraDTO.setStoreId(authorDTO.getStoreId());
+            }
         }
+
         if(!StringHelper.isNullOrEmpty(requestForm.getCameraName())){
             cameraDTO.setCameraName(requestForm.getCameraName());
         }
@@ -198,8 +205,11 @@ public class CameraService extends BaseService {
         return responseForm;
     }
 
-    private void convertRequestCameraDetailFormToCameraDTO(RequestCameraDetailForm requestForm, CameraDTO cameraDTO){
+    private void convertRequestCameraDetailFormToCameraDTO(RequestCameraDetailForm requestForm, CameraDTO cameraDTO, AuthorDTO authorDTO){
         cameraDTO.setStoreId(requestForm.getStoreId());
+        if(authorDTO != null){
+            cameraDTO.setStoreId(authorDTO.getStoreId());
+        }
         cameraDTO.setCameraId(requestForm.getCameraId());
     }
 }
