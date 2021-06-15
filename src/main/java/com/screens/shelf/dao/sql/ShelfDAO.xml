@@ -49,11 +49,10 @@
                CM.CreatedTime AS CMCreatedTime,
                CM.UpdatedTime AS CMUpdatedTime
         FROM tblShelf SH
-                 JOIN tblStore ST ON SH.StoreId = ST.StoreId
                  JOIN tblStatus STT ON SH.StatusId = STT.StatusId
                  LEFT JOIN tblShelfCameraMapping SCM ON SH.ShelfId = SCM.ShelfId AND SCM.StatusId = 1
                  LEFT JOIN tblCamera CM ON SCM.CameraId = CM.CameraId
-        WHERE SH.ShelfId = #{shelfId}
+        WHERE SH.ShelfId = #{shelfId} AND SH.StoreId = #{storeId}
     </select>
     <update id="updateShelf">
         UPDATE tblShelf
@@ -97,11 +96,13 @@
         SELECT DISTINCT(SH1.ShelfId), SH1.StatusId, SH2.totalOfRecord
         FROM tblShelf SH1,
         (SELECT COUNT(ST.StackId) AS totalOfRecord
-        FROM  tblStack ST WHERE ST.ShelfId = #{shelfId}
+        FROM  tblStack ST
+            JOIN tblShelf SH ON ST.ShelfId = SH.ShelfId AND ST.ShelfId = #{shelfId}
         <if test="statusId == 2">
             AND ST.StatusId != 2
-        </if>) SH2
-        WHERE SH1.ShelfId = #{shelfId}
+        </if>
+            JOIN tblStore STR ON SH.StoreId = STR.StoreId AND STR.StoreId = #{storeId}) SH2
+        WHERE SH1.ShelfId = #{shelfId} AND SH1.StoreId = #{storeId}
     </select>
     <update id="updateShelfStatus">
         UPDATE tblShelf SET StatusId = #{statusId}, UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
@@ -112,13 +113,13 @@
     </update>
 
 <!--    check business change shelf camera-->
-    <select id="getShelfStatus" resultMap="getStatus" flushCache="true">
-        SELECT StatusId FROM tblShelf WHERE ShelfId = #{shelfId} AND StatusId != 2
+    <select id="getShelfStatus" resultMap="getStatus">
+        SELECT StatusId FROM tblShelf WHERE ShelfId = #{shelfId} AND StatusId != 2 AND StoreId = #{storeId}
     </select>
-    <select id="getCameraStatus" resultMap="getStatus" flushCache="true">
+    <select id="getCameraStatus" resultMap="getStatus">
         SELECT StatusId FROM tblCamera WHERE cameraId = #{cameraId} AND StatusId != 2 AND typeDetect = 1
     </select>
-    <select id="getShelfCameraMappingStatus" resultMap="getStatus" flushCache="true">
+    <select id="getShelfCameraMappingStatus" resultMap="getStatus">
         SELECT StatusId FROM tblShelfCameraMapping
         WHERE ShelfId = #{shelfId} AND cameraId = #{cameraId} AND StatusId = 1
     </select>

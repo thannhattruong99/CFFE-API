@@ -81,10 +81,11 @@ public class ManagerService extends BaseService {
         return responseForm;
     }
 
-    public ResponseCommonForm updateManagerInformation(RequestUpdateManagerForm requestForm){
+    public ResponseCommonForm updateManagerInformation(RequestUpdateManagerForm requestForm, AuthorDTO authorDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
+
         ManagerDTO managerDTO = new ManagerDTO();
-        convertRequestUpdateManagerFormToManagerDTO(requestForm, managerDTO);
+        convertRequestUpdateManagerFormToManagerDTO(requestForm, managerDTO, authorDTO);
         try{
             if(!managerMapper.updateManagerInformation(managerDTO)){
                 List<String> errorCodes = new ArrayList<>();
@@ -95,13 +96,14 @@ public class ManagerService extends BaseService {
             logger.error("Error at ManagerService: " + e.getMessage());
             responseForm.setErrorCodes(catchSqlException(e.getMessage()));
         }
+
         return responseForm;
     }
 
-    public ResponseCommonForm resetManagerPassword(RequestResetPasswordForm requestForm){
+    public ResponseCommonForm resetManagerPassword(RequestResetPasswordForm requestForm, AuthorDTO authorDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
         ManagerDTO managerDTO = new ManagerDTO();
-        convertRequestResetPasswordToManagerDTO(requestForm, managerDTO);
+        convertRequestResetPasswordToManagerDTO(requestForm, managerDTO, authorDTO);
         try {
 
             if(!managerMapper.resetPassword(managerDTO)){
@@ -180,9 +182,9 @@ public class ManagerService extends BaseService {
         return responseCommonForm;
     }
 
-    public ResponseCommonForm changePassword(RequestChangePasswordForm requestForm){
+    public ResponseCommonForm changePassword(RequestChangePasswordForm requestForm, AuthorDTO authorDTO){
         ManagerDTO managerDTO = new ManagerDTO();
-        convertRequestChangePasswordFormToManagerDTO(requestForm, managerDTO);
+        convertRequestChangePasswordFormToManagerDTO(requestForm, managerDTO, authorDTO);
         ResponseCommonForm responseForm = checkChangePasswordBusiness(requestForm, managerDTO);
         if(responseForm.getErrorCodes() == null){
             try {
@@ -192,10 +194,6 @@ public class ManagerService extends BaseService {
             }
         }
         return responseForm;
-    }
-
-    private ManagerDTO getStoreIdAndStatusIdByUserName(ManagerDTO managerDTO){
-        return managerMapper.getStatusIdAndStoreIdByUserName(managerDTO);
     }
 
     private void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
@@ -271,8 +269,12 @@ public class ManagerService extends BaseService {
         managerDTO.setStatus(status);
     }
 
-    private void convertRequestUpdateManagerFormToManagerDTO(RequestUpdateManagerForm requestForm, ManagerDTO managerDTO){
+    private void convertRequestUpdateManagerFormToManagerDTO(RequestUpdateManagerForm requestForm, ManagerDTO managerDTO, AuthorDTO authorDTO){
         managerDTO.setUserName(requestForm.getUserName());
+        if(authorDTO != null){
+            managerDTO.setUserName(authorDTO.getUserName());
+        }
+
         managerDTO.setFullName(requestForm.getFullName());
         if (StringUtils.isNotEmpty(requestForm.getImageURL())) {
             managerDTO.setImageURL(requestForm.getImageURL());
@@ -288,8 +290,11 @@ public class ManagerService extends BaseService {
         managerDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 
-    private void convertRequestResetPasswordToManagerDTO(RequestResetPasswordForm requestForm, ManagerDTO managerDTO){
+    private void convertRequestResetPasswordToManagerDTO(RequestResetPasswordForm requestForm, ManagerDTO managerDTO, AuthorDTO authorDTO){
         managerDTO.setUserName(requestForm.getUserName());
+        if(authorDTO != null){
+            managerDTO.setUserName(authorDTO.getUserName());
+        }
         managerDTO.setPassword(StringHelper.generatePassword(PASSWORD_LENGTH));
     }
 
@@ -302,8 +307,11 @@ public class ManagerService extends BaseService {
         managerDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 
-    private void convertRequestChangePasswordFormToManagerDTO(RequestChangePasswordForm requestForm, ManagerDTO managerDTO){
+    private void convertRequestChangePasswordFormToManagerDTO(RequestChangePasswordForm requestForm, ManagerDTO managerDTO, AuthorDTO authorDTO){
         managerDTO.setUserName(requestForm.getUserName());
+        if(authorDTO != null){
+            managerDTO.setUserName(authorDTO.getUserName());
+        }
         managerDTO.setPassword(requestForm.getOldPassword());
         managerDTO.setNewPassword(requestForm.getNewPassword());
     }
@@ -322,7 +330,7 @@ public class ManagerService extends BaseService {
             }
         }else{
             ArrayList<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_007);
+            errorCodes.add(MSG_076);
             responseForm.setErrorCodes(errorCodes);
         }
 
