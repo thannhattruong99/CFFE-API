@@ -49,11 +49,10 @@
                CM.CreatedTime AS CMCreatedTime,
                CM.UpdatedTime AS CMUpdatedTime
         FROM tblShelf SH
-                 JOIN tblStore ST ON SH.StoreId = ST.StoreId
                  JOIN tblStatus STT ON SH.StatusId = STT.StatusId
                  LEFT JOIN tblShelfCameraMapping SCM ON SH.ShelfId = SCM.ShelfId AND SCM.StatusId = 1
                  LEFT JOIN tblCamera CM ON SCM.CameraId = CM.CameraId
-        WHERE SH.ShelfId = #{shelfId}
+        WHERE SH.ShelfId = #{shelfId} AND SH.StoreId = #{storeId}
     </select>
     <update id="updateShelf">
         UPDATE tblShelf

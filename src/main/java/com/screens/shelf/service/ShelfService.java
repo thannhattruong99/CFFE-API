@@ -2,6 +2,7 @@ package com.screens.shelf.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
+import com.filter.dto.AuthorDTO;
 import com.listeners.events.EventPublisher;
 import com.screens.shelf.dao.mapper.ShelfMapper;
 import com.screens.shelf.dto.ShelfDTO;
@@ -28,13 +29,14 @@ public class ShelfService extends BaseService {
     private static final String MSG_085 = "MSG-085";
     private static final String MSG_087 = "MSG-087";
     private static final String MSG_088 = "MSG-088";
+    private static final String MSG_076 = "MSG-076";
 
     @Autowired
     private ShelfMapper shelfMapper;
     @Autowired
     EventPublisher eventPublisher;
 
-    public ResponseShelfListForm getShelfList(RequestShelfListForm requestForm){
+    public ResponseShelfListForm getShelfList(RequestShelfListForm requestForm, AuthorDTO authorDTO){
         ResponseShelfListForm responseForm = null;
         ShelfDTO shelfDTO = new ShelfDTO();
         convertRequestShelfListToShelfDTO(requestForm, shelfDTO);
@@ -47,10 +49,10 @@ public class ShelfService extends BaseService {
         return responseForm;
     }
 
-    public ResponseShelfDetailForm getShelfDetail(RequestShelfDetailForm requestForm){
+    public ResponseShelfDetailForm getShelfDetail(RequestShelfDetailForm requestForm, AuthorDTO authorDTO){
         ResponseShelfDetailForm responseForm = null;
         ShelfDTO shelfDTO = new ShelfDTO();
-        convertRequestShelfDetailFormToShelfDTO(requestForm, shelfDTO);
+        convertRequestShelfDetailFormToShelfDTO(requestForm, shelfDTO, authorDTO);
 
         try {
             responseForm = shelfMapper.getShelfDetail(shelfDTO);
@@ -61,34 +63,47 @@ public class ShelfService extends BaseService {
         return responseForm;
     }
 
-    public ResponseCommonForm createShelf(RequestCreateShelfForm requestForm){
+    public ResponseCommonForm createShelf(RequestCreateShelfForm requestForm, AuthorDTO authorDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
-        ShelfDTO shelfDTO = new ShelfDTO();
-        convertRequestCreateShelfFormToShelfDTO(requestForm, shelfDTO);
-        try {
-            shelfMapper.createShelf(shelfDTO);
-        }catch (PersistenceException e){
-            logger.error("Error at ShelfService: " + e.getMessage());
-            responseForm.setErrorCodes(catchSqlException(e.getMessage()));
+
+        if(StringHelper.isNullOrEmpty(authorDTO.getStoreId())){
+            ShelfDTO shelfDTO = new ShelfDTO();
+            convertRequestCreateShelfFormToShelfDTO(requestForm, shelfDTO, authorDTO);
+            try {
+                shelfMapper.createShelf(shelfDTO);
+            }catch (PersistenceException e){
+                logger.error("Error at ShelfService: " + e.getMessage());
+                responseForm.setErrorCodes(catchSqlException(e.getMessage()));
+            }
+        }else{
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_076);
+            responseForm.setErrorCodes(errorCodes);
         }
 
         return responseForm;
     }
 
-    public ResponseCommonForm updateShelf(RequestUpdateShelfForm requestForm){
+    public ResponseCommonForm updateShelf(RequestUpdateShelfForm requestForm, AuthorDTO authorDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
-        ShelfDTO shelfDTO = new ShelfDTO();
-        convertRequestUpdateShelfFormToShelfDTO(requestForm, shelfDTO);
 
-        try{
-            if(!shelfMapper.updateShelf(shelfDTO)){
-                ArrayList<String> errorCodes = new ArrayList<>();
-                errorCodes.add(MSG_012);
-                responseForm.setErrorCodes(errorCodes);
+        if(!StringHelper.isNullOrEmpty(authorDTO.getStoreId())){
+            ShelfDTO shelfDTO = new ShelfDTO();
+            convertRequestUpdateShelfFormToShelfDTO(requestForm, shelfDTO);
+            try{
+                if(!shelfMapper.updateShelf(shelfDTO)){
+                    ArrayList<String> errorCodes = new ArrayList<>();
+                    errorCodes.add(MSG_012);
+                    responseForm.setErrorCodes(errorCodes);
+                }
+            }catch (PersistenceException e){
+                logger.error("Error at ShelfService: " + e.getMessage());
+                responseForm.setErrorCodes(catchSqlException(e.getMessage()));
             }
-        }catch (PersistenceException e){
-            logger.error("Error at ShelfService: " + e.getMessage());
-            responseForm.setErrorCodes(catchSqlException(e.getMessage()));
+        }else{
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_076);
+            responseForm.setErrorCodes(errorCodes);
         }
 
         return responseForm;
@@ -136,7 +151,7 @@ public class ShelfService extends BaseService {
     }
 
     private void convertRequestShelfListToShelfDTO(RequestShelfListForm requestForm, ShelfDTO shelfDTO){
-        shelfDTO.setStoreId(requestForm.getStoreId());
+        shelfDTO.setStoreId(null);
         shelfDTO.setShelfName(requestForm.getShelfName());
         shelfDTO.setStatusId(requestForm.getStatusId());
 
@@ -150,12 +165,13 @@ public class ShelfService extends BaseService {
         }
     }
 
-    private void convertRequestShelfDetailFormToShelfDTO(RequestShelfDetailForm requestForm, ShelfDTO shelfDTO){
+    private void convertRequestShelfDetailFormToShelfDTO(RequestShelfDetailForm requestForm, ShelfDTO shelfDTO, AuthorDTO authorDTO){
         shelfDTO.setShelfId(requestForm.getShelfId());
+        shelfDTO.setStoreId(authorDTO.getStoreId());
     }
 
-    private void convertRequestCreateShelfFormToShelfDTO(RequestCreateShelfForm requestForm, ShelfDTO shelfDTO){
-        shelfDTO.setStoreId(requestForm.getStoreId());
+    private void convertRequestCreateShelfFormToShelfDTO(RequestCreateShelfForm requestForm, ShelfDTO shelfDTO, AuthorDTO authorDTO){
+        shelfDTO.setStoreId(authorDTO.getStoreId());
         shelfDTO.setShelfName(requestForm.getShelfName());
         shelfDTO.setDescription(requestForm.getDescription());
         shelfDTO.setNumberOfStack(requestForm.getNumberOfStack());
