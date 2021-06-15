@@ -66,7 +66,9 @@
             USM.StoreId,
             ST.StoreName,
             U.Address,
+            C.CityId,
             C.CityName,
+            D.DistrictId,
             D.DistrictName,
             U.CreatedTime,
             U.UpdatedTime,
@@ -95,7 +97,7 @@
     <update id="updateManagerInformation">
         UPDATE tblUser
         SET Fullname = #{fullName},
-            <if test="imageUrl != null">
+            <if test="imageURL != null">
                 ImageURL = #{imageURL},
             </if>
             Gender = #{gender},
@@ -150,7 +152,7 @@
         <result property="userId" column="UserId"/>
         <result property="fullName" column="Fullname"/>
         <result property="userName" column="Username"/>
-        <result property="imageURL" column="ImageUrl"/>
+        <result property="imageURL" column="imageURL"/>
         <result property="gender" column="Gender"/>
         <result property="birthDate" column="BirthDate"/>
         <result property="identifyCard" column="IdentifyCard"/>
@@ -159,7 +161,9 @@
         <result property="storeId" column="StoreId"/>
         <result property="storeName" column="StoreName"/>
         <result property="address" column="Address"/>
+        <result property="cityId" column="CityId"/>
         <result property="cityName" column="CityName"/>
+        <result property="districtId" column="DistrictId"/>
         <result property="districtName" column="DistrictName"/>
         <result property="createdTime" column="CreatedTime"/>
         <result property="updatedTime" column="UpdatedTime"/>
