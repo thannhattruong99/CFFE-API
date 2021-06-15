@@ -33,15 +33,19 @@ public class StoreController {
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_035 = "MSG-035";
 
-    @GetMapping(value = "/admin/stores")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/stores")
     public String getStoreList(@Validated RequestGetStoreListForm requestForm,
-                               BindingResult result){
+                               BindingResult result,
+                               HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
+
         // Do Get/Search Store
-        ResponseStoreListForm responseStoreListForm = storeService.getStoreList(requestForm);
+        ResponseStoreListForm responseStoreListForm = storeService.getStoreList(requestForm,authorDTO);
         if(responseStoreListForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
@@ -51,15 +55,20 @@ public class StoreController {
         return ResponseSupporter.responseResult(responseStoreListForm);
     }
 
-    @GetMapping(value = "/admin/stores-by-product")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/stores-by-product")
     public String getStoreListByProduct(@Validated RequestGetStoreListByProductForm requestForm,
-                               BindingResult result){
+                               BindingResult result,
+                               HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
+
         // Do Get/Search Store
-        ResponseStoreListForm responseStoreListForm = storeService.getStoreListByProduct(requestForm);
+        ResponseStoreListForm responseStoreListForm = storeService.getStoreListByProduct(requestForm,authorDTO);
         if(responseStoreListForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
@@ -69,15 +78,18 @@ public class StoreController {
         return ResponseSupporter.responseResult(responseStoreListForm);
     }
 
-    @GetMapping(value = "/admin/operation-stores")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/operation-stores")
     public String getStoreListShort(@Validated RequestGetStoreListShort requestForm,
-                               BindingResult result){
+                               BindingResult result,
+                                    HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
         // Do Get/Search Store
-        ResponseStoreListForm responseStoreListForm = storeService.getStoreListShort(requestForm);
+        ResponseStoreListForm responseStoreListForm = storeService.getStoreListShort(requestForm,authorDTO);
         if(responseStoreListForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);
@@ -97,11 +109,7 @@ public class StoreController {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-
-        // if nguoi thuc hien la admin => authorDTO = null
         AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
-
-
         // Do Get Store Detail
         ResponseStoreDetailForm responseStoreDetailForm = storeService.getStoreDetail(requestForm,authorDTO);
         if(responseStoreDetailForm == null){
@@ -113,16 +121,19 @@ public class StoreController {
         return ResponseSupporter.responseResult(responseStoreDetailForm);
     }
 
-    @PostMapping(value = "/admin/store/create")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = "/store/create")
     public String createStore(
                                @Validated @RequestBody RequestCreateStoreForm requestForm,
-                               BindingResult result) throws IOException {
+                               BindingResult result,
+                               HttpServletRequest request) {
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
         // Do Create Store
-        ResponseCommonForm rs = storeService.createStore(requestForm);
+        ResponseCommonForm rs = storeService.createStore(requestForm,authorDTO);
         if(rs.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
@@ -130,15 +141,18 @@ public class StoreController {
         return ResponseSupporter.responseResult(true);
     }
 
-    @PostMapping(value = "/admin/store/update-status")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = "/store/update-status")
     public String changeStatus(@Validated @RequestBody RequestChangeStoreStatusForm requestForm,
-                               BindingResult result){
+                               BindingResult result,
+                               HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
         // Do Change Status Store
-        ResponseCommonForm rs = storeService.changeStatus(requestForm);
+        ResponseCommonForm rs = storeService.changeStatus(requestForm,authorDTO);
         if(rs.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }
@@ -146,15 +160,18 @@ public class StoreController {
         return ResponseSupporter.responseResult(true);
     }
 
-    @RequestMapping(value = "/admin/store/update", method = RequestMethod.POST)
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @RequestMapping(value = "/store/update", method = RequestMethod.POST)
     public String updateStoreInfo(@Validated @RequestBody RequestUpdateInfoForm requestForm,
-                                  BindingResult result){
+                                  BindingResult result,
+                                  HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
         // Do Update Infomation Store
-        ResponseCommonForm responseForm = storeService.updateStoreInfo(requestForm);
+        ResponseCommonForm responseForm = storeService.updateStoreInfo(requestForm,authorDTO);
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }
@@ -178,15 +195,17 @@ public class StoreController {
 //        return ResponseSupporter.responseResult(true);
 //    }
 
-    @RequestMapping(value = "/admin/store/change-manager", method = RequestMethod.POST)
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @RequestMapping(value = "/store/change-manager", method = RequestMethod.POST)
     public String changeManager(@Validated @RequestBody RequestChangeManager requestForm,
-                                     BindingResult result){
+                                     BindingResult result,
+                                HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
-        // Do Update Infomation Store
-        ResponseCommonForm responseForm = storeService.changeManager(requestForm);
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
+        ResponseCommonForm responseForm = storeService.changeManager(requestForm,authorDTO);
         if(responseForm.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
         }

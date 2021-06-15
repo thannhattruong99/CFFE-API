@@ -1,22 +1,25 @@
 package com.screens.stack.controller;
 
 import com.common.form.ResponseCommonForm;
+import com.filter.dto.AuthorDTO;
 import com.screens.stack.dto.RequestGetStackListByProductForm;
 import com.screens.stack.form.*;
 import com.screens.stack.service.StackService;
 import com.util.ResponseSupporter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@RestController("")
+@RequestMapping("admin")
+@SecurityRequirement(name = "basicAuth")
 public class StackController {
 
     @Autowired
@@ -81,15 +84,20 @@ public class StackController {
         return ResponseSupporter.responseResult(responseStackListForm);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/admin/manager/store/shelf/stack/update-product")
     public String changeProduct(@Validated @RequestBody RequestAddProduct requestForm,
-                               BindingResult result){
+                               BindingResult result,
+                                HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
+
         // Do Change Status Store
-        ResponseCommonForm rs = stackService.changeProduct(requestForm);
+        ResponseCommonForm rs = stackService.changeProduct(requestForm,authorDTO);
         if(rs.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(rs.getErrorCodes());
         }

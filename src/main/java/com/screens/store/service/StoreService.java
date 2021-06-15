@@ -21,109 +21,141 @@ public class StoreService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
     private static final int ADD_MANAGER = 1;
     private static final int REMOVE_MANAGER = 2;
-
+    private static final int ADMIN = 1;
+    private static final int MANAGER_WITHIN_STORE = 2;
+    private static final int MANAGER_WITHOUT_STORE = 3;
 
     @Autowired
     private StoreMapper storeMapper;
 
-    public ResponseStoreListForm getStoreList(RequestGetStoreListForm requestGetStoreListForm){
+    public ResponseStoreListForm getStoreList(RequestGetStoreListForm requestGetStoreListForm,AuthorDTO authorDTO){
         ResponseStoreListForm responseStoreListForm = null;
-        StoreDTO storeDTO = convertGetStoreListFormToDTO(requestGetStoreListForm);
-        try {
-            responseStoreListForm = storeMapper.getStoreList(storeDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
+        int authorStatus = checkAuthor(authorDTO);
+        if (authorStatus == ADMIN) {
+            StoreDTO storeDTO = convertGetStoreListFormToDTO(requestGetStoreListForm);
+            try {
+                responseStoreListForm = storeMapper.getStoreList(storeDTO);
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+            }
         }
         return responseStoreListForm;
     }
 
-    public ResponseStoreListForm getStoreListByProduct(RequestGetStoreListByProductForm requestForm){
+    public ResponseStoreListForm getStoreListByProduct(RequestGetStoreListByProductForm requestForm,AuthorDTO authorDTO){
         ResponseStoreListForm responseStoreListForm = null;
-        StoreDTO storeDTO = convertGetStoreListByProductFormToDTO(requestForm);
-        try {
-            responseStoreListForm = storeMapper.getStoreListByProduct(storeDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
+        int authorStatus = checkAuthor(authorDTO);
+        if (authorStatus == ADMIN) {
+            StoreDTO storeDTO = convertGetStoreListByProductFormToDTO(requestForm);
+            try {
+                responseStoreListForm = storeMapper.getStoreListByProduct(storeDTO);
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+            }
         }
         return responseStoreListForm;
     }
 
-    public ResponseStoreListForm getStoreListShort(RequestGetStoreListShort requestForm){
+    public ResponseStoreListForm getStoreListShort(RequestGetStoreListShort requestForm,AuthorDTO authorDTO){
         ResponseStoreListForm responseStoreListForm = null;
-        StoreDTO storeDTO = new StoreDTO();
-        try {
-            responseStoreListForm = storeMapper.getStoreListShort(storeDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
+        int authorStatus = checkAuthor(authorDTO);
+        if (authorStatus == ADMIN) {
+            StoreDTO storeDTO = new StoreDTO();
+            try {
+                responseStoreListForm = storeMapper.getStoreListShort(storeDTO);
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+            }
         }
         return responseStoreListForm;
     }
 
     public ResponseStoreDetailForm getStoreDetail(RequestGetStoreDetailForm requestForm, AuthorDTO authorDTO) {
         ResponseStoreDetailForm responseStoreDetailForm = null;
-        StoreDTO storeDTO = convertGetStoreDetailFormToDTO(requestForm,authorDTO);
-        try {
-            responseStoreDetailForm = storeMapper.getStoreDetail(storeDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
+        int statusAuthor = checkAuthor(authorDTO);
+        if ((statusAuthor == ADMIN) || (statusAuthor == MANAGER_WITHIN_STORE)) {
+            StoreDTO storeDTO = convertGetStoreDetailFormToDTO(requestForm,authorDTO);
+            try {
+                responseStoreDetailForm = storeMapper.getStoreDetail(storeDTO);
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+            }
         }
         return responseStoreDetailForm;
     }
 
-    public ResponseCommonForm createStore(RequestCreateStoreForm requestForm) {
+    public ResponseCommonForm createStore(RequestCreateStoreForm requestForm, AuthorDTO authorDTO) {
         ResponseCommonForm response = new ResponseCommonForm();
-        StoreDTO storeDTO = convertCreateStoreFormToDTO(requestForm);
-        try {
-            storeMapper.createStore(storeDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
-            response.setErrorCodes(catchSqlException(e.getMessage()));
+        int statusAuthor = checkAuthor(authorDTO);
+        if (statusAuthor == ADMIN) {
+            StoreDTO storeDTO = convertCreateStoreFormToDTO(requestForm);
+            try {
+                storeMapper.createStore(storeDTO);
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+                response.setErrorCodes(catchSqlException(e.getMessage()));
+            }
+        } else {
+            addErrorMessage(response,"MSG-076");
         }
         return response;
     }
 
-    public ResponseCommonForm changeStatus(RequestChangeStoreStatusForm requestForm) {
+    public ResponseCommonForm changeStatus(RequestChangeStoreStatusForm requestForm, AuthorDTO authorDTO) {
         ResponseCommonForm response = new ResponseCommonForm();
-        StoreDTO storeDTO = convertChangeStatusFormToDTO(requestForm);
-        try {
-            ResponseStoreDetailForm responseStoreDetailForm = storeMapper.getStoreStatus(storeDTO);
-            if ((responseStoreDetailForm.getStatusId() == 3) && (storeDTO.getStatusId() == 2)
-            && (StringUtils.isNotEmpty(storeDTO.getReasonInactive()))) {
-                System.out.println("ACTION: STORE PENDING => INACTIVE");
-                //check co ton tai shelf nao ko inactive hay khong
-                if (storeMapper.checkShelf(storeDTO)) {
+        int statusAuthor = checkAuthor(authorDTO);
+        if (statusAuthor == ADMIN) {
+            StoreDTO storeDTO = convertChangeStatusFormToDTO(requestForm);
+            try {
+                ResponseStoreDetailForm responseStoreDetailForm = storeMapper.getStoreStatus(storeDTO);
+                if ((responseStoreDetailForm.getStatusId() == 3) && (storeDTO.getStatusId() == 2)
+                        && (StringUtils.isNotEmpty(storeDTO.getReasonInactive()))) {
+                    System.out.println("ACTION: STORE PENDING => INACTIVE");
+                    //check co ton tai shelf nao ko inactive hay khong
+                    if (storeMapper.checkShelf(storeDTO)) {
+                        storeMapper.changeStatus(storeDTO);
+                    } else {
+                        List<String> errorMsg = new ArrayList<>();
+                        errorMsg.add("MSG-081");
+                        response.setErrorCodes(errorMsg);
+                    }
+                } else if ((responseStoreDetailForm.getStatusId() == 2) && (storeDTO.getStatusId() == 3)) {
+                    System.out.println("ACTION: STORE INACTIVE => PENDING");
                     storeMapper.changeStatus(storeDTO);
                 } else {
                     List<String> errorMsg = new ArrayList<>();
-                    errorMsg.add("MSG-081");
+                    errorMsg.add("MSG-066");
                     response.setErrorCodes(errorMsg);
                 }
-            } else if ((responseStoreDetailForm.getStatusId() == 2) && (storeDTO.getStatusId() == 3)) {
-                System.out.println("ACTION: STORE INACTIVE => PENDING");
-                storeMapper.changeStatus(storeDTO);
-            } else {
-                List<String> errorMsg = new ArrayList<>();
-                errorMsg.add("MSG-066");
-                response.setErrorCodes(errorMsg);
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+                response.setErrorCodes(catchSqlException(e.getMessage()));
             }
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
-            response.setErrorCodes(catchSqlException(e.getMessage()));
+        } else {
+            addErrorMessage(response,"MSG-076");
         }
         return response;
     }
 
-    public ResponseCommonForm updateStoreInfo(RequestUpdateInfoForm requestForm) {
+    public ResponseCommonForm updateStoreInfo(RequestUpdateInfoForm requestForm, AuthorDTO authorDTO) {
         ResponseCommonForm response = new ResponseCommonForm();
-        StoreDTO storeDTO = convertUpdateInfoFormToDTO(requestForm);
-        try {
-            storeMapper.updateInfo(storeDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
-            response.setErrorCodes(catchSqlException(e.getMessage()));
+        int statusAuthor = checkAuthor(authorDTO);
+        if (statusAuthor == ADMIN) {
+            StoreDTO storeDTO = convertUpdateInfoFormToDTO(requestForm);
+            try {
+                storeMapper.updateInfo(storeDTO);
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+                response.setErrorCodes(catchSqlException(e.getMessage()));
+            }
+        } else {
+            addErrorMessage(response,"MSG-076");
         }
+
         return response;
     }
+
+
 
 //    public ResponseCommonForm updateAnalyzedTime(RequestUpdateAnalyzedTime requestForm) {
 //        ResponseCommonForm response = new ResponseCommonForm();
@@ -137,51 +169,69 @@ public class StoreService extends BaseService {
 //        return response;
 //    }
 
-    public ResponseCommonForm changeManager(RequestChangeManager requestForm) {
+    public ResponseCommonForm changeManager(RequestChangeManager requestForm, AuthorDTO authorDTO) {
         ResponseCommonForm response = new ResponseCommonForm();
-        StoreDTO storeDTO = convertChangeManagerFormToDTO(requestForm);
-        List<String> errorMsg = new ArrayList<>();
-        try {
-            // Add manager
-            if (requestForm.getActive() == ADD_MANAGER) {
-                // check 2 thang ton tai va pending
-                if (!storeMapper.checkAvailableStore(storeDTO)) {
-                    errorMsg.add("MSG-075");
-                    response.setErrorCodes(errorMsg);
+        int statusAuthor = checkAuthor(authorDTO);
+        if (statusAuthor == ADMIN) {
+            StoreDTO storeDTO = convertChangeManagerFormToDTO(requestForm);
+            List<String> errorMsg = new ArrayList<>();
+            try {
+                // Add manager
+                if (requestForm.getActive() == ADD_MANAGER) {
+                    // check 2 thang ton tai va pending
+                    if (!storeMapper.checkAvailableStore(storeDTO)) {
+                        errorMsg.add("MSG-075");
+                        response.setErrorCodes(errorMsg);
+                    }
+                    else if (!storeMapper.checkAvailableManager(storeDTO)) {
+                        errorMsg.add("MSG-074");
+                        response.setErrorCodes(errorMsg);
+                    } else {
+                        // do add manager
+                        storeMapper.addManager(storeDTO);
+                    }
                 }
-                else if (!storeMapper.checkAvailableManager(storeDTO)) {
-                    errorMsg.add("MSG-074");
-                    response.setErrorCodes(errorMsg);
-                } else {
-                    // do add manager
-                    storeMapper.addManager(storeDTO);
+                // Remove manager
+                if (requestForm.getActive() == REMOVE_MANAGER) {
+                    // check 2 thang co ton tai ko
+                    if (!storeMapper.countStoreById(storeDTO)) {
+                        errorMsg.add("MSG-035");
+                        response.setErrorCodes(errorMsg);
+                    }
+                    else if (!storeMapper.countUserById(storeDTO)) {
+                        errorMsg.add("MSG-041");
+                        response.setErrorCodes(errorMsg);
+                    }
+                    // check 2 thang co mapping voi nhau ko
+                    else if (!storeMapper.checkStoreManagerMapping(storeDTO)) {
+                        errorMsg.add("MSG-077");
+                        response.setErrorCodes(errorMsg);
+                    } else {
+                        // do remove manager
+                        storeMapper.removeManager(storeDTO);
+                    }
                 }
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+                response.setErrorCodes(catchSqlException(e.getMessage()));
             }
-            // Remove manager
-            if (requestForm.getActive() == REMOVE_MANAGER) {
-                // check 2 thang co ton tai ko
-                if (!storeMapper.countStoreById(storeDTO)) {
-                    errorMsg.add("MSG-035");
-                    response.setErrorCodes(errorMsg);
-                }
-                else if (!storeMapper.countUserById(storeDTO)) {
-                    errorMsg.add("MSG-041");
-                    response.setErrorCodes(errorMsg);
-                }
-                // check 2 thang co mapping voi nhau ko
-                else if (!storeMapper.checkStoreManagerMapping(storeDTO)) {
-                    errorMsg.add("MSG-077");
-                    response.setErrorCodes(errorMsg);
-                } else {
-                    // do remove manager
-                    storeMapper.removeManager(storeDTO);
-                }
-            }
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
-            response.setErrorCodes(catchSqlException(e.getMessage()));
+        } else {
+            addErrorMessage(response,"MSG-076");
         }
+
+
         return response;
+    }
+
+    private int checkAuthor(AuthorDTO authorDTO) {
+        if (authorDTO == null) {
+            return ADMIN;
+        }
+        if (StringUtils.isNotEmpty(authorDTO.getStoreId())) {
+            return MANAGER_WITHIN_STORE;
+        } else {
+            return MANAGER_WITHOUT_STORE;
+        }
     }
 
     private StoreDTO convertChangeManagerFormToDTO(RequestChangeManager requestForm){
@@ -284,4 +334,9 @@ public class StoreService extends BaseService {
         return storeDTO;
     }
 
+    private void addErrorMessage(ResponseCommonForm response, String messCode) {
+        List<String> errorMsg = new ArrayList<>();
+        errorMsg.add(messCode);
+        response.setErrorCodes(errorMsg);
+    }
 }
