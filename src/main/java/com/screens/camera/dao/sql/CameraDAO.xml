@@ -204,8 +204,8 @@
     <update id="updateCamera">
         UPDATE tblCamera
         SET CameraName = #{cameraName},
-            <if test="imageUrl != null">
-                ImageURL = #{imageUrl},
+            <if test="imageURL != null">
+                ImageURL = #{imageURL},
             </if>
             IPAddress = #{ipAddress},
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
