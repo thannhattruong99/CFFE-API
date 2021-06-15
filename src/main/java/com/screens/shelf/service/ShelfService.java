@@ -66,7 +66,7 @@ public class ShelfService extends BaseService {
     public ResponseCommonForm createShelf(RequestCreateShelfForm requestForm, AuthorDTO authorDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
 
-        if(StringHelper.isNullOrEmpty(authorDTO.getStoreId())){
+        if(!StringHelper.isNullOrEmpty(authorDTO.getStoreId())){
             ShelfDTO shelfDTO = new ShelfDTO();
             convertRequestCreateShelfFormToShelfDTO(requestForm, shelfDTO, authorDTO);
             try {
