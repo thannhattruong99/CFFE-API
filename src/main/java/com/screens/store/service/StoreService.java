@@ -21,9 +21,6 @@ public class StoreService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
     private static final int ADD_MANAGER = 1;
     private static final int REMOVE_MANAGER = 2;
-    private static final int ADMIN = 1;
-    private static final int MANAGER_WITHIN_STORE = 2;
-    private static final int MANAGER_WITHOUT_STORE = 3;
 
     @Autowired
     private StoreMapper storeMapper;
@@ -223,17 +220,6 @@ public class StoreService extends BaseService {
         return response;
     }
 
-    private int checkAuthor(AuthorDTO authorDTO) {
-        if (authorDTO == null) {
-            return ADMIN;
-        }
-        if (StringUtils.isNotEmpty(authorDTO.getStoreId())) {
-            return MANAGER_WITHIN_STORE;
-        } else {
-            return MANAGER_WITHOUT_STORE;
-        }
-    }
-
     private StoreDTO convertChangeManagerFormToDTO(RequestChangeManager requestForm){
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreId(requestForm.getStoreId());
@@ -269,8 +255,8 @@ public class StoreService extends BaseService {
         storeDTO.setStoreId(requestForm.getStoreId());
         if (StringUtils.isNotEmpty(requestForm.getStoreName()))
             storeDTO.setStoreName(requestForm.getStoreName());
-//        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
-//            storeDTO.setImageUrl(requestForm.getImageUrl());
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            storeDTO.setImageUrl(requestForm.getImageUrl());
         if (StringUtils.isNotEmpty(requestForm.getAddress()))
             storeDTO.setAddress(requestForm.getAddress());
         if (requestForm.getDistrictId() != 0) {
@@ -334,9 +320,4 @@ public class StoreService extends BaseService {
         return storeDTO;
     }
 
-    private void addErrorMessage(ResponseCommonForm response, String messCode) {
-        List<String> errorMsg = new ArrayList<>();
-        errorMsg.add(messCode);
-        response.setErrorCodes(errorMsg);
-    }
 }

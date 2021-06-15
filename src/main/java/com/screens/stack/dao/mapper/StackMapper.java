@@ -114,7 +114,7 @@ public class StackMapper extends BaseDAO {
         return true;
     }
 
-    public boolean checkStackExist(StackDTO stackDTO) {
+    public boolean stackIsExistInStore(StackDTO stackDTO) {
         StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackExist",stackDTO);
         if(rs.getTotalOfRecord() <= 0){
             return false;

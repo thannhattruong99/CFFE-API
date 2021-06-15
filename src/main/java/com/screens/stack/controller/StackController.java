@@ -29,16 +29,19 @@ public class StackController {
     private static final String MSG_022 = "MSG-022";
     private static final String MSG_009 = "MSG-009";
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/admin/manager/store/shelf/stack")
     public String getStackDetail(
             @Validated RequestGetStackDetailForm requestForm,
-            BindingResult result){
+            BindingResult result,
+            HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute("AUTHOR");
         // Do Get Stack Detail
-        ResponseStackDetailForm responseStackDetailForm = stackService.getStackDetail(requestForm);
+        ResponseStackDetailForm responseStackDetailForm = stackService.getStackDetail(requestForm,authorDTO);
         if(responseStackDetailForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_022);
