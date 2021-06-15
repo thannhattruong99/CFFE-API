@@ -5,19 +5,21 @@ import com.common.form.ResponseCommonForm;
 import com.screens.category.form.*;
 import com.screens.category.service.CategoryService;
 import com.util.ResponseSupporter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@RestController("")
+@RequestMapping("admin")
+@SecurityRequirement(name = "basicAuth")
 public class CategoryController {
 
     @Autowired
@@ -26,10 +28,12 @@ public class CategoryController {
     private static final String MSG_029 = "MSG-029";
     private static final String MSG_009 = "MSG-009";
 
-    @GetMapping(value = "/admin/category")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/category")
     public String getCategoryDetail(
             @Validated RequestGetCategoryDetailForm requestForm,
-            BindingResult result){
+            BindingResult result,
+            HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -45,10 +49,12 @@ public class CategoryController {
         return ResponseSupporter.responseResult(responseCategoryDetailForm);
     }
 
-    @GetMapping(value = "/admin/categories")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/categories")
     public String getCategoryList(
             @Validated RequestGetCategoryListForm requestForm,
-            BindingResult result){
+            BindingResult result,
+            HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
@@ -61,10 +67,12 @@ public class CategoryController {
         return ResponseSupporter.responseResult(res);
     }
 
-    @PostMapping(value = "/admin/category/create")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = "/category/create")
     public String createCategory(
             @Validated @RequestBody RequestCreateCategoryForm requestForm,
-            BindingResult result) throws IOException {
+            BindingResult result,
+            HttpServletRequest request) throws IOException {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
@@ -75,9 +83,11 @@ public class CategoryController {
         return ResponseSupporter.responseResult(true);
     }
 
-    @PostMapping(value = "/admin/category/update-status")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = "/category/update-status")
     public String changeStatus(@Validated @RequestBody RequestChangeCategoryStatusForm requestForm,
-                               BindingResult result){
+                               BindingResult result,
+                               HttpServletRequest request){
 
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -89,9 +99,11 @@ public class CategoryController {
         return ResponseSupporter.responseResult(true);
     }
 
-    @PostMapping(value = "/admin/category/update")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = "/category/update")
     public String updateCategoryInfo(@Validated @RequestBody RequestUpdateInfoCategoryForm requestForm,
-                                    BindingResult result){
+                                    BindingResult result,
+                                     HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }

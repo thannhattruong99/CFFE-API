@@ -1,22 +1,25 @@
 package com.screens.product.controller;
 
 import com.common.form.ResponseCommonForm;
+import com.filter.dto.AuthorDTO;
 import com.screens.product.form.*;
 import com.screens.product.service.ProductService;
 import com.util.ResponseSupporter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@RestController("")
+@RequestMapping("admin")
+@SecurityRequirement(name = "basicAuth")
 public class ProductController {
 
     @Autowired
@@ -25,10 +28,12 @@ public class ProductController {
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_023 = "MSG-023";
 
-    @GetMapping(value = "/admin/product")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/product")
     public String getProductDetail(
             @Validated RequestGetProductDetailForm requestForm,
-            BindingResult result){
+            BindingResult result,
+            HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -44,10 +49,12 @@ public class ProductController {
         return ResponseSupporter.responseResult(res);
     }
 
-    @GetMapping(value = "/admin/products")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/products")
     public String getProductList(
             @Validated RequestGetProductListForm requestForm,
-            BindingResult result){
+            BindingResult result,
+            HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -63,10 +70,12 @@ public class ProductController {
         return ResponseSupporter.responseResult(res);
     }
 
-    @PostMapping(value = "/admin/product/create")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = "/product/create")
     public String createProduct(
             @Validated @RequestBody RequestCreateProductForm requestForm,
-            BindingResult result) throws IOException {
+            BindingResult result,
+            HttpServletRequest request) throws IOException {
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -81,9 +90,11 @@ public class ProductController {
         return ResponseSupporter.responseResult(true);
     }
 
-    @PostMapping(value = "/admin/product/update-status")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = "/product/update-status")
     public String updateStatus(@Validated @RequestBody RequestUpdateStatusProductForm requestForm,
-                               BindingResult result){
+                               BindingResult result,
+                               HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -97,9 +108,11 @@ public class ProductController {
         return ResponseSupporter.responseResult(true);
     }
 
-    @PostMapping(value = "/admin/product/update")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = "/product/update")
     public String updateProductInfo(@Validated @RequestBody RequestUpdateInfoProductForm requestForm,
-                                  BindingResult result){
+                                  BindingResult result,
+                                    HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -113,9 +126,11 @@ public class ProductController {
         return ResponseSupporter.responseResult(true);
     }
 
-    @PostMapping(value = "/admin/product/update-category")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = "/product/update-category")
     public String updateCategory(@Validated @RequestBody RequestUpdateCategoryForm requestForm,
-                                    BindingResult result){
+                                    BindingResult result,
+                                 HttpServletRequest request){
         // Check Validate
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);

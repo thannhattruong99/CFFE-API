@@ -443,8 +443,10 @@
 
     <select id="checkStackExist" resultMap="checkStackExist">
         SELECT COUNT(StackId) AS TotalOfRecord
-        FROM tblStack
-        WHERE StackId = #{stackId}
+        FROM tblStack SS
+                 LEFT JOIN tblShelf TS ON (TS.ShelfId = SS.ShelfId)
+        WHERE SS.StackId = #{stackId}
+          AND TS.StoreId = #{storeId}
     </select>
 
     <resultMap id="checkStackExist" type="StackDTO">

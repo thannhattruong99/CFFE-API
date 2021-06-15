@@ -25,13 +25,19 @@ public class StackService extends BaseService {
     @Autowired
     private StackMapper stackMapper;
 
-    public ResponseStackDetailForm getStackDetail(RequestGetStackDetailForm requestForm) {
+    public ResponseStackDetailForm getStackDetail(RequestGetStackDetailForm requestForm, AuthorDTO authorDTO) {
         ResponseStackDetailForm responseStackDetailForm = null;
-        StackDTO stackDTO = converGetStackDetailFormToDTO(requestForm);
-        try {
-            responseStackDetailForm = stackMapper.getStackDetail(stackDTO);
-        } catch (PersistenceException e) {
-            logger.error("Error Message: " + e.getMessage());
+        int authorStatus = checkAuthor(authorDTO);
+        if (authorStatus == MANAGER_WITHIN_STORE) {
+            StackDTO stackDTO = converGetStackDetailFormToDTO(requestForm,authorDTO);
+            try {
+                //check stack in store
+                if (stackMapper.stackIsExistInStore(stackDTO)) {
+                    responseStackDetailForm = stackMapper.getStackDetail(stackDTO);
+                }
+            } catch (PersistenceException e) {
+                logger.error("Error Message: " + e.getMessage());
+            }
         }
         return responseStackDetailForm;
     }
@@ -69,7 +75,7 @@ public class StackService extends BaseService {
              if(stackDTO.getAction() == ADD_ACTION) {
                 System.out.println("ACTION = ADD_ACTION");
                 // Check Stack co ton tai trong store
-                if (!stackMapper.checkStackExist(stackDTO)) {
+                if (!stackMapper.stackIsExistInStore(stackDTO)) {
                     errorMsg.add("MSG-022");
                     response.setErrorCodes(errorMsg);
                 }
@@ -132,7 +138,7 @@ public class StackService extends BaseService {
             if (stackDTO.getAction() == ADD_ACTION) {
                 System.out.println("ACTION = ADD_ACTION");
                 // Check Stack co ton tai
-                if (!stackMapper.checkStackExist(stackDTO)) {
+                if (!stackMapper.stackIsExistInStore(stackDTO)) {
                     errorMsg.add("MSG-022");
                     response.setErrorCodes(errorMsg);
                 }
@@ -189,7 +195,7 @@ public class StackService extends BaseService {
         StackDTO stackDTO = convertUpdateStatusFormToDTO(requestForm);
         try {
             List<String> errorMsg = new ArrayList<>();
-            if (!stackMapper.checkStackExist(stackDTO)) {
+            if (!stackMapper.stackIsExistInStore(stackDTO)) {
                 errorMsg.add("MSG-022");
                 response.setErrorCodes(errorMsg);
             } else {
@@ -267,9 +273,10 @@ public class StackService extends BaseService {
         return stackDTO;
     }
 
-    private StackDTO converGetStackDetailFormToDTO(RequestGetStackDetailForm requestForm){
+    private StackDTO converGetStackDetailFormToDTO(RequestGetStackDetailForm requestForm,AuthorDTO authorDTO){
         StackDTO stackDTO = new StackDTO();
         stackDTO.setStackId(requestForm.getStackId());
+        stackDTO.setStoreId(authorDTO.getStoreId());
         return stackDTO;
     }
 
