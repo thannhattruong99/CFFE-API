@@ -3,27 +3,34 @@ package com.authentication.controller;
 import com.authentication.form.RequestLoginForm;
 import com.authentication.form.ResponseLoginForm;
 import com.authentication.service.AccountService;
+import com.util.ResponseSupporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class AccountController {
+    private static final String MSG_003 = "MSG-003";
 
     @Autowired
     private AccountService accountService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody RequestLoginForm authenticationRequest) {
+    public String createAuthenticationToken(@RequestBody RequestLoginForm authenticationRequest) {
 
         ResponseLoginForm response = accountService
                 .checkLogin(authenticationRequest);
         if(response != null){
-            return ResponseEntity.ok(response);
+            return ResponseSupporter.responseResult(response);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        List<String> errorCodes = new ArrayList<>();
+        errorCodes.add(MSG_003);
+        return ResponseSupporter.responseErrorResult(errorCodes);
     }
 
     @GetMapping("")
