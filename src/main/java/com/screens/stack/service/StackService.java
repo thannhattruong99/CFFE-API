@@ -8,6 +8,7 @@ import com.screens.stack.dto.RequestGetStackListByProductForm;
 import com.screens.stack.dto.StackDTO;
 import com.screens.stack.form.*;
 import com.screens.store.service.StoreService;
+import com.util.MessageConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
@@ -81,38 +82,30 @@ public class StackService extends BaseService {
         if (authorStatus == MANAGER_WITHIN_STORE) {
             StackDTO stackDTO = convertChangeProductFormToDTO(requestForm,authorDTO);
             try {
-                List<String> errorMsg = new ArrayList<>();
 
                 // Add product
                 if(stackDTO.getAction() == ADD_ACTION) {
                     System.out.println("ACTION = ADD_ACTION");
                     // Check Stack co ton tai trong store
                     if (!stackMapper.stackIsExistInStore(stackDTO)) {
-                        errorMsg.add("MSG-022");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_022);
                     }
                     // Check Product co ton tai
                     else if (!stackMapper.checkProductExist(stackDTO)) {
-                        errorMsg.add("MSG-023");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_023);
                     }
                     // Check product active
                     else if (!stackMapper.checkProductActive(stackDTO)){
-                        System.out.println("*** product NOT active");
-                        errorMsg.add("MSG-089");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_089);
                     }
                     // Check stack co pending hay ko
                     else if (!stackMapper.checkStackPending(stackDTO)) {
-                        System.out.println("*** STACK ALREADY ACTIVE OR INACTIVE");
-                        errorMsg.add("MSG-090");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_090);
                     }
                     // Check co product nao dang tren stack do hay ko
                     else if (stackMapper.checkStackHaveProduct(stackDTO)) {
                         System.out.println("*** STACK ALREADY HAVE PRODUCT");
-                        errorMsg.add("MSG-091");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_091);
                     } else {
                         stackMapper.addProduct(stackDTO);
                         System.out.println("RS = SUSSCESS");
@@ -124,29 +117,24 @@ public class StackService extends BaseService {
                     System.out.println("ACTION = REMOVE_ACTION");
                     // Check Stack co ton tai trong store
                     if (!stackMapper.stackIsExistInStore(stackDTO)) {
-                        errorMsg.add("MSG-022");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_022);
                     }
                     // Check product co nam tren stack
                     else if (!stackMapper.checkStackProductMapping(stackDTO)) {
-                        errorMsg.add("MSG-092");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_092);
                     }
                     // Check Stack Mapping is pending
                     else {
                         stackMapper.removeProduct(stackDTO);
                     }
                 }
-
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
                 response.setErrorCodes(catchSqlException(e.getMessage()));
             }
         } else {
-            addErrorMessage(response,"MSG-076");
+            addErrorMessage(response,MessageConstant.MSG_076);
         }
-
-
         return response;
     }
 
@@ -156,38 +144,31 @@ public class StackService extends BaseService {
         if (authorStatus == MANAGER_WITHIN_STORE) {
             StackDTO stackDTO = convertChangeCameraFormToDTO(requestForm,authorDTO);
             try {
-                List<String> errorMsg = new ArrayList<>();
-
                 // Add Camera
                 if (stackDTO.getAction() == ADD_ACTION) {
                     System.out.println("ACTION = ADD_ACTION");
                     // Check Stack co ton tai trong store
                     if (!stackMapper.stackIsExistInStore(stackDTO)) {
-                        errorMsg.add("MSG-022");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_022);
                     }
                     // Check Camera co ton tai
                     else if (!stackMapper.checkCameraExist(stackDTO)) {
-                        errorMsg.add("MSG-020");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_020);
                     }
                     // Check stack is pending
                     else if (!stackMapper.checkStackPending(stackDTO)){
                         System.out.println("*** STACK ALREADY ACTIVE OR INACTIVE");
-                        errorMsg.add("MSG-090");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_090);
                     }
                     // Check Camera is pending
                     else if (!stackMapper.checkCameraPending(stackDTO)){
                         System.out.println("*** Camera NOT pending");
-                        errorMsg.add("MSG-093");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_093);
                     }
                     // check stack co product
                     else if (!stackMapper.checkStackHaveProduct(stackDTO)){
                         System.out.println("*** Stack not have product");
-                        errorMsg.add("MSG-100");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_100);
                     }
                     else {
                         stackMapper.addCamera(stackDTO);
@@ -199,25 +180,22 @@ public class StackService extends BaseService {
                 if (stackDTO.getAction() == REMOVE_ACTION) {
                     // Check Stack co ton tai trong store
                     if (!stackMapper.stackIsExistInStore(stackDTO)) {
-                        errorMsg.add("MSG-022");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response, MessageConstant.MSG_022);
                     } else
                     // Check camera co nam tren stack
                     if (!stackMapper.checkStackCameraMapping(stackDTO)) {
-                        errorMsg.add("MSG-094");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_094);
                     } else {
                         stackMapper.removeCamera(stackDTO);
                         System.out.println("RS = SUSSCESS");
                     }
                 }
-
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
                 response.setErrorCodes(catchSqlException(e.getMessage()));
             }
         } else {
-            addErrorMessage(response,"MSG-076");
+            addErrorMessage(response,MessageConstant.MSG_076);
         }
 
         return response;
@@ -229,10 +207,8 @@ public class StackService extends BaseService {
         if (authorStatus == MANAGER_WITHIN_STORE) {
             StackDTO stackDTO = convertUpdateStatusFormToDTO(requestForm,authorDTO);
             try {
-                List<String> errorMsg = new ArrayList<>();
                 if (!stackMapper.stackIsExistInStore(stackDTO)) {
-                    errorMsg.add("MSG-022");
-                    response.setErrorCodes(errorMsg);
+                    addErrorMessage(response,MessageConstant.MSG_022);
                 } else {
                     ResponseStackDetailForm rs = stackMapper.getStackStatus(stackDTO);
                     if ((rs.getStatusId() == 3) && (stackDTO.getStatusId() == 2)
@@ -242,15 +218,13 @@ public class StackService extends BaseService {
                         if (!stackMapper.checkStackHaveProduct(stackDTO)){
                             stackMapper.changeStatus(stackDTO);
                         } else {
-                            errorMsg.add("MSG-095");
-                            response.setErrorCodes(errorMsg);
+                            addErrorMessage(response,MessageConstant.MSG_095);
                         }
                     } else if((rs.getStatusId() == 2) && (stackDTO.getStatusId() == 3)) {
                         System.out.println("ACTION: INACTIVE => PENDING");
                         stackMapper.changeStatus(stackDTO);
                     } else {
-                        errorMsg.add("MSG-066");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_066);
                     }
                 }
             } catch (PersistenceException e) {
@@ -258,7 +232,7 @@ public class StackService extends BaseService {
                 response.setErrorCodes(catchSqlException(e.getMessage()));
             }
         } else {
-            addErrorMessage(response,"MSG-076");
+            addErrorMessage(response,MessageConstant.MSG_076);
         }
         return response;
     }

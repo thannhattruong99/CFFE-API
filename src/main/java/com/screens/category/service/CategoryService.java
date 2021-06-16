@@ -6,6 +6,7 @@ import com.screens.category.dao.mapper.CategoryMapper;
 import com.screens.category.dto.CategoryDTO;
 import com.screens.category.form.*;
 import com.screens.store.service.StoreService;
+import com.util.MessageConstant;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ import java.util.List;
 @Service
 public class CategoryService extends BaseService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
     @Autowired
     private CategoryMapper categoryMapper;
@@ -63,9 +64,7 @@ public class CategoryService extends BaseService {
         try {
             ResponseCategoryDetailForm res = categoryMapper.getCategoryDetail(categoryDTO);
             if (res == null) {
-                List<String> errorMsg = new ArrayList<>();
-                errorMsg.add("MSG-029");
-                response.setErrorCodes(errorMsg);
+                addErrorMessage(response, MessageConstant.MSG_029);
             } else {
                 if ((res.getStatusId() == 1) && (categoryDTO.getStatusId() == 2)) {
                     System.out.println("ACTION: CATEGORY ACTIVE => INACTIVE");
@@ -73,20 +72,15 @@ public class CategoryService extends BaseService {
                     if (!categoryMapper.checkHaveProductUsing(categoryDTO)) {
                         categoryMapper.changeStatus(categoryDTO);
                     } else {
-                        List<String> errorMsg = new ArrayList<>();
-                        errorMsg.add("MSG-109");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_109);
                     }
                 } else if ((res.getStatusId() == 2) && (categoryDTO.getStatusId() == 1)) {
                     System.out.println("ACTION: CATEGORY INACTIVE => ACTIVE");
                     categoryMapper.changeStatus(categoryDTO);
                 } else {
-                    List<String> errorMsg = new ArrayList<>();
-                    errorMsg.add("MSG-110");
-                    response.setErrorCodes(errorMsg);
+                    addErrorMessage(response,MessageConstant.MSG_110);
                 }
             }
-
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
             response.setErrorCodes(catchSqlException(e.getMessage()));
@@ -99,9 +93,7 @@ public class CategoryService extends BaseService {
         CategoryDTO categoryDTO = convertUpdateInfoCategoryFormToDTO(requestForm);
         try {
             if(!categoryMapper.checkCategoryExist(categoryDTO)) {
-                List<String> errorMsg = new ArrayList<>();
-                errorMsg.add("MSG-029");
-                response.setErrorCodes(errorMsg);
+                addErrorMessage(response,MessageConstant.MSG_029);
             } else {
                 categoryMapper.updateInfo(categoryDTO);
             }

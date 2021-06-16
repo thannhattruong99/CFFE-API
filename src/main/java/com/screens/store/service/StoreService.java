@@ -6,21 +6,19 @@ import com.filter.dto.AuthorDTO;
 import com.screens.store.dao.mapper.StoreMapper;
 import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.*;
+import com.util.MessageConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class StoreService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
-    private static final int ADD_MANAGER = 1;
-    private static final int REMOVE_MANAGER = 2;
 
     @Autowired
     private StoreMapper storeMapper;
@@ -93,7 +91,7 @@ public class StoreService extends BaseService {
                 response.setErrorCodes(catchSqlException(e.getMessage()));
             }
         } else {
-            addErrorMessage(response,"MSG-076");
+            addErrorMessage(response, MessageConstant.MSG_076);
         }
         return response;
     }
@@ -112,24 +110,20 @@ public class StoreService extends BaseService {
                     if (storeMapper.checkShelf(storeDTO)) {
                         storeMapper.changeStatus(storeDTO);
                     } else {
-                        List<String> errorMsg = new ArrayList<>();
-                        errorMsg.add("MSG-081");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_081);
                     }
                 } else if ((responseStoreDetailForm.getStatusId() == 2) && (storeDTO.getStatusId() == 3)) {
                     System.out.println("ACTION: STORE INACTIVE => PENDING");
                     storeMapper.changeStatus(storeDTO);
                 } else {
-                    List<String> errorMsg = new ArrayList<>();
-                    errorMsg.add("MSG-066");
-                    response.setErrorCodes(errorMsg);
+                    addErrorMessage(response,MessageConstant.MSG_066);
                 }
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
                 response.setErrorCodes(catchSqlException(e.getMessage()));
             }
         } else {
-            addErrorMessage(response,"MSG-076");
+            addErrorMessage(response,MessageConstant.MSG_076);
         }
         return response;
     }
@@ -146,25 +140,11 @@ public class StoreService extends BaseService {
                 response.setErrorCodes(catchSqlException(e.getMessage()));
             }
         } else {
-            addErrorMessage(response,"MSG-076");
+            addErrorMessage(response,MessageConstant.MSG_076);
         }
 
         return response;
     }
-
-
-
-//    public ResponseCommonForm updateAnalyzedTime(RequestUpdateAnalyzedTime requestForm) {
-//        ResponseCommonForm response = new ResponseCommonForm();
-//        StoreDTO storeDTO = convertUpdateAnalyzedTimeFormToDTO(requestForm);
-//        try {
-//            storeMapper.updateAnalyzedTime(storeDTO);
-//        } catch (PersistenceException e) {
-//            logger.error("Error Message: " + e.getMessage());
-//            response.setErrorCodes(catchSqlException(e.getMessage()));
-//        }
-//        return response;
-//    }
 
     public ResponseCommonForm changeManager(RequestChangeManager requestForm, AuthorDTO authorDTO) {
         ResponseCommonForm response = new ResponseCommonForm();
@@ -174,35 +154,30 @@ public class StoreService extends BaseService {
             List<String> errorMsg = new ArrayList<>();
             try {
                 // Add manager
-                if (requestForm.getActive() == ADD_MANAGER) {
+                if (requestForm.getActive() == ADD_ACTION) {
                     // check 2 thang ton tai va pending
                     if (!storeMapper.checkAvailableStore(storeDTO)) {
-                        errorMsg.add("MSG-075");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_075);
                     }
                     else if (!storeMapper.checkAvailableManager(storeDTO)) {
-                        errorMsg.add("MSG-074");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_074);
                     } else {
                         // do add manager
                         storeMapper.addManager(storeDTO);
                     }
                 }
                 // Remove manager
-                if (requestForm.getActive() == REMOVE_MANAGER) {
+                if (requestForm.getActive() == REMOVE_ACTION) {
                     // check 2 thang co ton tai ko
                     if (!storeMapper.countStoreById(storeDTO)) {
-                        errorMsg.add("MSG-035");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_035);
                     }
                     else if (!storeMapper.countUserById(storeDTO)) {
-                        errorMsg.add("MSG-041");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_041);
                     }
                     // check 2 thang co mapping voi nhau ko
                     else if (!storeMapper.checkStoreManagerMapping(storeDTO)) {
-                        errorMsg.add("MSG-077");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response,MessageConstant.MSG_077);
                     } else {
                         // do remove manager
                         storeMapper.removeManager(storeDTO);
@@ -213,7 +188,7 @@ public class StoreService extends BaseService {
                 response.setErrorCodes(catchSqlException(e.getMessage()));
             }
         } else {
-            addErrorMessage(response,"MSG-076");
+            addErrorMessage(response,MessageConstant.MSG_076);
         }
 
 
@@ -223,10 +198,10 @@ public class StoreService extends BaseService {
     private StoreDTO convertChangeManagerFormToDTO(RequestChangeManager requestForm){
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreId(requestForm.getStoreId());
-        if (requestForm.getActive() == ADD_MANAGER) {
+        if (requestForm.getActive() == ADD_ACTION) {
             storeDTO.setStatusId(ACTIVE_STATUS);
         }
-        if (requestForm.getActive() == REMOVE_MANAGER) {
+        if (requestForm.getActive() == REMOVE_ACTION) {
             storeDTO.setStatusId(PENDING_STATUS);
         }
         storeDTO.setUserId(requestForm.getUserId());

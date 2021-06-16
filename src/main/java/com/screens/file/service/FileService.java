@@ -1,5 +1,6 @@
 package com.screens.file.service;
 
+import com.common.service.BaseService;
 import com.screens.file.form.ResponseUploadImage;
 import com.util.FileHelper;
 import com.util.GCPHelper;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FileService {
+public class FileService extends BaseService {
     private final static String SUFFIX_IMAGE_PATH = "\\src\\main\\resources\\images";
     private final static String IMAGE_FOLDER_CLOUD = "images/";
 

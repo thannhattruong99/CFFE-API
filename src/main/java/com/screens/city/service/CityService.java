@@ -17,7 +17,9 @@ import java.util.Map;
 
 @Service
 public class CityService {
+
     private static final Logger logger = LoggerFactory.getLogger(CityService.class);
+
     @Autowired
     private CityMapper cityMapper;
 
@@ -32,7 +34,6 @@ public class CityService {
         }catch (PersistenceException e){
             logger.error("Error at CityService: " + e.getMessage());
         }
-
         return responseForm;
     }
 
@@ -42,7 +43,6 @@ public class CityService {
             CityDistrictResponseSupporter cityDistrictSupporter = new CityDistrictResponseSupporter();
             cityDistrictSupporter.setCityId(String.valueOf(city.getCityId()));
             cityDistrictSupporter.setCityName(city.getCityName());
-
             districts = new HashMap<String, String>();
             for (DistrictResponseSupporter districtSupporter: city.getDistricts()) {
                 districts.put(String.valueOf(districtSupporter.getDistrictId()), districtSupporter.getDistrictName());

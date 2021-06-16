@@ -6,6 +6,7 @@ import com.screens.product.dao.mapper.ProductMapper;
 import com.screens.product.dto.ProductDTO;
 import com.screens.product.form.*;
 import com.screens.store.service.StoreService;
+import com.util.MessageConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
@@ -62,28 +63,24 @@ public class ProductService extends BaseService {
         ResponseCommonForm response = new ResponseCommonForm();
         ProductDTO productDTO = convertUpdateStatusFormToDTO(requestForm);
         try {
-            List<String> errorMsg = new ArrayList<>();
             if (!productMapper.checkProductExist(productDTO)) {
-                errorMsg.add("MSG-023");
-                response.setErrorCodes(errorMsg);
+                addErrorMessage(response,MessageConstant.MSG_023);
             } else {
                 ResponseProductDetailForm rs = productMapper.getProductStatus(productDTO);
-                if ((rs.getStatusId() == 1) && (productDTO.getStatusId() == 2)
+                if ((rs.getStatusId() == ACTIVE_STATUS) && (productDTO.getStatusId() == INACTIVE_STATUS)
                         && (StringUtils.isNotEmpty(productDTO.getReasonInactive()))){
                     System.out.println("ACTION: ACTIVE => INACTIVE");
                     //check co product nao con tren any Stack hay ko
                     if (!productMapper.checkAnyStackHaveProduct(productDTO)){
                         productMapper.changeStatus(productDTO);
                     } else {
-                        errorMsg.add("MSG-097");
-                        response.setErrorCodes(errorMsg);
+                        addErrorMessage(response, MessageConstant.MSG_097);
                     }
-                } else if((rs.getStatusId() == 2) && (productDTO.getStatusId() == 1)) {
-                    System.out.println("ACTION: INACTIVE => PENDING");
+                } else if((rs.getStatusId() == INACTIVE_STATUS) && (productDTO.getStatusId() == ACTIVE_STATUS)) {
+                    System.out.println("ACTION: INACTIVE => ACTIVE");
                     productMapper.changeStatus(productDTO);
                 } else {
-                    errorMsg.add("MSG-098");
-                    response.setErrorCodes(errorMsg);
+                    addErrorMessage(response,MessageConstant.MSG_098);
                 }
             }
         } catch (PersistenceException e) {
@@ -112,21 +109,15 @@ public class ProductService extends BaseService {
             // Check empty
             if ((productDTO.getCategories() == null)||(productDTO.getCategories().size() <= 0)
             ||(productDTO.getCategories().size() >3)) {
-                List<String> errorMsg = new ArrayList<>();
-                errorMsg.add("MSG-103");
-                response.setErrorCodes(errorMsg);
+                addErrorMessage(response,MessageConstant.MSG_103);
             }
             //check product
             else if (!(productMapper.checkProductExist(productDTO))) {
-                List<String> errorMsg = new ArrayList<>();
-                errorMsg.add("MSG-023");
-                response.setErrorCodes(errorMsg);
+                addErrorMessage(response,MessageConstant.MSG_023);
             }
             // check cate valid
             else if (productMapper.checkCategoriesValid(productDTO) != productDTO.getCategories().size()){
-                List<String> errorMsg = new ArrayList<>();
-                errorMsg.add("MSG-104");
-                response.setErrorCodes(errorMsg);
+                addErrorMessage(response,MessageConstant.MSG_104);
             }
             else {
                 // add moi

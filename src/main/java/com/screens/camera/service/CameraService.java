@@ -6,6 +6,7 @@ import com.filter.dto.AuthorDTO;
 import com.screens.camera.dao.mapper.CameraMapper;
 import com.screens.camera.dto.CameraDTO;
 import com.screens.camera.form.*;
+import com.util.MessageConstant;
 import com.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -20,7 +21,7 @@ import java.util.List;
 @Service
 public class CameraService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(CameraService.class);
-    private static final String MSG_020 = "MSG-020";
+
     @Autowired
     private CameraMapper cameraMapper;
 
@@ -74,9 +75,7 @@ public class CameraService extends BaseService {
         convertRequestUpdateCameraFormToCameraDTO(requestForm, cameraDTO);
         try {
             if(!cameraMapper.updateCamera(cameraDTO)){
-                List<String> errorCodes = new ArrayList<>();
-                errorCodes.add(MSG_020);
-                responseForm.setErrorCodes(errorCodes);
+                addErrorMessage(responseForm, MessageConstant.MSG_020);
             }
         }catch (PersistenceException e){
             logger.error("Error at CameraService: " + e.getMessage());
@@ -190,16 +189,16 @@ public class CameraService extends BaseService {
         CameraDTO resultDAO = cameraMapper.countCameraById(cameraDTO);
         if(resultDAO == null){
             List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_020);
+            errorCodes.add(MessageConstant.MSG_020);
             responseForm.setErrorCodes(errorCodes);
         }else if(resultDAO.getStatusId() == ACTIVE_STATUS){
             ArrayList<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_076);
+            errorCodes.add(MessageConstant.MSG_076);
             responseForm.setErrorCodes(errorCodes);
 
         }else if(cameraDTO.getStatusId() == INACTIVE_STATUS && StringHelper.isNullOrEmpty(cameraDTO.getReasonInactive())){
                 List<String> errorCodes = new ArrayList<>();
-                errorCodes.add(MSG_066);
+                errorCodes.add(MessageConstant.MSG_066);
                 responseForm.setErrorCodes(errorCodes);
         }
         return responseForm;
