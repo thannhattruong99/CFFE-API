@@ -122,6 +122,14 @@ public class StackMapper extends BaseDAO {
         return true;
     }
 
+    public boolean shelfIsExistInStore(StackDTO stackDTO) {
+        StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.shelfIsExistInStore",stackDTO);
+        if(rs.getTotalOfRecord() <= 0){
+            return false;
+        }
+        return true;
+    }
+
     public boolean checkCameraExist(StackDTO stackDTO) {
         StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkCameraExist",stackDTO);
         if(rs.getTotalOfRecord() <= 0){
