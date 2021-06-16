@@ -453,6 +453,17 @@
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
 
+    <select id="shelfIsExistInStore" resultMap="shelfIsExistInStore">
+        SELECT COUNT(ShelfId) AS TotalOfRecord
+        FROM tblShelf SS
+        WHERE SS.ShelfId = #{shelfId}
+          AND SS.StoreId = #{storeId}
+    </select>
+
+    <resultMap id="shelfIsExistInStore" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
     <select id="checkCameraExist" resultMap="checkCameraExist">
         SELECT COUNT(CameraId) AS TotalOfRecord
         FROM tblCamera
