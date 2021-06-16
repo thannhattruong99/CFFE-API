@@ -221,8 +221,8 @@ public class StoreService extends BaseService {
         storeDTO.setStoreId(requestForm.getStoreId());
         if (StringUtils.isNotEmpty(requestForm.getStoreName()))
             storeDTO.setStoreName(requestForm.getStoreName());
-//        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
-//            storeDTO.setImageUrl(requestForm.getImageUrl());
+        if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
+            storeDTO.setImageUrl(requestForm.getImageUrl());
         if (StringUtils.isNotEmpty(requestForm.getAddress()))
             storeDTO.setAddress(requestForm.getAddress());
         if (requestForm.getDistrictId() != 0) {
