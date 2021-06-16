@@ -16,6 +16,7 @@ import java.util.List;
 public class FileService extends BaseService {
     private final static String SUFFIX_IMAGE_PATH = "\\src\\main\\resources\\images";
     private final static String IMAGE_FOLDER_CLOUD = "images/";
+    private final static String IMAGE_FOLDER_SERVER = "images\\";
 
     // upload image
     public ResponseUploadImage uploadImageToStorage(MultipartFile file) {
@@ -47,10 +48,9 @@ public class FileService extends BaseService {
         }
         // get file on server upload to storage
         try {
-            response.setFilePath(GCPHelper.uploadImage(IMAGE_FOLDER_CLOUD + fileName,
+            response.setFilePath(GCPHelper.uploadImage(IMAGE_FOLDER_SERVER + fileName,
                     IMAGE_FOLDER_CLOUD + StringUtils.cleanPath(fileName)));
-            FileHelper.deleteFile(IMAGE_FOLDER_CLOUD + fileName);
-
+            FileHelper.deleteFile(IMAGE_FOLDER_SERVER + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }

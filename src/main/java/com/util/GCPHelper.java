@@ -65,7 +65,7 @@ public class GCPHelper {
 
     private static Bucket getBucket(String bucketName) throws IOException {
         GoogleCredentials credentials = GoogleCredentials.fromStream(
-                new FileInputStream(ResourceUtils.getFile("classpath:" +"capstone-project-sm21-78b453757e26.json")))
+                new FileInputStream(ResourceUtils.getFile(FileHelper.getResourcePath() +"capstone-project-sm21-78b453757e26.json")))
                 .createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"));
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         Bucket bucket = storage.get(bucketName);
