@@ -48,6 +48,7 @@ public class CameraController {
         return ResponseSupporter.responseResult(responseForm);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/cameras", method = RequestMethod.GET)
     public String getCameras(@Validated RequestCameraListForm requestForm,
                              BindingResult result, HttpServletRequest request){
@@ -66,6 +67,7 @@ public class CameraController {
         return ResponseSupporter.responseResult(responseForm);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/camera", method = RequestMethod.GET)
     public String getCameraDetail(@Validated RequestCameraDetailForm requestForm,
                              BindingResult result, HttpServletRequest request){
@@ -82,6 +84,7 @@ public class CameraController {
         return ResponseSupporter.responseResult(responseForm);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/camera/create", method = RequestMethod.POST)
     public String createCamera(@Validated @RequestBody RequestCreateCameraForm requestForm,
                                BindingResult result){
@@ -99,6 +102,7 @@ public class CameraController {
         return ResponseSupporter.responseResult(true);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/camera/update", method = RequestMethod.POST)
     public String updateCamera(@Validated @RequestBody RequestUpdateCameraForm requestForm,
                                BindingResult result, HttpServletRequest request){
@@ -116,6 +120,7 @@ public class CameraController {
         return ResponseSupporter.responseResult(true);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/camera/update-status", method = RequestMethod.POST)
     public String updateStatus(@Validated @RequestBody RequestUpdateCameraStatusForm requestForm,
                                BindingResult result){
