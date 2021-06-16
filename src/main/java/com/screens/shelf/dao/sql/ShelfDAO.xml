@@ -78,14 +78,6 @@
            #{createdTime}),
            #{statusId},
            #{storeId})
-<!--        <selectKey keyProperty="shelfId" resultType="string" order="AFTER ">-->
-<!--            select ShelfId-->
-<!--            from tblShelf-->
-<!--            where CreatedTime = (select MAX(CreatedTime)-->
-<!--            from tblShelf-->
-<!--            where StoreId = #{storeId}-->
-<!--            ) AND StoreId = #{storeId};-->
-<!--        </selectKey>-->
     </insert>
     <insert id="createStacks">
         INSERT INTO tblStack(Position, CreatedTime, UpdatedTime, ShelfId, StatusId) VALUES

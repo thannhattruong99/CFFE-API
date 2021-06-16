@@ -15,9 +15,9 @@ import java.util.List;
 
 @Service
 public class FileService {
-    private final static String SUFFIX_IMAGE_PATH = "\\src\\main\\resources\\images";
+    private final static String SUFFIX_IMAGE_PATH = "/src/main/resources/images";
     private final static String IMAGE_FOLDER_CLOUD = "images/";
-    private final static String IMAGE_FOLDER_SERVER = "images\\";
+    private final static String IMAGE_FOLDER_SERVER = "images/";
 
     // upload image
     public ResponseUploadImage uploadImageToStorage(MultipartFile file) {
