@@ -4,7 +4,6 @@ import com.common.form.ResponseCommonForm;
 import com.filter.dto.AuthorDTO;
 import com.screens.store.form.*;
 import com.screens.store.service.StoreService;
-import com.util.DocumentStorageHelper;
 import com.util.ResponseSupporter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -14,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +23,6 @@ public class StoreController {
 
     @Autowired
     private StoreService storeService;
-
-    @Autowired
-    private DocumentStorageHelper documneStorageService;
-
 
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_035 = "MSG-035";

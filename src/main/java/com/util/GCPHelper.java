@@ -23,12 +23,6 @@ public class GCPHelper {
     private static String objectName = "aaa.txt";
     private static String filePath = "messages/3_text.txt";
 
-//    Send notification
-    private static final String BASE_URL = "https://fcm.googleapis.com";
-    private static final String FCM_SEND_ENDPOINT = "/v1/projects/" + projectId + "/messages:send";
-    private static final String MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging";
-    private static final String[] SCOPES = { MESSAGING_SCOPE };
-
 
     public static void uploadObject() {
         Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
@@ -36,7 +30,7 @@ public class GCPHelper {
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
 
         try {
-            File file =  ResourceUtils.getFile("classpath:" + filePath);
+            File file =  ResourceUtils.getFile(FileHelper.getResourcePath() + filePath);
             storage.create(blobInfo, Files.readAllBytes(Paths.get(file.getAbsolutePath())));
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,24 +67,6 @@ public class GCPHelper {
             throw new IOException("Bucket not found:" + bucketName);
         }
         return bucket;
-    }
-
-    private static String getAccessToken() throws IOException {
-        GoogleCredential googleCredential = GoogleCredential
-                .fromStream(new FileInputStream("service-account.json"))
-                .createScoped(Arrays.asList(SCOPES));
-        googleCredential.refreshToken();
-        return googleCredential.getAccessToken();
-    }
-
-    private static HttpURLConnection getConnection() throws IOException {
-        // [START use_access_token]
-        URL url = new URL(BASE_URL + FCM_SEND_ENDPOINT);
-        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-        httpURLConnection.setRequestProperty("Authorization", "Bearer " + getAccessToken());
-        httpURLConnection.setRequestProperty("Content-Type", "application/json; UTF-8");
-        return httpURLConnection;
-        // [END use_access_token]
     }
 
 }
