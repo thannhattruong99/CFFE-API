@@ -3,7 +3,7 @@
 
 <mapper namespace="com.screens.store.dao.sql.StoreDAO">
 
-    <select id="getStoreList" resultMap="getStoreList" useCache="false">
+    <select id="getStoreList" resultMap="getStoreList">
         SELECT
             SUPQUE.totalOfRecord,
             S.StoreId,
@@ -120,7 +120,7 @@
 
 
 
-    <select id="getStoreListByProduct" resultMap="getStoreListByProduct" useCache="false">
+    <select id="getStoreListByProduct" resultMap="getStoreListByProduct">
         SELECT
             S.StoreId,
             S.StoreName,
@@ -197,7 +197,7 @@
 
 
 
-    <select id="getStoreListShort" resultMap="getStoreListShort" useCache="false">
+    <select id="getStoreListShort" resultMap="getStoreListShort">
         SELECT
         SUPQUE.totalOfRecord,
         S.StoreId,
@@ -232,7 +232,7 @@
         </collection>
     </resultMap>
 
-    <select id="getStoreDetail" resultMap="getStoreDetail" useCache="false">
+    <select id="getStoreDetail" resultMap="getStoreDetail">
         SELECT S.StoreId,
                S.StoreName,
                S.ImageURL,
@@ -307,7 +307,7 @@
         WHERE UserId = #{userId}
     </update>
 
-    <select id="getStoreStatus" resultMap="getStoreStatus" useCache="false">
+    <select id="getStoreStatus" resultMap="getStoreStatus">
         SELECT S.StoreId,
                S.StatusId
         FROM tblStore S
@@ -338,14 +338,6 @@
             UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
         WHERE StoreId = #{storeId}
     </update>
-
-<!--    <update id="updateAnalyzedTime" parameterType="StoreDTO">-->
-<!--        UPDATE tblStore-->
-<!--        SET-->
-<!--            AnalyzedTime = #{analyzedTime},-->
-<!--            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')-->
-<!--        WHERE StoreId = #{storeId}-->
-<!--    </update>-->
 
     <select id="checkAvailableManager" resultMap="checkAvailableManager">
         SELECT COUNT(UserName) AS TotalOfRecord FROM tblUser WHERE UserId = #{userId} AND StatusId = 3

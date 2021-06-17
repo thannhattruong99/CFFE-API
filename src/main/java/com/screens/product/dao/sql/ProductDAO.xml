@@ -3,7 +3,7 @@
 
 <mapper namespace="com.screens.product.dao.sql.ProductDAO">
 
-    <select id="getProductDetail" resultMap="getProductDetail" useCache="false">
+    <select id="getProductDetail" resultMap="getProductDetail">
         SELECT S.ProductId,
                CC.CategoryId,
                CN.CategoryName,
@@ -39,7 +39,7 @@
         </collection>
     </resultMap>
 
-    <select id="getProductList" resultMap="getProductList" useCache="false">
+    <select id="getProductList" resultMap="getProductList">
         SELECT  A1.CategoryId,
                 CN.CategoryName,
                 A2.*
