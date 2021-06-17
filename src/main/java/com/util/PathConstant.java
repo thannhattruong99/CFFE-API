@@ -1,7 +1,7 @@
 package com.util;
 
 public class PathConstant {
-    public final static String RESOURCE_PATH = "/classes";
+    public final static String RESOURCE_PATH = "/classes/";
     public final static String IMAGE_FOLDER_CLOUD = "images/";
     public final static String IMAGE_FOLDER_SERVER = "images/";
     public static final String ADMIN_AUTHORITY_PATH = "authorities/Admin.properties";
