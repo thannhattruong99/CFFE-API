@@ -39,7 +39,7 @@ public class DocumentStorageHelper {
                 .toString();
         System.out.println("========================== "+userDirectory);
 
-        Path fileStorageLocation = Paths.get(userDirectory+ "\\src\\main\\resources\\files");
+        Path fileStorageLocation = Paths.get(userDirectory+ "/src/main/resources/files");
         try {
             Files.createDirectories(fileStorageLocation);
         } catch (Exception ex) {

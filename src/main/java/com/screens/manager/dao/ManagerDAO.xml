@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ManagerDAO">
-    <select id="getManagers" resultMap="getManagers" useCache="false">
+    <select id="getManagers" resultMap="getManagers">
         SELECT TR.totalOfRecord AS totalOfRecord,
                U.Fullname AS FullName,
                U.UserId AS UserId,
@@ -52,7 +52,7 @@
         #{offSet},
         #{fetchNext}
     </select>
-    <select id="getManagerDetail" resultMap="getManagerDetail" useCache="false" flushCache="true">
+    <select id="getManagerDetail" resultMap="getManagerDetail">
         SELECT
             U.UserId,
             U.Fullname,
@@ -92,7 +92,7 @@
     <select id="getTotalOfManagerLikeUserName" resultMap="getAffectedRows">
         SELECT COUNT(UserName) AS TotalOfRecord
         FROM tblUser
-        WHERE UserName REGEXP #{userNameRegexp} OR UserName = #{userName};
+        WHERE UserName REGEXP #{userNameRegexp} OR UserName = #{userName}
     </select>
     <update id="updateManagerInformation">
         UPDATE tblUser
@@ -111,7 +111,7 @@
         WHERE UserName = #{userName}
     </update>
     <update id="resetPassword">
-        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName};
+        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName}
     </update>
     <select id="getEmailByUserName" resultMap="getEmailByUser">
         SELECT Email FROM tblUser WHERE UserName = #{userName}
@@ -127,7 +127,7 @@
         <if test="statusId == 2">
             , ReasonInactive = #{reasonInactive}
         </if>
-        WHERE UserName = #{userName};
+        WHERE UserName = #{userName}
     </update>
     <select id="checkUserNameAndPassword" resultMap="checkUser">
         SELECT COUNT(UserName) AS TotalOfRecord FROM tblUser WHERE UserName = #{userName} AND Password = #{password}
