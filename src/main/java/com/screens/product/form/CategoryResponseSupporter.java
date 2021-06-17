@@ -2,11 +2,11 @@ package com.screens.product.form;
 
 import java.io.Serializable;
 
-public class CategoryResonseSupporter implements Serializable {
+public class CategoryResponseSupporter implements Serializable {
     private int categoryId;
     private String categoryName;
 
-    public CategoryResonseSupporter() {
+    public CategoryResponseSupporter() {
     }
 
     public int getCategoryId() {

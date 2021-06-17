@@ -108,7 +108,7 @@
                 <result property="reasonInactive" column="PRO_ReasonInactive"/>
                 <result property="statusId" column="PRO_StatusId"/>
                 <result property="statusName" column="PRO_StatusName"/>
-                <collection property="categories" ofType="CategoryResonseSupporter">
+                <collection property="categories" ofType="CategoryResponseSupporter">
                     <id property="categoryId" column="CategoryId"/>
                     <result property="categoryName" column="CategoryName"/>
                 </collection>
@@ -234,23 +234,13 @@
                 <result property="reasonInactive" column="PRO_ReasonInactive"/>
                 <result property="statusId" column="PRO_StatusId"/>
                 <result property="statusName" column="PRO_StatusName"/>
-                <collection property="categories" ofType="CategoryResonseSupporter">
+                <collection property="categories" ofType="CategoryResponseSupporter">
                     <result property="categoryId" column="CategoryId"/>
                     <result property="categoryName" column="CategoryName"/>
                 </collection>
             </association>
         </collection>
     </resultMap>
-
-
-
-
-
-
-
-
-
-
 
 
     <select id="getStackDetail" resultMap="getStackDetail">

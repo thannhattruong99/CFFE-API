@@ -33,7 +33,7 @@
         <result property="reasonInactive" column="ReasonInactive"/>
         <result property="statusId" column="StatusId"/>
         <result property="statusName" column="StatusName"/>
-        <collection property="categories" ofType="CategoryResonseSupporter">
+        <collection property="categories" ofType="CategoryResponseSupporter">
             <result property="categoryId" column="CategoryId"/>
             <result property="categoryName" column="CategoryName"/>
         </collection>
@@ -156,7 +156,7 @@
             <result property="reasonInactive" column="ReasonInactive"/>
             <result property="statusId" column="StatusId"/>
             <result property="statusName" column="StatusName"/>
-            <collection property="categories" ofType="CategoryResonseSupporter">
+            <collection property="categories" ofType="CategoryResponseSupporter">
                 <result property="categoryId" column="CategoryId"/>
                 <result property="categoryName" column="CategoryName"/>
             </collection>
