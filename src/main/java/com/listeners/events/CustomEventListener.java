@@ -1,6 +1,6 @@
 package com.listeners.events;
 
-import com.screens.shelf.dao.mapper.ShelfMapper;
+import com.screens.shelf.dao.ShelfDAO;
 import com.util.FileHelper;
 import com.util.GCPHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+import static com.util.PathConstant.INPUT_VIDEO_PATH;
+import static com.util.PathConstant.OUTPUT_VIDEO_PATH;
+
 @Component
 public class CustomEventListener {
     @Autowired
-    private ShelfMapper shelfMapper;
+    private ShelfDAO shelfDAO;
 
     @Async
     @EventListener
@@ -21,15 +24,15 @@ public class CustomEventListener {
         Thread.sleep(1000);
 
         int count;
-        if((count = PythonHelper.countPerson("videos/input/" + eventHelper.getRelativeFilePath(),
-                "videos/output/" + eventHelper.getRelativeFilePath())) != 0){
+        if((count = PythonHelper.countPerson(INPUT_VIDEO_PATH + eventHelper.getRelativeFilePath(),
+                OUTPUT_VIDEO_PATH + eventHelper.getRelativeFilePath())) != 0){
 
 //            Thread.sleep(30000);
-            GCPHelper.uploadImage("videos/output/" + eventHelper.getRelativeFilePath());
+            GCPHelper.uploadImage(OUTPUT_VIDEO_PATH + eventHelper.getRelativeFilePath());
 //            Thread.sleep(25000);
             System.out.println("Total person input: " + count);
-            FileHelper.deleteFile("videos/input/" + eventHelper.getRelativeFilePath());
-            FileHelper.deleteFile("videos/output/" + eventHelper.getRelativeFilePath());
+            FileHelper.deleteFile(INPUT_VIDEO_PATH + eventHelper.getRelativeFilePath());
+            FileHelper.deleteFile(OUTPUT_VIDEO_PATH + eventHelper.getRelativeFilePath());
         }
 
     }

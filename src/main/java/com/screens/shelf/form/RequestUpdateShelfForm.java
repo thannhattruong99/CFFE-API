@@ -1,7 +1,5 @@
 package com.screens.shelf.form;
 
-import org.springframework.lang.Nullable;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 

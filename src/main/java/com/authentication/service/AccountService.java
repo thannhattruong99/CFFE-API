@@ -1,6 +1,6 @@
 package com.authentication.service;
 
-import com.authentication.dao.mapper.AccountMapper;
+import com.authentication.dao.AccountDAO;
 import com.authentication.dto.AccountDTO;
 import com.authentication.form.RequestLoginForm;
 import com.authentication.form.ResponseLoginForm;
@@ -23,10 +23,10 @@ public class AccountService extends BaseService {
     private JwtTokenHelper jwtTokenHelper;
 
     @Autowired
-    private AccountMapper accountMapper;
+    private AccountDAO accountDAO;
 
     public AccountDTO loadUserByUsername(String userName){
-        AccountDTO result = accountMapper.getAccountInformation(userName);
+        AccountDTO result = accountDAO.getAccountInformation(userName);
         if(result != null){
             return result;
         }else {
@@ -38,7 +38,7 @@ public class AccountService extends BaseService {
     public ResponseLoginForm checkLogin(RequestLoginForm request){
         ResponseLoginForm resultDAO = null;
         try{
-            resultDAO = accountMapper.login(request);
+            resultDAO = accountDAO.login(request);
             if(resultDAO != null){
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("UserId", resultDAO.getUserId());

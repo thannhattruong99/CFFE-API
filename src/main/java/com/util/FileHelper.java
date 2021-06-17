@@ -15,12 +15,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
+import java.util.*;
+
+import static com.util.PathConstant.RESOURCE_PATH;
+import static com.util.PathConstant.INPUT_VIDEO_PATH;
 
 public class FileHelper {
-    private final static String CLASS_PATH = "classpath:";
-    private final static String RESOURCE_PATH = "\\src\\main\\resources\\";
-
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
     throws  IOException{
         Path uploadPath = Paths.get(uploadDir);
@@ -55,7 +55,7 @@ public class FileHelper {
                 .toAbsolutePath()
                 .toString();
 
-        Path fileStorageLocation = Paths.get(userDirectory+ "/src/main/resources/videos/input");
+        Path fileStorageLocation = Paths.get(FileHelper.getResourcePath() + INPUT_VIDEO_PATH);
         try {
             Files.createDirectories(fileStorageLocation);
         } catch (Exception ex) {
@@ -144,5 +144,36 @@ public class FileHelper {
             System.out.println("Could not store file. Please try again!"+ ex);
         }
         return fileName;
+    }
+
+    public static List<String> loadResource(String path){
+        List<String> result = new ArrayList<>();
+        File file = null;
+        Scanner myReader = null;
+        try {
+            file = ResourceUtils.getFile(FileHelper.getResourcePath() + path);
+            myReader = new Scanner(file);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine().trim();
+                result.add(data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if(myReader != null){
+                myReader.close();
+            }
+        }
+        return result;
+    }
+
+    public static List<String> getResourceList(String path) {
+        List<String> list = new ArrayList<>();
+        ResourceBundle rb = ResourceBundle.getBundle(path);
+        Enumeration<String> key = rb.getKeys();
+        while (key.hasMoreElements()) {
+            list.add(key.nextElement());
+        }
+        return list;
     }
 }

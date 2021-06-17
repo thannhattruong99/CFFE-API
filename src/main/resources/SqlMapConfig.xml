@@ -40,7 +40,7 @@
         <typeAlias alias="CategoryDTO" type="com.screens.category.dto.CategoryDTO"/>
         <typeAlias alias="ResponseProductDetailForm" type="com.screens.product.form.ResponseProductDetailForm"/>
         <typeAlias alias="ResponseProductListForm" type="com.screens.product.form.ResponseProductListForm"/>
-        <typeAlias alias="CategoryResonseSupporter" type="com.screens.product.form.CategoryResonseSupporter"/>
+        <typeAlias alias="CategoryResponseSupporter" type="com.screens.product.form.CategoryResponseSupporter"/>
         <typeAlias alias="ResponseCategoryListForm" type="com.screens.category.form.ResponseCategoryListForm"/>
         <typeAlias alias="ResponseLoginForm" type="com.authentication.form.ResponseLoginForm"/>
         <typeAlias alias="AccountDTO" type="com.authentication.dto.AccountDTO"/>
@@ -59,14 +59,14 @@
     </environments>
 
     <mappers>
-        <mapper resource="com/screens/manager/dao/sql/ManagerDAO.xml"/>
-        <mapper resource="com/screens/store/dao/sql/StoreDAO.xml"/>
-        <mapper resource="com/screens/city/dao/sql/CityDAO.xml"/>
-        <mapper resource="com/screens/shelf/dao/sql/ShelfDAO.xml"/>
-        <mapper resource="com/screens/camera/dao/sql/CameraDAO.xml"/>
-        <mapper resource="com/screens/stack/dao/sql/StackDAO.xml"/>
-        <mapper resource="com/screens/category/dao/sql/CategoryDAO.xml"/>
-        <mapper resource="com/screens/product/dao/sql/ProductDAO.xml"/>
-        <mapper resource="com/authentication/dao/sql/AccountDAO.xml"/>
+        <mapper resource="com/screens/manager/dao/ManagerDAO.xml"/>
+        <mapper resource="com/screens/store/dao/StoreDAO.xml"/>
+        <mapper resource="com/screens/city/dao/CityDAO.xml"/>
+        <mapper resource="com/screens/shelf/dao/ShelfDAO.xml"/>
+        <mapper resource="com/screens/camera/dao/CameraDAO.xml"/>
+        <mapper resource="com/screens/stack/dao/StackDAO.xml"/>
+        <mapper resource="com/screens/category/dao/CategoryDAO.xml"/>
+        <mapper resource="com/screens/product/dao/ProductDAO.xml"/>
+        <mapper resource="com/authentication/dao/AccountDAO.xml"/>
     </mappers>
 </configuration>

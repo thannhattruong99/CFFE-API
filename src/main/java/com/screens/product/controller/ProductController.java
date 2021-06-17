@@ -1,7 +1,6 @@
 package com.screens.product.controller;
 
 import com.common.form.ResponseCommonForm;
-import com.filter.dto.AuthorDTO;
 import com.screens.product.form.*;
 import com.screens.product.service.ProductService;
 import com.util.ResponseSupporter;

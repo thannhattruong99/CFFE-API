@@ -13,16 +13,16 @@ public class ResponseProductDetailForm implements Serializable {
     private String reasonInactive;
     private int statusId;
     private String statusName;
-    private List<CategoryResonseSupporter> categories;
+    private List<CategoryResponseSupporter> categories;
 
     public ResponseProductDetailForm() {
     }
 
-    public List<CategoryResonseSupporter> getCategories() {
+    public List<CategoryResponseSupporter> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<CategoryResonseSupporter> categories) {
+    public void setCategories(List<CategoryResponseSupporter> categories) {
         this.categories = categories;
     }
 

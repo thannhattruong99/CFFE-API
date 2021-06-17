@@ -3,7 +3,7 @@ package com.common.config;
 import com.authentication.dto.AccountDTO;
 import com.authentication.service.AccountService;
 import com.filter.dto.AuthorDTO;
-import com.util.ReadResourceHelper;
+import com.util.FileHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
@@ -22,13 +22,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static com.util.PathConstant.*;
+
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
-    private static final String ADMIN_AUTHORITY_PATH = "authorities/Admin.properties";
-    private static final String MANAGER_AUTHORITY_PATH = "authorities/Manager.properties";
-    private static final String APPLICATION_AUTHORITY_PATH = "authorities/Application.properties";
     private static final int ADMIN_ROLE = 1;
     private static final int MANAGER_ROLE = 2;
     private static final String USER_ID_STRING = "UserId";
@@ -49,9 +48,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtTokenHelper jwtTokenHelper;
 
     public JwtRequestFilter() {
-        adminAuthorities = ReadResourceHelper.loadResource(ADMIN_AUTHORITY_PATH);
-        managerAuthorities = ReadResourceHelper.loadResource(MANAGER_AUTHORITY_PATH);
-        applicationAuthorities = ReadResourceHelper.loadResource(APPLICATION_AUTHORITY_PATH);
+        adminAuthorities = FileHelper.loadResource(ADMIN_AUTHORITY_PATH);
+        managerAuthorities = FileHelper.loadResource(MANAGER_AUTHORITY_PATH);
+        applicationAuthorities = FileHelper.loadResource(APPLICATION_AUTHORITY_PATH);
     }
 
     @Override

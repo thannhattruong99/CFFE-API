@@ -1,6 +1,6 @@
 package com.screens.stack.form;
 
-import com.screens.product.form.CategoryResonseSupporter;
+import com.screens.product.form.CategoryResponseSupporter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,16 +15,16 @@ public class ProductResponseSupporter implements Serializable {
     private String reasonInactive;
     private int statusId;
     private String statusName;
-    private List<CategoryResonseSupporter> categories;
+    private List<CategoryResponseSupporter> categories;
 
     public ProductResponseSupporter() {
     }
 
-    public List<CategoryResonseSupporter> getCategories() {
+    public List<CategoryResponseSupporter> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<CategoryResonseSupporter> categories) {
+    public void setCategories(List<CategoryResponseSupporter> categories) {
         this.categories = categories;
     }
 

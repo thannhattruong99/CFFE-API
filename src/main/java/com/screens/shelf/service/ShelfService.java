@@ -4,13 +4,13 @@ import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.filter.dto.AuthorDTO;
 import com.listeners.events.EventPublisher;
-import com.screens.shelf.dao.mapper.ShelfMapper;
+import com.screens.shelf.dao.ShelfDAO;
 import com.screens.shelf.dto.ShelfDTO;
 import com.screens.shelf.dto.StackDTO;
 import com.screens.shelf.form.*;
 import com.util.FileHelper;
+import com.util.MessageConstant;
 import com.util.StringHelper;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,15 +24,9 @@ import java.util.List;
 @Service
 public class ShelfService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(ShelfService.class);
-    private static final String MSG_012 = "MSG-012";
-    private static final String MSG_086 = "MSG-086";
-    private static final String MSG_085 = "MSG-085";
-    private static final String MSG_087 = "MSG-087";
-    private static final String MSG_088 = "MSG-088";
-    private static final String MSG_076 = "MSG-076";
 
     @Autowired
-    private ShelfMapper shelfMapper;
+    private ShelfDAO shelfDAO;
     @Autowired
     EventPublisher eventPublisher;
 
@@ -41,7 +35,7 @@ public class ShelfService extends BaseService {
         ShelfDTO shelfDTO = new ShelfDTO();
         convertRequestShelfListToShelfDTO(requestForm, shelfDTO, authorDTO);
         try{
-            responseForm = shelfMapper.getShelfList(shelfDTO);
+            responseForm = shelfDAO.getShelfList(shelfDTO);
         }catch (PersistenceException e){
             logger.error("Error at ShelfService: " + e.getMessage());
         }
@@ -53,34 +47,28 @@ public class ShelfService extends BaseService {
         ResponseShelfDetailForm responseForm = null;
         ShelfDTO shelfDTO = new ShelfDTO();
         convertRequestShelfDetailFormToShelfDTO(requestForm, shelfDTO, authorDTO);
-
         try {
-            responseForm = shelfMapper.getShelfDetail(shelfDTO);
+            responseForm = shelfDAO.getShelfDetail(shelfDTO);
         }catch (PersistenceException e){
             logger.error("Error at ShelfService: " + e.getMessage());
         }
-
         return responseForm;
     }
 
     public ResponseCommonForm createShelf(RequestCreateShelfForm requestForm, AuthorDTO authorDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
-
         if(!StringHelper.isNullOrEmpty(authorDTO.getStoreId())){
             ShelfDTO shelfDTO = new ShelfDTO();
             convertRequestCreateShelfFormToShelfDTO(requestForm, shelfDTO, authorDTO);
             try {
-                shelfMapper.createShelf(shelfDTO);
+                shelfDAO.createShelf(shelfDTO);
             }catch (PersistenceException e){
                 logger.error("Error at ShelfService: " + e.getMessage());
                 responseForm.setErrorCodes(catchSqlException(e.getMessage()));
             }
         }else{
-            List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_076);
-            responseForm.setErrorCodes(errorCodes);
+            addErrorMessage(responseForm,MessageConstant.MSG_076);
         }
-
         return responseForm;
     }
 
@@ -91,19 +79,15 @@ public class ShelfService extends BaseService {
             ShelfDTO shelfDTO = new ShelfDTO();
             convertRequestUpdateShelfFormToShelfDTO(requestForm, shelfDTO);
             try{
-                if(!shelfMapper.updateShelf(shelfDTO)){
-                    ArrayList<String> errorCodes = new ArrayList<>();
-                    errorCodes.add(MSG_012);
-                    responseForm.setErrorCodes(errorCodes);
+                if(!shelfDAO.updateShelf(shelfDTO)){
+                    addErrorMessage(responseForm,MessageConstant.MSG_012);
                 }
             }catch (PersistenceException e){
                 logger.error("Error at ShelfService: " + e.getMessage());
                 responseForm.setErrorCodes(catchSqlException(e.getMessage()));
             }
         }else{
-            List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_076);
-            responseForm.setErrorCodes(errorCodes);
+            addErrorMessage(responseForm,MessageConstant.MSG_076);
         }
 
         return responseForm;
@@ -117,15 +101,13 @@ public class ShelfService extends BaseService {
             responseForm = checkUpdateStatusBusiness(shelfDTO);
             if(responseForm.getErrorCodes() == null){
                 try {
-                    shelfMapper.updateShelfStatus(shelfDTO);
+                    shelfDAO.updateShelfStatus(shelfDTO);
                 }catch (PersistenceException e){
                     logger.error("Error at ManagerService: " + e.getMessage());
                 }
             }
         }else{
-            List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_076);
-            responseForm.setErrorCodes(errorCodes);
+            addErrorMessage(responseForm,MessageConstant.MSG_076);
         }
 
 
@@ -141,9 +123,9 @@ public class ShelfService extends BaseService {
             if(responseForm.getErrorCodes() == null){
                 try{
                     if(shelfDTO.getAction() == ADD_ACTION){
-                        shelfMapper.addShelfCameraIntoShelf(shelfDTO);
+                        shelfDAO.addShelfCameraIntoShelf(shelfDTO);
                     }else {
-                        shelfMapper.removeShelfCameraFromShelf(shelfDTO);
+                        shelfDAO.removeShelfCameraFromShelf(shelfDTO);
                     }
                 }catch (PersistenceException e) {
                     logger.error("Error ShelfService: " + e.getMessage());
@@ -151,9 +133,7 @@ public class ShelfService extends BaseService {
                 }
             }
         }else{
-            ArrayList<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_076);
-            responseForm.setErrorCodes(errorCodes);
+            addErrorMessage(responseForm,MessageConstant.MSG_076);
         }
 
         return responseForm;
@@ -225,25 +205,25 @@ public class ShelfService extends BaseService {
     * */
     private ResponseCommonForm checkUpdateStatusBusiness(ShelfDTO shelfDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
-        ShelfDTO resultDAO = shelfMapper.getStatusId(shelfDTO);
+        ShelfDTO resultDAO = shelfDAO.getStatusId(shelfDTO);
 
         // Not found shelf
         if(resultDAO == null){
             List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_012);
+            errorCodes.add(MessageConstant.MSG_012);
             responseForm.setErrorCodes(errorCodes);
         }
         //shelf is activating, can not change status
         else if(resultDAO.getStatusId() == ACTIVE_STATUS){
             ArrayList<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_076);
+            errorCodes.add(MessageConstant.MSG_076);
             responseForm.setErrorCodes(errorCodes);
         }
         //request inactive, check reason inactive is not empty
         else if (shelfDTO.getStatusId() == INACTIVE_STATUS){
             if( resultDAO.getTotalOfRecord() > 0 || StringHelper.isNullOrEmpty(shelfDTO.getReasonInactive())){
                 ArrayList<String> errorCodes = new ArrayList<>();
-                errorCodes.add(MSG_066);
+                errorCodes.add(MessageConstant.MSG_066);
                 responseForm.setErrorCodes(errorCodes);
             }
         }
@@ -265,17 +245,17 @@ public class ShelfService extends BaseService {
     private ResponseCommonForm checkChangeShelfCameraBusiness(ShelfDTO shelfDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
 
-        ShelfDTO shelfResultDAO = shelfMapper.getShelfStatus(shelfDTO);
-        ShelfDTO cameraResultDAO = shelfMapper.getCameraStatus(shelfDTO);
+        ShelfDTO shelfResultDAO = shelfDAO.getShelfStatus(shelfDTO);
+        ShelfDTO cameraResultDAO = shelfDAO.getCameraStatus(shelfDTO);
 
         ArrayList<String> errorCodes = new ArrayList<>();
 //       check shelf exist and available
         if(shelfResultDAO == null){
-            errorCodes.add(MSG_085);
+            errorCodes.add(MessageConstant.MSG_085);
         }
 //        check camera exist and available
         if(cameraResultDAO  == null){
-            errorCodes.add(MSG_086);
+            errorCodes.add(MessageConstant.MSG_086);
         }
 
         if(errorCodes.size() > 0){
@@ -285,13 +265,13 @@ public class ShelfService extends BaseService {
 
         if(shelfDTO.getAction() == ADD_ACTION){
             if(shelfResultDAO.getStatusId() != PENDING_STATUS || cameraResultDAO.getStatusId() != PENDING_STATUS ){
-                errorCodes.add(MSG_087);
+                errorCodes.add(MessageConstant.MSG_087);
                 responseForm.setErrorCodes(errorCodes);
             }
         }else if(shelfDTO.getAction() == REMOVE_ACTION){
-            ShelfDTO mappingResultDAO = shelfMapper.getShelfCameraMappingStatus(shelfDTO);
+            ShelfDTO mappingResultDAO = shelfDAO.getShelfCameraMappingStatus(shelfDTO);
             if(mappingResultDAO != null){
-                errorCodes.add(MSG_088);
+                errorCodes.add(MessageConstant.MSG_088);
             }
         }
 

@@ -3,9 +3,10 @@ package com.screens.camera.service;
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.filter.dto.AuthorDTO;
-import com.screens.camera.dao.mapper.CameraMapper;
+import com.screens.camera.dao.CameraDAO;
 import com.screens.camera.dto.CameraDTO;
 import com.screens.camera.form.*;
+import com.util.MessageConstant;
 import com.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -20,9 +21,9 @@ import java.util.List;
 @Service
 public class CameraService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(CameraService.class);
-    private static final String MSG_020 = "MSG-020";
+
     @Autowired
-    private CameraMapper cameraMapper;
+    private CameraDAO cameraDAO;
 
     public ResponseAvailableCameraListForm getAvailableCameraList(RequestAvailableCameraListForm requestForm){
         ResponseAvailableCameraListForm responseForm = null;
@@ -30,7 +31,7 @@ public class CameraService extends BaseService {
         convertRequestAvailableCameraListFormToCameraDTO(requestForm, cameraDTO);
 
         try{
-            responseForm = cameraMapper.getAvailableCameraList(cameraDTO);
+            responseForm = cameraDAO.getAvailableCameraList(cameraDTO);
         }catch (PersistenceException e){
             logger.error("Error at CameraService: " + e.getMessage());
         }
@@ -44,7 +45,7 @@ public class CameraService extends BaseService {
         CameraDTO cameraDTO = new CameraDTO();
         convertRequestCameraListFormToCameraDTO(requestForm, cameraDTO, authorDTO);
         try {
-            responseForm = cameraMapper.getCameraList(cameraDTO);
+            responseForm = cameraDAO.getCameraList(cameraDTO);
         }catch (PersistenceException e){
             logger.error("Error at CameraService: " + e.getMessage());
         }
@@ -58,7 +59,7 @@ public class CameraService extends BaseService {
         CameraDTO cameraDTO = new CameraDTO();
         convertRequestCreateCameraFormToCameraDTO(requestForm, cameraDTO);
         try{
-            cameraMapper.createCamera(cameraDTO);
+            cameraDAO.createCamera(cameraDTO);
         }catch (PersistenceException e){
             logger.error("Error at CameraService: " + e.getMessage());
             responseForm.setErrorCodes(catchSqlException(e.getMessage()));
@@ -73,10 +74,8 @@ public class CameraService extends BaseService {
         CameraDTO cameraDTO = new CameraDTO();
         convertRequestUpdateCameraFormToCameraDTO(requestForm, cameraDTO);
         try {
-            if(!cameraMapper.updateCamera(cameraDTO)){
-                List<String> errorCodes = new ArrayList<>();
-                errorCodes.add(MSG_020);
-                responseForm.setErrorCodes(errorCodes);
+            if(!cameraDAO.updateCamera(cameraDTO)){
+                addErrorMessage(responseForm, MessageConstant.MSG_020);
             }
         }catch (PersistenceException e){
             logger.error("Error at CameraService: " + e.getMessage());
@@ -91,7 +90,7 @@ public class CameraService extends BaseService {
         ResponseCommonForm responseForm = checkUpdateCameraStatusBusiness(cameraDTO);
         if(responseForm.getErrorCodes() == null){
             try {
-                cameraMapper.updateStatus(cameraDTO);
+                cameraDAO.updateStatus(cameraDTO);
             }catch (PersistenceException e){
                 logger.error("Error at CameraService: " + e.getMessage());
                 responseForm.setErrorCodes(catchSqlException(e.getMessage()));
@@ -105,7 +104,7 @@ public class CameraService extends BaseService {
         CameraDTO cameraDTO = new CameraDTO();
         convertRequestCameraDetailFormToCameraDTO(requestForm, cameraDTO, authorDTO);
         try {
-            responseForm = cameraMapper.getCameraDetailById(cameraDTO);
+            responseForm = cameraDAO.getCameraDetailById(cameraDTO);
         }catch (PersistenceException e){
             logger.error("Error at CameraService: " + e.getMessage());
         }
@@ -187,19 +186,19 @@ public class CameraService extends BaseService {
 
     private ResponseCommonForm checkUpdateCameraStatusBusiness(CameraDTO cameraDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
-        CameraDTO resultDAO = cameraMapper.countCameraById(cameraDTO);
+        CameraDTO resultDAO = cameraDAO.countCameraById(cameraDTO);
         if(resultDAO == null){
             List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_020);
+            errorCodes.add(MessageConstant.MSG_020);
             responseForm.setErrorCodes(errorCodes);
         }else if(resultDAO.getStatusId() == ACTIVE_STATUS){
             ArrayList<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_076);
+            errorCodes.add(MessageConstant.MSG_076);
             responseForm.setErrorCodes(errorCodes);
 
         }else if(cameraDTO.getStatusId() == INACTIVE_STATUS && StringHelper.isNullOrEmpty(cameraDTO.getReasonInactive())){
                 List<String> errorCodes = new ArrayList<>();
-                errorCodes.add(MSG_066);
+                errorCodes.add(MessageConstant.MSG_066);
                 responseForm.setErrorCodes(errorCodes);
         }
         return responseForm;
