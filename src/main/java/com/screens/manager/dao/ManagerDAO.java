@@ -1,4 +1,4 @@
-package com.screens.manager.dao.mapper;
+package com.screens.manager.dao;
 
 import com.common.dao.BaseDAO;
 import com.screens.manager.dto.ManagerDTO;
@@ -8,9 +8,9 @@ import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ManagerMapper extends BaseDAO {
+public class ManagerDAO extends BaseDAO {
 
-    public ManagerMapper(IDBHelper idbHelper) {
+    public ManagerDAO(IDBHelper idbHelper) {
         super(idbHelper);
     }
 

@@ -1,4 +1,4 @@
-package com.screens.product.dao.mapper;
+package com.screens.product.dao;
 
 import com.common.dao.BaseDAO;
 import com.screens.product.dto.ProductDTO;
@@ -8,9 +8,9 @@ import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ProductMapper extends BaseDAO {
+public class ProductDAO extends BaseDAO {
 
-    public ProductMapper(IDBHelper idbHelper) {
+    public ProductDAO(IDBHelper idbHelper) {
         super(idbHelper);
     }
 

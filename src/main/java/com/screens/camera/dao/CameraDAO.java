@@ -1,4 +1,4 @@
-package com.screens.camera.dao.mapper;
+package com.screens.camera.dao;
 
 import com.common.dao.BaseDAO;
 import com.screens.camera.dto.CameraDTO;
@@ -9,8 +9,8 @@ import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CameraMapper extends BaseDAO {
-    public CameraMapper(IDBHelper idbHelper) {
+public class CameraDAO extends BaseDAO {
+    public CameraDAO(IDBHelper idbHelper) {
         super(idbHelper);
     }
 

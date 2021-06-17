@@ -1,4 +1,4 @@
-package com.authentication.dao.mapper;
+package com.authentication.dao;
 
 import com.authentication.dto.AccountDTO;
 import com.authentication.form.RequestLoginForm;
@@ -8,8 +8,8 @@ import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AccountMapper extends BaseDAO {
-    public AccountMapper(IDBHelper idbHelper) {
+public class AccountDAO extends BaseDAO {
+    public AccountDAO(IDBHelper idbHelper) {
         super(idbHelper);
     }
 

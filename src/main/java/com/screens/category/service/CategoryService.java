@@ -2,10 +2,9 @@ package com.screens.category.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
-import com.screens.category.dao.mapper.CategoryMapper;
+import com.screens.category.dao.CategoryDAO;
 import com.screens.category.dto.CategoryDTO;
 import com.screens.category.form.*;
-import com.screens.store.service.StoreService;
 import com.util.MessageConstant;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
@@ -13,22 +12,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class CategoryService extends BaseService {
 
     private static final Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
     @Autowired
-    private CategoryMapper categoryMapper;
+    private CategoryDAO categoryDAO;
 
     public ResponseCategoryDetailForm getCategoryDetail(RequestGetCategoryDetailForm requestForm) {
         ResponseCategoryDetailForm responseCategoryDetailForm = null;
         CategoryDTO categoryDTO = converGetCategoryDetailFormToDTO(requestForm);
         try {
-            responseCategoryDetailForm = categoryMapper.getCategoryDetail(categoryDTO);
+            responseCategoryDetailForm = categoryDAO.getCategoryDetail(categoryDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
         }
@@ -39,7 +35,7 @@ public class CategoryService extends BaseService {
         ResponseCategoryListForm responseStoreListForm = null;
         CategoryDTO categoryDTO = converGetCategoryListFormToDTO(requestForm);
         try {
-            responseStoreListForm = categoryMapper.getCategoryList(categoryDTO);
+            responseStoreListForm = categoryDAO.getCategoryList(categoryDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
         }
@@ -50,7 +46,7 @@ public class CategoryService extends BaseService {
         ResponseCommonForm response = new ResponseCommonForm();
         CategoryDTO categoryDTO = convertCreateCategoryFormToDTO(requestForm);
         try {
-            categoryMapper.createCategory(categoryDTO);
+            categoryDAO.createCategory(categoryDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
             response.setErrorCodes(catchSqlException(e.getMessage()));
@@ -62,21 +58,21 @@ public class CategoryService extends BaseService {
         ResponseCommonForm response = new ResponseCommonForm();
         CategoryDTO categoryDTO = convertChangeStatusFormToDTO(requestForm);
         try {
-            ResponseCategoryDetailForm res = categoryMapper.getCategoryDetail(categoryDTO);
+            ResponseCategoryDetailForm res = categoryDAO.getCategoryDetail(categoryDTO);
             if (res == null) {
                 addErrorMessage(response, MessageConstant.MSG_029);
             } else {
                 if ((res.getStatusId() == 1) && (categoryDTO.getStatusId() == 2)) {
                     System.out.println("ACTION: CATEGORY ACTIVE => INACTIVE");
                     //check co ton tai PRODUCT nao hay khong
-                    if (!categoryMapper.checkHaveProductUsing(categoryDTO)) {
-                        categoryMapper.changeStatus(categoryDTO);
+                    if (!categoryDAO.checkHaveProductUsing(categoryDTO)) {
+                        categoryDAO.changeStatus(categoryDTO);
                     } else {
                         addErrorMessage(response,MessageConstant.MSG_109);
                     }
                 } else if ((res.getStatusId() == 2) && (categoryDTO.getStatusId() == 1)) {
                     System.out.println("ACTION: CATEGORY INACTIVE => ACTIVE");
-                    categoryMapper.changeStatus(categoryDTO);
+                    categoryDAO.changeStatus(categoryDTO);
                 } else {
                     addErrorMessage(response,MessageConstant.MSG_110);
                 }
@@ -92,10 +88,10 @@ public class CategoryService extends BaseService {
         ResponseCommonForm response = new ResponseCommonForm();
         CategoryDTO categoryDTO = convertUpdateInfoCategoryFormToDTO(requestForm);
         try {
-            if(!categoryMapper.checkCategoryExist(categoryDTO)) {
+            if(!categoryDAO.checkCategoryExist(categoryDTO)) {
                 addErrorMessage(response,MessageConstant.MSG_029);
             } else {
-                categoryMapper.updateInfo(categoryDTO);
+                categoryDAO.updateInfo(categoryDTO);
             }
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());

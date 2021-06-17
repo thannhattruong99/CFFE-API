@@ -2,7 +2,7 @@ package com.screens.product.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
-import com.screens.product.dao.mapper.ProductMapper;
+import com.screens.product.dao.ProductDAO;
 import com.screens.product.dto.ProductDTO;
 import com.screens.product.form.*;
 import com.screens.store.service.StoreService;
@@ -14,22 +14,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class ProductService extends BaseService {
 
     private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
 
     @Autowired
-    private ProductMapper productMapper;
+    private ProductDAO productDAO;
 
     public ResponseProductDetailForm getProductDetail(RequestGetProductDetailForm requestForm) {
         ResponseProductDetailForm responseProductDetailForm = null;
         ProductDTO productDTO = converGetProductDetailFormToDTO(requestForm);
         try {
-            responseProductDetailForm = productMapper.getProductDetail(productDTO);
+            responseProductDetailForm = productDAO.getProductDetail(productDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
         }
@@ -40,7 +37,7 @@ public class ProductService extends BaseService {
         ResponseProductListForm responseProductListForm = null;
         ProductDTO productDTO = convertGetProductListFormToDTO(requestForm);
         try {
-            responseProductListForm = productMapper.getProductList(productDTO);
+            responseProductListForm = productDAO.getProductList(productDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
         }
@@ -51,7 +48,7 @@ public class ProductService extends BaseService {
         ResponseCommonForm response = new ResponseCommonForm();
         ProductDTO productDTO = convertCreateProductFormToDTO(requestForm);
         try {
-            productMapper.createProduct(productDTO);
+            productDAO.createProduct(productDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
             response.setErrorCodes(catchSqlException(e.getMessage()));
@@ -63,22 +60,22 @@ public class ProductService extends BaseService {
         ResponseCommonForm response = new ResponseCommonForm();
         ProductDTO productDTO = convertUpdateStatusFormToDTO(requestForm);
         try {
-            if (!productMapper.checkProductExist(productDTO)) {
+            if (!productDAO.checkProductExist(productDTO)) {
                 addErrorMessage(response,MessageConstant.MSG_023);
             } else {
-                ResponseProductDetailForm rs = productMapper.getProductStatus(productDTO);
+                ResponseProductDetailForm rs = productDAO.getProductStatus(productDTO);
                 if ((rs.getStatusId() == ACTIVE_STATUS) && (productDTO.getStatusId() == INACTIVE_STATUS)
                         && (StringUtils.isNotEmpty(productDTO.getReasonInactive()))){
                     System.out.println("ACTION: ACTIVE => INACTIVE");
                     //check co product nao con tren any Stack hay ko
-                    if (!productMapper.checkAnyStackHaveProduct(productDTO)){
-                        productMapper.changeStatus(productDTO);
+                    if (!productDAO.checkAnyStackHaveProduct(productDTO)){
+                        productDAO.changeStatus(productDTO);
                     } else {
                         addErrorMessage(response, MessageConstant.MSG_097);
                     }
                 } else if((rs.getStatusId() == INACTIVE_STATUS) && (productDTO.getStatusId() == ACTIVE_STATUS)) {
                     System.out.println("ACTION: INACTIVE => ACTIVE");
-                    productMapper.changeStatus(productDTO);
+                    productDAO.changeStatus(productDTO);
                 } else {
                     addErrorMessage(response,MessageConstant.MSG_098);
                 }
@@ -94,7 +91,7 @@ public class ProductService extends BaseService {
         ResponseCommonForm response = new ResponseCommonForm();
         ProductDTO productDTO = convertUpdateInfoProductFormToDTO(requestForm);
         try {
-            productMapper.updateInfo(productDTO);
+            productDAO.updateInfo(productDTO);
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());
             response.setErrorCodes(catchSqlException(e.getMessage()));
@@ -112,16 +109,16 @@ public class ProductService extends BaseService {
                 addErrorMessage(response,MessageConstant.MSG_103);
             }
             //check product
-            else if (!(productMapper.checkProductExist(productDTO))) {
+            else if (!(productDAO.checkProductExist(productDTO))) {
                 addErrorMessage(response,MessageConstant.MSG_023);
             }
             // check cate valid
-            else if (productMapper.checkCategoriesValid(productDTO) != productDTO.getCategories().size()){
+            else if (productDAO.checkCategoriesValid(productDTO) != productDTO.getCategories().size()){
                 addErrorMessage(response,MessageConstant.MSG_104);
             }
             else {
                 // add moi
-                productMapper.addCategories(productDTO);
+                productDAO.addCategories(productDTO);
             }
         } catch (PersistenceException e) {
             logger.error("Error Message: " + e.getMessage());

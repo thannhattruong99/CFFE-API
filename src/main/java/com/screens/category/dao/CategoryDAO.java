@@ -1,4 +1,4 @@
-package com.screens.category.dao.mapper;
+package com.screens.category.dao;
 
 
 import com.common.dao.BaseDAO;
@@ -9,9 +9,9 @@ import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CategoryMapper extends BaseDAO {
+public class CategoryDAO extends BaseDAO {
 
-    public CategoryMapper(IDBHelper idbHelper) {
+    public CategoryDAO(IDBHelper idbHelper) {
         super(idbHelper);
     }
 

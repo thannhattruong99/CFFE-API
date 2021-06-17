@@ -3,7 +3,7 @@ package com.screens.store.service;
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.filter.dto.AuthorDTO;
-import com.screens.store.dao.mapper.StoreMapper;
+import com.screens.store.dao.StoreDAO;
 import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.*;
 import com.util.MessageConstant;
@@ -21,7 +21,7 @@ public class StoreService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
 
     @Autowired
-    private StoreMapper storeMapper;
+    private StoreDAO storeDAO;
 
     public ResponseStoreListForm getStoreList(RequestGetStoreListForm requestGetStoreListForm,AuthorDTO authorDTO){
         ResponseStoreListForm responseStoreListForm = null;
@@ -29,7 +29,7 @@ public class StoreService extends BaseService {
         if (authorStatus == ADMIN) {
             StoreDTO storeDTO = convertGetStoreListFormToDTO(requestGetStoreListForm);
             try {
-                responseStoreListForm = storeMapper.getStoreList(storeDTO);
+                responseStoreListForm = storeDAO.getStoreList(storeDTO);
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
             }
@@ -43,7 +43,7 @@ public class StoreService extends BaseService {
         if (authorStatus == ADMIN) {
             StoreDTO storeDTO = convertGetStoreListByProductFormToDTO(requestForm);
             try {
-                responseStoreListForm = storeMapper.getStoreListByProduct(storeDTO);
+                responseStoreListForm = storeDAO.getStoreListByProduct(storeDTO);
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
             }
@@ -57,7 +57,7 @@ public class StoreService extends BaseService {
         if (authorStatus == ADMIN) {
             StoreDTO storeDTO = new StoreDTO();
             try {
-                responseStoreListForm = storeMapper.getStoreListShort(storeDTO);
+                responseStoreListForm = storeDAO.getStoreListShort(storeDTO);
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
             }
@@ -71,7 +71,7 @@ public class StoreService extends BaseService {
         if ((statusAuthor == ADMIN) || (statusAuthor == MANAGER_WITHIN_STORE)) {
             StoreDTO storeDTO = convertGetStoreDetailFormToDTO(requestForm,authorDTO);
             try {
-                responseStoreDetailForm = storeMapper.getStoreDetail(storeDTO);
+                responseStoreDetailForm = storeDAO.getStoreDetail(storeDTO);
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
             }
@@ -85,7 +85,7 @@ public class StoreService extends BaseService {
         if (statusAuthor == ADMIN) {
             StoreDTO storeDTO = convertCreateStoreFormToDTO(requestForm);
             try {
-                storeMapper.createStore(storeDTO);
+                storeDAO.createStore(storeDTO);
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
                 response.setErrorCodes(catchSqlException(e.getMessage()));
@@ -102,19 +102,19 @@ public class StoreService extends BaseService {
         if (statusAuthor == ADMIN) {
             StoreDTO storeDTO = convertChangeStatusFormToDTO(requestForm);
             try {
-                ResponseStoreDetailForm responseStoreDetailForm = storeMapper.getStoreStatus(storeDTO);
+                ResponseStoreDetailForm responseStoreDetailForm = storeDAO.getStoreStatus(storeDTO);
                 if ((responseStoreDetailForm.getStatusId() == 3) && (storeDTO.getStatusId() == 2)
                         && (StringUtils.isNotEmpty(storeDTO.getReasonInactive()))) {
                     System.out.println("ACTION: STORE PENDING => INACTIVE");
                     //check co ton tai shelf nao ko inactive hay khong
-                    if (storeMapper.checkShelf(storeDTO)) {
-                        storeMapper.changeStatus(storeDTO);
+                    if (storeDAO.checkShelf(storeDTO)) {
+                        storeDAO.changeStatus(storeDTO);
                     } else {
                         addErrorMessage(response,MessageConstant.MSG_081);
                     }
                 } else if ((responseStoreDetailForm.getStatusId() == 2) && (storeDTO.getStatusId() == 3)) {
                     System.out.println("ACTION: STORE INACTIVE => PENDING");
-                    storeMapper.changeStatus(storeDTO);
+                    storeDAO.changeStatus(storeDTO);
                 } else {
                     addErrorMessage(response,MessageConstant.MSG_066);
                 }
@@ -134,7 +134,7 @@ public class StoreService extends BaseService {
         if (statusAuthor == ADMIN) {
             StoreDTO storeDTO = convertUpdateInfoFormToDTO(requestForm);
             try {
-                storeMapper.updateInfo(storeDTO);
+                storeDAO.updateInfo(storeDTO);
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
                 response.setErrorCodes(catchSqlException(e.getMessage()));
@@ -156,31 +156,31 @@ public class StoreService extends BaseService {
                 // Add manager
                 if (requestForm.getActive() == ADD_ACTION) {
                     // check 2 thang ton tai va pending
-                    if (!storeMapper.checkAvailableStore(storeDTO)) {
+                    if (!storeDAO.checkAvailableStore(storeDTO)) {
                         addErrorMessage(response,MessageConstant.MSG_075);
                     }
-                    else if (!storeMapper.checkAvailableManager(storeDTO)) {
+                    else if (!storeDAO.checkAvailableManager(storeDTO)) {
                         addErrorMessage(response,MessageConstant.MSG_074);
                     } else {
                         // do add manager
-                        storeMapper.addManager(storeDTO);
+                        storeDAO.addManager(storeDTO);
                     }
                 }
                 // Remove manager
                 if (requestForm.getActive() == REMOVE_ACTION) {
                     // check 2 thang co ton tai ko
-                    if (!storeMapper.countStoreById(storeDTO)) {
+                    if (!storeDAO.countStoreById(storeDTO)) {
                         addErrorMessage(response,MessageConstant.MSG_035);
                     }
-                    else if (!storeMapper.countUserById(storeDTO)) {
+                    else if (!storeDAO.countUserById(storeDTO)) {
                         addErrorMessage(response,MessageConstant.MSG_041);
                     }
                     // check 2 thang co mapping voi nhau ko
-                    else if (!storeMapper.checkStoreManagerMapping(storeDTO)) {
+                    else if (!storeDAO.checkStoreManagerMapping(storeDTO)) {
                         addErrorMessage(response,MessageConstant.MSG_077);
                     } else {
                         // do remove manager
-                        storeMapper.removeManager(storeDTO);
+                        storeDAO.removeManager(storeDTO);
                     }
                 }
             } catch (PersistenceException e) {

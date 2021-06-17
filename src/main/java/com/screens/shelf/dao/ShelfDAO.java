@@ -1,4 +1,4 @@
-package com.screens.shelf.dao.mapper;
+package com.screens.shelf.dao;
 
 import com.common.dao.BaseDAO;
 import com.screens.shelf.dto.ShelfDTO;
@@ -9,9 +9,9 @@ import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ShelfMapper extends BaseDAO {
+public class ShelfDAO extends BaseDAO {
 
-    public ShelfMapper(IDBHelper idbHelper) {
+    public ShelfDAO(IDBHelper idbHelper) {
         super(idbHelper);
     }
 

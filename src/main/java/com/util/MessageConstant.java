@@ -35,4 +35,7 @@ public class MessageConstant {
     public static final String MSG_104 = "MSG-104";
     public static final String MSG_109 = "MSG-109";
     public static final String MSG_110 = "MSG-110";
+    public static final String MSG_112 = "MSG-112";
+    public static final String MSG_113 = "MSG-113";
+    public static final String MSG_114 = "MSG-114";
 }

@@ -4,7 +4,7 @@ import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
 import com.filter.dto.AuthorDTO;
 import com.listeners.events.EventPublisher;
-import com.screens.manager.dao.mapper.ManagerMapper;
+import com.screens.manager.dao.ManagerDAO;
 import com.screens.manager.dto.ManagerDTO;
 import com.screens.manager.form.*;
 import com.util.EmailHelper;
@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ManagerService extends BaseService {
@@ -30,14 +28,14 @@ public class ManagerService extends BaseService {
     EventPublisher eventPublisher;
 
     @Autowired
-    private ManagerMapper managerMapper;
+    private ManagerDAO managerDAO;
 
     public ResponseManagerListForm getManagerList(RequestManagerListForm requestForm){
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestManagerListFormToMangerDTO(requestForm, managerDTO);
         ResponseManagerListForm responseForm = null;
         try {
-            responseForm = managerMapper.getManagers(managerDTO);
+            responseForm = managerDAO.getManagers(managerDTO);
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
         }
@@ -49,7 +47,7 @@ public class ManagerService extends BaseService {
         convertRequestManagerDetailFormToManagerDTO(requestForm, managerDTO, authorDTO);
         ResponseManagerDetailForm responseForm = null;
         try {
-            responseForm = managerMapper.getManagerDetail(managerDTO);
+            responseForm = managerDAO.getManagerDetail(managerDTO);
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
         }
@@ -62,7 +60,7 @@ public class ManagerService extends BaseService {
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestCreateManagerFormToManagerDTO(requestForm, managerDTO);
         try {
-            if(managerMapper.createManager(managerDTO)){
+            if(managerDAO.createManager(managerDTO)){
                 String msgContent = "Username: " + managerDTO.getUserName() +
                                     "\nPassword: " + managerDTO.getPassword();
                 if(!EmailHelper.sendEmail(managerDTO.getEmail(), msgContent)){
@@ -83,7 +81,7 @@ public class ManagerService extends BaseService {
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestUpdateManagerFormToManagerDTO(requestForm, managerDTO, authorDTO);
         try{
-            if(!managerMapper.updateManagerInformation(managerDTO)){
+            if(!managerDAO.updateManagerInformation(managerDTO)){
                 addErrorMessage(responseForm,MessageConstant.MSG_063);
             }
         }catch (PersistenceException e){
@@ -98,7 +96,7 @@ public class ManagerService extends BaseService {
         ManagerDTO managerDTO = new ManagerDTO();
         convertRequestResetPasswordToManagerDTO(requestForm, managerDTO, authorDTO);
         try {
-            if(!managerMapper.resetPassword(managerDTO)){
+            if(!managerDAO.resetPassword(managerDTO)){
                 addErrorMessage(responseForm,MessageConstant.MSG_063);
             }else{
                 String email = "";
@@ -107,7 +105,7 @@ public class ManagerService extends BaseService {
                 if(!StringHelper.isNullOrEmpty(requestForm.getEmail())){
                     email = requestForm.getEmail();
                 }else{
-                    email = managerMapper.getEmailByUserName(managerDTO);
+                    email = managerDAO.getEmailByUserName(managerDTO);
                 }
                 if(!EmailHelper.sendEmail(email, msgContent)){
 //                    return false;
@@ -127,7 +125,7 @@ public class ManagerService extends BaseService {
         ResponseCommonForm responseForm = checkUpdateStatusBusiness(managerDTO);
         if(responseForm.getErrorCodes() == null){
             try {
-                managerMapper.updateManagerStatus(managerDTO);
+                managerDAO.updateManagerStatus(managerDTO);
             }catch (PersistenceException e){
                 logger.error("Error at ManagerService: " + e.getMessage());
             }
@@ -141,7 +139,7 @@ public class ManagerService extends BaseService {
      * */
     private ResponseCommonForm checkUpdateStatusBusiness(ManagerDTO managerDTO){
         ResponseCommonForm responseCommonForm = new ResponseCommonForm();
-        ManagerDTO resultDAO = managerMapper.getStatusIdAndStoreIdByUserName(managerDTO);
+        ManagerDTO resultDAO = managerDAO.getStatusIdAndStoreIdByUserName(managerDTO);
 
         //Not found manager
         if (resultDAO == null){
@@ -167,7 +165,7 @@ public class ManagerService extends BaseService {
         ResponseCommonForm responseForm = checkChangePasswordBusiness(requestForm, managerDTO);
         if(responseForm.getErrorCodes() == null){
             try {
-                    managerMapper.updatePassword(managerDTO);
+                    managerDAO.updatePassword(managerDTO);
             }catch (PersistenceException e){
                 logger.error("Error at ManagerService: " + e.getMessage());
             }
@@ -201,7 +199,7 @@ public class ManagerService extends BaseService {
         ManagerDTO requestDAO = new ManagerDTO();
         convertUserNameToMangerDTO(userName, requestDAO);
 
-        int responseResult = managerMapper.countRecordLikeUserName(requestDAO);
+        int responseResult = managerDAO.countRecordLikeUserName(requestDAO);
         if(responseResult > 0){
             userName = userName.concat(String.valueOf(responseResult).trim());
         }
@@ -297,7 +295,7 @@ public class ManagerService extends BaseService {
         ResponseCommonForm responseForm = new ResponseCommonForm();
         if(requestForm.getNewPassword().equals(requestForm.getRetypePassword())){
             try{
-                if(!managerMapper.checkUserNameAndPassword(managerDTO)){
+                if(!managerDAO.checkUserNameAndPassword(managerDTO)){
                     addErrorMessage(responseForm, MessageConstant.MSG_068);
                 }
             }catch (PersistenceException e){

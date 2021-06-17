@@ -1,4 +1,4 @@
-package com.screens.city.dao.mapper;
+package com.screens.city.dao;
 
 import com.common.dao.BaseDAO;
 import com.screens.city.form.CityResponseSupporter;
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CityMapper extends BaseDAO {
+public class CityDAO extends BaseDAO {
 
-    public CityMapper(IDBHelper idbHelper) {
+    public CityDAO(IDBHelper idbHelper) {
         super(idbHelper);
     }
 

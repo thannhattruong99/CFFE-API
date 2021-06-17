@@ -1,6 +1,6 @@
 package com.screens.city.service;
 
-import com.screens.city.dao.mapper.CityMapper;
+import com.screens.city.dao.CityDAO;
 import com.screens.city.form.CityDistrictResponseSupporter;
 import com.screens.city.form.CityResponseSupporter;
 import com.screens.city.form.DistrictResponseSupporter;
@@ -21,12 +21,12 @@ public class CityService {
     private static final Logger logger = LoggerFactory.getLogger(CityService.class);
 
     @Autowired
-    private CityMapper cityMapper;
+    private CityDAO cityDAO;
 
     public List<CityDistrictResponseSupporter> getCityDistrict(){
         List<CityDistrictResponseSupporter> responseForm = new ArrayList<>();
         try {
-            List<CityResponseSupporter> resultDAO = cityMapper.getCityDistrict();
+            List<CityResponseSupporter> resultDAO = cityDAO.getCityDistrict();
             if(resultDAO.size() <= 0){
                 return null;
             }

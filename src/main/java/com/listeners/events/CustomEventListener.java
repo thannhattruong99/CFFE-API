@@ -1,6 +1,6 @@
 package com.listeners.events;
 
-import com.screens.shelf.dao.mapper.ShelfMapper;
+import com.screens.shelf.dao.ShelfDAO;
 import com.util.FileHelper;
 import com.util.GCPHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.io.IOException;
 @Component
 public class CustomEventListener {
     @Autowired
-    private ShelfMapper shelfMapper;
+    private ShelfDAO shelfDAO;
 
     @Async
     @EventListener

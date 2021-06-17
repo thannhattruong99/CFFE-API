@@ -1,4 +1,4 @@
-package com.screens.stack.dao.mapper;
+package com.screens.stack.dao;
 
 import com.common.dao.BaseDAO;
 import com.screens.stack.dto.StackDTO;
@@ -8,9 +8,9 @@ import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class StackMapper extends BaseDAO {
+public class StackDAO extends BaseDAO {
 
-    public StackMapper(IDBHelper idbHelper) {
+    public StackDAO(IDBHelper idbHelper) {
         super(idbHelper);
     }
 
