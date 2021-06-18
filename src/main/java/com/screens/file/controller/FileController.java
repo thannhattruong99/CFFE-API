@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 
 
 @RestController("")
-@RequestMapping("")
+@RequestMapping("/file")
 @SecurityRequirement(name = "basicAuth")
 public class FileController {
     private static final String MSG_111 = "MSG-011";
@@ -28,6 +29,16 @@ public class FileController {
     @PostMapping("/upload-image")
     public String uploadImage(@RequestParam("file") MultipartFile file) {
         ResponseUploadImage response = fileService.uploadImageToStorage(file);
+        if(response.getErrorCodes() != null){
+            return ResponseSupporter.responseErrorResult(response.getErrorCodes());
+        }
+        return ResponseSupporter.responseResult(response);
+    }
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping("/upload-video")
+    public String uploadVideo(@RequestParam("file") MultipartFile file) throws IOException {
+        ResponseUploadImage response = fileService.uploadVideoToStorage(file);
         if(response.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(response.getErrorCodes());
         }

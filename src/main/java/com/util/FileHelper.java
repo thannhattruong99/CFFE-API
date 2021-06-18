@@ -114,7 +114,7 @@ public class FileHelper {
      * @param suffixPath path on server
      * @return fileName of image on server
      */
-    public static String storeImageOnServer(MultipartFile file, String suffixPath) {
+    public static String storeFileOnServer(MultipartFile file, String suffixPath) {
         String fileName = "";
         // Get full path directory on server
         String userDirectory = Paths.get("")
@@ -129,6 +129,7 @@ public class FileHelper {
             System.out.println("Could not create the directory where the uploaded files will be stored.");
             return fileName;
         }
+
 
         // change file name by UUID
         // Copy file to the target location (Replacing existing file with the same name)

@@ -57,6 +57,7 @@ public class GCPHelper {
         return blob.getMediaLink();
     }
 
+
     private static Bucket getBucket(String bucketName) throws IOException {
         GoogleCredentials credentials = GoogleCredentials.fromStream(
                 new FileInputStream(ResourceUtils.getFile(FileHelper.getResourcePath() +"capstone-project-sm21-78b453757e26.json")))
