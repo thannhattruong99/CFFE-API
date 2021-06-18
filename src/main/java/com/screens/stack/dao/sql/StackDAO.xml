@@ -3,7 +3,7 @@
 
 <mapper namespace="com.screens.stack.dao.sql.StackDAO">
 
-    <select id="getStackListByShelf" resultMap="getStackListByShelf" useCache="false">
+    <select id="getStackListByShelf" resultMap="getStackListByShelf">
         SELECT
             STA.StackId AS STACK_StackId,
             STA.Position AS STACK_Position,
@@ -124,7 +124,7 @@
 
 
 
-    <select id="getStackListByProductIdStoreId" resultMap="getStackListByProductIdStoreId" useCache="false">
+    <select id="getStackListByProductIdStoreId" resultMap="getStackListByProductIdStoreId">
         SELECT A1.CategoryId,
         CN.CategoryName,
         A2.*
@@ -253,7 +253,7 @@
 
 
 
-    <select id="getStackDetail" resultMap="getStackDetail" useCache="false">
+    <select id="getStackDetail" resultMap="getStackDetail">
         SELECT
             STA.StackId AS STACK_StackId,
             STA.Position AS STACK_Position,
@@ -333,7 +333,7 @@
         </association>
     </resultMap>
 
-    <select id="getStackStatus" resultMap="getStackStatus" useCache="false">
+    <select id="getStackStatus" resultMap="getStackStatus">
         SELECT STA.StatusId FROM tblStack STA WHERE STA.StackId = #{stackId}
     </select>
 

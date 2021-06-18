@@ -17,19 +17,8 @@ public class RequestCreateShelfForm {
     private String description;
     @Min(value = 1, message = "MSG-019") @Max(value = 30, message = "MSG-019")
     private int numberOfStack;
-    @Nullable
-    private String imageURL;
 
     public RequestCreateShelfForm() {
-    }
-
-    @Nullable
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(@Nullable String imageURL) {
-        this.imageURL = imageURL;
     }
 
     public String getStoreId() {

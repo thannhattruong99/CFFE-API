@@ -3,14 +3,13 @@
 
 <mapper namespace="com.screens.store.dao.sql.StoreDAO">
 
-    <select id="getStoreList" resultMap="getStoreList" useCache="false">
+    <select id="getStoreList" resultMap="getStoreList">
         SELECT
             SUPQUE.totalOfRecord,
             S.StoreId,
             S.StoreName,
             S.ImageURL,
             S.Address,
-            S.AnalyzedTime,
             S.ReasonInactive,
             TD.DistrictId,
             TD.DistrictName,
@@ -92,6 +91,7 @@
             </choose>
         </where>
         ORDER BY
+        S.UpdatedTime DESC,
         S.StoreName
         LIMIT
         #{offSet},
@@ -114,20 +114,18 @@
             <result property="updatedTime" column="UpdatedTime"/>
             <result property="statusId" column="StatusId"/>
             <result property="status" column="StatusName"/>
-            <result property="analyzedTime" column="AnalyzedTime"/>
             <result property="reasonInactive" column="ReasonInactive"/>
         </collection>
     </resultMap>
 
 
 
-    <select id="getStoreListByProduct" resultMap="getStoreListByProduct" useCache="false">
+    <select id="getStoreListByProduct" resultMap="getStoreListByProduct">
         SELECT
             S.StoreId,
             S.StoreName,
             S.ImageURL,
             S.Address,
-            S.AnalyzedTime,
             S.ReasonInactive,
             TD.DistrictId,
             TD.DistrictName,
@@ -192,7 +190,6 @@
             <result property="updatedTime" column="UpdatedTime"/>
             <result property="statusId" column="StatusId"/>
             <result property="status" column="StatusName"/>
-            <result property="analyzedTime" column="AnalyzedTime"/>
             <result property="reasonInactive" column="ReasonInactive"/>
         </collection>
     </resultMap>
@@ -200,7 +197,7 @@
 
 
 
-    <select id="getStoreListShort" resultMap="getStoreListShort" useCache="false">
+    <select id="getStoreListShort" resultMap="getStoreListShort">
         SELECT
         SUPQUE.totalOfRecord,
         S.StoreId,
@@ -231,17 +228,15 @@
             <result property="updatedTime" column="UpdatedTime"/>
             <result property="statusId" column="StatusId"/>
             <result property="status" column="StatusName"/>
-            <result property="analyzedTime" column="AnalyzedTime"/>
             <result property="reasonInactive" column="ReasonInactive"/>
         </collection>
     </resultMap>
 
-    <select id="getStoreDetail" resultMap="getStoreDetail" useCache="false">
+    <select id="getStoreDetail" resultMap="getStoreDetail">
         SELECT S.StoreId,
                S.StoreName,
                S.ImageURL,
                S.Address,
-               S.AnalyzedTime,
                TD.DistrictId,
                TD.DistrictName,
                TC.CityId,
@@ -281,18 +276,16 @@
         <result property="createdTime" column="CreatedTime"/>
         <result property="updatedTime" column="UpdatedTime"/>
         <result property="reasonInactive" column="ReasonInactive"/>
-        <result property="analyzedTime" column="AnalyzedTime"/>
         <result property="statusId" column="StatusId"/>
         <result property="statusName" column="StatusName"/>
     </resultMap>
 
     <insert id="createStore"  parameterType="StoreDTO">
-        INSERT INTO tblStore (StoreName, ImageURL, Address, AnalyzedTime, CreatedTime,
+        INSERT INTO tblStore (StoreName, ImageURL, Address, CreatedTime,
                               UpdatedTime, DistrictId, StatusId)
         VALUES (#{storeName},
           #{imageUrl},
           #{address},
-          #{analyzedTime},
           convert_tz(now(),@@session.time_zone,'+07:00'),
           convert_tz(now(),@@session.time_zone,'+07:00'),
           #{districtId},
@@ -314,7 +307,7 @@
         WHERE UserId = #{userId}
     </update>
 
-    <select id="getStoreStatus" resultMap="getStoreStatus" useCache="false">
+    <select id="getStoreStatus" resultMap="getStoreStatus">
         SELECT S.StoreId,
                S.StatusId
         FROM tblStore S
@@ -342,17 +335,6 @@
             <if test="districtId != 0">
                 DistrictId = #{districtId},
             </if>
-            <if test="analyzedTime != null">
-                AnalyzedTime = #{analyzedTime},
-            </if>
-            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
-        WHERE StoreId = #{storeId}
-    </update>
-
-    <update id="updateAnalyzedTime" parameterType="StoreDTO">
-        UPDATE tblStore
-        SET
-            AnalyzedTime = #{analyzedTime},
             UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
         WHERE StoreId = #{storeId}
     </update>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ManagerDAO">
-    <select id="getManagers" resultMap="getManagers" useCache="false">
+    <select id="getManagers" resultMap="getManagers">
         SELECT TR.totalOfRecord AS totalOfRecord,
                U.Fullname AS FullName,
                U.UserId AS UserId,
@@ -52,7 +52,7 @@
         #{offSet},
         #{fetchNext}
     </select>
-    <select id="getManagerDetail" resultMap="getManagerDetail" useCache="false" flushCache="true">
+    <select id="getManagerDetail" resultMap="getManagerDetail">
         SELECT
             U.UserId,
             U.Fullname,
@@ -66,7 +66,9 @@
             USM.StoreId,
             ST.StoreName,
             U.Address,
+            C.CityId,
             C.CityName,
+            D.DistrictId,
             D.DistrictName,
             U.CreatedTime,
             U.UpdatedTime,
@@ -90,12 +92,14 @@
     <select id="getTotalOfManagerLikeUserName" resultMap="getAffectedRows">
         SELECT COUNT(UserName) AS TotalOfRecord
         FROM tblUser
-        WHERE UserName REGEXP #{userNameRegexp} OR UserName = #{userName};
+        WHERE UserName REGEXP #{userNameRegexp} OR UserName = #{userName}
     </select>
     <update id="updateManagerInformation">
         UPDATE tblUser
         SET Fullname = #{fullName},
-            ImageURL = #{imageURL},
+            <if test="imageURL != null">
+                ImageURL = #{imageURL},
+            </if>
             Gender = #{gender},
             BirthDate = #{birthDate},
             IdentifyCard = #{identifyCard},
@@ -107,7 +111,7 @@
         WHERE UserName = #{userName}
     </update>
     <update id="resetPassword">
-        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName};
+        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName}
     </update>
     <select id="getEmailByUserName" resultMap="getEmailByUser">
         SELECT Email FROM tblUser WHERE UserName = #{userName}
@@ -123,7 +127,7 @@
         <if test="statusId == 2">
             , ReasonInactive = #{reasonInactive}
         </if>
-        WHERE UserName = #{userName};
+        WHERE UserName = #{userName}
     </update>
     <select id="checkUserNameAndPassword" resultMap="checkUser">
         SELECT COUNT(UserName) AS TotalOfRecord FROM tblUser WHERE UserName = #{userName} AND Password = #{password}
@@ -148,7 +152,7 @@
         <result property="userId" column="UserId"/>
         <result property="fullName" column="Fullname"/>
         <result property="userName" column="Username"/>
-        <result property="imageURL" column="ImageUrl"/>
+        <result property="imageURL" column="imageURL"/>
         <result property="gender" column="Gender"/>
         <result property="birthDate" column="BirthDate"/>
         <result property="identifyCard" column="IdentifyCard"/>
@@ -157,7 +161,9 @@
         <result property="storeId" column="StoreId"/>
         <result property="storeName" column="StoreName"/>
         <result property="address" column="Address"/>
+        <result property="cityId" column="CityId"/>
         <result property="cityName" column="CityName"/>
+        <result property="districtId" column="DistrictId"/>
         <result property="districtName" column="DistrictName"/>
         <result property="createdTime" column="CreatedTime"/>
         <result property="updatedTime" column="UpdatedTime"/>

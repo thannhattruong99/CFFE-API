@@ -9,7 +9,6 @@ public class StoreDTO extends BaseDTO implements Serializable {
     private String storeName;
     private String imageUrl;
     private String address;
-    private String analyzedTime;
     private String cityName;
     private int cityId;
     private String districtName;
@@ -62,14 +61,6 @@ public class StoreDTO extends BaseDTO implements Serializable {
 
     public void setStatusId(int statusId) {
         this.statusId = statusId;
-    }
-
-    public String getAnalyzedTime() {
-        return analyzedTime;
-    }
-
-    public void setAnalyzedTime(String analyzedTime) {
-        this.analyzedTime = analyzedTime;
     }
 
     public int getCityId() {
