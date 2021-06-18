@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 
 @Service
 public class ManagerService extends BaseService {
@@ -70,8 +71,8 @@ public class ManagerService extends BaseService {
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
             responseForm.setErrorCodes(catchSqlException(e.getMessage()));
-        }catch (MessagingException e){
-            logger.error("Send email at ManagerService: " + e.getMessage());
+        }catch (IOException e) {
+            System.out.println("Error at ManagerService: " + e.getMessage());
         }
         return responseForm;
     }
@@ -113,7 +114,7 @@ public class ManagerService extends BaseService {
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
-        } catch (MessagingException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return responseForm;
