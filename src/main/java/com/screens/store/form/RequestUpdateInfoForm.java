@@ -3,7 +3,6 @@ package com.screens.store.form;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 

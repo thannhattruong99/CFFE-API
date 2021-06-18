@@ -14,10 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.ws.rs.HttpMethod;
 
+import static com.util.PathConstant.REXP_ALL_PATH;
+
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final String[] PERMIT_PATHS = {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/swagger-ui/index.html?configUrl=/api-docs/swagger-config"};
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -31,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .antMatchers(PERMIT_PATHS).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
@@ -40,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers(HttpMethod.OPTIONS, "/**");
+        web.ignoring().mvcMatchers(HttpMethod.OPTIONS, REXP_ALL_PATH);
         web.ignoring().antMatchers(
 //                "/v2/api-docs",
 //                "/swagger-resources",
@@ -50,9 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                "/swagger-ui.html",
 //                "/webjars/**",
                 // -- Swagger UI v3 (OpenAPI)
-                "/v3/api-docs/**",
-                "/swagger-ui/**",
-                "/swagger-ui/index.html?configUrl=/api-docs/swagger-config");
+                PERMIT_PATHS);
     }
 
 }

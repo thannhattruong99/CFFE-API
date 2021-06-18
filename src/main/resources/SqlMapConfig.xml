@@ -58,7 +58,7 @@
             <transactionManager type="JDBC"/>
             <dataSource type="UNPOOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://35.247.184.122:3306/CFFA_Database" />
+                <property name="url" value="jdbc:mysql://35.247.184.122:3306/CFFA_Database?autoReconnect=true" />
                 <property name="username" value="luanhm" />
                 <property name="password" value="luanhm" />
             </dataSource>

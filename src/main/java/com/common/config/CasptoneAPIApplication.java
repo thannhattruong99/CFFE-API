@@ -20,6 +20,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.io.IOException;
 
+import static com.util.PathConstant.*;
+
 @Configuration
 @SpringBootApplication
 @RestController
@@ -27,6 +29,8 @@ import java.io.IOException;
 @ComponentScan(basePackages = {"com"})
 public class CasptoneAPIApplication {
     private static final Logger logger = LoggerFactory.getLogger(CasptoneAPIApplication.class);
+    private static final String[] HTTP_METHODS = {"GET", "POST", "PUT", "DELETE"};
+    private static final String REXP_ALL = "*";
 
     public static void main(String[] args) throws IOException {
         logger.info("Info message");
@@ -41,7 +45,7 @@ public class CasptoneAPIApplication {
         @Bean
         public MessageSource messageSource () {
             ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-            messageSource.setBasename("messages/msg");
+            messageSource.setBasename(MSG_RELATIVE_PATH);
             return messageSource;
         }
     }
@@ -51,12 +55,12 @@ public class CasptoneAPIApplication {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("*")
+                registry.addMapping(REXP_ALL_PATH).allowedMethods(HTTP_METHODS).allowedOrigins(REXP_ALL)
                         .allowedHeaders("*");
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler("/resources/**").setCachePeriod(0);
+                registry.addResourceHandler(REXP_RESOURCE_PATH).setCachePeriod(0);
             }
         };
     }

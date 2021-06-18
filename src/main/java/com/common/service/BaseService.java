@@ -2,11 +2,8 @@ package com.common.service;
 
 import com.common.form.ResponseCommonForm;
 import com.filter.dto.AuthorDTO;
-import com.screens.camera.service.CameraService;
 import com.util.MessageConstant;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;

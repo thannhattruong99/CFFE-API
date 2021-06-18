@@ -13,11 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.util.PathConstant.*;
+
 @Service
 public class FileService extends BaseService {
-    private final static String SUFFIX_IMAGE_PATH = "\\src\\main\\resources\\images";
-    private final static String IMAGE_FOLDER_CLOUD = "images/";
-    private final static String IMAGE_FOLDER_SERVER = "images/";
 
     // upload image
     public ResponseUploadImage uploadImageToStorage(MultipartFile file) {
@@ -41,7 +40,7 @@ public class FileService extends BaseService {
         }
 
         // upload file to server
-        String fileName = FileHelper.storeImageOnServer(file, SUFFIX_IMAGE_PATH);
+        String fileName = FileHelper.storeImageOnServer(file, RESOURCE_PATH + IMAGE_FOLDER_SERVER);
         if (fileName.isEmpty()) {
             errorMsg.add(MessageConstant.MSG_114);
             response.setErrorCodes(errorMsg);
