@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class FileHelper {
     private final static String CLASS_PATH = "classpath:";
-    private final static String RESOURCE_PATH = "/classes/";
+    private final static String RESOURCE_PATH = "/src/main/resources/";
 
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
     throws  IOException{
