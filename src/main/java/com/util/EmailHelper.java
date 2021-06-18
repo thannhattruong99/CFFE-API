@@ -24,6 +24,7 @@ public class EmailHelper {
         props.put("mail.debug", "true");
         props.put("mail.store.protocol", "pop3");
         props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.ssl.enable", "true");
 
         Session session = Session.getDefaultInstance(props, new Authenticator() {
             @Override
