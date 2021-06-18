@@ -20,7 +20,8 @@ import static com.util.PathConstant.REXP_ALL_PATH;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final String[] PERMIT_PATHS = {"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/swagger-ui/index.html?configUrl=/api-docs/swagger-config"};
+    private static final String[] PERMIT_PATHS = {"/v3/api-docs/**", "/swagger-ui/**",
+            "/swagger-ui.html","/swagger-ui/index.html?configUrl=/api-docs/swagger-config", "/swagger-ui/favicon-32x32.png"};
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

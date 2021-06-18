@@ -40,7 +40,7 @@ public class SwaggerConfig {
         log.debug("Starting Swagger");
         Contact contact = new Contact(
                 "Truong Nhat Than",
-                "https://localhost:9090",
+                "http://localhost:9090",
                 "truongtn@gmail.com");
 
         List<VendorExtension> vext = new ArrayList<>();
@@ -48,7 +48,7 @@ public class SwaggerConfig {
                 "Backend API",
                 "This is the best stuff since sliced bread - API",
                 "1",
-                "https://localhost:9090",
+                "http://localhost:9090",
                 contact,
                 "truongtn",
                 "truongtn",
