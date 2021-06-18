@@ -2,6 +2,7 @@ package com.util;
 
 public class MessageConstant {
     public static final String MSG_007 = "MSG-007";
+    public static final String MSG_009 = "MSG-009";
     public static final String MSG_012 = "MSG-012";
     public static final String MSG_020 = "MSG-020";
     public static final String MSG_022 = "MSG-022";
@@ -28,6 +29,7 @@ public class MessageConstant {
     public static final String MSG_093 = "MSG-093";
     public static final String MSG_094 = "MSG-094";
     public static final String MSG_095 = "MSG-095";
+    public static final String MSG_096 = "MSG-096";
     public static final String MSG_097 = "MSG-097";
     public static final String MSG_098 = "MSG-098";
     public static final String MSG_100 = "MSG-100";
@@ -38,4 +40,6 @@ public class MessageConstant {
     public static final String MSG_112 = "MSG-112";
     public static final String MSG_113 = "MSG-113";
     public static final String MSG_114 = "MSG-114";
+    public static final String MSG_115 = "MSG-115";
+    public static final String MSG_116 = "MSG-116";
 }

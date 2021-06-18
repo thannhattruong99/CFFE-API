@@ -38,11 +38,18 @@
         <typeAlias alias="StackDTO" type="com.screens.stack.dto.StackDTO"/>
         <typeAlias alias="ProductDTO" type="com.screens.product.dto.ProductDTO"/>
         <typeAlias alias="CategoryDTO" type="com.screens.category.dto.CategoryDTO"/>
+        <typeAlias alias="VideoDTO" type="com.screens.video.dto.VideoDTO"/>
         <typeAlias alias="ResponseProductDetailForm" type="com.screens.product.form.ResponseProductDetailForm"/>
         <typeAlias alias="ResponseProductListForm" type="com.screens.product.form.ResponseProductListForm"/>
         <typeAlias alias="CategoryResponseSupporter" type="com.screens.product.form.CategoryResponseSupporter"/>
         <typeAlias alias="ResponseCategoryListForm" type="com.screens.category.form.ResponseCategoryListForm"/>
         <typeAlias alias="ResponseLoginForm" type="com.authentication.form.ResponseLoginForm"/>
+        <typeAlias alias="ResponseCountVideosForm" type="com.screens.video.form.ResponseCountVideosForm"/>
+        <typeAlias alias="ResponseEmotionVideosForm" type="com.screens.video.form.ResponseEmotionVideosForm"/>
+        <typeAlias alias="ShelfVideoResponseSupporter" type="com.screens.video.form.ShelfVideoResponseSupporter"/>
+        <typeAlias alias="StoreCountResponseSupporter" type="com.screens.video.form.StoreCountResponseSupporter"/>
+        <typeAlias alias="StoreEmotionResponseSupporter" type="com.screens.video.form.StoreEmotionResponseSupporter"/>
+        <typeAlias alias="VideoResponseSupporter" type="com.screens.video.form.VideoResponseSupporter"/>
         <typeAlias alias="AccountDTO" type="com.authentication.dto.AccountDTO"/>
     </typeAliases>
 
@@ -51,7 +58,7 @@
             <transactionManager type="JDBC"/>
             <dataSource type="UNPOOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://35.247.184.122:3306/CFFA_Database" />
+                <property name="url" value="jdbc:mysql://35.247.184.122:3306/CFFA_Database?autoReconnect=true" />
                 <property name="username" value="luanhm" />
                 <property name="password" value="luanhm" />
             </dataSource>
@@ -67,6 +74,8 @@
         <mapper resource="com/screens/stack/dao/StackDAO.xml"/>
         <mapper resource="com/screens/category/dao/CategoryDAO.xml"/>
         <mapper resource="com/screens/product/dao/ProductDAO.xml"/>
+        <mapper resource="com/screens/video/dao/VidDAO.xml"/>
+        <mapper resource="com/authentication/dao/AccountDAO.xml"/>
         <mapper resource="com/authentication/dao/AccountDAO.xml"/>
     </mappers>
 </configuration>

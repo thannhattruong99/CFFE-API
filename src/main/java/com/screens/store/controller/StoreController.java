@@ -4,6 +4,7 @@ import com.common.form.ResponseCommonForm;
 import com.filter.dto.AuthorDTO;
 import com.screens.store.form.*;
 import com.screens.store.service.StoreService;
+import com.util.MessageConstant;
 import com.util.ResponseSupporter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -24,9 +25,6 @@ public class StoreController {
     @Autowired
     private StoreService storeService;
 
-    private static final String MSG_009 = "MSG-009";
-    private static final String MSG_035 = "MSG-035";
-
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/stores")
     public String getStoreList(@Validated RequestGetStoreListForm requestForm,
@@ -42,7 +40,7 @@ public class StoreController {
         ResponseStoreListForm responseStoreListForm = storeService.getStoreList(requestForm,authorDTO);
         if(responseStoreListForm == null){
             List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_009);
+            errorCodes.add(MessageConstant.MSG_009);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
@@ -65,7 +63,7 @@ public class StoreController {
         ResponseStoreListForm responseStoreListForm = storeService.getStoreListByProduct(requestForm,authorDTO);
         if(responseStoreListForm == null){
             List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_009);
+            errorCodes.add(MessageConstant.MSG_009);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
@@ -86,7 +84,7 @@ public class StoreController {
         ResponseStoreListForm responseStoreListForm = storeService.getStoreListShort(requestForm,authorDTO);
         if(responseStoreListForm == null){
             List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_009);
+            errorCodes.add(MessageConstant.MSG_009);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
@@ -108,7 +106,7 @@ public class StoreController {
         ResponseStoreDetailForm responseStoreDetailForm = storeService.getStoreDetail(requestForm,authorDTO);
         if(responseStoreDetailForm == null){
             List<String> errorCodes = new ArrayList<>();
-            errorCodes.add(MSG_035);
+            errorCodes.add(MessageConstant.MSG_035);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result

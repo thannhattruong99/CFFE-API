@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.screens.video.dao.VidDAO">
+
+    <select id="getVideoCountList" resultMap="getVideoCountList">
+        SELECT TV.VideoId,
+               TV.VideoName,
+               TV.VideoURL,
+               TV.StartedTime,
+               TV.EndedTime,
+               TV.StatusId,
+               TS.ShelfId,
+               TS.ShelfName,
+               TT.StoreId,
+               TT.StoreName,
+               TTTT.totalOfRecord
+        FROM tblVideo TV
+                 LEFT JOIN tblShelfCameraMapping TSCM ON (TSCM.ShelfCameraMappingId = TV.ShelfCameraMappingId)
+                 LEFT JOIN tblShelf TS ON (TS.ShelfId = TSCM.ShelfId)
+                 LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId),
+             (
+                 SELECT COUNT(TV.VideoId) AS totalOfRecord
+                 FROM tblVideo TV
+                          LEFT JOIN tblShelfCameraMapping TSCM ON (TSCM.ShelfCameraMappingId = TV.ShelfCameraMappingId)
+                          LEFT JOIN tblShelf TS ON (TS.ShelfId = TSCM.ShelfId)
+                          LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
+                 WHERE
+                    TV.StartedTime &gt;= #{dayStart}
+                    AND TV.EndedTime &lt;= #{dayEnd}
+                <if test="storeId != null">
+                    AND TS.StoreId = #{storeId}
+                    <if test="shelfId != null">
+                        AND TS.ShelfId = #{shelfId}
+                    </if>
+                </if>
+             ) TTTT
+        WHERE
+            TV.StartedTime &gt;= #{dayStart}
+            AND TV.EndedTime &lt;= #{dayEnd}
+            <if test="storeId != null">
+                AND TS.StoreId = #{storeId}
+                <if test="shelfId != null">
+                    AND TS.ShelfId = #{shelfId}
+                </if>
+            </if>
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+    <resultMap id="getVideoCountList" type="ResponseCountVideosForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreCountResponseSupporter">
+            <id property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <collection property="shelves" ofType="ShelfVideoResponseSupporter">
+                <id property="shelfId" column="ShelfId"/>
+                <result property="shelfName" column="ShelfName"/>
+                <collection property="videos" ofType="VideoResponseSupporter">
+                    <id property="videoId" column="VideoId"/>
+                    <result property="videoName" column="VideoName"/>
+                    <result property="videoUrl" column="VideoURL"/>
+                    <result property="startedTime" column="StartedTime"/>
+                    <result property="endedTime" column="EndedTime"/>
+                    <result property="statusId" column="StatusId"/>
+                </collection>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+
+    <select id="getVideoEmotionList" resultMap="getVideoEmotionList">
+        SELECT TV.VideoId,
+                TV.VideoName,
+                TV.VideoURL,
+                TV.StartedTime,
+                TV.EndedTime,
+                TV.StatusId,
+                TS.ShelfId,
+                TS.ShelfName,
+                TT.StoreId,
+                TT.StoreName,
+                TSCM.ProductId,
+                TTTT.totalOfRecord
+        FROM tblVideo TV
+            LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.StackProductCameraMappingId = TV.StackProductCameraMappingId)
+            LEFT JOIN tblStack TTS ON (TTS.StackId = TSCM.StackId)
+            LEFT JOIN tblShelf TS ON (TS.ShelfId = TTS.ShelfId)
+            LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId),
+            (
+                SELECT COUNT(TV.VideoId) AS totalOfRecord
+                FROM tblVideo TV
+                    LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.StackProductCameraMappingId = TV.StackProductCameraMappingId)
+                    LEFT JOIN tblStack TTS ON (TTS.StackId = TSCM.StackId)
+                    LEFT JOIN tblShelf TS ON (TS.ShelfId = TTS.ShelfId)
+                    LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
+                WHERE
+                    TSCM.ProductId = #{productId}
+                    <if test="storeId != null">
+                        AND TS.StoreId = #{storeId}
+                    </if>
+                    AND TV.StartedTime &gt;= #{dayStart}
+                    AND TV.EndedTime &lt;= #{dayEnd}
+            ) TTTT
+        WHERE
+            TSCM.ProductId = #{productId}
+            <if test="storeId != null">
+                AND TS.StoreId = #{storeId}
+            </if>
+            AND TV.StartedTime &gt;= #{dayStart}
+            AND TV.EndedTime &lt;= #{dayEnd}
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+    <resultMap id="getVideoEmotionList" type="ResponseEmotionVideosForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreEmotionResponseSupporter">
+            <id property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <collection property="videos" ofType="VideoResponseSupporter">
+                <id property="videoId" column="VideoId"/>
+                <result property="videoName" column="VideoName"/>
+                <result property="videoUrl" column="VideoURL"/>
+                <result property="startedTime" column="StartedTime"/>
+                <result property="endedTime" column="EndedTime"/>
+                <result property="statusId" column="StatusId"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+</mapper>
