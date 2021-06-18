@@ -33,14 +33,14 @@ import static springfox.documentation.builders.PathSelectors.regex;
 public class SwaggerConfig {
     private final Logger log = LoggerFactory.getLogger(SwaggerConfig.class);
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String DEFAULT_INCLUDE_PATTERN = "http://34.126.163.161:9091/*";
+    public static final String DEFAULT_INCLUDE_PATTERN = "http://35.240.143.111:9091/*";
 
     @Bean
     public Docket swaggerSpringfoxDocket() {
         log.debug("Starting Swagger");
         Contact contact = new Contact(
                 "Truong Nhat Than",
-                "http://34.126.163.161:9091",
+                "http://35.240.143.111:9091",
                 "truongtn@gmail.com");
 
         List<VendorExtension> vext = new ArrayList<>();
@@ -48,7 +48,7 @@ public class SwaggerConfig {
                 "Backend API",
                 "This is the best stuff since sliced bread - API",
                 "1",
-                "http://34.126.163.161:9091",
+                "http://35.240.143.111:9091",
                 contact,
                 "truongtn",
                 "truongtn",
