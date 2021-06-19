@@ -3,6 +3,7 @@ package com.listeners.events;
 import org.springframework.context.ApplicationEvent;
 
 public class EventCreator extends ApplicationEvent {
+    private String eventId;
     private String eventName;
     private String relativeFilePath;
     /**
@@ -17,11 +18,34 @@ public class EventCreator extends ApplicationEvent {
         this.relativeFilePath = relativeFilePath;
     }
 
+    public EventCreator(Object source, String eventId, String eventName, String relativeFilePath) {
+        super(source);
+        this.eventId = eventId;
+        this.eventName = eventName;
+        this.relativeFilePath = relativeFilePath;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
     public String getEventName() {
         return eventName;
     }
 
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
     public String getRelativeFilePath() {
         return relativeFilePath;
+    }
+
+    public void setRelativeFilePath(String relativeFilePath) {
+        this.relativeFilePath = relativeFilePath;
     }
 }
