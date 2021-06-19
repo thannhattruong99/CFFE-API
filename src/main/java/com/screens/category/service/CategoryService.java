@@ -123,8 +123,8 @@ public class CategoryService extends BaseService {
 
     private CategoryDTO converGetCategoryListFormToDTO(RequestGetCategoryListForm requestForm){
         CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setSearchValue(requestForm.getSearchValue().toLowerCase().trim());
-        categoryDTO.setSearchField(requestForm.getSearchField().toLowerCase().trim());
+        categoryDTO.setSearchValue(requestForm.getSearchValue());
+        categoryDTO.setSearchField(requestForm.getSearchField());
         categoryDTO.setStatusId(requestForm.getStatusId());
         if(requestForm.getPageNum() > 0){
             categoryDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
