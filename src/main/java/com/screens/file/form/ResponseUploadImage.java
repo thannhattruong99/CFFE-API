@@ -1,8 +1,9 @@
 package com.screens.file.form;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ResponseUploadImage {
+public class ResponseUploadImage implements Serializable {
     private String filePath;
     private List<String> errorCodes;
 

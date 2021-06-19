@@ -5,10 +5,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,7 +17,7 @@ import java.util.*;
 import static com.util.PathConstant.RESOURCE_PATH;
 import static com.util.PathConstant.INPUT_VIDEO_PATH;
 
-public class FileHelper {
+public class FileHelper implements Serializable {
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
     throws  IOException{
         Path uploadPath = Paths.get(uploadDir);
@@ -37,9 +34,17 @@ public class FileHelper {
         }
     }
 
+    //TruongNT
     public static void deleteFile(String relativeFilePath) throws IOException {
+        System.out.println("getResourcePath() + relativeFilePath: " + getResourcePath() + relativeFilePath);
         File file = new File(getResourcePath() + relativeFilePath);
-        file.delete();
+        System.out.println("file isFile: " + file.canExecute());
+        if (file.delete()){
+            System.out.println("XOA THANH CONG");
+        }else{
+            System.out.println("XOA THAT BAI");
+            file.deleteOnExit();
+        }
     }
 
     public static boolean checkExistFile(String relativeFilePath) throws FileNotFoundException {
@@ -114,7 +119,7 @@ public class FileHelper {
      * @param suffixPath path on server
      * @return fileName of image on server
      */
-    public static String storeImageOnServer(MultipartFile file, String suffixPath) {
+    public static String storeFileOnServer(MultipartFile file, String suffixPath) {
         String fileName = "";
         // Get full path directory on server
         String userDirectory = Paths.get("")
@@ -129,6 +134,7 @@ public class FileHelper {
             System.out.println("Could not create the directory where the uploaded files will be stored.");
             return fileName;
         }
+
 
         // change file name by UUID
         // Copy file to the target location (Replacing existing file with the same name)
