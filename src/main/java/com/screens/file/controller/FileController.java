@@ -2,6 +2,7 @@ package com.screens.file.controller;
 
 
 import com.screens.file.form.ResponseUploadImage;
+import com.screens.file.form.ResponseUploadVideo;
 import com.screens.file.service.FileService;
 import com.util.ResponseSupporter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,8 +38,8 @@ public class FileController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/upload-video")
-    public String uploadVideo(@RequestParam("file") MultipartFile file) throws IOException {
-        ResponseUploadImage response = fileService.uploadVideoToStorage(file);
+    public String uploadVideo(@RequestParam("file") MultipartFile[] files) throws IOException {
+        ResponseUploadVideo response = fileService.uploadVideoToStorage(files);
         if(response.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(response.getErrorCodes());
         }

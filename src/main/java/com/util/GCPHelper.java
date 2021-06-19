@@ -50,7 +50,7 @@ public class GCPHelper {
         return blob.getSelfLink();
     }
 
-    public static String uploadImage(String relativeFilePath, String fileCloudPath) throws IOException {
+    public static String uploadFile(String relativeFilePath, String fileCloudPath) throws IOException {
         Bucket bucket  = getBucket(bucketName);
         InputStream inputStream = new FileInputStream(FileHelper.getResourcePath() + relativeFilePath);
         Blob blob = bucket.create(fileCloudPath, inputStream, "");
