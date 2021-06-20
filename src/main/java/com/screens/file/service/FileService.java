@@ -3,11 +3,13 @@ package com.screens.file.service;
 import com.common.service.BaseService;
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.*;
+import com.listeners.events.EventPublisher;
 import com.screens.file.form.ResponseUploadImage;
 import com.screens.file.form.ResponseUploadVideo;
 import com.util.FileHelper;
 import com.util.GCPHelper;
 import com.util.MessageConstant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +21,8 @@ import static com.util.PathConstant.*;
 
 @Service
 public class FileService extends BaseService {
+
+
 
     // upload image
     public ResponseUploadImage uploadImageToStorage(MultipartFile file) {
@@ -102,6 +106,11 @@ public class FileService extends BaseService {
         return response;
     }
 
+    public String testVoid(){
+        String temp = "aaaa";
+
+        return temp;
+    }
     private void getVideoProperties(String filePath) throws IOException {
         IsoFile isoFile = new IsoFile(filePath);
         MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();

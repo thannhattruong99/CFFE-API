@@ -28,8 +28,12 @@ import java.util.List;
 public class ShelfController {
     private static final String MSG_009 = "MSG-009";
     private static final String AUTHOR = "AUTHOR";
+
     @Autowired
     private ShelfService shelfService;
+
+    @Autowired
+    StockTransactionService stockTransactionService;
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelves", method = RequestMethod.GET)
@@ -158,10 +162,10 @@ public class ShelfController {
                 file.getContentType(), file.getSize());
     }
 
-    @Autowired
-    StockTransactionService stockTransactionService;
 
-    @GetMapping( value = "test-sse", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping( value = "/test-sse", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<StockTransaction> stockTransactionEvents(){
         return stockTransactionService.getStockTransactions();
     }

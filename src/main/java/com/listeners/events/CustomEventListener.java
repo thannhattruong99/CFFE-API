@@ -25,23 +25,23 @@ public class CustomEventListener {
     @Async
     @EventListener
     public void eventListener(EventCreator eventCreator) throws InterruptedException, IOException {
-        Thread.sleep(1000);
-
+//        Thread.sleep(1000);
+        System.out.println("111111111111111111111111111");
+        Thread.sleep(10000);
         if(eventCreatorMap == null){
             eventCreatorMap = new HashMap<>();
         }
-
-
-        int count;
-        if((count = PythonHelper.countPerson("videos/input/" + eventCreator.getRelativeFilePath(),
-                "videos/output/" + eventCreator.getRelativeFilePath())) != 0){
-
-            GCPHelper.uploadImage("videos/output/" + eventCreator.getRelativeFilePath());
-
-            System.out.println("Total person input: " + count);
-            FileHelper.deleteFile("videos/input/" + eventCreator.getRelativeFilePath());
-            FileHelper.deleteFile("videos/output/" + eventCreator.getRelativeFilePath());
-        }
+        System.out.println("222222222222222222222222222");
+//        int count;
+//        if((count = PythonHelper.countPerson("videos/input/" + eventCreator.getRelativeFilePath(),
+//                "videos/output/" + eventCreator.getRelativeFilePath())) != 0){
+//
+//            GCPHelper.uploadImage("videos/output/" + eventCreator.getRelativeFilePath());
+//
+//            System.out.println("Total person input: " + count);
+//            FileHelper.deleteFile("videos/input/" + eventCreator.getRelativeFilePath());
+//            FileHelper.deleteFile("videos/output/" + eventCreator.getRelativeFilePath());
+//        }
 
     }
 
