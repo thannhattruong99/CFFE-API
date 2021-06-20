@@ -109,6 +109,9 @@ public class StoreController {
             errorCodes.add(MessageConstant.MSG_035);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
+        if (responseStoreDetailForm.getErrorCodes() != null) {
+            return ResponseSupporter.responseErrorResult(responseStoreDetailForm.getErrorCodes());
+        }
         // Return result
         return ResponseSupporter.responseResult(responseStoreDetailForm);
     }

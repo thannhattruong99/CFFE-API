@@ -6,6 +6,7 @@ import com.screens.camera.form.ResponseAvailableCameraListForm;
 import com.screens.camera.form.ResponseCameraDetailForm;
 import com.screens.camera.form.ResponseCameraListForm;
 import com.util.IDBHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -52,5 +53,14 @@ public class CameraDAO extends BaseDAO {
 
     public ResponseCameraDetailForm getCameraDetailById(CameraDTO cameraDTO){
         return sqlSession.selectOne("CameraDAO.getCameraDetailById", cameraDTO);
+    }
+
+    public String getStoreIdByCamera(CameraDTO cameraDTO) {
+        String storeId;
+        storeId = sqlSession.selectOne("CameraDAO.getStoreIdByShelfMapping", cameraDTO);
+        if (StringUtils.isEmpty(storeId)){
+            storeId = sqlSession.selectOne("CameraDAO.getStoreIdByStackMapping", cameraDTO);
+        }
+        return storeId;
     }
 }

@@ -1,6 +1,7 @@
 package com.screens.store.form;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ResponseStoreDetailForm implements Serializable {
     private String storeId;
@@ -20,8 +21,17 @@ public class ResponseStoreDetailForm implements Serializable {
     private String reasonInactive;
     private int statusId;
     private String statusName;
+    private List<String> errorCodes;
 
     public ResponseStoreDetailForm() {
+    }
+
+    public List<String> getErrorCodes() {
+        return errorCodes;
+    }
+
+    public void setErrorCodes(List<String> errorCodes) {
+        this.errorCodes = errorCodes;
     }
 
     public String getManagerImage() {
