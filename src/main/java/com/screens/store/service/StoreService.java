@@ -69,13 +69,17 @@ public class StoreService extends BaseService {
     public ResponseStoreDetailForm getStoreDetail(RequestGetStoreDetailForm requestForm, AuthorDTO authorDTO) {
         ResponseStoreDetailForm responseStoreDetailForm = null;
         int statusAuthor = checkAuthor(authorDTO);
-        if ((statusAuthor == ADMIN) || (statusAuthor == MANAGER_WITHIN_STORE)) {
+        if ((statusAuthor == ADMIN)
+                || ((statusAuthor == MANAGER_WITHIN_STORE)&&(requestForm.getStoreId().equalsIgnoreCase(authorDTO.getStoreId())))) {
             StoreDTO storeDTO = convertGetStoreDetailFormToDTO(requestForm,authorDTO);
             try {
                 responseStoreDetailForm = storeDAO.getStoreDetail(storeDTO);
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
             }
+        } else {
+            responseStoreDetailForm = new ResponseStoreDetailForm();
+            responseStoreDetailForm.setErrorCodes(getError(MessageConstant.MSG_120));
         }
         return responseStoreDetailForm;
     }
@@ -258,9 +262,9 @@ public class StoreService extends BaseService {
     private StoreDTO convertGetStoreDetailFormToDTO(RequestGetStoreDetailForm requestForm, AuthorDTO authorDTO) {
         StoreDTO storeDTO = new StoreDTO();
         storeDTO.setStoreId(requestForm.getStoreId());
-        if (authorDTO != null) {
-            storeDTO.setStoreId(authorDTO.getStoreId());
-        }
+//        if (authorDTO != null) {
+//            storeDTO.setStoreId(authorDTO.getStoreId());
+//        }
         return storeDTO;
     }
 

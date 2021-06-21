@@ -9,10 +9,11 @@
         WHERE U.UserName = #{username}
     </select>
     <select id="login" resultMap="login">
-        SELECT U.UserId, U.UserName, U.FullName ,STT.StatusId, STT.StatusName, R.RoleId, R.RoleName, USM.StoreId FROM tblUser U
+        SELECT U.UserId, U.UserName, U.FullName ,STT.StatusId, STT.StatusName, R.RoleId, R.RoleName, USM.StoreId, ST.StoreName FROM tblUser U
         JOIN tblStatus STT ON U.StatusId != 2 AND STT.StatusId = U.StatusId
         JOIN tblRole R ON R.RoleId = U.RoleId
         LEFT JOIN tblUserStoreMapping USM ON USM.UserId = U.UserId AND USM.StatusId = 1
+        LEFT JOIN tblStore ST ON USM.StoreId = ST.StoreId
         WHERE U.UserName = #{username} AND U.Password = #{password}
     </select>
     <resultMap id="getAccountInformation" type="AccountDTO">
@@ -29,5 +30,7 @@
         <result property="statusName" column="StatusName"/>
         <result property="roleId" column="RoleId"/>
         <result property="roleName" column="RoleName"/>
+        <result property="storeId" column="StoreId"/>
+        <result property="storeName" column="StoreName"/>
     </resultMap>
 </mapper>

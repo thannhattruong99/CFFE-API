@@ -100,11 +100,22 @@ public class CameraService extends BaseService {
     }
 
     public ResponseCameraDetailForm getCameraDetail(RequestCameraDetailForm requestForm, AuthorDTO authorDTO){
-        ResponseCameraDetailForm responseForm = new ResponseCameraDetailForm();
+        ResponseCameraDetailForm responseForm = null;
         CameraDTO cameraDTO = new CameraDTO();
-        convertRequestCameraDetailFormToCameraDTO(requestForm, cameraDTO, authorDTO);
+        int statusAuthor = checkAuthor(authorDTO);
+        convertRequestCameraDetailFormToCameraDTO(requestForm, cameraDTO);
         try {
-            responseForm = cameraDAO.getCameraDetailById(cameraDTO);
+            String storeId = cameraDAO.getStoreIdByCamera(cameraDTO);
+            if ((ADMIN == statusAuthor) || (StringUtils.isEmpty(storeId))) {
+                responseForm = cameraDAO.getCameraDetailById(cameraDTO);
+            } else {
+                if (authorDTO.getStoreId().equalsIgnoreCase(storeId)) {
+                    responseForm = cameraDAO.getCameraDetailById(cameraDTO);
+                } else {
+                    responseForm = new ResponseCameraDetailForm();
+                    responseForm.setErrorCodes(getError(MessageConstant.MSG_120));
+                }
+            }
         }catch (PersistenceException e){
             logger.error("Error at CameraService: " + e.getMessage());
         }
@@ -204,11 +215,7 @@ public class CameraService extends BaseService {
         return responseForm;
     }
 
-    private void convertRequestCameraDetailFormToCameraDTO(RequestCameraDetailForm requestForm, CameraDTO cameraDTO, AuthorDTO authorDTO){
-        cameraDTO.setStoreId(requestForm.getStoreId());
-        if(authorDTO != null){
-            cameraDTO.setStoreId(authorDTO.getStoreId());
-        }
+    private void convertRequestCameraDetailFormToCameraDTO(RequestCameraDetailForm requestForm, CameraDTO cameraDTO){
         cameraDTO.setCameraId(requestForm.getCameraId());
     }
 }

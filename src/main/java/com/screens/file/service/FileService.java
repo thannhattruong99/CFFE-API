@@ -122,9 +122,4 @@ public class FileService extends BaseService {
         System.out.println("Durration (s): " + mhb.getDuration() / mhb.getTimescale());
     }
 
-    private List<String> getError(String errorCode){
-        List<String> errorList = new ArrayList<>();
-        errorList.add(errorCode);
-        return errorList;
-    }
 }
