@@ -52,6 +52,7 @@ public class StackDAO extends BaseDAO {
 
     public boolean addProduct(StackDTO stackDTO) {
         try{
+            openConnection();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addProduct",stackDTO) > 0){
                 this.sqlSession.commit();
                 return true;
@@ -94,6 +95,7 @@ public class StackDAO extends BaseDAO {
 
     public boolean removeCamera(StackDTO stackDTO) {
         try{
+            openConnection();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addNewRecordMapping",stackDTO) > 0){
                 if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateCameraPending",stackDTO) > 0){
                     if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateStackPending",stackDTO) > 0){
