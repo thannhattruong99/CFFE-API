@@ -81,6 +81,9 @@ public class CameraController {
             errorCodes.add(MSG_009);
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
+        if (responseForm.getErrorCodes() != null) {
+            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
+        }
         return ResponseSupporter.responseResult(responseForm);
     }
 

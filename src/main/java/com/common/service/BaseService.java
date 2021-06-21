@@ -62,4 +62,10 @@ public class BaseService {
         errorMsg.add(messCode);
         response.setErrorCodes(errorMsg);
     }
+
+    public List<String> getError(String errorCode){
+        List<String> errorList = new ArrayList<>();
+        errorList.add(errorCode);
+        return errorList;
+    }
 }

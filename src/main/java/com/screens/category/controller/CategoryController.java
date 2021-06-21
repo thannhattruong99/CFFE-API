@@ -53,8 +53,7 @@ public class CategoryController {
     @GetMapping(value = "/categories")
     public String getCategoryList(
             @Validated RequestGetCategoryListForm requestForm,
-            BindingResult result,
-            HttpServletRequest request){
+            BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }

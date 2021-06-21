@@ -15,11 +15,21 @@ public class VideoDAO extends BaseDAO {
     }
 
     public ResponseCountVideosForm getVideoCountList(VideoDTO videoDTO) {
-        return sqlSession.selectOne("com.screens.video.dao.VidDAO.getVideoCountList",videoDTO);
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.video.dao.VidDAO.getVideoCountList",videoDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
     public ResponseEmotionVideosForm getVideoEmotionList(VideoDTO videoDTO) {
-        return sqlSession.selectOne("com.screens.video.dao.VidDAO.getVideoEmotionList",videoDTO);
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.video.dao.VidDAO.getVideoEmotionList",videoDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
 }

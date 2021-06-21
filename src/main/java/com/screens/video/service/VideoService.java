@@ -122,12 +122,6 @@ public class VideoService extends BaseService {
         return videoDTO;
     }
 
-    private List<String> getError(String errorCode){
-        List<String> errorList = new ArrayList<>();
-        errorList.add(errorCode);
-        return errorList;
-    }
-
     private String getTime(int dayBefore) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, dayBefore);

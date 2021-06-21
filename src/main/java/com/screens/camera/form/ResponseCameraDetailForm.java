@@ -1,5 +1,7 @@
 package com.screens.camera.form;
 
+import java.util.List;
+
 public class ResponseCameraDetailForm {
     private String cameraId;
     private String cameraName;
@@ -20,8 +22,17 @@ public class ResponseCameraDetailForm {
     private String storeId;
     private String storeName;
     private String storeImage;
+    private List<String> errorCodes;
 
     public ResponseCameraDetailForm() {
+    }
+
+    public List<String> getErrorCodes() {
+        return errorCodes;
+    }
+
+    public void setErrorCodes(List<String> errorCodes) {
+        this.errorCodes = errorCodes;
     }
 
     public String getReasonInactive() {

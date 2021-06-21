@@ -12,8 +12,17 @@ public class ResponseLoginForm implements Serializable {
     private int roleId;
     private String roleName;
     private String storeId;
+    private String storeName;
 
     public ResponseLoginForm() {
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public String getToken() {

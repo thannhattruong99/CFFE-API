@@ -15,75 +15,121 @@ public class ProductDAO extends BaseDAO {
     }
 
     public ResponseProductDetailForm getProductDetail(ProductDTO productDTO) {
-        return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductDetail",productDTO);
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductDetail",productDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
     public ResponseProductListForm getProductList(ProductDTO productDTO) {
-        return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductList",productDTO);
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductList",productDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
     public boolean createProduct(ProductDTO productDTO) {
-        if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.createProduct",productDTO) > 0){
-            System.out.println("id =========== "+productDTO.getProductId());
-//            this.sqlSession.commit();
-            if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.productAddCategory",productDTO) > 0){
-                this.sqlSession.commit();
-                return true;
+        try{
+            openConnection();
+            if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.createProduct",productDTO) > 0){
+                if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.productAddCategory",productDTO) > 0){
+                    this.sqlSession.commit();
+                    return true;
+                }
             }
+            return false;
+        }finally {
+            closeConnection();
         }
-        return false;
     }
 
     public boolean checkProductExist(ProductDTO productDTO) {
-        ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkProductExist",productDTO);
-        if(rs.getTotalOfRecord() <= 0){
-            return false;
+        try {
+            openConnection();
+            ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkProductExist",productDTO);
+            if(rs.getTotalOfRecord() <= 0){
+                return false;
+            }
+            return true;
+        }finally {
+            closeConnection();
         }
-        return true;
     }
 
     public ResponseProductDetailForm getProductStatus(ProductDTO productDTO) {
-        return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductStatus",productDTO);
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductStatus",productDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
     public boolean checkAnyStackHaveProduct(ProductDTO productDTO) {
-        ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkAnyStackHaveProduct",productDTO);
-        if(rs.getTotalOfRecord() <= 0){
-            return false;
+        try{
+            openConnection();
+            ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkAnyStackHaveProduct",productDTO);
+            if(rs.getTotalOfRecord() <= 0){
+                return false;
+            }
+            return true;
+        }finally {
+            closeConnection();
         }
-        return true;
     }
 
     public int checkCategoriesValid(ProductDTO productDTO) {
-        ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkCategoriesValid",productDTO);
-        System.out.println("===========" + rs.getTotalOfRecord());
-        return rs.getTotalOfRecord();
+        try{
+            openConnection();
+            ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkCategoriesValid",productDTO);
+            return rs.getTotalOfRecord();
+        }finally {
+            closeConnection();
+        }
     }
 
     public boolean changeStatus(ProductDTO productDTO) {
-        if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.changeStatus",productDTO) > 0){
-            this.sqlSession.commit();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean updateInfo(ProductDTO productDTO) {
-        if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.updateInfo",productDTO) > 0){
-            this.sqlSession.commit();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean addCategories(ProductDTO productDTO) {
-        if(sqlSession.delete("com.screens.product.dao.sql.ProductDAO.removeCategories",productDTO) > 0){
-            if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.addCategories",productDTO) > 0){
+        try {
+            openConnection();
+            if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.changeStatus",productDTO) > 0){
                 this.sqlSession.commit();
                 return true;
             }
-
+            return false;
+        }finally {
+            closeConnection();
         }
-        return false;
+    }
+
+    public boolean updateInfo(ProductDTO productDTO) {
+        try {
+            openConnection();
+            if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.updateInfo",productDTO) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
+        }
+    }
+
+    public boolean addCategories(ProductDTO productDTO) {
+        try{
+            openConnection();
+            if(sqlSession.delete("com.screens.product.dao.sql.ProductDAO.removeCategories",productDTO) > 0){
+                if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.addCategories",productDTO) > 0){
+                    this.sqlSession.commit();
+                    return true;
+                }
+            }
+            return false;
+        }finally {
+            closeConnection();
+        }
     }
 }

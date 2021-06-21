@@ -115,85 +115,6 @@
         LIMIT #{offSet}, #{fetchNext}
 
 
-
-<!--        SELECT TR.totalOfRecord, Camera.CameraId, Camera.CameraName, Camera.ImageURL, Camera.IpAddress, Camera.StoreId, Camera.StoreName, Camera.UpdatedTime, Camera.StatusId, Camera.StatusName-->
-<!--        FROM-->
-<!--        (SELECT COUNT(TR.CameraId) AS totalOfRecord FROM-->
-<!--        (SELECT DISTINCT(Camera.CameraId) FROM-->
-<!--        (SELECT C.CameraId, C.CameraName, ST.StoreId-->
-<!--        FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId-->
-<!--        LEFT JOIN tblStackProductCameraMapping-->
-<!--        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1-->
-<!--        LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2-->
-<!--        LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2-->
-<!--        LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1-->
-<!--        LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2-->
-<!--        UNION-->
-<!--        SELECT C.CameraId, C.CameraName, ST2.StoreId-->
-<!--        FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId-->
-<!--        LEFT JOIN tblStackProductCameraMapping-->
-<!--        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1-->
-<!--        LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2-->
-<!--        LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2-->
-<!--        LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1-->
-<!--        LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2) AS Camera-->
-<!--            <where>-->
-<!--                <if test="storeId != null">-->
-<!--                    Camera.StoreId = #{storeId}-->
-<!--                </if>-->
-<!--                <if test="cameraName != null">-->
-<!--                    AND Camera.CameraName like '%' #{cameraName} '%'-->
-<!--                </if>-->
-<!--            </where>-->
-<!--        ) AS TR) TR,-->
-
-<!--        (SELECT DISTINCT(Camera.CameraId), Camera.CameraName, Camera.ImageURL, Camera.IpAddress, Camera.StoreId, Camera.StoreName, Camera.UpdatedTime, Camera.StatusId, Camera.StatusName-->
-<!--        FROM-->
-<!--        (SELECT C.CameraId, C.CameraName, C.ImageURL, C.IPAddress, C.TypeDetect, ST.StoreId, ST.StoreName, C.UpdatedTime, C.StatusId, STT.StatusName-->
-<!--        FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId-->
-<!--        JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 2-->
-<!--        LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2-->
-<!--        LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2-->
-<!--        LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1-->
-<!--        LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2-->
-<!--        UNION-->
-<!--        SELECT C.CameraId, C.CameraName, C.ImageURL, C.IPAddress, C.TypeDetect, ST2.StoreId, ST2.StoreName,C.UpdatedTime, C.StatusId, STT.StatusName-->
-<!--        FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId-->
-<!--        LEFT JOIN tblStackProductCameraMapping-->
-<!--        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 1-->
-<!--        LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2-->
-<!--        LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2-->
-<!--        LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1-->
-<!--        LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2-->
-<!--        WHERE C.CameraId NOT IN (SELECT C.CameraId-->
-<!--        FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId-->
-<!--        JOIN tblStackProductCameraMapping-->
-<!--        SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1 AND C.TypeDetect = 2-->
-<!--        JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2-->
-<!--        LEFT JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2-->
-<!--        LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1-->
-<!--        LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1-->
-<!--        LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2)-->
-<!--            ) AS Camera) AS Camera-->
-<!--         <where>-->
-<!--             <if test="storeId != null">-->
-<!--                 Camera.StoreId = #{storeId}-->
-<!--             </if>-->
-<!--             <if test="cameraName != null">-->
-<!--                 AND Camera.CameraName like '%' #{cameraName} '%'-->
-<!--             </if>-->
-<!--         </where>-->
-<!--         ORDER BY Camera.UpdatedTime DESC-->
-<!--         LIMIT #{offSet}, #{fetchNext}-->
     </select>
     <insert id="createCamera">
         INSERT INTO tblCamera(CameraName, ImageURL, IPAddress, RTSPString, TypeDetect, CreatedTime, UpdatedTime, StatusId)
@@ -224,69 +145,98 @@
     </select>
     <select id="getCameraDetailById" resultMap="getCameraDetailById">
         SELECT
-        C.CameraId,
-        C.CameraName,
-        C.ImageURL,
-        C.IPAddress,
-        C.RTSPString,
-        C.TypeDetect,
-        C.UpdatedTime,
-        C.CreatedTime,
-        C.StatusId,
-        STT.StatusName,
-        C.ReasonInactive,
-        STK.StackId,
-        STK.Position,
-        SH.ShelfId AS ShelfId,
-        SH.ShelfName AS ShelfName,
-        SPCM.AddedCameraTime,
-        ST.StoreId,
-        ST.StoreName,
-        ST.ImageURL AS StoreImage
+            C.CameraId,
+            C.CameraName,
+            C.ImageURL,
+            C.IPAddress,
+            C.RTSPString,
+            C.TypeDetect,
+            C.UpdatedTime,
+            C.CreatedTime,
+            C.StatusId,
+            STT.StatusName,
+            C.ReasonInactive,
+            STK.StackId,
+            STK.Position,
+            SH.ShelfId AS ShelfId,
+            SH.ShelfName AS ShelfName,
+            SPCM.AddedCameraTime,
+            ST.StoreId,
+            ST.StoreName,
+            ST.ImageURL AS StoreImage
         FROM tblCamera C
-        JOIN tblStatus STT ON C.StatusId = STT.StatusId
-        LEFT JOIN tblStackProductCameraMapping SPCM
-        ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
-        LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
-        LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
-        JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2 AND ST.StoreId IS NOT NULL
+                 JOIN tblStatus STT ON C.StatusId = STT.StatusId
+                 LEFT JOIN tblStackProductCameraMapping SPCM
+                           ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
+                 LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
+                 LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
+         JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2 AND ST.StoreId IS NOT NULL
         WHERE C.CameraId = #{cameraId}
-        <if test="storeId != null">
-            AND ST.StoreId = #{storeId}
-        </if>
-
         UNION ALL
-
         SELECT
-        C.CameraId,
-        C.CameraName,
-        C.ImageURL,
-        C.IPAddress,
-        C.RTSPString,
-        C.TypeDetect,
-        C.UpdatedTime,
-        C.CreatedTime,
-        C.StatusId,
-        STT.StatusName,
-        C.ReasonInactive,
-        '' AS StackId,
-        '' AS Position,
-        SH2.ShelfId,
-        SH2.ShelfName,
-        SCM.AddedTime,
-        ST2.StoreId,
-        ST2.StoreName,
-        ST2.ImageURL AS StoreImage
+            C.CameraId,
+            C.CameraName,
+            C.ImageURL,
+            C.IPAddress,
+            C.RTSPString,
+            C.TypeDetect,
+            C.UpdatedTime,
+            C.CreatedTime,
+            C.StatusId,
+            STT.StatusName,
+            C.ReasonInactive,
+            '' AS StackId,
+            '' AS Position,
+    SH2.ShelfId,
+    SH2.ShelfName,
+    SCM.AddedTime,
+    ST2.StoreId,
+    ST2.StoreName,
+    ST2.ImageURL AS StoreImage
         FROM tblCamera C
-        JOIN tblStatus STT ON C.StatusId = STT.StatusId
-        LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1
-        LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1
-        LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2 AND ST2.StoreId IS NOT NULL
+            JOIN tblStatus STT ON C.StatusId = STT.StatusId
+            LEFT JOIN tblShelfCameraMapping SCM ON C.CameraId = SCM.CameraId AND SCM.StatusId = 1
+            LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1
+            LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2 AND ST2.StoreId IS NOT NULL
         WHERE C.CameraId = #{cameraId}
-        <if test="storeId != null">
-            AND ST2.StoreId = #{storeId}
-        </if>
+          AND C.CameraId NOT IN (
+            SELECT
+            C.CameraId
+            FROM tblCamera C
+            JOIN tblStatus STT ON C.StatusId = STT.StatusId
+            LEFT JOIN tblStackProductCameraMapping SPCM
+            ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
+            LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
+            LEFT JOIN tblShelf SH ON STK.ShelfId = SH.ShelfId AND SH.StatusId != 2
+            JOIN tblStore ST ON SH.StoreId = ST.StoreId AND ST.StatusId != 2 AND ST.StoreId IS NOT NULL
+            WHERE C.CameraId = #{cameraId}
+            )
     </select>
+
+
+    <select id="getStoreIdByShelfMapping" resultType="java.lang.String">
+        SELECT TS.StoreId
+        FROM   tblCamera TC
+                   LEFT JOIN tblShelfCameraMapping TSCM ON (TC.CameraId = TSCM.CameraId AND TSCM.StatusId = 1 )
+                   LEFT JOIN tblShelf TS ON (TS.ShelfId = TSCM.ShelfId)
+        WHERE TC.CameraId = #{cameraId}
+    </select>
+
+    <select id="getStoreIdByStackMapping" resultType="java.lang.String">
+        SELECT TS.StoreId
+        FROM   tblCamera TC
+                   LEFT JOIN tblStackProductCameraMapping TSCM ON (TC.CameraId = TSCM.CameraId AND TSCM.StatusId = 1)
+                   LEFT JOIN tblStack TSS ON (TSS.StackId = TSCM.StackId)
+                   LEFT JOIN tblShelf TS ON (TS.ShelfId = TSS.ShelfId)
+        WHERE TC.CameraId = #{cameraId}
+    </select>
+
+
+
+
+
+
+
     <resultMap id="getAvailableCameraList" type="ResponseAvailableCameraListForm">
         <result property="totalOfRecord" column="totalOfRecord"/>
         <collection property="cameras" ofType="AvailableCameraListResponseSupporter">
@@ -333,4 +283,6 @@
         <result property="storeName" column="StoreName"/>
         <result property="storeImage" column="StoreImage"/>
     </resultMap>
+
+
 </mapper>

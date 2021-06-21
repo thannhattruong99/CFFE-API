@@ -16,51 +16,87 @@ public class CategoryDAO extends BaseDAO {
     }
 
     public ResponseCategoryDetailForm getCategoryDetail(CategoryDTO categoryDTO) {
-        return sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.getCategoryDetail",categoryDTO);
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.getCategoryDetail",categoryDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
     public ResponseCategoryListForm getCategoryList(CategoryDTO categoryDTO) {
-        return sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.getCategoryList",categoryDTO);
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.getCategoryList",categoryDTO);
+
+        }finally {
+            closeConnection();
+        }
     }
 
     public boolean createCategory(CategoryDTO categoryDTO) {
-        if(sqlSession.insert("com.screens.category.dao.sql.CategoryDAO.createCategory",categoryDTO) > 0){
-            this.sqlSession.commit();
-            return true;
+        try{
+            openConnection();
+            if(sqlSession.insert("com.screens.category.dao.sql.CategoryDAO.createCategory",categoryDTO) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
         }
-        return false;
     }
 
     public boolean checkHaveProductUsing(CategoryDTO categoryDTO){
-        CategoryDTO resultDAO = sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.checkProduct",categoryDTO);
-        if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
-            return false;
+        try{
+            openConnection();
+            CategoryDTO resultDAO = sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.checkProduct",categoryDTO);
+            if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
+                return false;
+            }
+            return true;
+        }finally {
+            closeConnection();
         }
-        return true;
     }
 
     public boolean checkCategoryExist(CategoryDTO categoryDTO){
-        CategoryDTO resultDAO = sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.checkCategoryExist",categoryDTO);
-        if(resultDAO.getTotalOfRecord() <= 0){
-            return false;
+        try{
+            openConnection();
+            CategoryDTO resultDAO = sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.checkCategoryExist",categoryDTO);
+            if(resultDAO.getTotalOfRecord() <= 0){
+                return false;
+            }
+            return true;
+        }finally {
+            closeConnection();
         }
-        return true;
+
     }
 
     public boolean changeStatus(CategoryDTO categoryDTO) {
-        if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.changeStatus",categoryDTO) > 0){
-            this.sqlSession.commit();
-            return true;
+        try{
+            openConnection();
+            if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.changeStatus",categoryDTO) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
         }
-        return false;
     }
 
     public boolean updateInfo(CategoryDTO categoryDTO) {
-        if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.updateInfo",categoryDTO) > 0){
-            this.sqlSession.commit();
-            return true;
+        try{
+            openConnection();
+            if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.updateInfo",categoryDTO) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
         }
-        return false;
     }
-
 }

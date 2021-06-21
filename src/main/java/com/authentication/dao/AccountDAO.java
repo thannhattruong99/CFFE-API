@@ -13,14 +13,24 @@ public class AccountDAO extends BaseDAO {
         super(idbHelper);
     }
 
-    public AccountDTO getAccountInformation(String userName){
-        AccountDTO result = sqlSession.selectOne("AccountDAO.getAccountInformation", userName);
-        return result;
+    public AccountDTO getAccountInformation(String userName) {
+        try {
+            openConnection();
+            return sqlSession.selectOne("AccountDAO.getAccountInformation", userName);
+        }finally {
+            closeConnection();
+        }
     }
 
+
+
     public ResponseLoginForm login(RequestLoginForm request){
-        ResponseLoginForm result = sqlSession.selectOne("AccountDAO.login", request);
-        return result;
+        try{
+            openConnection();
+            return sqlSession.selectOne("AccountDAO.login", request);
+        }finally {
+            closeConnection();
+        }
     }
 
 }
