@@ -1,30 +1,30 @@
 package com.screens.file.dto;
 
 public class Notification {
-    private String name;
-    private int price;
+    private String message;
+    private int status;
 
     public Notification() {
     }
 
-    public Notification(String requestId, int price) {
-        this.name = requestId;
-        this.price = price;
+    public Notification(String message, int status) {
+        this.message = message;
+        this.status = status;
     }
 
-    public String getName() {
-        return name;
+    public String getMessage() {
+        return message;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public int getPrice() {
-        return price;
+    public int getStatus() {
+        return status;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

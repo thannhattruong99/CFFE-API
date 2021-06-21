@@ -6,6 +6,7 @@ public class EventCreator extends ApplicationEvent {
     private String eventId;
     private String eventName;
     private String relativeFilePath;
+    private int status;
     /**
      * Create a new {@code ApplicationEvent}.
      *
@@ -18,11 +19,24 @@ public class EventCreator extends ApplicationEvent {
         this.relativeFilePath = relativeFilePath;
     }
 
+    public EventCreator(Object source, String eventId) {
+        super(source);
+        this.eventId = eventId;
+    }
+
     public EventCreator(Object source, String eventId, String eventName, String relativeFilePath) {
         super(source);
         this.eventId = eventId;
         this.eventName = eventName;
         this.relativeFilePath = relativeFilePath;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getEventId() {

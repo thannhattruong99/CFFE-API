@@ -52,22 +52,14 @@ public class FileController {
         if(response.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(response.getErrorCodes());
         }
-        eventPublisher.publishEvent("HELLLLLLOOOOOOOO","/test/test.test");
+        // public event Detect
+        eventPublisher.publishEvent(response.getIdEvent());
         return ResponseSupporter.responseResult(response);
     }
-
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/upload-video-version2")
-    public String uploadVideo2() throws IOException {
-        String response = fileService.testVoid();
-        //http://localhost:9090/admin/manager/store/test-sse
-        return ResponseSupporter.responseResult(response);
-    }
-
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping( value = "/get-file-transaction", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    public Flux<FileTransaction> stockTransactionEvents(){
-        return fileTransactionService.getFileTransactions();
+    public Flux<FileTransaction> fileTransactionEvents(@RequestParam("eventId") String eventId){
+        return fileTransactionService.getFileTransactions(eventId);
     }
 }

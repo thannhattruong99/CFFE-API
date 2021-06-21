@@ -15,7 +15,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static com.util.PathConstant.*;
 
@@ -103,14 +105,10 @@ public class FileService extends BaseService {
             }
         });
         response.setFilePath(listOutputPath);
+        response.setIdEvent(UUID.randomUUID() + "-" + new Date());
         return response;
     }
 
-    public String testVoid(){
-        String temp = "aaaa";
-
-        return temp;
-    }
     private void getVideoProperties(String filePath) throws IOException {
         IsoFile isoFile = new IsoFile(filePath);
         MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();

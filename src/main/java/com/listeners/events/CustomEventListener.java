@@ -25,13 +25,23 @@ public class CustomEventListener {
     @Async
     @EventListener
     public void eventListener(EventCreator eventCreator) throws InterruptedException, IOException {
-//        Thread.sleep(1000);
-        System.out.println("111111111111111111111111111");
-        Thread.sleep(10000);
         if(eventCreatorMap == null){
             eventCreatorMap = new HashMap<>();
         }
-        System.out.println("222222222222222222222222222");
+        // upload file success => 11
+        eventCreator.setStatus(11);
+        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+
+        Thread.sleep(10000);
+
+        // detect thanh cong => 99
+        eventCreator.setStatus(99);
+        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+
+
+
+
+
 //        int count;
 //        if((count = PythonHelper.countPerson("videos/input/" + eventCreator.getRelativeFilePath(),
 //                "videos/output/" + eventCreator.getRelativeFilePath())) != 0){
@@ -45,5 +55,11 @@ public class CustomEventListener {
 
     }
 
+    public Map<String, EventCreator> getEventCreatorMap() {
+        return eventCreatorMap;
+    }
 
+    public void setEventCreatorMap(Map<String, EventCreator> eventCreatorMap) {
+        this.eventCreatorMap = eventCreatorMap;
+    }
 }

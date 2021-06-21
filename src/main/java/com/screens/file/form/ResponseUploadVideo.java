@@ -5,9 +5,20 @@ import java.util.List;
 
 public class ResponseUploadVideo implements Serializable {
     private List<String> filePath;
+
+    private String idEvent;
+
     private List<String> errorCodes;
 
     public ResponseUploadVideo() {
+    }
+
+    public String getIdEvent() {
+        return idEvent;
+    }
+
+    public void setIdEvent(String idEvent) {
+        this.idEvent = idEvent;
     }
 
     public List<String> getFilePath() {
