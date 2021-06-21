@@ -63,9 +63,7 @@ public class StackService extends BaseService {
         if (authorStatus == MANAGER_WITHIN_STORE) {
             StackDTO stackDTO = convertGetStackListByProductIdStoreIdFormToDTO(requestForm,authorDTO);
             try {
-                if (stackDAO.stackIsExistInStore(stackDTO)) {
-                    responseStackListForm = stackDAO.getStackListByProductIdStoreId(stackDTO);
-                }
+                responseStackListForm = stackDAO.getStackListByProductIdStoreId(stackDTO);
             } catch (PersistenceException e) {
                 logger.error("Error Message: " + e.getMessage());
             }
