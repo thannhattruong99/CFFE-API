@@ -25,6 +25,7 @@ public class StackDAO extends BaseDAO {
 
     public ResponseStackDetailForm getStackStatus(StackDTO stackDTO) {
         try{
+            openConnection();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackStatus",stackDTO);
         }finally {
             closeConnection();
@@ -33,6 +34,7 @@ public class StackDAO extends BaseDAO {
 
     public ResponseStackListForm getStackListByShelf(StackDTO stackDTO) {
         try{
+            openConnection();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByShelf",stackDTO);
         }finally {
             closeConnection();
@@ -41,6 +43,7 @@ public class StackDAO extends BaseDAO {
 
     public ResponseStackListForm getStackListByProductIdStoreId(StackDTO stackDTO) {
         try{
+            openConnection();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByProductIdStoreId",stackDTO);
         }finally {
             closeConnection();
