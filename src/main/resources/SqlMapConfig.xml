@@ -56,13 +56,13 @@
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
-            <dataSource type="POOLED">
+            <dataSource type="UNPOOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://35.247.184.122:3306/CFFA_Database?autoReconnect=true" />
+                <property name="url" value="jdbc:mysql://35.247.184.122:3306/CFFA_Database" />
                 <property name="username" value="luanhm" />
                 <property name="password" value="luanhm" />
-                <property name="poolPingQuery" value="/* ping */ SELECT 1"/>
-                <property name="poolPingEnabled" value="true"/>
+<!--                <property name="poolPingQuery" value="/* ping */ SELECT 1"/>-->
+<!--                <property name="poolPingEnabled" value="true"/>-->
             </dataSource>
         </environment>
     </environments>

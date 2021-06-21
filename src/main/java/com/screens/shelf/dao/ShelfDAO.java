@@ -16,95 +16,139 @@ public class ShelfDAO extends BaseDAO {
     }
 
     public ResponseShelfListForm getShelfList(ShelfDTO shelfDTO){
-        return sqlSession.selectOne("ShelfDAO.getShelves", shelfDTO);
+        try{
+            openConnection();
+            return sqlSession.selectOne("ShelfDAO.getShelves", shelfDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
     public ResponseShelfDetailForm getShelfDetail(ShelfDTO shelfDTO){
-        sqlSession.flushStatements();
-        return sqlSession.selectOne("ShelfDAO.getShelfDetail", shelfDTO);
+        try{
+            openConnection();
+            return sqlSession.selectOne("ShelfDAO.getShelfDetail", shelfDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
     public boolean createShelf(ShelfDTO shelfDTO){
+        try{
+            openConnection();
+            if(sqlSession.insert("ShelfDAO.createShelf", shelfDTO) > 0){
 
-        if(sqlSession.insert("ShelfDAO.createShelf", shelfDTO) > 0){
+                //set ShelfId into list of stack
+                for (StackDTO stack: shelfDTO.getStacks()) {
+                    stack.setShelfId(shelfDTO.getShelfId());
+                }
 
-            //set ShelfId into list of stack
-            for (StackDTO stack: shelfDTO.getStacks()) {
-                stack.setShelfId(shelfDTO.getShelfId());
+                if(sqlSession.insert("ShelfDAO.createStacks", shelfDTO.getStacks()) == shelfDTO.getStacks().size()){
+                    sqlSession.commit(true);
+                    return true;
+                }
             }
-
-            if(sqlSession.insert("ShelfDAO.createStacks", shelfDTO.getStacks()) == shelfDTO.getStacks().size()){
-                sqlSession.commit(true);
-                return true;
-            }
+            return false;
+        }finally {
+            closeConnection();
         }
-
-        return false;
     }
 
     public boolean updateShelf(ShelfDTO shelfDTO){
-        if(sqlSession.update("ShelfDAO.updateShelf", shelfDTO) > 0){
-            sqlSession.commit(true);
-            return true;
+        try{
+            openConnection();
+            if(sqlSession.update("ShelfDAO.updateShelf", shelfDTO) > 0){
+                sqlSession.commit(true);
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
         }
-        return false;
     }
 
     public ShelfDTO getStatusId(ShelfDTO shelfDTO){
-        return sqlSession.selectOne("ShelfDAO.getStatusId", shelfDTO);
+        try {
+            openConnection();
+            return sqlSession.selectOne("ShelfDAO.getStatusId", shelfDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
     public boolean updateShelfStatus(ShelfDTO shelfDTO){
-        if(sqlSession.update("ShelfDAO.updateShelfStatus", shelfDTO) > 0){
-            sqlSession.commit(true);
-            return true;
+        try{
+            openConnection();
+            if(sqlSession.update("ShelfDAO.updateShelfStatus", shelfDTO) > 0){
+                sqlSession.commit(true);
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
         }
-        return false;
     }
 
     public ShelfDTO getShelfStatus(ShelfDTO shelfDTO){
-        ShelfDTO result = sqlSession.selectOne("ShelfDAO.getShelfStatus", shelfDTO);
-        return result;
+        try{
+            openConnection();
+            return sqlSession.selectOne("ShelfDAO.getShelfStatus", shelfDTO);
+        }finally {
+            closeConnection();
+        }
     }
 
     public ShelfDTO getCameraStatus(ShelfDTO shelfDTO){
-        ShelfDTO result = sqlSession.selectOne("ShelfDAO.getCameraStatus", shelfDTO);
-        return result;
+        try {
+            openConnection();
+            return sqlSession.selectOne("ShelfDAO.getCameraStatus", shelfDTO);
+        }finally {
+            closeConnection();
+        }
+
     }
 
     public ShelfDTO getShelfCameraMappingStatus(ShelfDTO shelfDTO){
-        ShelfDTO result = sqlSession.selectOne("ShelfDAO.getShelfCameraMappingStatus", shelfDTO);
-        return result;
+        try{
+            openConnection();
+            return sqlSession.selectOne("ShelfDAO.getShelfCameraMappingStatus", shelfDTO);
+        }finally {
+            closeConnection();
+        }
+
     }
 
     public boolean addShelfCameraIntoShelf(ShelfDTO shelfDTO){
-        if(sqlSession.insert("ShelfDAO.createShelfCameraOnMapping", shelfDTO) > 0){
-            if(sqlSession.update("ShelfDAO.createShelfCameraOnCamera", shelfDTO) > 0){
-                if(sqlSession.update("ShelfDAO.createShelfCameraOnShelf", shelfDTO) > 0){
-                    sqlSession.commit(true);
-                    return true;
+        try{
+            openConnection();
+            if(sqlSession.insert("ShelfDAO.createShelfCameraOnMapping", shelfDTO) > 0){
+                if(sqlSession.update("ShelfDAO.createShelfCameraOnCamera", shelfDTO) > 0){
+                    if(sqlSession.update("ShelfDAO.createShelfCameraOnShelf", shelfDTO) > 0){
+                        sqlSession.commit(true);
+                        return true;
+                    }
                 }
             }
+            return false;
+        }finally {
+            closeConnection();
         }
-        return false;
     }
 
     public boolean removeShelfCameraFromShelf(ShelfDTO shelfDTO){
-
-        if (sqlSession.update("ShelfDAO.removeShelfCameraFromMapping", shelfDTO) > 0){
-            if (sqlSession.update("ShelfDAO.removeShelfCameraFromCamera", shelfDTO) > 0){
-                if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
-                    sqlSession.commit(true);
-                    return true;
+        try{
+            openConnection();
+            if (sqlSession.update("ShelfDAO.removeShelfCameraFromMapping", shelfDTO) > 0){
+                if (sqlSession.update("ShelfDAO.removeShelfCameraFromCamera", shelfDTO) > 0){
+                    if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
+                        sqlSession.commit(true);
+                        return true;
+                    }
                 }
             }
+            return false;
+        }finally {
+            closeConnection();
         }
-
-        return false;
-    }
-
-    public boolean insertHotSpot(){
-
-        return false;
     }
 }

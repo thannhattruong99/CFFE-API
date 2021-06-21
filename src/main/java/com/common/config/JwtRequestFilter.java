@@ -56,7 +56,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(AUTHORIZATION);
-
         String username = null;
         String jwtToken = null;
         String uri = request.getRequestURI();
@@ -84,7 +83,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             AccountDTO accountDTO = this.accountService.loadUserByUsername(username);
-
             // if token is valid configure Spring Security to manually set
             // authentication
             if (jwtTokenHelper.validateToken(jwtToken, accountDTO)) {
