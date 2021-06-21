@@ -2,15 +2,20 @@ package com.screens.file.controller;
 
 
 import com.listeners.events.EventPublisher;
+import com.screens.file.dto.FileTransaction;
 import com.screens.file.form.ResponseUploadImage;
 import com.screens.file.form.ResponseUploadVideo;
 import com.screens.file.service.FileService;
+import com.screens.file.service.FileTransactionService;
+import com.screens.shelf.dto.StockTransaction;
 import com.util.ResponseSupporter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 
@@ -26,6 +31,9 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private FileTransactionService fileTransactionService;
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/upload-image")
@@ -56,4 +64,10 @@ public class FileController {
         return ResponseSupporter.responseResult(response);
     }
 
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping( value = "/get-file-transaction", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    public Flux<FileTransaction> stockTransactionEvents(){
+        return fileTransactionService.getFileTransactions();
+    }
 }

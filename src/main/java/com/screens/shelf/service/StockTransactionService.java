@@ -21,10 +21,10 @@ public class StockTransactionService {
     List<String> stockNames = Arrays.asList("Vietcombank,VietinBank,BIDV,PVCombank".split(","));
 
 
-    public void init(){
-        String uuid = UUID.randomUUID().toString();
-        eventPublisher.publishEvent("Upload file", uuid);
-    }
+//    public void init(){
+//        String uuid = UUID.randomUUID().toString();
+//        eventPublisher.publishEvent("Upload file", uuid);
+//    }
 
     public Flux<StockTransaction> getStockTransactions() {
         Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
