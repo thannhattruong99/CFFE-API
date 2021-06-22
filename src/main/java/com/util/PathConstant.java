@@ -1,7 +1,7 @@
 package com.util;
 
 public class PathConstant {
-    public final static String RESOURCE_PATH = "/src/main/resources/";
+    public final static String RESOURCE_PATH = "/target/classes/";
     public final static String IMAGE_FOLDER_CLOUD = "images/";
     public final static String IMAGE_FOLDER_SERVER = "images/";
     public final static String VIDEO_FOLDER_CLOUD = "videos/";
@@ -14,4 +14,5 @@ public class PathConstant {
     public static final String MSG_RELATIVE_PATH = "messages/msg";
     public static final String REXP_RESOURCE_PATH = "/resources/**";
     public static final String REXP_ALL_PATH = "/**";
+    public static final String DEFAULT_INCLUDE_PATTERN = "http://35.240.143.111:9090/*";
 }
