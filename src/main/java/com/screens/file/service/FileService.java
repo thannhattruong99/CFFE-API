@@ -3,7 +3,12 @@ package com.screens.file.service;
 import com.common.service.BaseService;
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.*;
+import com.listeners.events.CustomEventListener;
+import com.listeners.events.EventCreator;
 import com.listeners.events.EventPublisher;
+import com.screens.file.dto.FileTransaction;
+import com.screens.file.dto.Notification;
+import com.screens.file.dto.VideoProperty;
 import com.screens.file.form.ResponseUploadImage;
 import com.screens.file.form.ResponseUploadVideo;
 import com.util.FileHelper;
@@ -13,20 +18,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Flux;
+import reactor.util.function.Tuple2;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static com.util.PathConstant.*;
 
 @Service
 public class FileService extends BaseService {
 
+    @Autowired
+    EventPublisher eventPublisher;
 
+    @Autowired
+    CustomEventListener customEventListener;
 
-    // upload image
+    /**
+     * Upload Image To Storage
+     * @param file Image
+     * @return ResponseUploadImage
+     */
     public ResponseUploadImage uploadImageToStorage(MultipartFile file) {
         ResponseUploadImage response = new ResponseUploadImage();
 
@@ -61,7 +78,13 @@ public class FileService extends BaseService {
         return response;
     }
 
-    public ResponseUploadVideo uploadVideoToStorage(MultipartFile[] files) throws IOException {
+    /**
+     * Upload Video To Server
+     * @param files List video
+     * @return List of path file on server
+     * @throws IOException
+     */
+    public ResponseUploadVideo uploadVideoToServer(MultipartFile[] files) throws IOException {
         ResponseUploadVideo response = new ResponseUploadVideo();
 
         // check size file
@@ -79,45 +102,68 @@ public class FileService extends BaseService {
         }
 
         // upload file to server
-        List<String> listFileName = new ArrayList<>();
+        List<VideoProperty> listVideoProperty = new ArrayList<>();
         for(MultipartFile file : files) {
             String fileName = FileHelper.storeFileOnServer(file, RESOURCE_PATH + VIDEO_FOLDER_SERVER);
             if (fileName.isEmpty()) {
                 response.setErrorCodes(getError(MessageConstant.MSG_114));
                 return response;
             } else {
-                listFileName.add(fileName);
-                String filePath = FileHelper.getResourcePath() + VIDEO_FOLDER_SERVER + fileName;
-                getVideoProperties(filePath);
+                VideoProperty videoProperty = new VideoProperty();
+                String originalFileName = file.getOriginalFilename();
+                getVideoProperties(videoProperty, fileName, originalFileName);
+                listVideoProperty.add(videoProperty);
             }
         }
-
-        // up file on server upload to storage
-        List<String> listOutputPath = new ArrayList<>();
-        listFileName.forEach(fileName -> {
-            try {
-                String outputPath = GCPHelper.uploadFile(VIDEO_FOLDER_SERVER + fileName,
-                        VIDEO_FOLDER_CLOUD + StringUtils.cleanPath(fileName));
-                listOutputPath.add(outputPath);
-                FileHelper.deleteFile(VIDEO_FOLDER_SERVER + fileName);
-            } catch (IOException e) {
-                System.out.println("Upload video taong: " + e.getMessage());
-            }
-        });
-        response.setFilePath(listOutputPath);
+        response.setVideoPropertyList(listVideoProperty);
         response.setIdEvent(UUID.randomUUID() + "-" + new Date());
         return response;
     }
 
-    private void getVideoProperties(String filePath) throws IOException {
+    private void getVideoProperties(VideoProperty videoProperty, String fileName, String originalFileName) throws IOException {
+        String filePath = FileHelper.getResourcePath() + VIDEO_FOLDER_SERVER + fileName;
         IsoFile isoFile = new IsoFile(filePath);
         MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();
-        System.out.println("FilePath: " + filePath);
-        System.out.println("Type: " + mhb.getType());
-        System.out.println("Current Time: " + mhb.getCurrentTime());
-        System.out.println("Creation Time: " + mhb.getCreationTime());
-        System.out.println("Modified Time: " + mhb.getModificationTime());
-        System.out.println("Durration (s): " + mhb.getDuration() / mhb.getTimescale());
+        videoProperty.setVideoName(fileName);
+        DateFormat dateFormat = new SimpleDateFormat(DAY_TIME_FORMAT);
+        videoProperty.setStartedTime(dateFormat.format(mhb.getCreationTime()));
+        videoProperty.setDuration((int)(mhb.getDuration() / mhb.getTimescale()));
+        videoProperty.setStatusId(ACTIVE_STATUS);
+        //  GET ShelfCameraMappingId, StackProductCameraMappingId FORM NAME
+        String typeVideo = originalFileName.substring(0,originalFileName.lastIndexOf("_"));
+        String oriName = originalFileName.substring(originalFileName.lastIndexOf("_")+1,originalFileName.lastIndexOf("."));
+        if ("1".equalsIgnoreCase(typeVideo)){
+            videoProperty.setShelfCameraMappingId(oriName);
+        }
+        if ("2".equalsIgnoreCase(typeVideo)){
+            videoProperty.setStackProductCameraMappingId(oriName);
+        }
     }
 
+
+    public Flux<FileTransaction> getFileTransactions(String eventId) {
+        Flux<Long> interval = Flux.interval(Duration.ofSeconds(2));
+        // Lay data moi
+        EventCreator data = customEventListener.getEventCreatorMap().get(eventId);
+
+        Flux<FileTransaction> fileTransactionFlux = Flux.fromStream(
+                // generate new data.
+                Stream.generate(() -> new FileTransaction(getRandomUser(),
+                        new Notification(data.getEventName(), data.getStatus()),
+                        new Date()))
+        );
+
+        if (data.getStatus() == 99) {
+            Map<String, EventCreator> eventCreatorMap = customEventListener.getEventCreatorMap();
+            eventCreatorMap.remove("test");
+            customEventListener.setEventCreatorMap(eventCreatorMap);
+        }
+        return Flux.zip(interval, fileTransactionFlux).map(Tuple2::getT2);
+    }
+
+
+    String getRandomUser() {
+        String users[] = "HieuHd,LuanNM,TruongNT,HuuDN".split(",");
+        return users[new Random().nextInt(users.length)];
+    }
 }

@@ -27,8 +27,10 @@ public class BaseService {
     protected static final String ACTIVE_STATUS_STR = "ACTIVE";
     protected static final String INACTIVE_STATUS_STR = "INACTIVE";
     protected static final String PENDING_STATUS_STR = "PENDING";
+    protected static final String DAY_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss";
     protected static final String DEFAULT_IMAGE = "https://storage.googleapis.com/capstone_storeage/images/default-image.jpg";
     private static final String DUPLICATE_ERROR_KEY = "Duplicate entry";
+
 
     public List<String> catchSqlException(String errorMsg){
         List<String> errorCodes = new ArrayList<>();

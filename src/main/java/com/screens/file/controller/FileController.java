@@ -5,9 +5,8 @@ import com.listeners.events.EventPublisher;
 import com.screens.file.dto.FileTransaction;
 import com.screens.file.form.ResponseUploadImage;
 import com.screens.file.form.ResponseUploadVideo;
+import com.screens.file.form.ResponseUploadVideoToServer;
 import com.screens.file.service.FileService;
-import com.screens.file.service.FileTransactionService;
-import com.screens.shelf.dto.StockTransaction;
 import com.util.ResponseSupporter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -32,9 +31,6 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
-    @Autowired
-    private FileTransactionService fileTransactionService;
-
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/upload-image")
     public String uploadImage(@RequestParam("file") MultipartFile file) {
@@ -48,18 +44,20 @@ public class FileController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/upload-video")
     public String uploadVideo(@RequestParam("file") MultipartFile[] files) throws IOException {
-        ResponseUploadVideo response = fileService.uploadVideoToStorage(files);
+        ResponseUploadVideo response = fileService.uploadVideoToServer(files);
         if(response.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(response.getErrorCodes());
         }
         // public event Detect
-        eventPublisher.publishEvent(response.getIdEvent());
-        return ResponseSupporter.responseResult(response);
+        eventPublisher.publishEvent(response.getIdEvent(),response.getVideoPropertyList());
+        ResponseUploadVideoToServer responseUploadVideoToServer = new ResponseUploadVideoToServer();
+        responseUploadVideoToServer.setEventId(response.getIdEvent());
+        return ResponseSupporter.responseResult(responseUploadVideoToServer);
     }
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping( value = "/get-file-transaction", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<FileTransaction> fileTransactionEvents(@RequestParam("eventId") String eventId){
-        return fileTransactionService.getFileTransactions(eventId);
+        return fileService.getFileTransactions(eventId);
     }
 }

@@ -5,10 +5,18 @@ public class VideoResponseSupporter {
     private String videoName;
     private String videoUrl;
     private String startedTime;
-    private String endedTime;
+    private int duration;
     private int statusId;
 
     public VideoResponseSupporter() {
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public String getVideoId() {
@@ -41,14 +49,6 @@ public class VideoResponseSupporter {
 
     public void setStartedTime(String startedTime) {
         this.startedTime = startedTime;
-    }
-
-    public String getEndedTime() {
-        return endedTime;
-    }
-
-    public void setEndedTime(String endedTime) {
-        this.endedTime = endedTime;
     }
 
     public int getStatusId() {
