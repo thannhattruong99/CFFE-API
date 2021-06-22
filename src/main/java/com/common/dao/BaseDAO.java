@@ -18,7 +18,7 @@ public class BaseDAO {
     }
 
     public void openConnection() {
-        this.sqlSession = idbHelper.makeConnection().openSession(ExecutorType.REUSE,TransactionIsolationLevel.READ_COMMITTED);
+        this.sqlSession = idbHelper.makeConnection().openSession(TransactionIsolationLevel.READ_COMMITTED);
     }
 
     public void closeConnection(){
