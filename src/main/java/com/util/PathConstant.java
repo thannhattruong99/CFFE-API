@@ -14,5 +14,5 @@ public class PathConstant {
     public static final String MSG_RELATIVE_PATH = "messages/msg";
     public static final String REXP_RESOURCE_PATH = "/resources/**";
     public static final String REXP_ALL_PATH = "/**";
-    public static final String DEFAULT_INCLUDE_PATTERN = "http://35.240.143.111:9090/*";
+    public static final String DEFAULT_INCLUDE_PATTERN = "http://35.240.143.111:9091/*";
 }
