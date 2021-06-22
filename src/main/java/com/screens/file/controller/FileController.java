@@ -56,7 +56,7 @@ public class FileController {
     }
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping( value = "/get-file-transaction", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    @GetMapping( value = "/get-file-transaction", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<FileTransaction> fileTransactionEvents(@RequestParam("eventId") String eventId){
         return fileService.getFileTransactions(eventId);
     }
