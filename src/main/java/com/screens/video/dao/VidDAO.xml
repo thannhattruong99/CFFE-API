@@ -8,7 +8,7 @@
                TV.VideoName,
                TV.VideoURL,
                TV.StartedTime,
-               TV.EndedTime,
+               TV.Duration,
                TV.StatusId,
                TS.ShelfId,
                TS.ShelfName,
@@ -62,7 +62,7 @@
                     <result property="videoName" column="VideoName"/>
                     <result property="videoUrl" column="VideoURL"/>
                     <result property="startedTime" column="StartedTime"/>
-                    <result property="endedTime" column="EndedTime"/>
+                    <result property="duration" column="Duration"/>
                     <result property="statusId" column="StatusId"/>
                 </collection>
             </collection>
@@ -76,7 +76,7 @@
                 TV.VideoName,
                 TV.VideoURL,
                 TV.StartedTime,
-                TV.EndedTime,
+                TV.Duration,
                 TV.StatusId,
                 TS.ShelfId,
                 TS.ShelfName,
@@ -126,10 +126,18 @@
                 <result property="videoName" column="VideoName"/>
                 <result property="videoUrl" column="VideoURL"/>
                 <result property="startedTime" column="StartedTime"/>
-                <result property="endedTime" column="EndedTime"/>
+                <result property="duration" column="Duration"/>
                 <result property="statusId" column="StatusId"/>
             </collection>
         </collection>
     </resultMap>
+
+    <insert id="insertVideoProperty" parameterType="EventCreator">
+        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,Duration,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values
+        <foreach collection="videoPropertyList" item="element" index="index" open="(" separator="),("  close=")">
+            #{element.videoName},#{element.videoUrl},#{element.startedTime},
+            #{element.duration},#{element.shelfCameraMappingId},#{element.stackProductCameraMappingId},#{element.statusId}
+        </foreach>
+    </insert>
 
 </mapper>

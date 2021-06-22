@@ -7,7 +7,7 @@ public class VideoDTO extends BaseDTO {
     private String videoName;
     private String videoUrl;
     private String startedTime;
-    private String endedTime;
+    private int duration;
     private int statusId;
     private String storeId;
     private int videoType;
@@ -17,6 +17,14 @@ public class VideoDTO extends BaseDTO {
     private String productId;
 
     public VideoDTO() {
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public String getProductId() {
@@ -97,14 +105,6 @@ public class VideoDTO extends BaseDTO {
 
     public void setStartedTime(String startedTime) {
         this.startedTime = startedTime;
-    }
-
-    public String getEndedTime() {
-        return endedTime;
-    }
-
-    public void setEndedTime(String endedTime) {
-        this.endedTime = endedTime;
     }
 
     public int getStatusId() {

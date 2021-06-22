@@ -135,7 +135,6 @@ public class FileHelper implements Serializable {
             return fileName;
         }
 
-
         // change file name by UUID
         // Copy file to the target location (Replacing existing file with the same name)
         try {

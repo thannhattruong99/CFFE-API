@@ -51,6 +51,8 @@
         <typeAlias alias="StoreEmotionResponseSupporter" type="com.screens.video.form.StoreEmotionResponseSupporter"/>
         <typeAlias alias="VideoResponseSupporter" type="com.screens.video.form.VideoResponseSupporter"/>
         <typeAlias alias="AccountDTO" type="com.authentication.dto.AccountDTO"/>
+        <typeAlias alias="EventCreator" type="com.listeners.events.EventCreator"/>
+        <typeAlias alias="VideoProperty" type="com.screens.file.dto.VideoProperty"/>
     </typeAliases>
 
     <environments default="development">
