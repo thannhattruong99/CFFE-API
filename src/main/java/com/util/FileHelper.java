@@ -153,7 +153,6 @@ public class FileHelper implements Serializable {
     }
 
     public static List<String> loadResource(String path){
-        System.out.println("PATH: " + path);
         List<String> result = new ArrayList<>();
         File file = null;
         Scanner myReader = null;
