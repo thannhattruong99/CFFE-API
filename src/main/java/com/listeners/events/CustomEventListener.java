@@ -38,24 +38,24 @@ public class CustomEventListener {
             eventCreatorMap = new HashMap<>();
         }
 
-        // TODO: detect video
-        // TODO: insert tblHotspot
-        eventCreator.setStatus(11);
-        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
-        Thread.sleep(10000);
-
-
-        // TODO: upload video moi => cloud
-        List<VideoProperty> videoPropertyList = uploadVideoDetectedToStorage(eventCreator);
-        // TODO: insert info video to db
-        eventCreator.setVideoPropertyList(videoPropertyList);
-        if (videoDAO.insertVideoProperty(eventCreator)){
-            eventCreator.setStatus(99);
-            eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
-        } else {
-            eventCreator.setStatus(-11);
-            eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
-        }
+//        // TODO: detect video
+//        // TODO: insert tblHotspot
+//        eventCreator.setStatus(11);
+//        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+//        Thread.sleep(10000);
+//
+//
+//        // TODO: upload video moi => cloud
+//        List<VideoProperty> videoPropertyList = uploadVideoDetectedToStorage(eventCreator);
+//        // TODO: insert info video to db
+//        eventCreator.setVideoPropertyList(videoPropertyList);
+//        if (videoDAO.insertVideoProperty(eventCreator)){
+//            eventCreator.setStatus(99);
+//            eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+//        } else {
+//            eventCreator.setStatus(-11);
+//            eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+//        }
 
 
 //        int count;
@@ -69,6 +69,11 @@ public class CustomEventListener {
 //            FileHelper.deleteFile("videos/output/" + eventCreator.getRelativeFilePath());
 //        }
 
+        eventCreator.setStatus(0);
+        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+        Thread.sleep(5000);
+        eventCreator.setStatus(1);
+        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
     }
 
     private List<VideoProperty> uploadVideoDetectedToStorage(EventCreator eventCreator) {
