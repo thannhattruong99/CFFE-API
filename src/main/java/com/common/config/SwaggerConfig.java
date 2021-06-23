@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.util.PathConstant.DEFAULT_INCLUDE_PATTERN;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
@@ -34,6 +33,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 public class SwaggerConfig {
     private final Logger log = LoggerFactory.getLogger(SwaggerConfig.class);
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String DEFAULT_INCLUDE_PATTERN = "http://localhost:9090/*";
 
     @Bean
     public Docket swaggerSpringfoxDocket() {
