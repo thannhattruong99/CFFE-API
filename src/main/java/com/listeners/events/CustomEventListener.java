@@ -33,7 +33,7 @@ public class CustomEventListener {
 
     @Async
     @EventListener
-    public void eventListener(EventCreator eventCreator) {
+    public void eventListener(EventCreator eventCreator) throws InterruptedException {
         if(eventCreatorMap == null){
             eventCreatorMap = new HashMap<>();
         }
