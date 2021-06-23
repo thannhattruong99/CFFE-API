@@ -37,6 +37,8 @@ public class CustomEventListener {
         if(eventCreatorMap == null){
             eventCreatorMap = new HashMap<>();
         }
+        eventCreator.setStatus(0);
+        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
 
         for (VideoProperty video: eventCreator.getVideoPropertyList()) {
             int count;
@@ -45,17 +47,17 @@ public class CustomEventListener {
                         video.getVideoName())) != 0){
 
 //                    GCPHelper.uploadImage(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + video.getVideoName());
-//                    FileHelper.deleteFile(FileHelper.getResourcePath() + INPUT_VIDEO_PATH + video.getVideoName());
-//                    FileHelper.deleteFile(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + video.getVideoName());
+
+                    FileHelper.deleteFile2(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + video.getVideoName());
                     video.setTotalPerson(count);
                 }
+                FileHelper.deleteFile2(FileHelper.getResourcePath() + INPUT_VIDEO_PATH + video.getVideoName());
             }catch (InterruptedException e) {
                 video.setStatusId(-1);
                 System.out.println("ERROR AT HERERER: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("ERROR AT HERE: " + e.getMessage());
             }
-//            catch (IOException e) {
-//                video.setStatusId(-1);
-//            }
         }
 
         for (VideoProperty video: eventCreator.getVideoPropertyList()) {
@@ -82,8 +84,7 @@ public class CustomEventListener {
 //            eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
 //        }
 
-        eventCreator.setStatus(0);
-        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+
         Thread.sleep(20000);
         eventCreator.setStatus(1);
         eventCreatorMap.put(eventCreator.getEventId(),eventCreator);

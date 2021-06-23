@@ -37,12 +37,11 @@ public class PythonHelper {
         command += " " + OUTPUT_VIDEO_OPTION + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFilePath;
         return command;
     }
-    public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException {
+    public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
 //
 
 
         int numberOfPerson = 0;
-        try{
             Runtime rt = Runtime.getRuntime();
 //            String command = PYTHON38 + " " + RUN_PYTHON_SOURCE + "Run.py"
 //                    + " --prototxt "+ RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.prototxt" +
@@ -59,11 +58,6 @@ public class PythonHelper {
             System.out.println("proc.waitFor(): " + proc.waitFor());
 //            insert db
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         return numberOfPerson;
     }

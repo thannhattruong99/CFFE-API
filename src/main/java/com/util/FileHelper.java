@@ -46,6 +46,12 @@ public class FileHelper implements Serializable {
         }
     }
 
+    //TruongNT
+    public static void deleteFile2(String absolutePath) throws IOException {
+        File file = new File(getResourcePath() + absolutePath);
+        file.delete();
+    }
+
     public static boolean checkExistFile(String relativeFilePath) throws FileNotFoundException {
         return ResourceUtils.getFile(getResourcePath() + relativeFilePath).exists();
     }
