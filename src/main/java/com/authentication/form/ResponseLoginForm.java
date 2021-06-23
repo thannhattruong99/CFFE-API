@@ -13,6 +13,7 @@ public class ResponseLoginForm implements Serializable {
     private String roleName;
     private String storeId;
     private String storeName;
+    private String imageURL;
 
     public ResponseLoginForm() {
     }
@@ -96,4 +97,8 @@ public class ResponseLoginForm implements Serializable {
     public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
+
+    public String getImageURL() { return imageURL; }
+
+    public void setImageURL(String imageURL) { this.imageURL = imageURL; }
 }
