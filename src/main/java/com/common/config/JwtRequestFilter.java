@@ -37,7 +37,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String UNAUTHORIZED = "Unauthorized";
 
 
-    private List<String> adminAuthorities;
+    private final List<String> adminAuthorities;
     private final List<String> managerAuthorities;
     private final List<String> applicationAuthorities;
 
@@ -59,9 +59,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwtToken = null;
         String uri = request.getRequestURI();
-        System.out.println("URI: " + uri);
-        System.out.println("adminAuthorities: " + adminAuthorities.size());
-        adminAuthorities = FileHelper.loadResource(ADMIN_AUTHORITY_PATH);
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
