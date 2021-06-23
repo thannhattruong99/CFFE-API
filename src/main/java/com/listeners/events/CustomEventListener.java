@@ -33,16 +33,43 @@ public class CustomEventListener {
 
     @Async
     @EventListener
-    public void eventListener(EventCreator eventCreator) throws InterruptedException, IOException {
+    public void eventListener(EventCreator eventCreator) throws InterruptedException {
         if(eventCreatorMap == null){
             eventCreatorMap = new HashMap<>();
+        }
+        eventCreator.setStatus(0);
+        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+
+        for (VideoProperty video: eventCreator.getVideoPropertyList()) {
+            int count;
+            try{
+                if((count = PythonHelper.countPerson(video.getVideoName(),
+                        video.getVideoName())) != 0){
+
+//                    GCPHelper.uploadImage(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + video.getVideoName());
+
+                    FileHelper.deleteFile2(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + video.getVideoName());
+                    video.setTotalPerson(count);
+                }
+                FileHelper.deleteFile2(FileHelper.getResourcePath() + INPUT_VIDEO_PATH + video.getVideoName());
+            }catch (InterruptedException e) {
+                video.setStatusId(-1);
+                System.out.println("ERROR AT HERERER: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("ERROR AT HERE: " + e.getMessage());
+            }
+        }
+
+        for (VideoProperty video: eventCreator.getVideoPropertyList()) {
+            System.out.println("Video name: " + video.getVideoName());
+            System.out.println("Video status: " + video.getStatusId());
+            System.out.println("Total person: " + video.getTotalPerson());
         }
 
 //        // TODO: detect video
 //        // TODO: insert tblHotspot
 //        eventCreator.setStatus(11);
 //        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
-//        Thread.sleep(10000);
 //
 //
 //        // TODO: upload video moi => cloud
@@ -58,19 +85,6 @@ public class CustomEventListener {
 //        }
 
 
-//        int count;
-//        if((count = PythonHelper.countPerson("videos/input/" + eventCreator.getRelativeFilePath(),
-//                "videos/output/" + eventCreator.getRelativeFilePath())) != 0){
-//
-//            GCPHelper.uploadImage("videos/output/" + eventCreator.getRelativeFilePath());
-//
-//            System.out.println("Total person input: " + count);
-//            FileHelper.deleteFile("videos/input/" + eventCreator.getRelativeFilePath());
-//            FileHelper.deleteFile("videos/output/" + eventCreator.getRelativeFilePath());
-//        }
-
-        eventCreator.setStatus(0);
-        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
         Thread.sleep(20000);
         eventCreator.setStatus(1);
         eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
@@ -80,10 +94,10 @@ public class CustomEventListener {
         List<VideoProperty> videoPropertyList = eventCreator.getVideoPropertyList();
         videoPropertyList.forEach(videoProperty -> {
             try {
-                String outputPath = GCPHelper.uploadFile(VIDEO_FOLDER_SERVER + videoProperty.getVideoName(),
+                String outputPath = GCPHelper.uploadFile(INPUT_VIDEO_PATH + videoProperty.getVideoName(),
                         VIDEO_FOLDER_CLOUD + StringUtils.cleanPath(videoProperty.getVideoName()));
                 videoProperty.setVideoUrl(outputPath);
-                FileHelper.deleteFile(VIDEO_FOLDER_SERVER + videoProperty.getVideoName());
+                FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoName());
             } catch (IOException e) {
                 System.out.println("Upload video taong: " + e.getMessage());
             }
