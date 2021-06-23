@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.util.PathConstant.RESOURCE_PATH;
-import static com.util.PathConstant.INPUT_VIDEO_PATH;
+import static com.util.PathConstant.*;
 
 public class FileHelper implements Serializable {
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
@@ -180,5 +179,13 @@ public class FileHelper implements Serializable {
             list.add(key.nextElement());
         }
         return list;
+    }
+
+    //get out of project path
+    public static String getOutProjectPath(){
+        String str = Paths.get("").toAbsolutePath().toString();
+        str = str.replaceAll(PROJECT_NAME, "");
+        System.out.println("STR: " + str);
+        return str;
     }
 }

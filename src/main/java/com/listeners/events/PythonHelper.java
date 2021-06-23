@@ -7,21 +7,49 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class PythonHelper {
-    private final static String RUN_PYTHON_SOURCE = "/Users/truongtn/Desktop/Desktop/HocTap/Semester8/Python/CoutingPeople/People-Counting-in-Real-Time/";
-    private final static String PYTHON_3 = "python3";
-    private final static String INPUT_OPTION = "--input";
-    private final static String OUTPUT_OPTION = "--output";
+import static com.util.PathConstant.*;
+import static com.util.PathConstant.COUNT_MODEL_PATH;
 
-    public static int countPerson(String inputVideoPath, String outputVideoPath) throws InterruptedException {
+public class PythonHelper {
+    //    private static String RUN_PYTHON_SOURCE = "/Users/truongtn/Desktop/Desktop/HocTap/Semester8/Python/CoutingPeople/People-Counting-in-Real-Time/";
+    private static final String INPUT_VIDEO_OPTION = "--input";
+    private static final String OUTPUT_VIDEO_OPTION = "--output";
+    private static final String PROTXT_OPTION = "--prototxt";
+    private static final String COUNT_MODEL_OPTION = "--model";
+    private static String PYTHON38 = "python3";
+//    private static String RUN_COUNT_PEOPLE_ABSOLUTE_PATH = "";
+//    private static String PROTXT_ABSOLUTE_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.prototxt";
+//    private static String COUNT_MODEL_PATH = "";
+
+    private static String createDetectCountCommand(String inputFilePath, String outputFilePath){
+        String command = "";
+//      python version
+        command += PYTHON38;
+//        run file path
+        command += " " + FileHelper.getOutProjectPath() + RUN_COUNT_PEOPLE_PATH;
+//        protxt file path
+        command += " " + PROTXT_OPTION + " " + FileHelper.getOutProjectPath() + PROTXT_PATH;
+//        count model path
+        command += " " + COUNT_MODEL_OPTION + " " + FileHelper.getOutProjectPath() + COUNT_MODEL_PATH;
+//        input option
+        command += " " + INPUT_VIDEO_OPTION + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFilePath;
+//        output option
+        command += " " + OUTPUT_VIDEO_OPTION + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFilePath;
+        return command;
+    }
+    public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException {
+//
+
+
         int numberOfPerson = 0;
         try{
             Runtime rt = Runtime.getRuntime();
-            String command = PYTHON_3 + " " + RUN_PYTHON_SOURCE + "Run.py"
-                    + " --prototxt "+ RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.prototxt" +
-                    " --model " + RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.caffemodel" + " "
-                    + INPUT_OPTION + " " + FileHelper.getResourcePath() + inputVideoPath
-                    + " " + OUTPUT_OPTION + " " + FileHelper.getResourcePath() + outputVideoPath;
+//            String command = PYTHON38 + " " + RUN_PYTHON_SOURCE + "Run.py"
+//                    + " --prototxt "+ RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.prototxt" +
+//                    " --model " + RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.caffemodel" + " "
+//                    + INPUT_VIDEO_OPTION + " " + FileHelper.getResourcePath() + inputVideoPath
+//                    + " " + OUTPUT_VIDEO_OPTION + " " + FileHelper.getResourcePath() + outputVideoPath;
+            String command = createDetectCountCommand(inputFileName, outputFileName);
             System.out.println("COMMAND: "  + command);
             Process proc = rt.exec(command);
             numberOfPerson = readConsole(proc);

@@ -104,7 +104,7 @@ public class FileService extends BaseService {
         // upload file to server
         List<VideoProperty> listVideoProperty = new ArrayList<>();
         for(MultipartFile file : files) {
-            String fileName = FileHelper.storeFileOnServer(file, RESOURCE_PATH + VIDEO_FOLDER_SERVER);
+            String fileName = FileHelper.storeFileOnServer(file, RESOURCE_PATH + INPUT_VIDEO_PATH);
             if (fileName.isEmpty()) {
                 response.setErrorCodes(getError(MessageConstant.MSG_114));
                 return response;
@@ -121,7 +121,7 @@ public class FileService extends BaseService {
     }
 
     private void getVideoProperties(VideoProperty videoProperty, String fileName, String originalFileName) throws IOException {
-        String filePath = FileHelper.getResourcePath() + VIDEO_FOLDER_SERVER + fileName;
+        String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileName;
         IsoFile isoFile = new IsoFile(filePath);
         MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();
         videoProperty.setVideoName(fileName);

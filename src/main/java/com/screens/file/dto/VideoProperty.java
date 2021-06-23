@@ -11,8 +11,17 @@ public class VideoProperty implements Serializable {
     private String shelfCameraMappingId;
     private String stackProductCameraMappingId;
     private int statusId;
+    private int totalPerson;
 
     public VideoProperty() {
+    }
+
+    public int getTotalPerson() {
+        return totalPerson;
+    }
+
+    public void setTotalPerson(int totalPerson) {
+        this.totalPerson = totalPerson;
     }
 
     public int getStatusId() {
