@@ -82,6 +82,11 @@ public class CustomEventListener {
 //            eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
 //        }
 
+        eventCreator.setStatus(0);
+        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+        Thread.sleep(20000);
+        eventCreator.setStatus(1);
+        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
     }
 
     private List<VideoProperty> uploadVideoDetectedToStorage(EventCreator eventCreator) {
