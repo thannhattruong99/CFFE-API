@@ -18,7 +18,7 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @RequestMapping(value = "/login2", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String createAuthenticationToken(@RequestBody RequestLoginForm authenticationRequest) {
 
         ResponseLoginForm response = accountService
