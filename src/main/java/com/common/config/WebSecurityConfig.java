@@ -46,14 +46,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().mvcMatchers(HttpMethod.OPTIONS, REXP_ALL_PATH);
         web.ignoring().antMatchers(
-//                "/v2/api-docs",
-//                "/swagger-resources",
-//                "/swagger-resources/**",
-//                "/configuration/ui",
-//                "/configuration/security",
-//                "/swagger-ui.html",
-//                "/webjars/**",
-                // -- Swagger UI v3 (OpenAPI)
                 PERMIT_PATHS);
     }
 
