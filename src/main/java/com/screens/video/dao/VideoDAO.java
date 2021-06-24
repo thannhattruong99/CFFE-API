@@ -36,12 +36,17 @@ public class VideoDAO extends BaseDAO {
         }
     }
 
-    public boolean insertVideoProperty(EventCreator eventCreator) {
-        if(sqlSession.insert("com.screens.video.dao.VidDAO.insertVideoProperty",eventCreator) > 0){
-            this.sqlSession.commit();
-            return true;
+    public boolean insertVideoProperty(VideoProperty videoProperty) {
+        try{
+            openConnection();
+            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertVideoProperty",videoProperty) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
         }
-        return false;
     }
 
 }

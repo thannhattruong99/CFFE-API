@@ -16,7 +16,7 @@ public class PythonHelper {
     private static final String OUTPUT_VIDEO_OPTION = "--output";
     private static final String PROTXT_OPTION = "--prototxt";
     private static final String COUNT_MODEL_OPTION = "--model";
-    private static String PYTHON38 = "python3";
+    private static String PYTHON38 = "python";
 //    private static String RUN_COUNT_PEOPLE_ABSOLUTE_PATH = "";
 //    private static String PROTXT_ABSOLUTE_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.prototxt";
 //    private static String COUNT_MODEL_PATH = "";

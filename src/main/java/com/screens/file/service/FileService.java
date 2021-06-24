@@ -104,27 +104,33 @@ public class FileService extends BaseService {
         // upload file to server
         List<VideoProperty> listVideoProperty = new ArrayList<>();
         for(MultipartFile file : files) {
-            String fileName = FileHelper.storeFileOnServer(file, RESOURCE_PATH + INPUT_VIDEO_PATH);
-            if (fileName.isEmpty()) {
+            String fileNameUUID = FileHelper.storeFileOnServer(file, RESOURCE_PATH + INPUT_VIDEO_PATH);
+            if (fileNameUUID.isEmpty()) {
                 response.setErrorCodes(getError(MessageConstant.MSG_114));
                 return response;
             } else {
                 VideoProperty videoProperty = new VideoProperty();
-                String originalFileName = file.getOriginalFilename();
-                getVideoProperties(videoProperty, fileName, originalFileName);
+                getVideoProperties(videoProperty, fileNameUUID, file.getOriginalFilename());
                 listVideoProperty.add(videoProperty);
             }
         }
         response.setVideoPropertyList(listVideoProperty);
-        response.setIdEvent(UUID.randomUUID() + "-" + new Date());
+        response.setIdEvent(UUID.randomUUID() + "-" + getTime());
         return response;
     }
 
-    private void getVideoProperties(VideoProperty videoProperty, String fileName, String originalFileName) throws IOException {
-        String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileName;
+    private String getTime() {
+        Calendar cal = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-hhmmss");
+        return dateFormat.format(cal.getTime());
+    }
+
+    private void getVideoProperties(VideoProperty videoProperty, String fileNameUUID, String originalFileName) throws IOException {
+        String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
         IsoFile isoFile = new IsoFile(filePath);
         MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();
-        videoProperty.setVideoName(fileName);
+        videoProperty.setVideoNameOriginal(originalFileName);
+        videoProperty.setVideoNameUUID(fileNameUUID);
         DateFormat dateFormat = new SimpleDateFormat(DAY_TIME_FORMAT);
         videoProperty.setStartedTime(dateFormat.format(mhb.getCreationTime()));
         videoProperty.setDuration((int)(mhb.getDuration() / mhb.getTimescale()));
@@ -148,22 +154,10 @@ public class FileService extends BaseService {
 
         Flux<FileTransaction> fileTransactionFlux = Flux.fromStream(
                 // generate new data.
-                Stream.generate(() -> new FileTransaction(getRandomUser(),
-                        new Notification(data.getEventName(), data.getStatus()),
-                        new Date()))
+                Stream.generate(() -> new FileTransaction(data.getMessage(), data.getStatus()))
         );
 
-        if (data.getStatus() == 99) {
-            Map<String, EventCreator> eventCreatorMap = customEventListener.getEventCreatorMap();
-            eventCreatorMap.remove("test");
-            customEventListener.setEventCreatorMap(eventCreatorMap);
-        }
         return Flux.zip(interval, fileTransactionFlux).map(Tuple2::getT2);
     }
 
-
-    String getRandomUser() {
-        String users[] = "HieuHd,LuanNM,TruongNT,HuuDN".split(",");
-        return users[new Random().nextInt(users.length)];
-    }
 }

@@ -10,13 +10,10 @@ public class EventCreator extends ApplicationEvent {
     private String eventName;
     private String relativeFilePath;
     private List<VideoProperty> videoPropertyList;
+    private String message;
     private int status;
-    /**
-     * Create a new {@code ApplicationEvent}.
-     *
-     * @param source the object on which the event initially occurred or with
-     *               which the event is associated (never {@code null})
-     */
+
+
     public EventCreator(Object source, String eventName, String relativeFilePath) {
         super(source);
         this.eventName = eventName;
@@ -40,6 +37,14 @@ public class EventCreator extends ApplicationEvent {
         this.eventId = eventId;
         this.eventName = eventName;
         this.relativeFilePath = relativeFilePath;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public List<VideoProperty> getVideoPropertyList() {
