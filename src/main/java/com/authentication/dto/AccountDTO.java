@@ -11,6 +11,7 @@ public class AccountDTO {
     private String roleName;
     private String password;
     private String storeId;
+    private String imageURL;
 
     public AccountDTO() {
     }
@@ -94,4 +95,8 @@ public class AccountDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getImageURL() { return imageURL; }
+
+    public void setImageURL(String imageURL) { this.imageURL = imageURL; }
 }
