@@ -190,8 +190,9 @@ public class FileHelper implements Serializable {
     //get out of project path
     public static String getOutProjectPath(){
         String str = Paths.get("").toAbsolutePath().toString();
-        str = str.replaceAll(PROJECT_NAME, "");
-        System.out.println("STR: " + str);
+        System.out.println("STR1: " + str);
+        str = str.replaceAll("CapstoneAPI/target", "");
+        System.out.println("STR2: " + str);
         return str;
     }
 }
