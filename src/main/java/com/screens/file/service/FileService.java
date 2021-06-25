@@ -7,7 +7,6 @@ import com.listeners.events.CustomEventListener;
 import com.listeners.events.EventCreator;
 import com.listeners.events.EventPublisher;
 import com.screens.file.dto.FileTransaction;
-import com.screens.file.dto.Notification;
 import com.screens.file.dto.VideoProperty;
 import com.screens.file.form.ResponseUploadImage;
 import com.screens.file.form.ResponseUploadVideo;
@@ -104,40 +103,54 @@ public class FileService extends BaseService {
         // upload file to server
         List<VideoProperty> listVideoProperty = new ArrayList<>();
         for(MultipartFile file : files) {
-            String fileName = FileHelper.storeFileOnServer(file, RESOURCE_PATH + INPUT_VIDEO_PATH);
-            if (fileName.isEmpty()) {
+            String fileNameUUID = FileHelper.storeFileOnServer(file, RESOURCE_PATH + INPUT_VIDEO_PATH);
+            if (fileNameUUID.isEmpty()) {
                 response.setErrorCodes(getError(MessageConstant.MSG_114));
                 return response;
             } else {
+                String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
+                IsoFile isoFile = new IsoFile(filePath);
+                if (isoFile.getMovieBox() == null) {
+                    response.setErrorCodes(getError(MessageConstant.MSG_118));
+                    return response;
+                }
                 VideoProperty videoProperty = new VideoProperty();
-                String originalFileName = file.getOriginalFilename();
-                getVideoProperties(videoProperty, fileName, originalFileName);
+                getVideoProperties(videoProperty, fileNameUUID, file.getOriginalFilename());
                 listVideoProperty.add(videoProperty);
             }
         }
         response.setVideoPropertyList(listVideoProperty);
-        response.setIdEvent(UUID.randomUUID() + "-" + new Date());
+        response.setIdEvent(UUID.randomUUID() + "-" + getTime());
         return response;
     }
 
-    private void getVideoProperties(VideoProperty videoProperty, String fileName, String originalFileName) throws IOException {
-        String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileName;
+    private String getTime() {
+        Calendar cal = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-hhmmss");
+        return dateFormat.format(cal.getTime());
+    }
+
+    private void getVideoProperties(VideoProperty videoProperty, String fileNameUUID, String originalFileName) throws IOException {
+        String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
         IsoFile isoFile = new IsoFile(filePath);
         MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();
-        videoProperty.setVideoName(fileName);
+        videoProperty.setVideoNameOriginal(originalFileName);
+        videoProperty.setVideoNameUUID(fileNameUUID);
         DateFormat dateFormat = new SimpleDateFormat(DAY_TIME_FORMAT);
         videoProperty.setStartedTime(dateFormat.format(mhb.getCreationTime()));
+
+        Calendar gcal = new GregorianCalendar();
+        gcal.setTime(mhb.getCreationTime());
+        gcal.add(Calendar.SECOND, (int)(mhb.getDuration() / mhb.getTimescale()));
+        Date endedTime = gcal.getTime();
+        videoProperty.setEndedTime(dateFormat.format(endedTime));
+
         videoProperty.setDuration((int)(mhb.getDuration() / mhb.getTimescale()));
         videoProperty.setStatusId(ACTIVE_STATUS);
-        //  GET ShelfCameraMappingId, StackProductCameraMappingId FORM NAME
         String typeVideo = originalFileName.substring(0,originalFileName.lastIndexOf("_"));
-        String oriName = originalFileName.substring(originalFileName.lastIndexOf("_")+1,originalFileName.lastIndexOf("."));
-        if ("1".equalsIgnoreCase(typeVideo)){
-            videoProperty.setShelfCameraMappingId(oriName);
-        }
-        if ("2".equalsIgnoreCase(typeVideo)){
-            videoProperty.setStackProductCameraMappingId(oriName);
-        }
+        String cameraId = originalFileName.substring(originalFileName.lastIndexOf("_")+1,originalFileName.lastIndexOf("."));
+        videoProperty.setTypeVideo(Integer.parseInt(typeVideo));
+        videoProperty.setCameraId(cameraId);
     }
 
 
@@ -148,22 +161,10 @@ public class FileService extends BaseService {
 
         Flux<FileTransaction> fileTransactionFlux = Flux.fromStream(
                 // generate new data.
-                Stream.generate(() -> new FileTransaction(getRandomUser(),
-                        new Notification(data.getEventName(), data.getStatus()),
-                        new Date()))
+                Stream.generate(() -> new FileTransaction(data.getMessage(), data.getStatus()))
         );
 
-        if (data.getStatus() == 99) {
-            Map<String, EventCreator> eventCreatorMap = customEventListener.getEventCreatorMap();
-            eventCreatorMap.remove("test");
-            customEventListener.setEventCreatorMap(eventCreatorMap);
-        }
         return Flux.zip(interval, fileTransactionFlux).map(Tuple2::getT2);
     }
 
-
-    String getRandomUser() {
-        String users[] = "HieuHd,LuanNM,TruongNT,HuuDN".split(",");
-        return users[new Random().nextInt(users.length)];
-    }
 }

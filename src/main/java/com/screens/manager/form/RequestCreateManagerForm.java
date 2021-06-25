@@ -18,8 +18,8 @@ public class RequestCreateManagerForm {
     @NotEmpty(message = "MSG-044")
     @Email(message = "MSG-045")
     private String email;
-    @DateTimeFormat
     @NotEmpty(message = "MSG-047")
+    @Pattern(regexp = "^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])",message = "MSG-117")
     private String birthDate;
     @Min(value= 0, message = "MSG-054")
     @Max(value = 2, message = "MSG-054")

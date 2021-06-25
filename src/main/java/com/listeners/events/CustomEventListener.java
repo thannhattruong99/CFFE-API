@@ -1,17 +1,15 @@
 package com.listeners.events;
 
-import com.coremedia.iso.IsoFile;
-import com.coremedia.iso.boxes.MovieHeaderBox;
 import com.screens.file.dto.VideoProperty;
 import com.screens.shelf.dao.ShelfDAO;
 import com.screens.video.dao.VideoDAO;
 import com.util.FileHelper;
 import com.util.GCPHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,10 +24,10 @@ public class CustomEventListener {
     private Map<String, EventCreator> eventCreatorMap;
 
     @Autowired
-    private ShelfDAO shelfDAO;
-
-    @Autowired
     private VideoDAO videoDAO;
+
+    private static final int DETECT_HOT_SPOT = 1;
+    private static final int DETECT_EMOTION = 2;
 
     @Async
     @EventListener
@@ -39,73 +37,104 @@ public class CustomEventListener {
         }
         System.out.println("Start do event 1");
         eventCreator.setStatus(0);
+        eventCreator.setMessage("Loading");
         eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
 
-        for (VideoProperty video: eventCreator.getVideoPropertyList()) {
-            int count;
+        List<String> videoErrorNameList = new ArrayList<>();
+        for (VideoProperty videoProperty: eventCreator.getVideoPropertyList()) {
+            int countHP;
             try{
-                if((count = PythonHelper.countPerson(video.getVideoName(),
-                        video.getVideoName())) != 0){
-
-//                    GCPHelper.uploadImage(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + video.getVideoName());
-
-                    FileHelper.deleteFile2(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + video.getVideoName());
-                    video.setTotalPerson(count);
+                // TODO: detect video hot spot / emotion
+                if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
+                    if((countHP = PythonHelper.countPerson(videoProperty.getVideoNameUUID(),
+                            videoProperty.getVideoNameUUID())) != 0){
+                        videoProperty.setTotalPerson(countHP);
+                    }
                 }
-                FileHelper.deleteFile2(FileHelper.getResourcePath() + INPUT_VIDEO_PATH + video.getVideoName());
+                if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
+                    int temp;
+                    if((temp = PythonHelper.countEmotion(videoProperty.getVideoNameUUID(),
+                            videoProperty.getVideoNameUUID())) != 0){
+//                        videoProperty.setTotalPerson(countHP);
+                        System.out.println("count emotion");
+                    }
+                }
+
+                // TODO: delete file input
+                FileHelper.deleteFile2(FileHelper.getResourcePath() + INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
+
+                // TODO: upload video moi => cloud
+                uploadVideoDetectedToStorage(videoProperty);
+
+                // TODO: insert tblHotspot / tblEmotion
+                // TODO: insert tblVideo
+                insertDatabase(videoProperty,videoErrorNameList,eventCreator);
+
             }catch (InterruptedException e) {
-                video.setStatusId(-1);
-                System.out.println("ERROR AT HERERER: " + e.getMessage());
+                setError(videoProperty,videoErrorNameList,eventCreator);
             } catch (IOException e) {
-                System.out.println("ERROR AT HERE: " + e.getMessage());
+                setError(videoProperty,videoErrorNameList,eventCreator);
             }
         }
 
         for (VideoProperty video: eventCreator.getVideoPropertyList()) {
-            System.out.println("Video name: " + video.getVideoName());
+            System.out.println("Video name: " + video.getVideoNameUUID());
             System.out.println("Video status: " + video.getStatusId());
             System.out.println("Total person: " + video.getTotalPerson());
         }
 
-//        // TODO: detect video
-//        // TODO: insert tblHotspot
-//        eventCreator.setStatus(11);
-//        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
-//
-//
-//        // TODO: upload video moi => cloud
-//        List<VideoProperty> videoPropertyList = uploadVideoDetectedToStorage(eventCreator);
-//        // TODO: insert info video to db
-//        eventCreator.setVideoPropertyList(videoPropertyList);
-//        if (videoDAO.insertVideoProperty(eventCreator)){
-//            eventCreator.setStatus(99);
-//            eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
-//        } else {
-//            eventCreator.setStatus(-11);
-//            eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
-//        }
 
-
-        Thread.sleep(20000);
         eventCreator.setStatus(1);
+        String msg = "";
+        if (videoErrorNameList.size() >0){
+            msg = " - " + videoErrorNameList.size() +" error: ";
+            for (String name : videoErrorNameList) {
+                msg += "["+ name + "]";
+            }
+        }
+        eventCreator.setMessage("Success" + msg);
         eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
     }
 
-    private List<VideoProperty> uploadVideoDetectedToStorage(EventCreator eventCreator) {
-        List<VideoProperty> videoPropertyList = eventCreator.getVideoPropertyList();
-        videoPropertyList.forEach(videoProperty -> {
-            try {
-                String outputPath = GCPHelper.uploadFile(INPUT_VIDEO_PATH + videoProperty.getVideoName(),
-                        VIDEO_FOLDER_CLOUD + StringUtils.cleanPath(videoProperty.getVideoName()));
-                videoProperty.setVideoUrl(outputPath);
-                FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoName());
-            } catch (IOException e) {
-                System.out.println("Upload video taong: " + e.getMessage());
-            }
-        });
-        return videoPropertyList;
+    private void uploadVideoDetectedToStorage(VideoProperty videoProperty) {
+        try {
+            String outputPath = GCPHelper.uploadFile(OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID(),
+                    VIDEO_FOLDER_CLOUD + org.springframework.util.StringUtils.cleanPath(videoProperty.getVideoNameUUID()));
+            videoProperty.setVideoUrl(outputPath);
+//            FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
+            FileHelper.deleteFile2(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
+        } catch (IOException e) {
+            System.out.println("Upload video taong: " + e.getMessage());
+        }
     }
 
+    private void insertDatabase(VideoProperty videoProperty, List<String> videoErrorNameList, EventCreator eventCreator){
+        if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
+            String shelfCameraMappingId = videoDAO.getShelfCameraMappingId(videoProperty);
+            System.out.println("shelfCameraMappingId = " + shelfCameraMappingId);
+            if (StringUtils.isNotEmpty(shelfCameraMappingId)){
+                videoProperty.setShelfCameraMappingId(shelfCameraMappingId);
+                videoDAO.insertHotSpot(videoProperty);
+                videoDAO.insertVideoProperty(videoProperty);
+            } else {
+                setError(videoProperty,videoErrorNameList,eventCreator);
+            }
+        }
+        if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
+//                    videoDAO.insertEmotion(videoProperty);
+//                    videoDAO.insertVideoProperty(videoProperty);
+        }
+    }
+    private void setError(VideoProperty videoProperty, List<String> videoErrorNameList, EventCreator eventCreator) {
+        videoProperty.setStatusId(-1);;
+        videoErrorNameList.add(videoProperty.getVideoNameOriginal());
+        String msg = "";
+        for (String name : videoErrorNameList) {
+            msg += "["+ name + "]";
+        }
+        eventCreator.setMessage("Loading - " + videoErrorNameList.size() +" error: " + msg );
+        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+    }
 
     public Map<String, EventCreator> getEventCreatorMap() {
         return eventCreatorMap;
