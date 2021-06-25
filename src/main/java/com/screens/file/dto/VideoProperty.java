@@ -8,13 +8,40 @@ public class VideoProperty implements Serializable {
     private String videoNameUUID;
     private String videoUrl;
     private String startedTime;
+    private String endedTime;
     private int duration;
+    private String cameraId;
     private String shelfCameraMappingId;
     private String stackProductCameraMappingId;
     private int statusId;
     private int totalPerson;
+    private int typeVideo;
 
     public VideoProperty() {
+    }
+
+    public String getCameraId() {
+        return cameraId;
+    }
+
+    public void setCameraId(String cameraId) {
+        this.cameraId = cameraId;
+    }
+
+    public int getTypeVideo() {
+        return typeVideo;
+    }
+
+    public void setTypeVideo(int typeVideo) {
+        this.typeVideo = typeVideo;
+    }
+
+    public String getEndedTime() {
+        return endedTime;
+    }
+
+    public void setEndedTime(String endedTime) {
+        this.endedTime = endedTime;
     }
 
     public String getVideoNameOriginal() {

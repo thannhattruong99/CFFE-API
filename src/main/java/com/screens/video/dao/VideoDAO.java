@@ -36,6 +36,15 @@ public class VideoDAO extends BaseDAO {
         }
     }
 
+    public String getShelfCameraMappingId(VideoProperty videoProperty) {
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.video.dao.VidDAO.getShelfCameraMappingId",videoProperty);
+        }finally {
+            closeConnection();
+        }
+    }
+
     public boolean insertVideoProperty(VideoProperty videoProperty) {
         try{
             openConnection();
@@ -47,6 +56,33 @@ public class VideoDAO extends BaseDAO {
         }finally {
             closeConnection();
         }
+    }
+
+    public boolean insertHotSpot(VideoProperty videoProperty) {
+        try{
+            openConnection();
+            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertHotSpot",videoProperty) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
+        }
+    }
+
+    public boolean insertEmotion(VideoProperty videoProperty) {
+//        try{
+//            openConnection();
+//            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertEmotion",videoProperty) > 0){
+//                this.sqlSession.commit();
+//                return true;
+//            }
+//            return false;
+//        }finally {
+//            closeConnection();
+//        }
+        return true;
     }
 
 }

@@ -7,7 +7,6 @@ import com.listeners.events.CustomEventListener;
 import com.listeners.events.EventCreator;
 import com.listeners.events.EventPublisher;
 import com.screens.file.dto.FileTransaction;
-import com.screens.file.dto.Notification;
 import com.screens.file.dto.VideoProperty;
 import com.screens.file.form.ResponseUploadImage;
 import com.screens.file.form.ResponseUploadVideo;
@@ -109,6 +108,12 @@ public class FileService extends BaseService {
                 response.setErrorCodes(getError(MessageConstant.MSG_114));
                 return response;
             } else {
+                String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
+                IsoFile isoFile = new IsoFile(filePath);
+                if (isoFile.getMovieBox() == null) {
+                    response.setErrorCodes(getError(MessageConstant.MSG_118));
+                    return response;
+                }
                 VideoProperty videoProperty = new VideoProperty();
                 getVideoProperties(videoProperty, fileNameUUID, file.getOriginalFilename());
                 listVideoProperty.add(videoProperty);
@@ -133,17 +138,19 @@ public class FileService extends BaseService {
         videoProperty.setVideoNameUUID(fileNameUUID);
         DateFormat dateFormat = new SimpleDateFormat(DAY_TIME_FORMAT);
         videoProperty.setStartedTime(dateFormat.format(mhb.getCreationTime()));
+
+        Calendar gcal = new GregorianCalendar();
+        gcal.setTime(mhb.getCreationTime());
+        gcal.add(Calendar.SECOND, (int)(mhb.getDuration() / mhb.getTimescale()));
+        Date endedTime = gcal.getTime();
+        videoProperty.setEndedTime(dateFormat.format(endedTime));
+
         videoProperty.setDuration((int)(mhb.getDuration() / mhb.getTimescale()));
         videoProperty.setStatusId(ACTIVE_STATUS);
-        //  GET ShelfCameraMappingId, StackProductCameraMappingId FORM NAME
         String typeVideo = originalFileName.substring(0,originalFileName.lastIndexOf("_"));
-        String oriName = originalFileName.substring(originalFileName.lastIndexOf("_")+1,originalFileName.lastIndexOf("."));
-        if ("1".equalsIgnoreCase(typeVideo)){
-            videoProperty.setShelfCameraMappingId(oriName);
-        }
-        if ("2".equalsIgnoreCase(typeVideo)){
-            videoProperty.setStackProductCameraMappingId(oriName);
-        }
+        String cameraId = originalFileName.substring(originalFileName.lastIndexOf("_")+1,originalFileName.lastIndexOf("."));
+        videoProperty.setTypeVideo(Integer.parseInt(typeVideo));
+        videoProperty.setCameraId(cameraId);
     }
 
 

@@ -3,6 +3,17 @@
 
 <mapper namespace="com.screens.video.dao.VidDAO">
 
+    <select id="getShelfCameraMappingId" resultType="java.lang.String">
+        SELECT ShelfCameraMappingId, AddedTime, RemovedTime
+        FROM tblShelfCameraMapping
+        WHERE CameraId = #{cameraId}
+        AND AddedTime &lt;= #{startedTime}
+        AND (CASE WHEN RemovedTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
+            ELSE RemovedTime END)  &gt;= #{endedTime}
+        ORDER BY AddedTime DESC
+        LIMIT 1
+    </select>
+
     <select id="getVideoCountList" resultMap="getVideoCountList">
         SELECT TV.VideoId,
                TV.VideoName,
@@ -144,6 +155,11 @@
         INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,Duration,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values
             (#{videoNameOriginal},#{videoUrl},#{startedTime},
             #{duration},#{shelfCameraMappingId},#{stackProductCameraMappingId},#{statusId})
+    </insert>
+
+    <insert id="insertHotSpot" parameterType="VideoProperty">
+        INSERT INTO tblHotSpot (StartedTime,EndedTime,TotalPeople,ShelfCameraMappingId) values
+        (#{startedTime},#{endedTime},#{totalPerson},#{shelfCameraMappingId})
     </insert>
 
 </mapper>
