@@ -132,12 +132,18 @@
         </collection>
     </resultMap>
 
-    <insert id="insertVideoProperty" parameterType="EventCreator">
+<!--    <insert id="insertVideoProperty" parameterType="EventCreator">-->
+<!--        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,Duration,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values-->
+<!--        <foreach collection="videoPropertyList" item="element" index="index" open="(" separator="),("  close=")">-->
+<!--            #{element.videoName},#{element.videoUrl},#{element.startedTime},-->
+<!--            #{element.duration},#{element.shelfCameraMappingId},#{element.stackProductCameraMappingId},#{element.statusId}-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+    <insert id="insertVideoProperty" parameterType="VideoProperty">
         INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,Duration,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values
-        <foreach collection="videoPropertyList" item="element" index="index" open="(" separator="),("  close=")">
-            #{element.videoName},#{element.videoUrl},#{element.startedTime},
-            #{element.duration},#{element.shelfCameraMappingId},#{element.stackProductCameraMappingId},#{element.statusId}
-        </foreach>
+            (#{videoNameOriginal},#{videoUrl},#{startedTime},
+            #{duration},#{shelfCameraMappingId},#{stackProductCameraMappingId},#{statusId})
     </insert>
 
 </mapper>
