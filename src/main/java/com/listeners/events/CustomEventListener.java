@@ -37,6 +37,7 @@ public class CustomEventListener {
         if(eventCreatorMap == null){
             eventCreatorMap = new HashMap<>();
         }
+        System.out.println("Start do event 1");
         eventCreator.setStatus(0);
         eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
 
