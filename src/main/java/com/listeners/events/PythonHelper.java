@@ -37,9 +37,8 @@ public class PythonHelper {
         command += " " + OUTPUT_VIDEO_OPTION + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFilePath;
         return command;
     }
-    public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
-//
 
+    public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
 
         int numberOfPerson = 0;
             Runtime rt = Runtime.getRuntime();
@@ -58,7 +57,12 @@ public class PythonHelper {
             System.out.println("proc.waitFor(): " + proc.waitFor());
 //            insert db
 
+        return numberOfPerson;
+    }
 
+    // LuanNM temp
+    public static int countEmotion(String inputFileName, String outputFileName) throws InterruptedException, IOException {
+        int numberOfPerson = 0;
         return numberOfPerson;
     }
 
