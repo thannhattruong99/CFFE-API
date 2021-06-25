@@ -19,7 +19,7 @@
                TV.VideoName,
                TV.VideoURL,
                TV.StartedTime,
-               TV.Duration,
+               TV.EndedTime,
                TV.StatusId,
                TS.ShelfId,
                TS.ShelfName,
@@ -73,7 +73,7 @@
                     <result property="videoName" column="VideoName"/>
                     <result property="videoUrl" column="VideoURL"/>
                     <result property="startedTime" column="StartedTime"/>
-                    <result property="duration" column="Duration"/>
+                    <result property="endedTime" column="EndedTime"/>
                     <result property="statusId" column="StatusId"/>
                 </collection>
             </collection>
