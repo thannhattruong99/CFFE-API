@@ -152,9 +152,9 @@
 <!--    </insert>-->
 
     <insert id="insertVideoProperty" parameterType="VideoProperty">
-        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,Duration,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values
+        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,EndedTime,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values
             (#{videoNameOriginal},#{videoUrl},#{startedTime},
-            #{duration},#{shelfCameraMappingId},#{stackProductCameraMappingId},#{statusId})
+            #{endedTime},#{shelfCameraMappingId},#{stackProductCameraMappingId},#{statusId})
     </insert>
 
     <insert id="insertHotSpot" parameterType="VideoProperty">
