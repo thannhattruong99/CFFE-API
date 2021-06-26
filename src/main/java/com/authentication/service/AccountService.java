@@ -32,7 +32,6 @@ public class AccountService extends BaseService {
         }else {
             throw new UsernameNotFoundException("User not found with username: " + userName);
         }
-
     }
 
     public ResponseLoginForm checkLogin(RequestLoginForm request){
@@ -43,8 +42,7 @@ public class AccountService extends BaseService {
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("UserId", resultDAO.getUserId());
                 claims.put("UserName", resultDAO.getUserName());
-                claims.put("FullName", resultDAO.getFullName());
-                claims.put("StoreId", resultDAO.getStoreId());
+//                claims.put("StoreId", resultDAO.getStoreId());
                 claims.put("RoleId", resultDAO.getRoleId());
                 resultDAO.setToken(jwtTokenHelper.generateToken(claims, request.getUsername()));
             }

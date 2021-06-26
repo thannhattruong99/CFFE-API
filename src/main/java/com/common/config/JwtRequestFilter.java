@@ -4,6 +4,7 @@ import com.authentication.dto.AccountDTO;
 import com.authentication.service.AccountService;
 import com.filter.dto.AuthorDTO;
 import com.util.FileHelper;
+import com.util.StringHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final int ADMIN_ROLE = 1;
     private static final int MANAGER_ROLE = 2;
     private static final String USER_ID_STRING = "UserId";
+    private static final String USER_NAME_STRING = "UserName";
     private static final String STORE_ID_STRING = "StoreId";
     private static final String ROLE_ID_STRING = "RoleId";
     private static final String AUTHORIZATION = "Authorization";
@@ -39,6 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 
     private final List<String> adminAuthorities;
+    private final List<String> guestAuthorities;
     private final List<String> managerAuthorities;
     private final List<String> applicationAuthorities;
 
@@ -52,6 +55,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         adminAuthorities = FileHelper.loadResource(ADMIN_AUTHORITY_PATH);
         managerAuthorities = FileHelper.loadResource(MANAGER_AUTHORITY_PATH);
         applicationAuthorities = FileHelper.loadResource(APPLICATION_AUTHORITY_PATH);
+        guestAuthorities = FileHelper.loadResource(GUEST_AUTHORITY_PATH);
     }
 
     @Override
@@ -94,16 +98,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             if (jwtTokenHelper.validateToken(jwtToken, accountDTO)) {
                 Claims claims = jwtTokenHelper.getAllClaimsFromToken(jwtToken);
                 int roleId = claims.get(ROLE_ID_STRING, Integer.class);
-
                 //manager authorities
                 if(roleId == MANAGER_ROLE){
-                    if(managerAuthorities.contains(uri)){
-                        String storeId = claims.get(STORE_ID_STRING, String.class);
+                    if(StringHelper.isNullOrEmpty(accountDTO.getStoreId()) && !guestAuthorities.contains(uri)){
+                        response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                        return;
+                    }else if(managerAuthorities.contains(uri)){
                         String userId = claims.get(USER_ID_STRING, String.class);
                         AuthorDTO authorDTO = new AuthorDTO();
                         authorDTO.setUserId(userId);
-                        authorDTO.setUserName(username);
-                        authorDTO.setStoreId(storeId);
+                        authorDTO.setStoreId(accountDTO.getStoreId());
                         request.setAttribute("AUTHOR", authorDTO);
                     }else {
                         response.setHeader(AUTHORIZATION, UNAUTHORIZED);
@@ -125,9 +129,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 // Spring Security Configurations successfully.
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }else {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, UNAUTHORIZED);
+                response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                return;
             }
         }
         filterChain.doFilter(request, response);
     }
+
 }
