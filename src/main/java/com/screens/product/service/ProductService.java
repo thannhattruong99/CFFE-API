@@ -44,6 +44,17 @@ public class ProductService extends BaseService {
         return responseProductListForm;
     }
 
+    public ResponseAllProductForm getAllProduct(){
+        ResponseAllProductForm responseProductListForm = null;
+        ProductDTO productDTO = new ProductDTO();
+        try {
+            responseProductListForm = productDAO.getAllProduct(productDTO);
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+        }
+        return responseProductListForm;
+    }
+
     public ResponseCommonForm createProduct(RequestCreateProductForm requestForm) {
         ResponseCommonForm response = new ResponseCommonForm();
         ProductDTO productDTO = convertCreateProductFormToDTO(requestForm);

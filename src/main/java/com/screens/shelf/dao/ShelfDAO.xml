@@ -194,4 +194,21 @@
     <resultMap id="getStatus" type="ShelfDTO">
         <result property="statusId" column="StatusId"/>
     </resultMap>
+    <select id="getShelveByStoreId" resultMap="getShelveByStoreId">
+        SELECT S.ShelfId,
+               S.ShelfName,
+               TT.totalOfRecord
+        FROM tblShelf S,
+             (SELECT COUNT(S.ShelfId) AS totalOfRecord
+              FROM tblShelf S
+              WHERE S.StoreId = #{storeId}) TT
+        WHERE S.StoreId = #{storeId}
+    </select>
+    <resultMap id="getShelveByStoreId" type="ResponseShelvesByStoreId">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="shelves" ofType="ShelfSortSupporter">
+            <result property="shelfId" column="ShelfId"/>
+            <result property="shelfName" column="ShelfName"/>
+        </collection>
+    </resultMap>
 </mapper>

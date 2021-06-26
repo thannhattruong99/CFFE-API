@@ -2,6 +2,7 @@ package com.screens.product.dao;
 
 import com.common.dao.BaseDAO;
 import com.screens.product.dto.ProductDTO;
+import com.screens.product.form.ResponseAllProductForm;
 import com.screens.product.form.ResponseProductDetailForm;
 import com.screens.product.form.ResponseProductListForm;
 import com.util.IDBHelper;
@@ -27,6 +28,15 @@ public class ProductDAO extends BaseDAO {
         try{
             openConnection();
             return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductList",productDTO);
+        }finally {
+            closeConnection();
+        }
+    }
+
+    public ResponseAllProductForm getAllProduct(ProductDTO productDTO) {
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getAllProduct",productDTO);
         }finally {
             closeConnection();
         }

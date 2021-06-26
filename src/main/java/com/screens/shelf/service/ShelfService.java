@@ -41,6 +41,19 @@ public class ShelfService extends BaseService {
         return responseForm;
     }
 
+    public ResponseShelvesByStoreId getShelveByStoreId(RequestShelvesByStoreId requestForm){
+        ResponseShelvesByStoreId responseForm = null;
+        ShelfDTO shelfDTO = new ShelfDTO();
+        shelfDTO.setStoreId(requestForm.getStoreId());
+        try{
+            responseForm = shelfDAO.getShelveByStoreId(shelfDTO);
+        }catch (PersistenceException e){
+            logger.error("Error at ShelfService: " + e.getMessage());
+        }
+
+        return responseForm;
+    }
+
     public ResponseShelfDetailForm getShelfDetail(RequestShelfDetailForm requestForm, AuthorDTO authorDTO){
         ResponseShelfDetailForm responseForm = null;
         ShelfDTO shelfDTO = new ShelfDTO();
