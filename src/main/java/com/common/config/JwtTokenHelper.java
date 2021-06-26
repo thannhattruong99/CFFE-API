@@ -1,6 +1,7 @@
 package com.common.config;
 
 import com.authentication.dto.AccountDTO;
+import com.util.StringHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,6 +21,10 @@ public class JwtTokenHelper implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
 //    number of seconds: h * m * s
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    private static final String USER_ID_STRING = "UserId";
+    private static final String USER_NAME_STRING = "UserName";
+    private static final String STORE_ID_STRING = "StoreId";
+    private static final String ROLE_ID_STRING = "RoleId";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -81,8 +86,16 @@ public class JwtTokenHelper implements Serializable {
     }
 
     public Boolean validateToken(String token, AccountDTO accountDTO) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(accountDTO.getUserName()) && !isTokenExpired(token));
+        boolean isValidate = true;
+        Claims claims = getAllClaimsFromToken(token);
+
+        if(!accountDTO.getUserId().equals(claims.get(USER_ID_STRING, String.class))){
+            isValidate = false;
+        } else if(!accountDTO.getUserName().equals(getUsernameFromToken(token))){
+            isValidate = false;
+        }
+
+        return (isValidate && !isTokenExpired(token));
     }
 
     private Date calculateExpirationDate(Date createdDate) {
