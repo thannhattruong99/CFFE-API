@@ -139,13 +139,6 @@ public class ShelfService extends BaseService {
         return responseForm;
     }
 
-    //    TruongTN
-    public String storeFile(MultipartFile file, Integer userId, String docType) {
-        String fileName = FileHelper.storeVideo(file, userId, docType);
-        eventPublisher.publishEvent("Upload file", fileName);
-        return fileName;
-    }
-
     private void convertRequestShelfListToShelfDTO(RequestShelfListForm requestForm, ShelfDTO shelfDTO, AuthorDTO authorDTO){
         shelfDTO.setStoreId(authorDTO.getStoreId());
         shelfDTO.setShelfName(requestForm.getShelfName());
