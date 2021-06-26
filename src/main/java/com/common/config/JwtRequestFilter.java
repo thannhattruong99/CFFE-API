@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -37,7 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String UNAUTHORIZED = "Unauthorized";
 
 
-    private List<String> adminAuthorities;
+    private final List<String> adminAuthorities;
     private final List<String> managerAuthorities;
     private final List<String> applicationAuthorities;
 
@@ -59,9 +60,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwtToken = null;
         String uri = request.getRequestURI();
-        System.out.println("URI: " + uri);
-        System.out.println("adminAuthorities: " + adminAuthorities.size());
-        adminAuthorities = FileHelper.loadResource(ADMIN_AUTHORITY_PATH);
+
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
@@ -70,8 +69,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 username = jwtTokenHelper.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
                 logger.error("Unable to get JWT Token: " + e.getMessage());
+                response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                return;
             } catch (ExpiredJwtException e) {
                 logger.error("JWT Token has expired: " + e.getMessage());
+                response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                return;
             }
         }
         else if(applicationAuthorities.contains(uri)){
@@ -101,7 +104,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         authorDTO.setUserId(userId);
                         authorDTO.setUserName(username);
                         authorDTO.setStoreId(storeId);
-                        ((HttpServletRequest) request).setAttribute("AUTHOR", authorDTO);
+                        request.setAttribute("AUTHOR", authorDTO);
                     }else {
                         response.setHeader(AUTHORIZATION, UNAUTHORIZED);
                         return;
