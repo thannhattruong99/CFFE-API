@@ -1,15 +1,12 @@
 package com.screens.video.dao;
 
 import com.common.dao.BaseDAO;
-import com.listeners.events.EventCreator;
 import com.screens.file.dto.VideoProperty;
 import com.screens.video.dto.VideoDTO;
 import com.screens.video.form.ResponseCountVideosForm;
 import com.screens.video.form.ResponseEmotionVideosForm;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class VideoDAO extends BaseDAO {

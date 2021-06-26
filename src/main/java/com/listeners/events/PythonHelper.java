@@ -3,12 +3,10 @@ package com.listeners.events;
 import com.util.FileHelper;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static com.util.PathConstant.*;
-import static com.util.PathConstant.COUNT_MODEL_PATH;
 
 public class PythonHelper {
     //    private static String RUN_PYTHON_SOURCE = "/Users/truongtn/Desktop/Desktop/HocTap/Semester8/Python/CoutingPeople/People-Counting-in-Real-Time/";

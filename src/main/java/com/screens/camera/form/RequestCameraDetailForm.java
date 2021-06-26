@@ -1,7 +1,5 @@
 package com.screens.camera.form;
 
-import org.springframework.lang.Nullable;
-
 import javax.validation.constraints.NotEmpty;
 
 public class RequestCameraDetailForm {

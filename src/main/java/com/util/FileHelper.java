@@ -1,6 +1,5 @@
 package com.util;
 
-import com.common.dto.DocumnentStorageProperties;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.util.PathConstant.*;
+import static com.util.PathConstant.RESOURCE_PATH;
 
 public class FileHelper implements Serializable {
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)

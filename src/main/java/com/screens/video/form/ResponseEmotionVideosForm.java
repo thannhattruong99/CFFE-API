@@ -1,7 +1,5 @@
 package com.screens.video.form;
 
-import com.screens.store.form.StoreResponseSupporter;
-
 import java.util.List;
 
 public class ResponseEmotionVideosForm {

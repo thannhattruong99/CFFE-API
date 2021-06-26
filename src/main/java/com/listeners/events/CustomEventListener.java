@@ -1,7 +1,6 @@
 package com.listeners.events;
 
 import com.screens.file.dto.VideoProperty;
-import com.screens.shelf.dao.ShelfDAO;
 import com.screens.video.dao.VideoDAO;
 import com.util.FileHelper;
 import com.util.GCPHelper;

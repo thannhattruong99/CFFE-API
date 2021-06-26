@@ -2,7 +2,7 @@ package com.screens.file.service;
 
 import com.common.service.BaseService;
 import com.coremedia.iso.IsoFile;
-import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.MovieHeaderBox;
 import com.listeners.events.CustomEventListener;
 import com.listeners.events.EventCreator;
 import com.listeners.events.EventPublisher;
