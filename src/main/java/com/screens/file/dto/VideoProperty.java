@@ -4,16 +4,52 @@ import java.io.Serializable;
 
 public class VideoProperty implements Serializable {
     private String videoId;
-    private String videoName;
+    private String videoNameOriginal;
+    private String videoNameUUID;
     private String videoUrl;
     private String startedTime;
+    private String endedTime;
     private int duration;
+    private String cameraId;
     private String shelfCameraMappingId;
     private String stackProductCameraMappingId;
     private int statusId;
     private int totalPerson;
+    private int typeVideo;
 
     public VideoProperty() {
+    }
+
+    public String getCameraId() {
+        return cameraId;
+    }
+
+    public void setCameraId(String cameraId) {
+        this.cameraId = cameraId;
+    }
+
+    public int getTypeVideo() {
+        return typeVideo;
+    }
+
+    public void setTypeVideo(int typeVideo) {
+        this.typeVideo = typeVideo;
+    }
+
+    public String getEndedTime() {
+        return endedTime;
+    }
+
+    public void setEndedTime(String endedTime) {
+        this.endedTime = endedTime;
+    }
+
+    public String getVideoNameOriginal() {
+        return videoNameOriginal;
+    }
+
+    public void setVideoNameOriginal(String videoNameOriginal) {
+        this.videoNameOriginal = videoNameOriginal;
     }
 
     public int getTotalPerson() {
@@ -40,12 +76,12 @@ public class VideoProperty implements Serializable {
         this.videoId = videoId;
     }
 
-    public String getVideoName() {
-        return videoName;
+    public String getVideoNameUUID() {
+        return videoNameUUID;
     }
 
-    public void setVideoName(String videoName) {
-        this.videoName = videoName;
+    public void setVideoNameUUID(String videoNameUUID) {
+        this.videoNameUUID = videoNameUUID;
     }
 
     public String getVideoUrl() {

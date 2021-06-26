@@ -3,12 +3,23 @@
 
 <mapper namespace="com.screens.video.dao.VidDAO">
 
+    <select id="getShelfCameraMappingId" resultType="java.lang.String">
+        SELECT ShelfCameraMappingId, AddedTime, RemovedTime
+        FROM tblShelfCameraMapping
+        WHERE CameraId = #{cameraId}
+        AND AddedTime &lt;= #{startedTime}
+        AND (CASE WHEN RemovedTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
+            ELSE RemovedTime END)  &gt;= #{endedTime}
+        ORDER BY AddedTime DESC
+        LIMIT 1
+    </select>
+
     <select id="getVideoCountList" resultMap="getVideoCountList">
         SELECT TV.VideoId,
                TV.VideoName,
                TV.VideoURL,
                TV.StartedTime,
-               TV.Duration,
+               TV.EndedTime,
                TV.StatusId,
                TS.ShelfId,
                TS.ShelfName,
@@ -62,7 +73,7 @@
                     <result property="videoName" column="VideoName"/>
                     <result property="videoUrl" column="VideoURL"/>
                     <result property="startedTime" column="StartedTime"/>
-                    <result property="duration" column="Duration"/>
+                    <result property="endedTime" column="EndedTime"/>
                     <result property="statusId" column="StatusId"/>
                 </collection>
             </collection>
@@ -76,7 +87,7 @@
                 TV.VideoName,
                 TV.VideoURL,
                 TV.StartedTime,
-                TV.Duration,
+                TV.EndedTime,
                 TV.StatusId,
                 TS.ShelfId,
                 TS.ShelfName,
@@ -126,18 +137,29 @@
                 <result property="videoName" column="VideoName"/>
                 <result property="videoUrl" column="VideoURL"/>
                 <result property="startedTime" column="StartedTime"/>
-                <result property="duration" column="Duration"/>
+                <result property="endedTime" column="EndedTime"/>
                 <result property="statusId" column="StatusId"/>
             </collection>
         </collection>
     </resultMap>
 
-    <insert id="insertVideoProperty" parameterType="EventCreator">
-        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,Duration,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values
-        <foreach collection="videoPropertyList" item="element" index="index" open="(" separator="),("  close=")">
-            #{element.videoName},#{element.videoUrl},#{element.startedTime},
-            #{element.duration},#{element.shelfCameraMappingId},#{element.stackProductCameraMappingId},#{element.statusId}
-        </foreach>
+<!--    <insert id="insertVideoProperty" parameterType="EventCreator">-->
+<!--        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,Duration,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values-->
+<!--        <foreach collection="videoPropertyList" item="element" index="index" open="(" separator="),("  close=")">-->
+<!--            #{element.videoName},#{element.videoUrl},#{element.startedTime},-->
+<!--            #{element.duration},#{element.shelfCameraMappingId},#{element.stackProductCameraMappingId},#{element.statusId}-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+    <insert id="insertVideoProperty" parameterType="VideoProperty">
+        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,EndedTime,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values
+            (#{videoNameOriginal},#{videoUrl},#{startedTime},
+            #{endedTime},#{shelfCameraMappingId},#{stackProductCameraMappingId},#{statusId})
+    </insert>
+
+    <insert id="insertHotSpot" parameterType="VideoProperty">
+        INSERT INTO tblHotSpot (StartedTime,EndedTime,TotalPeople,ShelfCameraMappingId) values
+        (#{startedTime},#{endedTime},#{totalPerson},#{shelfCameraMappingId})
     </insert>
 
 </mapper>

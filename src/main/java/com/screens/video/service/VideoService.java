@@ -2,16 +2,9 @@ package com.screens.video.service;
 
 import com.common.service.BaseService;
 import com.filter.dto.AuthorDTO;
-import com.screens.store.dao.StoreDAO;
-import com.screens.store.dto.StoreDTO;
-import com.screens.store.form.RequestGetStoreListForm;
-import com.screens.store.form.ResponseStoreListForm;
-import com.screens.store.service.StoreService;
 import com.screens.video.dao.VideoDAO;
 import com.screens.video.dto.VideoDTO;
 import com.screens.video.form.RequestGetVideoListForm;
-import com.screens.video.form.ResponseCountVideosForm;
-import com.screens.video.form.ResponseEmotionVideosForm;
 import com.screens.video.form.ResponseGetVideoForm;
 import com.util.MessageConstant;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
 
 @Service
 public class VideoService extends BaseService {

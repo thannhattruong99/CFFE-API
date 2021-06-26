@@ -1,12 +1,7 @@
 package com.screens.video.controller;
 
 import com.filter.dto.AuthorDTO;
-import com.screens.store.form.RequestGetStoreListForm;
-import com.screens.store.form.ResponseStoreListForm;
-import com.screens.store.service.StoreService;
 import com.screens.video.form.RequestGetVideoListForm;
-import com.screens.video.form.ResponseCountVideosForm;
-import com.screens.video.form.ResponseEmotionVideosForm;
 import com.screens.video.form.ResponseGetVideoForm;
 import com.screens.video.service.VideoService;
 import com.util.MessageConstant;

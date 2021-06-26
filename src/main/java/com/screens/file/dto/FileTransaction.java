@@ -1,39 +1,31 @@
 package com.screens.file.dto;
 
-import java.util.Date;
 
 public class FileTransaction {
-    private String user;
-    private Notification notification;
-    private Date when;
+    private String message;
+    private int status;
 
-    public FileTransaction(String user, Notification notification, Date when) {
-        this.user = user;
-        this.notification = notification;
-        this.when = when;
+
+    public FileTransaction(String message, int status) {
+        this.message = message;
+        this.status = status;
     }
 
-    public String getUser() {
-        return user;
+    public String getMessage() {
+        return message;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public Notification getNotification() {
-        return notification;
+    public int getStatus() {
+        return status;
     }
 
-    public void setNotification(Notification notification) {
-        this.notification = notification;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public Date getWhen() {
-        return when;
-    }
 
-    public void setWhen(Date when) {
-        this.when = when;
-    }
 }

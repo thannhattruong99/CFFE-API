@@ -1,15 +1,12 @@
 package com.screens.video.dao;
 
 import com.common.dao.BaseDAO;
-import com.listeners.events.EventCreator;
 import com.screens.file.dto.VideoProperty;
 import com.screens.video.dto.VideoDTO;
 import com.screens.video.form.ResponseCountVideosForm;
 import com.screens.video.form.ResponseEmotionVideosForm;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class VideoDAO extends BaseDAO {
@@ -36,12 +33,53 @@ public class VideoDAO extends BaseDAO {
         }
     }
 
-    public boolean insertVideoProperty(EventCreator eventCreator) {
-        if(sqlSession.insert("com.screens.video.dao.VidDAO.insertVideoProperty",eventCreator) > 0){
-            this.sqlSession.commit();
-            return true;
+    public String getShelfCameraMappingId(VideoProperty videoProperty) {
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.video.dao.VidDAO.getShelfCameraMappingId",videoProperty);
+        }finally {
+            closeConnection();
         }
-        return false;
+    }
+
+    public boolean insertVideoProperty(VideoProperty videoProperty) {
+        try{
+            openConnection();
+            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertVideoProperty",videoProperty) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
+        }
+    }
+
+    public boolean insertHotSpot(VideoProperty videoProperty) {
+        try{
+            openConnection();
+            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertHotSpot",videoProperty) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
+        }
+    }
+
+    public boolean insertEmotion(VideoProperty videoProperty) {
+//        try{
+//            openConnection();
+//            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertEmotion",videoProperty) > 0){
+//                this.sqlSession.commit();
+//                return true;
+//            }
+//            return false;
+//        }finally {
+//            closeConnection();
+//        }
+        return true;
     }
 
 }

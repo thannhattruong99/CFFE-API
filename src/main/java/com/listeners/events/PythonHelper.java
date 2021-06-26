@@ -3,12 +3,10 @@ package com.listeners.events;
 import com.util.FileHelper;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static com.util.PathConstant.*;
-import static com.util.PathConstant.COUNT_MODEL_PATH;
 
 public class PythonHelper {
     //    private static String RUN_PYTHON_SOURCE = "/Users/truongtn/Desktop/Desktop/HocTap/Semester8/Python/CoutingPeople/People-Counting-in-Real-Time/";
@@ -37,9 +35,8 @@ public class PythonHelper {
         command += " " + OUTPUT_VIDEO_OPTION + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFilePath;
         return command;
     }
-    public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
-//
 
+    public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
 
         int numberOfPerson = 0;
             Runtime rt = Runtime.getRuntime();
@@ -58,7 +55,12 @@ public class PythonHelper {
             System.out.println("proc.waitFor(): " + proc.waitFor());
 //            insert db
 
+        return numberOfPerson;
+    }
 
+    // LuanNM temp
+    public static int countEmotion(String inputFileName, String outputFileName) throws InterruptedException, IOException {
+        int numberOfPerson = 0;
         return numberOfPerson;
     }
 
