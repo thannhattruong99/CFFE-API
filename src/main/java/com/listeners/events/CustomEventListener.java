@@ -27,6 +27,8 @@ public class CustomEventListener {
 
     private static final int DETECT_HOT_SPOT = 1;
     private static final int DETECT_EMOTION = 2;
+    private static final String CONTENT_TYPE_IMAGE = "";
+    private static final String CONTENT_TYPE_VIDEO = "video/mp4";
 
     @Async
     @EventListener
@@ -98,7 +100,8 @@ public class CustomEventListener {
     private void uploadVideoDetectedToStorage(VideoProperty videoProperty) {
         try {
             String outputPath = GCPHelper.uploadFile(OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID(),
-                    VIDEO_FOLDER_CLOUD + org.springframework.util.StringUtils.cleanPath(videoProperty.getVideoNameUUID()));
+                    VIDEO_FOLDER_CLOUD + org.springframework.util.StringUtils.cleanPath(videoProperty.getVideoNameUUID()),
+                    CONTENT_TYPE_VIDEO);
             videoProperty.setVideoUrl(outputPath);
 //            FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
             FileHelper.deleteFile2(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());

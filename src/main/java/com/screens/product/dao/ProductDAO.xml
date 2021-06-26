@@ -3,6 +3,23 @@
 
 <mapper namespace="com.screens.product.dao.sql.ProductDAO">
 
+    <select id="getAllProduct" resultMap="getAllProduct">
+        SELECT S.ProductId,
+               S.ProductName,
+               TT.totalOfRecord
+        FROM tblProduct S,
+             (SELECT COUNT(S.ProductId) AS totalOfRecord
+              FROM tblProduct S) TT
+    </select>
+
+    <resultMap id="getAllProduct" type="ResponseAllProductForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="products" ofType="ProductShortResponseSupporter">
+            <result property="productId" column="ProductId"/>
+            <result property="productName" column="ProductName"/>
+        </collection>
+    </resultMap>
+
     <select id="getProductDetail" resultMap="getProductDetail">
         SELECT S.ProductId,
                CC.CategoryId,

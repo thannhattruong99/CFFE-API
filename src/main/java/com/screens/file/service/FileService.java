@@ -38,6 +38,9 @@ public class FileService extends BaseService {
     @Autowired
     CustomEventListener customEventListener;
 
+    private static final String CONTENT_TYPE_IMAGE = "";
+    private static final String CONTENT_TYPE_VIDEO = "video/mp4";
+
     /**
      * Upload Image To Storage
      * @param file Image
@@ -69,7 +72,7 @@ public class FileService extends BaseService {
         // get file on server upload to storage
         try {
             response.setFilePath(GCPHelper.uploadFile(IMAGE_FOLDER_SERVER + fileName,
-                    IMAGE_FOLDER_CLOUD + StringUtils.cleanPath(fileName)));
+                    IMAGE_FOLDER_CLOUD + StringUtils.cleanPath(fileName),CONTENT_TYPE_IMAGE));
             FileHelper.deleteFile(IMAGE_FOLDER_SERVER + fileName);
         } catch (IOException e) {
             System.out.println("Toang roi ne: " + e.getMessage());
