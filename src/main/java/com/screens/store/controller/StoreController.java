@@ -174,22 +174,6 @@ public class StoreController {
         return ResponseSupporter.responseResult(true);
     }
 
-//    @RequestMapping(value = "/admin/store/update-analyzed-time", method = RequestMethod.POST)
-//    public String updateAnalyzedTime(@Validated @RequestBody RequestUpdateAnalyzedTime requestForm,
-//                                  BindingResult result){
-//        // Check Validate
-//        if(result.hasErrors()){
-//            return ResponseSupporter.responseErrorResult(result);
-//        }
-//        // Do Update Infomation Store
-//        ResponseCommonForm responseForm = storeService.updateAnalyzedTime(requestForm);
-//        if(responseForm.getErrorCodes() != null){
-//            return ResponseSupporter.responseErrorResult(responseForm.getErrorCodes());
-//        }
-//        // Return result
-//        return ResponseSupporter.responseResult(true);
-//    }
-
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/store/change-manager", method = RequestMethod.POST)
     public String changeManager(@Validated @RequestBody RequestChangeManager requestForm,
@@ -207,19 +191,5 @@ public class StoreController {
         // Return result
         return ResponseSupporter.responseResult(true);
     }
-
-//    @PostMapping("/uploadImage")
-//    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file,
-//                                         @RequestParam("userId") Integer UserId,
-//                                         @RequestParam("docType") String docType) {
-//
-//        String fileName = documneStorageService.storeFile(file, UserId, docType);
-//        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                .path("/downloadFile/")
-//                .path(fileName)
-//                .toUriString();
-//        return new UploadFileResponse(fileName, fileDownloadUri,
-//                file.getContentType(), file.getSize());
-//    }
 
 }
