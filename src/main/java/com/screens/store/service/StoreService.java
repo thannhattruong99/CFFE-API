@@ -57,6 +57,7 @@ public class StoreService extends BaseService {
         int authorStatus = checkAuthor(authorDTO);
         if (authorStatus == ADMIN) {
             StoreDTO storeDTO = new StoreDTO();
+            storeDTO.setAll(requestForm.getAll());
             try {
                 responseStoreListForm = storeDAO.getStoreListShort(storeDTO);
             } catch (PersistenceException e) {

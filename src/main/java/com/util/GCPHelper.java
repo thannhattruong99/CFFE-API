@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class GCPHelper {
-//    upload image
+
     private static String bucketName = "capstone_storeage";
 
-    public static String uploadFile(String relativeFilePath, String fileCloudPath) throws IOException {
+    public static String uploadFile(String relativeFilePath, String fileCloudPath, String contentType) throws IOException {
         Bucket bucket  = getBucket(bucketName);
         InputStream inputStream = new FileInputStream(FileHelper.getResourcePath() + relativeFilePath);
-        Blob blob = bucket.create(fileCloudPath, inputStream, "");
+        Blob blob = bucket.create(fileCloudPath, inputStream, contentType);
         return blob.getMediaLink();
     }
 

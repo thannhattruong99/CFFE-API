@@ -51,6 +51,27 @@ public class ShelfController {
     }
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @RequestMapping(value = "/shelves-by-storeid", method = RequestMethod.GET)
+    public String getShelvesByStoreId(@Validated RequestShelvesByStoreId requestForm,
+                             BindingResult result, HttpServletRequest request){
+
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+
+        AuthorDTO authorDTO = (AuthorDTO) request.getAttribute(AUTHOR);
+
+        ResponseShelvesByStoreId responseForm = shelfService.getShelveByStoreId(requestForm);
+
+        if(responseForm == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        return ResponseSupporter.responseResult(responseForm);
+    }
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelf", method = RequestMethod.GET)
     public String getShelfDetail(@Validated RequestShelfDetailForm requestForm, BindingResult result,
                                  HttpServletRequest request){

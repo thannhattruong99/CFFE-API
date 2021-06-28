@@ -70,6 +70,22 @@ public class ProductController {
     }
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/all-product")
+    public String getAllProduct(
+            HttpServletRequest request){
+
+        // Do Get Product Detail
+        ResponseAllProductForm res = productService.getAllProduct();
+        if(res == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
+        // Return result
+        return ResponseSupporter.responseResult(res);
+    }
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/product/create")
     public String createProduct(
             @Validated @RequestBody RequestCreateProductForm requestForm,

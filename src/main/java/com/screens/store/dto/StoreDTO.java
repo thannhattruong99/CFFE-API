@@ -19,8 +19,17 @@ public class StoreDTO extends BaseDTO implements Serializable {
     private int statusId;
     private int totalOfRecord;
     private String productId;
+    private boolean all;
 
     public StoreDTO() {
+    }
+
+    public boolean isAll() {
+        return all;
+    }
+
+    public void setAll(boolean all) {
+        this.all = all;
     }
 
     public String getProductId() {

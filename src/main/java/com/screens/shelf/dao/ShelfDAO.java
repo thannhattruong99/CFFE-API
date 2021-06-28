@@ -5,6 +5,7 @@ import com.screens.shelf.dto.ShelfDTO;
 import com.screens.shelf.dto.StackDTO;
 import com.screens.shelf.form.ResponseShelfDetailForm;
 import com.screens.shelf.form.ResponseShelfListForm;
+import com.screens.shelf.form.ResponseShelvesByStoreId;
 import com.util.IDBHelper;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,15 @@ public class ShelfDAO extends BaseDAO {
         try{
             openConnection();
             return sqlSession.selectOne("ShelfDAO.getShelves", shelfDTO);
+        }finally {
+            closeConnection();
+        }
+    }
+
+    public ResponseShelvesByStoreId getShelveByStoreId(ShelfDTO shelfDTO){
+        try{
+            openConnection();
+            return sqlSession.selectOne("ShelfDAO.getShelveByStoreId", shelfDTO);
         }finally {
             closeConnection();
         }
