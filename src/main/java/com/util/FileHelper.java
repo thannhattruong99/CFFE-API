@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.util.PathConstant.PROJECT_NAME;
 import static com.util.PathConstant.RESOURCE_PATH;
 
 public class FileHelper implements Serializable {
@@ -131,7 +132,9 @@ public class FileHelper implements Serializable {
     //get out of project path
     public static String getOutProjectPath(){
         String str = Paths.get("").toAbsolutePath().toString();
+        System.out.println("STR1: " + str);
         str = str.replaceAll("CapstoneAPI/target", "");
+        System.out.println("STR2: " + str);
         return str;
     }
 }
