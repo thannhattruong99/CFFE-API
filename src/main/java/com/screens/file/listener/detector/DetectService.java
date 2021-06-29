@@ -123,9 +123,7 @@ public class DetectService {
 
     public static int getHotSpotResult(StringBuilder stringBuilder){
         int index = stringBuilder.indexOf(PERSONS) + SIZE;
-        System.out.println("stringBuilder: " + stringBuilder.toString());
         stringBuilder.delete(0, index);
-        System.out.println("stringBuilder.delete(0, index): " + stringBuilder);
         try {
             return Integer.parseInt(String.valueOf(stringBuilder).trim());
         }catch (NumberFormatException e){
