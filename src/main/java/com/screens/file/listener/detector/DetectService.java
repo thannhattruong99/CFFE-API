@@ -11,7 +11,7 @@ import static com.util.PathConstant.*;
 public class DetectService {
     private final static String PERSONS = "PERSONS:";
 //    PERSONS:
-    private final static int SIZE = 9;
+    private final static int SIZE = 8;
 
     private static String createHotSpotCommand(String inputFilePath, String outputFilePath){
         String command = "";
@@ -123,9 +123,11 @@ public class DetectService {
 
     public static int getHotSpotResult(StringBuilder stringBuilder){
         int index = stringBuilder.indexOf(PERSONS) + SIZE;
+        System.out.println("stringBuilder: " + stringBuilder.toString());
         stringBuilder.delete(0, index);
+        System.out.println("stringBuilder.delete(0, index): " + stringBuilder);
         try {
-            return Integer.parseInt(String.valueOf(stringBuilder));
+            return Integer.parseInt(String.valueOf(stringBuilder).trim());
         }catch (NumberFormatException e){
             return -1;
         }
