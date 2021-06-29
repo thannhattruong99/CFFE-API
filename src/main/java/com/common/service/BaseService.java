@@ -21,6 +21,8 @@ public class BaseService {
     protected static final int MANAGER_WITHIN_STORE = 2;
     protected static final int MANAGER_WITHOUT_STORE = 3;
     protected static final int PASSWORD_LENGTH = 8;
+    protected static final int DETECT_HOT_SPOT = 1;
+    protected static final int DETECT_EMOTION = 2;
     protected static final boolean IS_DESCENDING = false;
     protected static final String NUMBER_REGEXP = "[0-9]*";
     protected static final String TIME_ZONE_VIETNAMESE = "+07:00";

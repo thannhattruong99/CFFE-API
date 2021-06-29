@@ -14,6 +14,10 @@
         LIMIT 1
     </select>
 
+<!--    <select id="countByCameraIdAndTime" resultType="int">-->
+<!--        -->
+<!--    </select>-->
+
     <select id="getVideoCountList" resultMap="getVideoCountList">
         SELECT TV.VideoId,
                TV.VideoName,

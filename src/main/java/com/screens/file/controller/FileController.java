@@ -43,7 +43,7 @@ public class FileController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/upload-video")
-    public String uploadVideo(@RequestParam("file") MultipartFile[] files) throws IOException {
+    public String uploadVideo(@RequestParam("file") MultipartFile[] files){
         ResponseUploadVideo response = fileService.uploadVideoToServer(files);
         if(response.getErrorCodes() != null){
             return ResponseSupporter.responseErrorResult(response.getErrorCodes());

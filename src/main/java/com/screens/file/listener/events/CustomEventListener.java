@@ -1,12 +1,17 @@
 package com.screens.file.listener.events;
 
+import com.common.service.BaseService;
 import com.screens.file.listener.detector.DetectService;
 import com.screens.file.dto.VideoProperty;
 import com.screens.file.listener.detector.EmotionDTO;
+import com.screens.file.service.FileService;
 import com.screens.video.dao.VideoDAO;
 import com.util.FileHelper;
 import com.util.GCPHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -21,14 +26,15 @@ import java.util.Map;
 import static com.util.PathConstant.*;
 
 @Component
-public class CustomEventListener {
+public class CustomEventListener extends BaseService {
+    private static final Logger logger = LoggerFactory.getLogger(CustomEventListener.class);
+
     private Map<String, EventCreator> eventCreatorMap;
 
     @Autowired
     private VideoDAO videoDAO;
 
-    private static final int DETECT_HOT_SPOT = 1;
-    private static final int DETECT_EMOTION = 2;
+
     private static final String CONTENT_TYPE_IMAGE = "";
     private static final String CONTENT_TYPE_VIDEO = "video/mp4";
 
@@ -113,20 +119,17 @@ public class CustomEventListener {
     }
 
     private void insertDatabase(VideoProperty videoProperty, List<String> videoErrorNameList, EventCreator eventCreator){
-        if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
-            String shelfCameraMappingId = videoDAO.getShelfCameraMappingId(videoProperty);
-            System.out.println("shelfCameraMappingId = " + shelfCameraMappingId);
-            if (StringUtils.isNotEmpty(shelfCameraMappingId)){
-                videoProperty.setShelfCameraMappingId(shelfCameraMappingId);
+        try {
+            if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
                 videoDAO.insertHotSpot(videoProperty);
                 videoDAO.insertVideoProperty(videoProperty);
-            } else {
-                setError(videoProperty,videoErrorNameList,eventCreator);
             }
-        }
-        if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
+            if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
 //                    videoDAO.insertEmotion(videoProperty);
 //                    videoDAO.insertVideoProperty(videoProperty);
+            }
+        } catch (PersistenceException e){
+            logger.error("Error at CustomEventListener: " + e.getMessage());
         }
     }
     private void setError(VideoProperty videoProperty, List<String> videoErrorNameList, EventCreator eventCreator) {
