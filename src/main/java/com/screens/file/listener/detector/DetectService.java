@@ -124,7 +124,11 @@ public class DetectService {
     public static int getHotSpotResult(StringBuilder stringBuilder){
         int index = stringBuilder.indexOf(PERSONS) + SIZE;
         stringBuilder.delete(0, index);
-        return Integer.parseInt(String.valueOf(stringBuilder));
+        try {
+            return Integer.parseInt(String.valueOf(stringBuilder));
+        }catch (NumberFormatException e){
+            return -1;
+        }
     }
 
     private static EmotionDTO readEmotionConsole(Process proc) throws IOException {
