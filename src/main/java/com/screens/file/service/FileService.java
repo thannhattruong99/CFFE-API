@@ -98,6 +98,10 @@ public class FileService extends BaseService {
             else if(!file.getContentType().toLowerCase().equals("video/mp4")){
                 response.setErrorCodes(getError(MessageConstant.MSG_118));
             }
+            // check name file
+            else if (!validVideoName(file)) {
+                response.setErrorCodes(getError(MessageConstant.MSG_121));
+            }
             if (response.getErrorCodes() != null) {
                 return response;
             }
@@ -131,6 +135,27 @@ public class FileService extends BaseService {
         Calendar cal = Calendar.getInstance();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-hhmmss");
         return dateFormat.format(cal.getTime());
+    }
+
+    private boolean validVideoName(MultipartFile file) {
+//        boolean valid = true;
+
+
+        String fileName = file.getOriginalFilename();
+        String[] parts = fileName.split("_");
+        if (parts.length != 3) {
+            return false;
+        }
+        try {
+            Integer.parseInt(parts[0]);
+        }catch (NumberFormatException e) {
+            return false;
+        }
+        String fileType = parts[2].substring(parts[2].lastIndexOf("."));
+        if (!fileType.equalsIgnoreCase(".mp4")) {
+            return false;
+        }
+        return true;
     }
 
     private void getVideoProperties(VideoProperty videoProperty, String fileNameUUID, String originalFileName) throws IOException {

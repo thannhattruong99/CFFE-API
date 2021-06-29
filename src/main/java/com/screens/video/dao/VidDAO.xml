@@ -25,11 +25,17 @@
                TS.ShelfName,
                TT.StoreId,
                TT.StoreName,
+                THS.HotspotId,
+                THS.StartedTime,
+                THS.EndedTime,
+                THS.TotalPeople,
+                THS.Description,
                TTTT.totalOfRecord
         FROM tblVideo TV
                  LEFT JOIN tblShelfCameraMapping TSCM ON (TSCM.ShelfCameraMappingId = TV.ShelfCameraMappingId)
                  LEFT JOIN tblShelf TS ON (TS.ShelfId = TSCM.ShelfId)
-                 LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId),
+                 LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
+                 LEFT JOIN tblHotSpot THS ON (TSCM.ShelfCameraMappingId = THS.ShelfCameraMappingId AND TV.StartedTime = THS.StartedTime),
              (
                  SELECT COUNT(TV.VideoId) AS totalOfRecord
                  FROM tblVideo TV
@@ -55,9 +61,8 @@
                     AND TS.ShelfId = #{shelfId}
                 </if>
             </if>
-        LIMIT
-        #{offSet},
-        #{fetchNext}
+        ORDER BY
+                 TV.StartedTime DESC
     </select>
 
     <resultMap id="getVideoCountList" type="ResponseCountVideosForm">
@@ -75,6 +80,13 @@
                     <result property="startedTime" column="StartedTime"/>
                     <result property="endedTime" column="EndedTime"/>
                     <result property="statusId" column="StatusId"/>
+                    <collection property="hotSpot" ofType="HotSpotResponseSupporter">
+                        <result property="hotspotId" column="HotspotId"/>
+                        <result property="startedTime" column="StartedTime"/>
+                        <result property="endedTime" column="EndedTime"/>
+                        <result property="TotalPeople" column="TotalPeople"/>
+                        <result property="description" column="description"/>
+                    </collection>
                 </collection>
             </collection>
         </collection>
@@ -94,12 +106,24 @@
                 TT.StoreId,
                 TT.StoreName,
                 TSCM.ProductId,
+                THS.EmotionId,
+                THS.StartedTime,
+                THS.EndedTime,
+                THS.Angry,
+                THS.Disgust,
+                THS.Fear,
+                THS.Happy,
+                THS.Sad,
+                THS.Surprise,
+                THS.Neutral,
+                THS.Description,
                 TTTT.totalOfRecord
         FROM tblVideo TV
             LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.StackProductCameraMappingId = TV.StackProductCameraMappingId)
             LEFT JOIN tblStack TTS ON (TTS.StackId = TSCM.StackId)
             LEFT JOIN tblShelf TS ON (TS.ShelfId = TTS.ShelfId)
-            LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId),
+            LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
+            LEFT JOIN tblEmotion THS ON (TSCM.StackProductCameraMappingId = THS.StackProductCameraMappingId AND TV.StartedTime = THS.StartedTime),
             (
                 SELECT COUNT(TV.VideoId) AS totalOfRecord
                 FROM tblVideo TV
@@ -122,9 +146,7 @@
             </if>
             AND TV.StartedTime &gt;= #{dayStart}
             AND TV.EndedTime &lt;= #{dayEnd}
-        LIMIT
-        #{offSet},
-        #{fetchNext}
+        ORDER BY TV.StartedTime DESC
     </select>
 
     <resultMap id="getVideoEmotionList" type="ResponseEmotionVideosForm">
@@ -139,6 +161,19 @@
                 <result property="startedTime" column="StartedTime"/>
                 <result property="endedTime" column="EndedTime"/>
                 <result property="statusId" column="StatusId"/>
+                <collection property="emotion" ofType="EmotionResponseSupporter">
+                    <id property="emotionId" column="EmotionId"/>
+                    <result property="videoName" column="VideoName"/>
+                    <result property="startedTime" column="StartedTime"/>
+                    <result property="angry" column="Angry"/>
+                    <result property="disgust" column="Disgust"/>
+                    <result property="fear" column="Fear"/>
+                    <result property="happy" column="Happy"/>
+                    <result property="sad" column="Sad"/>
+                    <result property="surprise" column="Surprise"/>
+                    <result property="neutral" column="Neutral"/>
+                    <result property="description" column="Description"/>
+                </collection>
             </collection>
         </collection>
     </resultMap>

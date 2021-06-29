@@ -8,12 +8,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
-public class RequestGetVideoListForm extends RequestGetBaseForm {
+public class RequestGetVideoListForm {
     @Nullable
-    @Pattern(regexp = "^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])",message = "MSG-117")
     private String dayStart;
     @Nullable
-    @Pattern(regexp = "^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])",message = "MSG-117")
     private String dayEnd;
     @Min(value = 1, message = "MSG-009") @Max(value = 2, message = "MSG-009")
     private int videoType;

@@ -7,6 +7,8 @@ public class VideoResponseSupporter {
     private String startedTime;
     private String endedTime;
     private int statusId;
+    private EmotionResponseSupporter emotion;
+    private HotSpotResponseSupporter hotSpot;
 
     public VideoResponseSupporter() {
     }
@@ -57,5 +59,21 @@ public class VideoResponseSupporter {
 
     public void setStatusId(int statusId) {
         this.statusId = statusId;
+    }
+
+    public EmotionResponseSupporter getEmotion() {
+        return emotion;
+    }
+
+    public void setEmotion(EmotionResponseSupporter emotion) {
+        this.emotion = emotion;
+    }
+
+    public HotSpotResponseSupporter getHotSpot() {
+        return hotSpot;
+    }
+
+    public void setHotSpot(HotSpotResponseSupporter hotSpot) {
+        this.hotSpot = hotSpot;
     }
 }

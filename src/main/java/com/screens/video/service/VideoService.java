@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.Calendar;
 
 @Service
@@ -38,6 +42,12 @@ public class VideoService extends BaseService {
         if (authorStatus == ADMIN || authorStatus == MANAGER_WITHIN_STORE) {
             VideoDTO videoDTO = convertGetVideoFormToDTO(requestForm,authorDTO);
             // check Day
+            if (!validDayType(videoDTO.getDayStart())) {
+                response.setErrorCodes(getError(MessageConstant.MSG_117));
+            }
+            if (!validDayType(videoDTO.getDayEnd())) {
+                response.setErrorCodes(getError(MessageConstant.MSG_117));
+            }
             if (StringUtils.isNotEmpty(videoDTO.getDayEnd()) && StringUtils.isEmpty(videoDTO.getDayStart())) {
                 response.setErrorCodes(getError(MessageConstant.MSG_115));
             }
@@ -69,17 +79,11 @@ public class VideoService extends BaseService {
 
     private VideoDTO convertGetVideoFormToDTO(RequestGetVideoListForm requestForm, AuthorDTO authorDTO) {
         VideoDTO videoDTO = new VideoDTO();
-        if(requestForm.getPageNum() > 0){
-            videoDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
-        }
-        videoDTO.setFetchNext(requestForm.getFetchNext());
-        if(requestForm.getFetchNext() <= 0){
-            videoDTO.setFetchNext(DEFAULT_FETCH_NEXT);
-        }
+
         //===
         videoDTO.setVideoType(requestForm.getVideoType());
         if (StringUtils.isNotEmpty(requestForm.getShelfId())) {
-            if (requestForm.getShelfId().toLowerCase().equals(ALL_OPTION)){
+            if (!requestForm.getShelfId().toLowerCase().equals(ALL_OPTION)){
                 videoDTO.setShelfId(requestForm.getShelfId());
             }
         }
@@ -120,6 +124,22 @@ public class VideoService extends BaseService {
         cal.add(Calendar.DATE, dayBefore);
         DateFormat dateFormat = new SimpleDateFormat(DAY_TIME_FORMAT);
         return dateFormat.format(cal.getTime());
+    }
+
+    private boolean validDayType(String date){
+        boolean valid = false;
+        try {
+            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
+            LocalDate.parse(date,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+//                            .withResolverStyle(ResolverStyle.STRICT)
+            );
+            valid = true;
+        } catch (DateTimeParseException e) {
+            e.printStackTrace();
+            valid = false;
+        }
+        return valid;
     }
 
 }
