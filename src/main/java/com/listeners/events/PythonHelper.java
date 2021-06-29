@@ -9,17 +9,13 @@ import java.io.InputStreamReader;
 import static com.util.PathConstant.*;
 
 public class PythonHelper {
-    //    private static String RUN_PYTHON_SOURCE = "/Users/truongtn/Desktop/Desktop/HocTap/Semester8/Python/CoutingPeople/People-Counting-in-Real-Time/";
     private static final String INPUT_VIDEO_OPTION = "--input";
     private static final String OUTPUT_VIDEO_OPTION = "--output";
     private static final String PROTXT_OPTION = "--prototxt";
     private static final String COUNT_MODEL_OPTION = "--model";
     private static String PYTHON38 = "python3.8";
-//    private static String RUN_COUNT_PEOPLE_ABSOLUTE_PATH = "";
-//    private static String PROTXT_ABSOLUTE_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.prototxt";
-//    private static String COUNT_MODEL_PATH = "";
 
-    private static String createDetectCountCommand(String inputFilePath, String outputFilePath){
+    private static String createHotSpotCommand(String inputFilePath, String outputFilePath){
         String command = "";
 //      python version
         command += PYTHON38;
@@ -39,21 +35,12 @@ public class PythonHelper {
     public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
 
         int numberOfPerson = 0;
-            Runtime rt = Runtime.getRuntime();
-//            String command = PYTHON38 + " " + RUN_PYTHON_SOURCE + "Run.py"
-//                    + " --prototxt "+ RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.prototxt" +
-//                    " --model " + RUN_PYTHON_SOURCE + "mobilenet_ssd/MobileNetSSD_deploy.caffemodel" + " "
-//                    + INPUT_VIDEO_OPTION + " " + FileHelper.getResourcePath() + inputVideoPath
-//                    + " " + OUTPUT_VIDEO_OPTION + " " + FileHelper.getResourcePath() + outputVideoPath;
-            String command = createDetectCountCommand(inputFileName, outputFileName);
-            System.out.println("COMMAND: "  + command);
-            Process proc = rt.exec(command);
-            numberOfPerson = readConsole(proc);
-            if(proc.isAlive()){
-//                System.out.println("Con song day ne");
-            }
-            System.out.println("proc.waitFor(): " + proc.waitFor());
-//            insert db
+        Runtime rt = Runtime.getRuntime();
+        String command = createHotSpotCommand(inputFileName, outputFileName);
+        System.out.println("COMMAND: "  + command);
+        Process proc = rt.exec(command);
+        numberOfPerson = readConsole(proc);
+        proc.isAlive();
 
         return numberOfPerson;
     }
@@ -61,6 +48,7 @@ public class PythonHelper {
     // LuanNM temp
     public static int countEmotion(String inputFileName, String outputFileName) throws InterruptedException, IOException {
         int numberOfPerson = 0;
+
         return numberOfPerson;
     }
 

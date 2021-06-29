@@ -62,7 +62,7 @@ public class CustomEventListener {
                 }
 
                 // TODO: delete file input
-                FileHelper.deleteFile2(FileHelper.getResourcePath() + INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
+                FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
 
                 // TODO: upload video moi => cloud
                 uploadVideoDetectedToStorage(videoProperty);
@@ -104,7 +104,7 @@ public class CustomEventListener {
                     CONTENT_TYPE_VIDEO);
             videoProperty.setVideoUrl(outputPath);
 //            FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
-            FileHelper.deleteFile2(FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
+            FileHelper.deleteFile(OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
         } catch (IOException e) {
             System.out.println("Upload video taong: " + e.getMessage());
         }

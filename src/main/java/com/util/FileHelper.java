@@ -35,22 +35,15 @@ public class FileHelper implements Serializable {
 
     //TruongNT
     public static void deleteFile(String relativeFilePath) throws IOException {
-        System.out.println("getResourcePath() + relativeFilePath: " + getResourcePath() + relativeFilePath);
         File file = new File(getResourcePath() + relativeFilePath);
-        System.out.println("file isFile: " + file.canExecute());
-        if (file.delete()){
-            System.out.println("XOA THANH CONG");
-        }else{
-            System.out.println("XOA THAT BAI");
-            file.deleteOnExit();
-        }
-    }
-
-    //TruongNT
-    public static void deleteFile2(String absolutePath) throws IOException {
-        File file = new File(getResourcePath() + absolutePath);
         file.delete();
     }
+
+//    //TruongNT
+//    public static void deleteFile2(String absolutePath) throws IOException {
+//        File file = new File(getResourcePath() + absolutePath);
+//        file.delete();
+//    }
 
     public static boolean checkExistFile(String relativeFilePath) throws FileNotFoundException {
         return ResourceUtils.getFile(getResourcePath() + relativeFilePath).exists();
