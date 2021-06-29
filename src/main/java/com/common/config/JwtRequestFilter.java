@@ -7,6 +7,7 @@ import com.util.FileHelper;
 import com.util.StringHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 return;
             } catch (ExpiredJwtException e) {
                 logger.error("JWT Token has expired: " + e.getMessage());
+                response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                return;
+            } catch (SignatureException e){
+                logger.error("JWT Token invalid: " + e.getMessage());
                 response.setHeader(AUTHORIZATION, UNAUTHORIZED);
                 return;
             }

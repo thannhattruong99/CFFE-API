@@ -1,4 +1,4 @@
-package com.listeners.events;
+package com.screens.file.listener.events;
 
 import com.screens.file.dto.VideoProperty;
 import org.springframework.context.ApplicationEvent;

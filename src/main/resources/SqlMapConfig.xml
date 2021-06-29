@@ -51,7 +51,7 @@
         <typeAlias alias="StoreEmotionResponseSupporter" type="com.screens.video.form.StoreEmotionResponseSupporter"/>
         <typeAlias alias="VideoResponseSupporter" type="com.screens.video.form.VideoResponseSupporter"/>
         <typeAlias alias="AccountDTO" type="com.authentication.dto.AccountDTO"/>
-        <typeAlias alias="EventCreator" type="com.listeners.events.EventCreator"/>
+        <typeAlias alias="EventCreator" type="com.screens.file.listener.events.EventCreator"/>
         <typeAlias alias="VideoProperty" type="com.screens.file.dto.VideoProperty"/>
         <typeAlias alias="ResponseAllProductForm" type="com.screens.product.form.ResponseAllProductForm"/>
         <typeAlias alias="ProductShortResponseSupporter" type="com.screens.product.form.ProductShortResponseSupporter"/>
