@@ -1,4 +1,4 @@
-package com.listeners.events;
+package com.screens.file.listener.events;
 
 import com.screens.file.dto.VideoProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +11,6 @@ import java.util.List;
 public class EventPublisher {
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
-
-    //TruongNT
-    public void publishEvent(String eventId, String relativeFilePath) {
-        applicationEventPublisher.publishEvent(new EventCreator(this, eventId, relativeFilePath));
-    }
 
     //LuanNM
     public void publishEvent(String eventId, List<VideoProperty> videoPropertyList) {
