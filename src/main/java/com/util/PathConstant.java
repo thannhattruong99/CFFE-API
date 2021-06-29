@@ -19,11 +19,25 @@ public class PathConstant {
     public static final String PROJECT_NAME = "CapstoneAPI";
 
 //    PYTHON COMMON OPTION
+    public static String PYTHON38 = "python3";
+    public static final String FPS_ARGUMENT = "--fps";
+    public static final String MODEL_ARGUMENT = "--model";
+    public static final String WEIGHT_ARGUMENT = "--argument";
 
-
-    //    COUNT PEOPLE PATH
+//    HOT SPOT
+    public static final String PROTXT_ARGUMENT = "--prototxt";
     public static final String RUN_COUNT_PEOPLE_PATH = "Counting-People/Run.py";
     public static final String PROTXT_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.prototxt";
     public static final String COUNT_MODEL_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.caffemodel";
+    public static final String INPUT_VIDEO_ARGUMENT = "--input";
+    public static final String OUTPUT_VIDEO_ARGUMENT = "--output";
+
+//    EMOTION
+    public static final String RUN_EMOTION_PATH = "realtime_emotion_detection/videoOffline.py";
+    public static final String VIDEO_ARGUMENT = "--video";
+    public static final String SAVE_ARGUMENT = "--save";
+    public static final String EMOTION_WEIGHT_PATH = "realtime_emotion_detection/fer.h5";
+    public static final String EMOTION_MODEL_PATH = "realtime_emotion_detection/fer.json";
+    public static final int DETECT_EMOTION_FPS = 2;
 
 }

@@ -1,6 +1,8 @@
-package com.listeners.events;
+package com.screens.file.listener.events;
 
+import com.screens.file.listener.detector.DetectService;
 import com.screens.file.dto.VideoProperty;
+import com.screens.file.listener.detector.EmotionDTO;
 import com.screens.video.dao.VideoDAO;
 import com.util.FileHelper;
 import com.util.GCPHelper;
@@ -47,15 +49,15 @@ public class CustomEventListener {
             try{
                 // TODO: detect video hot spot / emotion
                 if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
-                    if((countHP = PythonHelper.countPerson(videoProperty.getVideoNameUUID(),
+                    if((countHP = DetectService.countPerson(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != 0){
                         videoProperty.setTotalPerson(countHP);
                     }
                 }
                 if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
-                    int temp;
-                    if((temp = PythonHelper.countEmotion(videoProperty.getVideoNameUUID(),
-                            videoProperty.getVideoNameUUID())) != 0){
+                    EmotionDTO emotionDTO;
+                    if((emotionDTO = DetectService.countEmotion(videoProperty.getVideoNameUUID(),
+                            videoProperty.getVideoNameUUID())) != null){
 //                        videoProperty.setTotalPerson(countHP);
                         System.out.println("count emotion");
                     }
