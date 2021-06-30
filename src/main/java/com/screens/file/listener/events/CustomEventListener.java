@@ -114,7 +114,7 @@ public class CustomEventListener extends BaseService {
 //            FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
             FileHelper.deleteFile(OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
         } catch (IOException e) {
-            System.out.println("Upload video taong: " + e.getMessage());
+            System.out.println("Upload video toang: " + e.getMessage());
         }
     }
 
