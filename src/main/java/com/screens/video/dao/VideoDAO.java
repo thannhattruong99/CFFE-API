@@ -82,4 +82,17 @@ public class VideoDAO extends BaseDAO {
         return true;
     }
 
+    public boolean isDuplicate(VideoProperty videoProperty) {
+        try{
+            openConnection();
+            int count = sqlSession.selectOne("com.screens.video.dao.VidDAO.countByCameraIdAndTime",videoProperty);
+            if (count > 0) {
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
+        }
+    }
+
 }

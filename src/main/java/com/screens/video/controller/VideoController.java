@@ -32,7 +32,7 @@ public class VideoController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/videos")
-    public String getStoreList(@Validated RequestGetVideoListForm requestForm,
+    public String getVideoList(@Validated RequestGetVideoListForm requestForm,
                                BindingResult result,
                                HttpServletRequest request){
         if(result.hasErrors()){

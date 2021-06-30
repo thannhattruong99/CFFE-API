@@ -30,6 +30,10 @@ public class StackService extends BaseService {
             StackDTO stackDTO = converGetStackDetailFormToDTO(requestForm,authorDTO);
             try {
                 //check stack in store
+//                String storeIdOfStack = stackDAO.getStoreIdByStackId(stackDTO);
+//                if (storeIdOfStack != stackDTO.getStoreId()) {
+//                    System.out.println("authen");
+//                }
                 if (stackDAO.stackIsExistInStore(stackDTO)) {
                     responseStackDetailForm = stackDAO.getStackDetail(stackDTO);
                 }

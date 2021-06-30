@@ -11,7 +11,7 @@ import static com.util.PathConstant.*;
 public class DetectService {
     private final static String PERSONS = "PERSONS:";
 //    PERSONS:
-    private final static int SIZE = 9;
+    private final static int SIZE = 8;
 
     private static String createHotSpotCommand(String inputFilePath, String outputFilePath){
         String command = "";
@@ -124,7 +124,11 @@ public class DetectService {
     public static int getHotSpotResult(StringBuilder stringBuilder){
         int index = stringBuilder.indexOf(PERSONS) + SIZE;
         stringBuilder.delete(0, index);
-        return Integer.parseInt(String.valueOf(stringBuilder));
+        try {
+            return Integer.parseInt(String.valueOf(stringBuilder).trim());
+        }catch (NumberFormatException e){
+            return -1;
+        }
     }
 
     private static EmotionDTO readEmotionConsole(Process proc) throws IOException {

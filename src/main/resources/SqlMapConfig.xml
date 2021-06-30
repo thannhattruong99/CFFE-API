@@ -57,6 +57,8 @@
         <typeAlias alias="ProductShortResponseSupporter" type="com.screens.product.form.ProductShortResponseSupporter"/>
         <typeAlias alias="ResponseShelvesByStoreId" type="com.screens.shelf.form.ResponseShelvesByStoreId"/>
         <typeAlias alias="ShelfSortSupporter" type="com.screens.shelf.form.ShelfSortSupporter"/>
+        <typeAlias alias="HotSpotResponseSupporter" type="com.screens.video.form.HotSpotResponseSupporter"/>
+        <typeAlias alias="EmotionResponseSupporter" type="com.screens.video.form.EmotionResponseSupporter"/>
     </typeAliases>
 
     <environments default="development">

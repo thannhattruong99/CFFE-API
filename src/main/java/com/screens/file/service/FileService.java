@@ -10,9 +10,15 @@ import com.screens.file.dto.FileTransaction;
 import com.screens.file.dto.VideoProperty;
 import com.screens.file.form.ResponseUploadImage;
 import com.screens.file.form.ResponseUploadVideo;
+import com.screens.shelf.service.ShelfService;
+import com.screens.video.dao.VideoDAO;
+import com.screens.video.dto.VideoDTO;
 import com.util.FileHelper;
 import com.util.GCPHelper;
 import com.util.MessageConstant;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -31,12 +37,17 @@ import static com.util.PathConstant.*;
 
 @Service
 public class FileService extends BaseService {
+    private static final Logger logger = LoggerFactory.getLogger(FileService.class);
+
 
     @Autowired
     EventPublisher eventPublisher;
 
     @Autowired
     CustomEventListener customEventListener;
+
+    @Autowired
+    private VideoDAO videoDAO;
 
     private static final String CONTENT_TYPE_IMAGE = "";
     private static final String CONTENT_TYPE_VIDEO = "video/mp4";
@@ -86,17 +97,22 @@ public class FileService extends BaseService {
      * @return List of path file on server
      * @throws IOException
      */
-    public ResponseUploadVideo uploadVideoToServer(MultipartFile[] files) throws IOException {
+    public ResponseUploadVideo uploadVideoToServer(MultipartFile[] files) {
         ResponseUploadVideo response = new ResponseUploadVideo();
 
-        // check size file
+        // check file
         for(MultipartFile file : files) {
+            // check size
             if(file.isEmpty() || file.getSize()==0){
                 response.setErrorCodes(getError(MessageConstant.MSG_119));
             }
-            // check type file
+            // check type
             else if(!file.getContentType().toLowerCase().equals("video/mp4")){
                 response.setErrorCodes(getError(MessageConstant.MSG_118));
+            }
+            // check name
+            else if (!validVideoName(file)) {
+                response.setErrorCodes(getError(MessageConstant.MSG_121));
             }
             if (response.getErrorCodes() != null) {
                 return response;
@@ -106,22 +122,37 @@ public class FileService extends BaseService {
         // upload file to server
         List<VideoProperty> listVideoProperty = new ArrayList<>();
         for(MultipartFile file : files) {
+            VideoProperty videoProperty = new VideoProperty();
             String fileNameUUID = FileHelper.storeFileOnServer(file, RESOURCE_PATH + INPUT_VIDEO_PATH);
             if (fileNameUUID.isEmpty()) {
                 response.setErrorCodes(getError(MessageConstant.MSG_114));
                 return response;
             } else {
-                String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
-                IsoFile isoFile = new IsoFile(filePath);
-                if (isoFile.getMovieBox() == null) {
-                    response.setErrorCodes(getError(MessageConstant.MSG_118));
-                    return response;
+                try {
+                    String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
+                    IsoFile isoFile = new IsoFile(filePath);
+                    if (isoFile.getMovieBox() == null) {
+                        response.setErrorCodes(getError(MessageConstant.MSG_118));
+                        return response;
+                    }
+                    if (!getVideoProperties(videoProperty, fileNameUUID, file.getOriginalFilename())){
+                        //TODO: Xoa het video tren server (listVideoProperty)
+                        response.setErrorCodes(getError(MessageConstant.MSG_122));
+                        return response;
+                    }
+                    listVideoProperty.add(videoProperty);
+                }catch (IOException e){
+                    logger.error("Error at FileService: " + e.getMessage());
                 }
-                VideoProperty videoProperty = new VideoProperty();
-                getVideoProperties(videoProperty, fileNameUUID, file.getOriginalFilename());
-                listVideoProperty.add(videoProperty);
+
             }
         }
+
+//        if (duplicateVideo(listVideoProperty)) {
+//            response.setErrorCodes(getError(MessageConstant.MSG_123));
+//            return response;
+//        }
+
         response.setVideoPropertyList(listVideoProperty);
         response.setIdEvent(UUID.randomUUID() + "-" + getTime());
         return response;
@@ -133,7 +164,50 @@ public class FileService extends BaseService {
         return dateFormat.format(cal.getTime());
     }
 
-    private void getVideoProperties(VideoProperty videoProperty, String fileNameUUID, String originalFileName) throws IOException {
+//    private boolean duplicateVideo(List<VideoProperty> listVideoProperty) {
+//        //Check duplicate input
+//        for (VideoProperty videoProperty : listVideoProperty) {
+//            int count = 1;
+//            String cameraId = videoProperty.getCameraId();
+//            String startTime = videoProperty.getStartedTime();
+//            for (VideoProperty videoProperty2 : listVideoProperty) {
+//                if ((cameraId.equalsIgnoreCase(videoProperty2.getCameraId()))
+//                    && (startTime.equalsIgnoreCase(videoProperty2.getStartedTime()))){
+//                    count++;
+//                }
+//            }
+//            if (count > 1) {
+//                return true;
+//            }
+//        }
+//        //Check duplicate database
+//        for (VideoProperty videoProperty : listVideoProperty) {
+//            if (videoDAO.isDuplicate(videoProperty)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
+    private boolean validVideoName(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        String[] parts = fileName.split("_");
+        if (parts.length != 3) {
+            return false;
+        }
+        try {
+            Integer.parseInt(parts[0]);
+        }catch (NumberFormatException e) {
+            return false;
+        }
+        String fileType = parts[2].substring(parts[2].lastIndexOf("."));
+        if (!fileType.equalsIgnoreCase(".mp4")) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean getVideoProperties(VideoProperty videoProperty, String fileNameUUID, String originalFileName) throws IOException {
         String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
         IsoFile isoFile = new IsoFile(filePath);
         MovieHeaderBox mhb = isoFile.getMovieBox().getMovieHeaderBox();
@@ -150,13 +224,35 @@ public class FileService extends BaseService {
 
         videoProperty.setDuration((int)(mhb.getDuration() / mhb.getTimescale()));
         videoProperty.setStatusId(ACTIVE_STATUS);
-        String typeVideo = originalFileName.substring(0,originalFileName.lastIndexOf("_"));
-        String cameraId = originalFileName.substring(originalFileName.lastIndexOf("_")+1,originalFileName.lastIndexOf("."));
-        videoProperty.setTypeVideo(Integer.parseInt(typeVideo));
-        videoProperty.setCameraId(cameraId);
+        String[] parts = originalFileName.split("_");
+        videoProperty.setTypeVideo(Integer.parseInt(parts[0]));
+        videoProperty.setCameraId(parts[1]);
+
+        try {
+            if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
+                String shelfCameraMappingId = videoDAO.getShelfCameraMappingId(videoProperty);
+                System.out.println("shelfCameraMappingId = " + shelfCameraMappingId);
+                if (org.apache.commons.lang3.StringUtils.isNotEmpty(shelfCameraMappingId)){
+                    videoProperty.setShelfCameraMappingId(shelfCameraMappingId);
+                } else {
+                    return false;
+                }
+            }
+            if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
+                //TODO: get Stack Mapping Id
+            }
+        } catch (PersistenceException e) {
+            logger.error("Error at FileService: " + e.getMessage());
+            return false;
+        }
+        return true;
     }
 
-
+    /**
+     * Get file transactrion
+     * @param eventId UUID of event
+     * @return Flux<FileTransaction>
+     */
     public Flux<FileTransaction> getFileTransactions(String eventId) {
         Flux<Long> interval = Flux.interval(Duration.ofSeconds(2));
         // Lay data moi
