@@ -42,6 +42,15 @@ public class VideoDAO extends BaseDAO {
         }
     }
 
+    public String getStackProductCameraMappingId(VideoProperty videoProperty) {
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.video.dao.VidDAO.getStackProductCameraMappingId",videoProperty);
+        }finally {
+            closeConnection();
+        }
+    }
+
     public boolean insertVideoProperty(VideoProperty videoProperty) {
         try{
             openConnection();
@@ -69,17 +78,16 @@ public class VideoDAO extends BaseDAO {
     }
 
     public boolean insertEmotion(VideoProperty videoProperty) {
-//        try{
-//            openConnection();
-//            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertEmotion",videoProperty) > 0){
-//                this.sqlSession.commit();
-//                return true;
-//            }
-//            return false;
-//        }finally {
-//            closeConnection();
-//        }
-        return true;
+        try{
+            openConnection();
+            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertEmotion",videoProperty) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeConnection();
+        }
     }
 
     public boolean isDuplicate(VideoProperty videoProperty) {

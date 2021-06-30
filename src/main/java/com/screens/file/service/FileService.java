@@ -51,6 +51,7 @@ public class FileService extends BaseService {
 
     private static final String CONTENT_TYPE_IMAGE = "";
     private static final String CONTENT_TYPE_VIDEO = "video/mp4";
+    private static final String NULL_STRING = "null";
 
     /**
      * Upload Image To Storage
@@ -232,14 +233,22 @@ public class FileService extends BaseService {
             if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
                 String shelfCameraMappingId = videoDAO.getShelfCameraMappingId(videoProperty);
                 System.out.println("shelfCameraMappingId = " + shelfCameraMappingId);
-                if (org.apache.commons.lang3.StringUtils.isNotEmpty(shelfCameraMappingId)){
+                if (org.apache.commons.lang3.StringUtils.isNotEmpty(shelfCameraMappingId)
+                && !NULL_STRING.equalsIgnoreCase(shelfCameraMappingId)){
                     videoProperty.setShelfCameraMappingId(shelfCameraMappingId);
                 } else {
                     return false;
                 }
             }
             if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
-                //TODO: get Stack Mapping Id
+                String stackProductCameraMappingId = videoDAO.getStackProductCameraMappingId(videoProperty);
+                System.out.println("stackProductCameraMappingId = " + stackProductCameraMappingId);
+                if (org.apache.commons.lang3.StringUtils.isNotEmpty(stackProductCameraMappingId)
+                        && !NULL_STRING.equalsIgnoreCase(stackProductCameraMappingId)){
+                    videoProperty.setStackProductCameraMappingId(stackProductCameraMappingId);
+                } else {
+                    return false;
+                }
             }
         } catch (PersistenceException e) {
             logger.error("Error at FileService: " + e.getMessage());

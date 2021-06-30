@@ -1,5 +1,7 @@
 package com.screens.file.dto;
 
+import com.screens.file.listener.detector.EmotionDTO;
+
 import java.io.Serializable;
 
 public class VideoProperty implements Serializable {
@@ -16,8 +18,17 @@ public class VideoProperty implements Serializable {
     private int statusId;
     private int totalPerson;
     private int typeVideo;
+    private EmotionDTO emotions;
 
     public VideoProperty() {
+    }
+
+    public EmotionDTO getEmotions() {
+        return emotions;
+    }
+
+    public void setEmotions(EmotionDTO emotions) {
+        this.emotions = emotions;
     }
 
     public String getCameraId() {

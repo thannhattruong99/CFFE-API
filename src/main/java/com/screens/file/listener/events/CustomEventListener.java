@@ -51,35 +51,39 @@ public class CustomEventListener extends BaseService {
 
         List<String> videoErrorNameList = new ArrayList<>();
         for (VideoProperty videoProperty: eventCreator.getVideoPropertyList()) {
-            int countHP;
             try{
+                int countHP;
                 // TODO: detect video hot spot / emotion
                 if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
                     if((countHP = DetectService.countPerson(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != 0){
                         videoProperty.setTotalPerson(countHP);
+                    } else {
+                        setError(videoProperty,videoErrorNameList,eventCreator);
                     }
                 }
                 if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
                     EmotionDTO emotionDTO;
                     if((emotionDTO = DetectService.countEmotion(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != null){
-//                        videoProperty.setTotalPerson(countHP);
-                        System.out.println("count emotion");
+                        videoProperty.setEmotions(emotionDTO);
+                        System.out.println("OUTPUT DETECT: " + emotionDTO.toString());
+                    } else {
+                        setError(videoProperty,videoErrorNameList,eventCreator);
                     }
                 }
 
                 // TODO: delete file input
                 FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
 
-                // TODO: upload video moi => cloud
-                uploadVideoDetectedToStorage(videoProperty);
+                if (videoProperty.getStatusId() != -1) {
+                    // TODO: upload video moi => cloud
+                    uploadVideoDetectedToStorage(videoProperty);
 
-                // TODO: insert tblHotspot / tblEmotion
-                // TODO: insert tblVideo
-                insertDatabase(videoProperty,videoErrorNameList,eventCreator);
-
-            }catch (InterruptedException e) {
+                    // TODO: insert tblHotspot / tblEmotion -> tblVideo
+                    insertDatabase(videoProperty,videoErrorNameList,eventCreator);
+                }
+            } catch (InterruptedException e) {
                 setError(videoProperty,videoErrorNameList,eventCreator);
             } catch (IOException e) {
                 setError(videoProperty,videoErrorNameList,eventCreator);
@@ -122,12 +126,11 @@ public class CustomEventListener extends BaseService {
         try {
             if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
                 videoDAO.insertHotSpot(videoProperty);
-                videoDAO.insertVideoProperty(videoProperty);
             }
             if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
-//                    videoDAO.insertEmotion(videoProperty);
-//                    videoDAO.insertVideoProperty(videoProperty);
+                videoDAO.insertEmotion(videoProperty);
             }
+            videoDAO.insertVideoProperty(videoProperty);
         } catch (PersistenceException e){
             logger.error("Error at CustomEventListener: " + e.getMessage());
         }

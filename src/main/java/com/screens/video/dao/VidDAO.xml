@@ -4,7 +4,7 @@
 <mapper namespace="com.screens.video.dao.VidDAO">
 
     <select id="getShelfCameraMappingId" resultType="java.lang.String">
-        SELECT ShelfCameraMappingId, AddedTime, RemovedTime
+        SELECT ShelfCameraMappingId
         FROM tblShelfCameraMapping
         WHERE CameraId = #{cameraId}
         AND AddedTime &lt;= #{startedTime}
@@ -12,6 +12,17 @@
             ELSE RemovedTime END)  &gt;= #{endedTime}
         ORDER BY AddedTime DESC
         LIMIT 1
+    </select>
+
+    <select id="getStackProductCameraMappingId" resultType="java.lang.String">
+        SELECT StackProductCameraMappingId
+        FROM tblStackProductCameraMapping
+        WHERE CameraId = #{cameraId}
+          AND AddedCameraTime &lt;= #{startedTime}
+          AND (CASE WHEN RemovedCameraTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
+                    ELSE RemovedCameraTime END)  &gt;= #{endedTime}
+        ORDER BY AddedCameraTime DESC
+            LIMIT 1
     </select>
 
 <!--    <select id="countByCameraIdAndTime" resultType="int">-->
@@ -199,6 +210,20 @@
     <insert id="insertHotSpot" parameterType="VideoProperty">
         INSERT INTO tblHotSpot (StartedTime,EndedTime,TotalPeople,ShelfCameraMappingId) values
         (#{startedTime},#{endedTime},#{totalPerson},#{shelfCameraMappingId})
+    </insert>
+
+    <insert id="insertEmotion" parameterType="VideoProperty">
+        INSERT INTO tblEmotion (StartedTime,EndedTime,Angry,Disgust,Fear,Happy,Sad,Surprise,Neutral,StackProductCameraMappingId) values
+            (#{startedTime},
+             #{endedTime},
+             #{emotions.numberOfAngry},
+             #{emotions.numberOfDisgust},
+             #{emotions.numberOfFear},
+             #{emotions.numberOfHappy},
+             #{emotions.numberOfSad},
+             #{emotions.numberOfSurprise},
+             #{emotions.numberOfNeutral},
+             #{stackProductCameraMappingId})
     </insert>
 
 </mapper>
