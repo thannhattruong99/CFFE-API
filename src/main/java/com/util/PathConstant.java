@@ -22,7 +22,7 @@ public class PathConstant {
     public static String PYTHON38 = "python3.8";
     public static final String FPS_ARGUMENT = "--fps";
     public static final String MODEL_ARGUMENT = "--model";
-    public static final String WEIGHT_ARGUMENT = "--argument";
+    public static final String WEIGHT_ARGUMENT = "--weight";
 
 //    HOT SPOT
     public static final String PROTXT_ARGUMENT = "--prototxt";

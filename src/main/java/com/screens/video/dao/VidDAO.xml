@@ -168,7 +168,7 @@
                 <collection property="emotion" ofType="EmotionResponseSupporter">
                     <id property="emotionId" column="EmotionId"/>
                     <result property="videoName" column="VideoName"/>
-                    <result property="startedTime" column="StartedTime"/>
+                    <result property="startTime" column="StartedTime"/>
                     <result property="angry" column="Angry"/>
                     <result property="disgust" column="Disgust"/>
                     <result property="fear" column="Fear"/>
