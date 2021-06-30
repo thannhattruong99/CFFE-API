@@ -43,7 +43,7 @@ public class DetectService {
     }
 
 
-    private String createDetectEmotionCommand(String inputFileName, String outputFileName){
+    private static String createDetectEmotionCommand(String inputFileName, String outputFileName){
         String command = "";
 //        python version
         command += PYTHON38;
@@ -56,9 +56,9 @@ public class DetectService {
 //        output video
         command += " " + SAVE_ARGUMENT + " " + OUTPUT_VIDEO_PATH + outputFileName;
 //        emotion model path
-        command += " " + MODEL_ARGUMENT + " " + EMOTION_MODEL_PATH;
+        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_MODEL_PATH;
 //        emotion weight path
-        command += " " + WEIGHT_ARGUMENT + " " + EMOTION_WEIGHT_PATH;
+        command += " " + WEIGHT_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_WEIGHT_PATH;
 
         return command;
     }
@@ -67,7 +67,7 @@ public class DetectService {
     public static EmotionDTO countEmotion(String inputFileName, String outputFileName) throws InterruptedException, IOException {
         EmotionDTO emotionDTO = new EmotionDTO();
         Runtime rt = Runtime.getRuntime();
-        String command = createHotSpotCommand(inputFileName, outputFileName);
+        String command = createDetectEmotionCommand(inputFileName, outputFileName);
         Process proc = rt.exec(command);
         System.out.println("COMMAND: "  + command);
 
