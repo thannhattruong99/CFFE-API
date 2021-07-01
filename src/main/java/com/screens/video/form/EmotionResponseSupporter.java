@@ -7,6 +7,7 @@ public class EmotionResponseSupporter implements Serializable {
     private String emotionId;
     private String startTime;
     private String endTime;
+    private String videoName;
     private int angry;
     private int disgust;
     private int fear;
@@ -17,6 +18,14 @@ public class EmotionResponseSupporter implements Serializable {
     private String description;
 
     public EmotionResponseSupporter() {
+    }
+
+    public String getVideoName() {
+        return videoName;
+    }
+
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
     }
 
     public String getEmotionId() {
