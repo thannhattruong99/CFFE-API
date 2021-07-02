@@ -46,6 +46,7 @@
                CM.CameraName,
                CM.IPAddress,
                CM.RTSPString,
+               CM.ImageURL,
                CM.CreatedTime AS CMCreatedTime,
                CM.UpdatedTime AS CMUpdatedTime
         FROM tblShelf SH
@@ -179,6 +180,7 @@
             <result property="cameraName" column="CameraName"/>
             <result property="ipAddress" column="IPAddress"/>
             <result property="rtspString" column="RTSPString"/>
+            <result property="imageURL" column="ImageURL"/>
             <result property="createdTime" column="CMCreatedTime"/>
             <result property="updatedTime" column="CMUpdatedTime"/>
         </collection>
