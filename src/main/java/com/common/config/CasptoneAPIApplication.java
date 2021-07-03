@@ -60,7 +60,7 @@ public class CasptoneAPIApplication {
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler(REXP_RESOURCE_PATH).setCachePeriod(0);
+                registry.addResourceHandler(REXP_RESOURCE_PATH).setCachePeriod(3600000);
             }
         };
     }

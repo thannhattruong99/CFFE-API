@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().mvcMatchers(HttpMethod.OPTIONS, REXP_ALL_PATH);
         web.ignoring().antMatchers(
                 PERMIT_PATHS);
