@@ -11,6 +11,7 @@ import io.jsonwebtoken.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -63,24 +64,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(AUTHORIZATION);
 
-        if ("OPTIONS".equals(request.getMethod())) {
-//            System.out.println("HERERERERERER");
-//            response.setHeader("Access-Control-Allow-Origin", "*");
-//            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//            response.setHeader("Access-Control-Max-Age", "3600");
-//            response.setHeader("Access-Control-Allow-Headers", "authorization, content-type, xsrf-token");
-//            response.addHeader("Access-Control-Expose-Headers", "xsrf-token");
-//            response.setStatus(HttpServletResponse.SC_OK);
-        }
-
         String username = null;
         String jwtToken = null;
         String uri = request.getRequestURI();
 
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
-        if ("OPTIONS".equals(request.getMethod())) {
-            System.out.println("Preflight request Preflight requestm Preflight request Preflight request Preflight request ");
+        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
             logger.warn("Preflight request");
         }
         else if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
