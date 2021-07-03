@@ -29,7 +29,7 @@ import static com.util.PathConstant.*;
 @ComponentScan(basePackages = {"com"})
 public class CasptoneAPIApplication {
     private static final Logger logger = LoggerFactory.getLogger(CasptoneAPIApplication.class);
-    private static final String[] HTTP_METHODS = {"GET", "POST", "PUT", "DELETE"};
+    private static final String[] HTTP_METHODS = {"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"};
     private static final String REXP_ALL = "*";
 
     public static void main(String[] args) throws IOException {
@@ -60,7 +60,7 @@ public class CasptoneAPIApplication {
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler(REXP_RESOURCE_PATH).setCachePeriod(3600000);
+                registry.addResourceHandler(REXP_RESOURCE_PATH).setCachePeriod(0);
             }
         };
     }
