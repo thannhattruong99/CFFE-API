@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.util.PathConstant.DEFAULT_INCLUDE_PATTERN;
+import static com.util.PathConstant.LOCAL_PATTERN;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
@@ -70,7 +71,7 @@ public class SwaggerConfig {
                 .useDefaultResponseMessages(false);
 
         docket = docket.select()
-                .paths(regex(DEFAULT_INCLUDE_PATTERN))
+                .paths(regex(DEFAULT_INCLUDE_PATTERN).or(regex(LOCAL_PATTERN)))
                 .build();
         log.debug("Started Swagger in  ms");
         return docket;
@@ -84,7 +85,7 @@ public class SwaggerConfig {
     private SecurityContext securityContext() {
         return SecurityContext.builder()
                 .securityReferences(defaultAuth())
-                .forPaths(regex(DEFAULT_INCLUDE_PATTERN))
+                .forPaths(regex(DEFAULT_INCLUDE_PATTERN).or(regex(LOCAL_PATTERN)))
                 .build();
     }
 

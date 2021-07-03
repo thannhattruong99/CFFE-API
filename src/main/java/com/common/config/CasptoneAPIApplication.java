@@ -55,8 +55,8 @@ public class CasptoneAPIApplication {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping(REXP_ALL_PATH).allowedMethods(HTTP_METHODS).allowedOrigins(REXP_ALL)
-                        .allowedHeaders("*");
+                registry.addMapping(REXP_ALL_PATH).allowedMethods(REXP_ALL).allowedOrigins(REXP_ALL)
+                        .allowedHeaders(REXP_ALL);
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {

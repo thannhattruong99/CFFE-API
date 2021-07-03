@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-
+@CrossOrigin
 @RestController("")
 @RequestMapping("admin")
 @SecurityRequirement(name = "basicAuth")

@@ -16,6 +16,7 @@ public class PathConstant {
     public static final String REXP_RESOURCE_PATH = "/resources/**";
     public static final String REXP_ALL_PATH = "/**";
     public static final String DEFAULT_INCLUDE_PATTERN = "http://35.240.143.111:9091/*";
+    public static final String LOCAL_PATTERN = "http://localhost:9091/*";
     public static final String PROJECT_NAME = "CapstoneAPI";
 
 //    PYTHON COMMON OPTION
