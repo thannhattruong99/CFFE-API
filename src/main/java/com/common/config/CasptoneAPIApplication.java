@@ -32,7 +32,7 @@ public class CasptoneAPIApplication {
     private static final String[] HTTP_METHODS = {"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"};
     private static final String REXP_ALL = "*";
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         logger.info("Info message");
         logger.warn("Warn message");
         logger.error("Error message");
