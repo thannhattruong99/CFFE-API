@@ -62,87 +62,95 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(AUTHORIZATION);
-        System.out.println("HERERERERERERERERERERERERERERERERERERERERER");
-        System.out.println("request.getMethod(): " + request.getMethod());
+
         if ("OPTIONS".equals(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
-//            return;
+//            System.out.println("HERERERERERER");
+//            response.setHeader("Access-Control-Allow-Origin", "*");
+//            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//            response.setHeader("Access-Control-Max-Age", "3600");
+//            response.setHeader("Access-Control-Allow-Headers", "authorization, content-type, xsrf-token");
+//            response.addHeader("Access-Control-Expose-Headers", "xsrf-token");
+//            response.setStatus(HttpServletResponse.SC_OK);
         }
 
-            String username = null;
-            String jwtToken = null;
-            String uri = request.getRequestURI();
+        String username = null;
+        String jwtToken = null;
+        String uri = request.getRequestURI();
 
-            // JWT Token is in the form "Bearer token". Remove Bearer word and get
-            // only the Token
-            if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-                jwtToken = requestTokenHeader.substring(7);
-                try {
-                    username = jwtTokenHelper.getUsernameFromToken(jwtToken);
-                } catch (IllegalArgumentException e) {
-                    logger.error("Unable to get JWT Token: " + e.getMessage());
-                    response.setHeader(AUTHORIZATION, UNAUTHORIZED);
-                    return;
-                } catch (ExpiredJwtException e) {
-                    logger.error("JWT Token has expired: " + e.getMessage());
-                    response.setHeader(AUTHORIZATION, UNAUTHORIZED);
-                    return;
-                } catch (SignatureException e) {
-                    logger.error("JWT Token invalid: " + e.getMessage());
-                    response.setHeader(AUTHORIZATION, UNAUTHORIZED);
-                    return;
+        // JWT Token is in the form "Bearer token". Remove Bearer word and get
+        // only the Token
+        if ("OPTIONS".equals(request.getMethod())) {
+            System.out.println("Preflight request Preflight requestm Preflight request Preflight request Preflight request ");
+            logger.warn("Preflight request");
+        }
+        else if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+            jwtToken = requestTokenHeader.substring(7);
+            try {
+                username = jwtTokenHelper.getUsernameFromToken(jwtToken);
+            } catch (IllegalArgumentException e) {
+                logger.error("Unable to get JWT Token: " + e.getMessage());
+                response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                return;
+            } catch (ExpiredJwtException e) {
+                logger.error("JWT Token has expired: " + e.getMessage());
+                response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                return;
+            } catch (SignatureException e) {
+                logger.error("JWT Token invalid: " + e.getMessage());
+                response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                return;
+            }
+        } else if (applicationAuthorities.contains(uri)) {
+            logger.warn("Init page openai");
+        } else {
+            response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+            return;
+        }
+
+        // Once we get the token validate it.
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            AccountDTO accountDTO = this.accountService.loadUserByUsername(username);
+            // if token is valid configure Spring Security to manually set
+            // authentication
+            if (jwtTokenHelper.validateToken(jwtToken, accountDTO)) {
+                Claims claims = jwtTokenHelper.getAllClaimsFromToken(jwtToken);
+                int roleId = claims.get(ROLE_ID_STRING, Integer.class);
+                //manager authorities
+                if (roleId == MANAGER_ROLE) {
+                    if (StringHelper.isNullOrEmpty(accountDTO.getStoreId()) && !guestAuthorities.contains(uri)) {
+                        response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                        return;
+                    } else if (managerAuthorities.contains(uri)) {
+                        String userId = claims.get(USER_ID_STRING, String.class);
+                        AuthorDTO authorDTO = new AuthorDTO();
+                        authorDTO.setUserId(userId);
+                        authorDTO.setStoreId(accountDTO.getStoreId());
+                        request.setAttribute("AUTHOR", authorDTO);
+                    } else {
+                        response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                        return;
+                    }
+                } else if (roleId == ADMIN_ROLE) {
+                    if (!adminAuthorities.contains(uri)) {
+                        response.setHeader(AUTHORIZATION, UNAUTHORIZED);
+                        return;
+                    }
                 }
-            } else if (applicationAuthorities.contains(uri)) {
-                logger.warn("Init page openai");
+
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                        accountDTO, null, null);
+                usernamePasswordAuthenticationToken
+                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // After setting the Authentication in the context, we specify
+                // that the current user is authenticated. So it passes the
+                // Spring Security Configurations successfully.
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             } else {
                 response.setHeader(AUTHORIZATION, UNAUTHORIZED);
                 return;
             }
-
-            // Once we get the token validate it.
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-                AccountDTO accountDTO = this.accountService.loadUserByUsername(username);
-                // if token is valid configure Spring Security to manually set
-                // authentication
-                if (jwtTokenHelper.validateToken(jwtToken, accountDTO)) {
-                    Claims claims = jwtTokenHelper.getAllClaimsFromToken(jwtToken);
-                    int roleId = claims.get(ROLE_ID_STRING, Integer.class);
-                    //manager authorities
-                    if (roleId == MANAGER_ROLE) {
-                        if (StringHelper.isNullOrEmpty(accountDTO.getStoreId()) && !guestAuthorities.contains(uri)) {
-                            response.setHeader(AUTHORIZATION, UNAUTHORIZED);
-                            return;
-                        } else if (managerAuthorities.contains(uri)) {
-                            String userId = claims.get(USER_ID_STRING, String.class);
-                            AuthorDTO authorDTO = new AuthorDTO();
-                            authorDTO.setUserId(userId);
-                            authorDTO.setStoreId(accountDTO.getStoreId());
-                            request.setAttribute("AUTHOR", authorDTO);
-                        } else {
-                            response.setHeader(AUTHORIZATION, UNAUTHORIZED);
-                            return;
-                        }
-                    } else if (roleId == ADMIN_ROLE) {
-                        if (!adminAuthorities.contains(uri)) {
-                            response.setHeader(AUTHORIZATION, UNAUTHORIZED);
-                            return;
-                        }
-                    }
-
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                            accountDTO, null, null);
-                    usernamePasswordAuthenticationToken
-                            .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    // After setting the Authentication in the context, we specify
-                    // that the current user is authenticated. So it passes the
-                    // Spring Security Configurations successfully.
-                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                } else {
-                    response.setHeader(AUTHORIZATION, UNAUTHORIZED);
-                    return;
-                }
-            }
+        }
 
         filterChain.doFilter(request, response);
     }
