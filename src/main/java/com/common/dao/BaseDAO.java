@@ -17,26 +17,17 @@ public class BaseDAO {
     }
 
     public void openConnection() {
-        if(this.sqlSession == null){
-            if(idbHelper.makeConnection() != null){
-                this.sqlSession = idbHelper.makeConnection().openSession(TransactionIsolationLevel.READ_COMMITTED);
-            }
-        }
-        if(this.sqlSession.getConnection() == null){
-            if(idbHelper.makeConnection() != null){
-                this.sqlSession = idbHelper.makeConnection().openSession(TransactionIsolationLevel.READ_COMMITTED);
-            }
-        }
+        this.sqlSession = idbHelper.makeConnection().openSession(TransactionIsolationLevel.READ_COMMITTED);
     }
 
     public void closeConnection(){
-//        try {
-//            if(sqlSession.getConnection() != null){
-//                sqlSession.getConnection().close();
-//            }
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
+        try {
+            if(sqlSession.getConnection() != null){
+                sqlSession.getConnection().close();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
 }
