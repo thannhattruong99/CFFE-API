@@ -70,12 +70,8 @@ public class DetectService {
         String command = createDetectEmotionCommand(inputFileName, outputFileName);
         Process proc = rt.exec(command);
         System.out.println("COMMAND: "  + command);
-
         emotionDTO = readEmotionConsole(proc);
-
-
         proc.isAlive();
-
         return emotionDTO;
     }
 

@@ -60,9 +60,7 @@ public class CustomEventListener extends BaseService {
                         videoProperty.setTotalPerson(countHP);
                     }
                 }
-                System.out.println("videoProperty.getTypeVideo() 1: " + videoProperty.getTypeVideo());
                 if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
-                    System.out.println("videoProperty.getTypeVideo() 2: " + videoProperty.getTypeVideo());
                     EmotionDTO emotionDTO;
                     if((emotionDTO = DetectService.countEmotion(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != null){
@@ -87,13 +85,6 @@ public class CustomEventListener extends BaseService {
                 setError(videoProperty,videoErrorNameList,eventCreator);
             }
         }
-
-        for (VideoProperty video: eventCreator.getVideoPropertyList()) {
-            System.out.println("Video name: " + video.getVideoNameUUID());
-            System.out.println("Video status: " + video.getStatusId());
-            System.out.println("Total person: " + video.getTotalPerson());
-        }
-
 
         eventCreator.setStatus(1);
         String msg = "";
