@@ -16,21 +16,13 @@ public class BaseDAO {
         this.idbHelper = idbHelper;
     }
 
-    public void openConnection() {
+    public void openSession() {
         this.sqlSession = idbHelper.makeConnection().openSession(TransactionIsolationLevel.READ_COMMITTED);
     }
 
-    public void closeConnection(){
-//        try {
-            if(sqlSession != null){
-                sqlSession.commit();
-//                if(sqlSession.getConnection() != null){
-//                    sqlSession.getConnection().close();
-//                }
-            }
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-
+    public void closeSession(){
+        if(sqlSession != null){
+            sqlSession.commit();
+        }
     }
 }

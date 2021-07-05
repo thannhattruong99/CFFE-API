@@ -15,10 +15,10 @@ public class AccountDAO extends BaseDAO {
 
     public AccountDTO getAccountInformation(String userName) {
         try {
-            openConnection();
+            openSession();
             return sqlSession.selectOne("AccountDAO.getAccountInformation", userName);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
@@ -26,10 +26,10 @@ public class AccountDAO extends BaseDAO {
 
     public ResponseLoginForm login(RequestLoginForm request){
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("AccountDAO.login", request);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 

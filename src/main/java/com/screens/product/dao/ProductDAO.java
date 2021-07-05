@@ -17,34 +17,34 @@ public class ProductDAO extends BaseDAO {
 
     public ResponseProductDetailForm getProductDetail(ProductDTO productDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductDetail",productDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseProductListForm getProductList(ProductDTO productDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductList",productDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseAllProductForm getAllProduct(ProductDTO productDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getAllProduct",productDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean createProduct(ProductDTO productDTO) {
         try{
-            openConnection();
+            openSession();
             if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.createProduct",productDTO) > 0){
                 if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.productAddCategory",productDTO) > 0){
                     this.sqlSession.commit();
@@ -53,84 +53,84 @@ public class ProductDAO extends BaseDAO {
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkProductExist(ProductDTO productDTO) {
         try {
-            openConnection();
+            openSession();
             ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkProductExist",productDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseProductDetailForm getProductStatus(ProductDTO productDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductStatus",productDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkAnyStackHaveProduct(ProductDTO productDTO) {
         try{
-            openConnection();
+            openSession();
             ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkAnyStackHaveProduct",productDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public int checkCategoriesValid(ProductDTO productDTO) {
         try{
-            openConnection();
+            openSession();
             ProductDTO rs =  sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.checkCategoriesValid",productDTO);
             return rs.getTotalOfRecord();
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean changeStatus(ProductDTO productDTO) {
         try {
-            openConnection();
+            openSession();
             if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.changeStatus",productDTO) > 0){
                 this.sqlSession.commit();
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean updateInfo(ProductDTO productDTO) {
         try {
-            openConnection();
+            openSession();
             if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.updateInfo",productDTO) > 0){
                 this.sqlSession.commit();
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean addCategories(ProductDTO productDTO) {
         try{
-            openConnection();
+            openSession();
             if(sqlSession.delete("com.screens.product.dao.sql.ProductDAO.removeCategories",productDTO) > 0){
                 if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.addCategories",productDTO) > 0){
                     this.sqlSession.commit();
@@ -139,7 +139,7 @@ public class ProductDAO extends BaseDAO {
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 }

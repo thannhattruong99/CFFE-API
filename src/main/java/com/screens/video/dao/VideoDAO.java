@@ -17,81 +17,81 @@ public class VideoDAO extends BaseDAO {
 
     public ResponseCountVideosForm getVideoCountList(VideoDTO videoDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.video.dao.VidDAO.getVideoCountList",videoDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseEmotionVideosForm getVideoEmotionList(VideoDTO videoDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.video.dao.VidDAO.getVideoEmotionList",videoDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public String getShelfCameraMappingId(VideoProperty videoProperty) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.video.dao.VidDAO.getShelfCameraMappingId",videoProperty);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean insertVideoProperty(VideoProperty videoProperty) {
         try{
-            openConnection();
+            openSession();
             if(sqlSession.insert("com.screens.video.dao.VidDAO.insertVideoProperty",videoProperty) > 0){
                 this.sqlSession.commit();
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean insertHotSpot(VideoProperty videoProperty) {
         try{
-            openConnection();
+            openSession();
             if(sqlSession.insert("com.screens.video.dao.VidDAO.insertHotSpot",videoProperty) > 0){
                 this.sqlSession.commit();
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean insertEmotion(VideoProperty videoProperty) {
 //        try{
-//            openConnection();
+//            openSession();
 //            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertEmotion",videoProperty) > 0){
 //                this.sqlSession.commit();
 //                return true;
 //            }
 //            return false;
 //        }finally {
-//            closeConnection();
+//            closeSession();
 //        }
         return true;
     }
 
     public boolean isDuplicate(VideoProperty videoProperty) {
         try{
-            openConnection();
+            openSession();
             int count = sqlSession.selectOne("com.screens.video.dao.VidDAO.countByCameraIdAndTime",videoProperty);
             if (count > 0) {
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 

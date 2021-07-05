@@ -17,82 +17,82 @@ public class CameraDAO extends BaseDAO {
 
     public ResponseAvailableCameraListForm getAvailableCameraList(CameraDTO cameraDTO){
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("CameraDAO.getAvailableCameraList", cameraDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseCameraListForm getCameraList(CameraDTO cameraDTO){
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("CameraDAO.getCameraList", cameraDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean createCamera(CameraDTO cameraDTO){
         try{
-            openConnection();
+            openSession();
             if(sqlSession.insert("CameraDAO.createCamera", cameraDTO) > 0){
                 sqlSession.commit(true);
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean updateCamera(CameraDTO cameraDTO){
         try{
-            openConnection();
+            openSession();
             if(sqlSession.update("CameraDAO.updateCamera", cameraDTO) > 0){
                 sqlSession.commit(true);
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean updateStatus(CameraDTO cameraDTO){
         try{
-            openConnection();
+            openSession();
             if(sqlSession.update("CameraDAO.updateStatus", cameraDTO) > 0){
                 sqlSession.commit(true);
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public CameraDTO countCameraById(CameraDTO cameraDTO){
         try {
-            openConnection();
+            openSession();
             return sqlSession.selectOne("CameraDAO.getCameraStatusById", cameraDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseCameraDetailForm getCameraDetailById(CameraDTO cameraDTO){
         try {
-            openConnection();
+            openSession();
             return sqlSession.selectOne("CameraDAO.getCameraDetailById", cameraDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public String getStoreIdByCamera(CameraDTO cameraDTO) {
         try{
-            openConnection();
+            openSession();
             String storeId;
             storeId = sqlSession.selectOne("CameraDAO.getStoreIdByShelfMapping", cameraDTO);
             if (StringUtils.isEmpty(storeId)){
@@ -100,7 +100,7 @@ public class CameraDAO extends BaseDAO {
             }
             return storeId;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 }

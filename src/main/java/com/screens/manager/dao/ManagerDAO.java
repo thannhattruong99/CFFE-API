@@ -16,126 +16,126 @@ public class ManagerDAO extends BaseDAO {
 
     public ResponseManagerListForm getManagers(ManagerDTO managerDTO){
         try {
-            openConnection();
+            openSession();
             return sqlSession.selectOne("ManagerDAO.getManagers", managerDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseManagerDetailForm getManagerDetail(ManagerDTO managerDTO){
         try {
-            openConnection();
+            openSession();
             return sqlSession.selectOne( "ManagerDAO.getManagerDetail",managerDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean createManager(ManagerDTO managerDTO){
         try{
-            openConnection();
+            openSession();
             if(sqlSession.insert("ManagerDAO.insertManger", managerDTO) > 0){
                 sqlSession.commit(true);
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public int countRecordLikeUserName(ManagerDTO managerDTO){
         try{
-            openConnection();
+            openSession();
             ManagerDTO resultDAO = sqlSession.selectOne("ManagerDAO.getTotalOfManagerLikeUserName", managerDTO);
             return resultDAO.getAffectedRecords();
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean updateManagerInformation(ManagerDTO managerDTO){
         try {
-            openConnection();
+            openSession();
             if(sqlSession.update("ManagerDAO.updateManagerInformation", managerDTO) > 0){
                 sqlSession.commit(true);
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean resetPassword(ManagerDTO managerDTO){
         try{
-            openConnection();
+            openSession();
             if(sqlSession.update("ManagerDAO.resetPassword", managerDTO) > 0){
                 sqlSession.commit(true);
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public String getEmailByUserName(ManagerDTO managerDTO){
         try{
-            openConnection();
+            openSession();
             ManagerDTO resultDAO = sqlSession.selectOne("ManagerDAO.getEmailByUserName", managerDTO);
             return resultDAO.getEmail();
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ManagerDTO getStatusIdAndStoreIdByUserName(ManagerDTO managerDTO){
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("ManagerDAO.getStatusIdAndStoreIdByUserName", managerDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean updateManagerStatus(ManagerDTO managerDTO){
         try{
-            openConnection();
+            openSession();
             if(sqlSession.update("ManagerDAO.updateManagerStatus", managerDTO) > 0){
                 sqlSession.commit(true);
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkUserNameAndPassword(ManagerDTO managerDTO){
         try{
-            openConnection();
+            openSession();
             ManagerDTO resultDAO = sqlSession.selectOne("ManagerDAO.checkUserNameAndPassword", managerDTO);
             if( resultDAO == null || resultDAO.getAffectedRecords() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean updatePassword(ManagerDTO managerDTO){
         try{
-            openConnection();
+            openSession();
             if(sqlSession.update("ManagerDAO.updatePassword", managerDTO) > 0){
                 sqlSession.commit(true);
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 }

@@ -16,56 +16,56 @@ public class StackDAO extends BaseDAO {
 
     public ResponseStackDetailForm getStackDetail(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackDetail",stackDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseStackDetailForm getStackStatus(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackStatus",stackDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseStackListForm getStackListByShelf(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByShelf",stackDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public ResponseStackListForm getStackListByProductIdStoreId(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByProductIdStoreId",stackDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean addProduct(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addProduct",stackDTO) > 0){
                 this.sqlSession.commit();
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean addCamera(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.activeStack",stackDTO) > 0) {
                 if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.activeCamera",stackDTO) > 0){
                     if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.activeMapping",stackDTO) > 0){
@@ -76,26 +76,26 @@ public class StackDAO extends BaseDAO {
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean removeProduct(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.removeProduct",stackDTO) > 0){
                 this.sqlSession.commit();
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean removeCamera(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addNewRecordMapping",stackDTO) > 0){
                 if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateCameraPending",stackDTO) > 0){
                     if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateStackPending",stackDTO) > 0){
@@ -109,150 +109,150 @@ public class StackDAO extends BaseDAO {
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean changeStatus(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.changeStatus",stackDTO) > 0){
                 this.sqlSession.commit();
                 return true;
             }
             return false;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkProductActive(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkProductActive",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkStackPending(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackPending",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkCameraPending(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkCameraPending",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkStackHaveProduct(StackDTO stackDTO) {
         try {
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackHaveProduct",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean stackIsExistInStore(StackDTO stackDTO) {
         try {
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackExist",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean shelfIsExistInStore(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.shelfIsExistInStore",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkCameraExist(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkCameraExist",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkProductExist(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkProductExist",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkStackProductMapping(StackDTO stackDTO) {
         try {
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackProductMapping",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 
     public boolean checkStackCameraMapping(StackDTO stackDTO) {
         try{
-            openConnection();
+            openSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackCameraMapping",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 }
