@@ -112,6 +112,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         String userId = claims.get(USER_ID_STRING, String.class);
                         AuthorDTO authorDTO = new AuthorDTO();
                         authorDTO.setUserId(userId);
+                        authorDTO.setUserName(accountDTO.getUserName());
                         authorDTO.setStoreId(accountDTO.getStoreId());
                         request.setAttribute("AUTHOR", authorDTO);
                     }else {
