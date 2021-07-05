@@ -108,7 +108,7 @@ public class CameraController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/camera/update", method = RequestMethod.POST)
     public String updateCamera(@Validated @RequestBody RequestUpdateCameraForm requestForm,
-                               BindingResult result, HttpServletRequest request){
+                               BindingResult result){
 
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);

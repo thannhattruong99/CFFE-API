@@ -127,7 +127,8 @@
                 ImageURL = #{imageURL},
             </if>
             IPAddress = #{ipAddress},
-            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime}),
+            RTSPString = #{rtspString}
         WHERE CameraId = #{cameraId}
     </update>
     <update id="updateStatus">

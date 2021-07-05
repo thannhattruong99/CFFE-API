@@ -11,6 +11,7 @@ import io.jsonwebtoken.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -62,13 +63,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(AUTHORIZATION);
+
         String username = null;
         String jwtToken = null;
         String uri = request.getRequestURI();
 
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+            logger.warn("Preflight request");
+        }
+        else if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
                 username = jwtTokenHelper.getUsernameFromToken(jwtToken);
@@ -80,16 +85,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 logger.error("JWT Token has expired: " + e.getMessage());
                 response.setHeader(AUTHORIZATION, UNAUTHORIZED);
                 return;
-            } catch (SignatureException e){
+            } catch (SignatureException e) {
                 logger.error("JWT Token invalid: " + e.getMessage());
                 response.setHeader(AUTHORIZATION, UNAUTHORIZED);
                 return;
             }
-        }
-        else if(applicationAuthorities.contains(uri)){
+        } else if (applicationAuthorities.contains(uri)) {
             logger.warn("Init page openai");
-        }
-        else{
+        } else {
             response.setHeader(AUTHORIZATION, UNAUTHORIZED);
             return;
         }
@@ -104,23 +107,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 Claims claims = jwtTokenHelper.getAllClaimsFromToken(jwtToken);
                 int roleId = claims.get(ROLE_ID_STRING, Integer.class);
                 //manager authorities
-                if(roleId == MANAGER_ROLE){
-                    if(StringHelper.isNullOrEmpty(accountDTO.getStoreId()) && !guestAuthorities.contains(uri)){
+                if (roleId == MANAGER_ROLE) {
+                    if (StringHelper.isNullOrEmpty(accountDTO.getStoreId()) && !guestAuthorities.contains(uri)) {
                         response.setHeader(AUTHORIZATION, UNAUTHORIZED);
                         return;
-                    }else if(managerAuthorities.contains(uri)){
+                    } else if (managerAuthorities.contains(uri)) {
                         String userId = claims.get(USER_ID_STRING, String.class);
                         AuthorDTO authorDTO = new AuthorDTO();
                         authorDTO.setUserId(userId);
                         authorDTO.setUserName(accountDTO.getUserName());
                         authorDTO.setStoreId(accountDTO.getStoreId());
                         request.setAttribute("AUTHOR", authorDTO);
-                    }else {
+                    } else {
                         response.setHeader(AUTHORIZATION, UNAUTHORIZED);
                         return;
                     }
-                }else if(roleId == ADMIN_ROLE){
-                    if(!adminAuthorities.contains(uri)){
+                } else if (roleId == ADMIN_ROLE) {
+                    if (!adminAuthorities.contains(uri)) {
                         response.setHeader(AUTHORIZATION, UNAUTHORIZED);
                         return;
                     }
@@ -134,11 +137,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 // that the current user is authenticated. So it passes the
                 // Spring Security Configurations successfully.
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            }else {
+            } else {
                 response.setHeader(AUTHORIZATION, UNAUTHORIZED);
                 return;
             }
         }
+
         filterChain.doFilter(request, response);
     }
 

@@ -3,7 +3,7 @@
 
 <mapper namespace="ShelfDAO">
     <select id="getShelves" resultMap="getShelves">
-        SELECT TR.totalOfRecord, SH.ShelfId, SH.ShelfName, SH.UpdatedTime, SH.StatusId, SH.NumberStacks , STT.StatusName
+        SELECT TR.totalOfRecord, SH.ShelfId, SH.ShelfName, SH.Description, SH.UpdatedTime, SH.StatusId, SH.NumberStacks , STT.StatusName
         FROM tblShelf SH
         JOIN tblStore ST ON SH.StoreId = ST.StoreId
         <if test="statusId != 0">
@@ -46,6 +46,7 @@
                CM.CameraName,
                CM.IPAddress,
                CM.RTSPString,
+               CM.ImageURL,
                CM.CreatedTime AS CMCreatedTime,
                CM.UpdatedTime AS CMUpdatedTime
         FROM tblShelf SH
@@ -158,6 +159,7 @@
         <collection property="shelves" ofType="ShelfResponseSupporter">
             <id property="shelfId" column="ShelfId"/>
             <result property="shelfName" column="ShelfName"/>
+            <result property="description" column="Description"/>
             <result property="updatedTime" column="UpdatedTime"/>
             <result property="statusId" column="StatusId"/>
             <result property="statusName" column="StatusName"/>
@@ -179,6 +181,7 @@
             <result property="cameraName" column="CameraName"/>
             <result property="ipAddress" column="IPAddress"/>
             <result property="rtspString" column="RTSPString"/>
+            <result property="imageURL" column="ImageURL"/>
             <result property="createdTime" column="CMCreatedTime"/>
             <result property="updatedTime" column="CMUpdatedTime"/>
         </collection>
