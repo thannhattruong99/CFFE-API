@@ -314,8 +314,8 @@
             <result property="productId" column="PRO_ProductId"/>
             <result property="productName" column="PRO_ProductName"/>
             <result property="imageUrl" column="PRO_ImageURL"/>
-            <result property="description" column="PRO_ImageURL"/>
-            <result property="createTime" column="PRO_Description"/>
+            <result property="description" column="PRO_Description"/>
+            <result property="createTime" column="PRO_CreatedTime"/>
             <result property="updateTime" column="PRO_UpdatedTime"/>
             <result property="reasonInactive" column="PRO_ReasonInactive"/>
             <result property="statusId" column="PRO_StatusId"/>

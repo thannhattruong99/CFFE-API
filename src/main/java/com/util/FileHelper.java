@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.util.PathConstant.PROJECT_NAME;
-import static com.util.PathConstant.RESOURCE_PATH;
+import static com.util.PathConstant.*;
 
 public class FileHelper implements Serializable {
+
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
     throws  IOException{
         Path uploadPath = Paths.get(uploadDir);
@@ -125,7 +125,11 @@ public class FileHelper implements Serializable {
     //get out of project path
     public static String getOutProjectPath(){
         String str = Paths.get("").toAbsolutePath().toString();
-        str = str.replaceAll("CapstoneAPI/target", "");
+        if(str.contains(PROJECT_SERVER_PATH)){
+            str = str.replaceAll(PROJECT_SERVER_PATH, "");
+        }else{
+            str = str.replaceAll(PROJECT_LOCAL_PATH, "");
+        }
         return str;
     }
 }

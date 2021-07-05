@@ -29,10 +29,10 @@ import static com.util.PathConstant.*;
 @ComponentScan(basePackages = {"com"})
 public class CasptoneAPIApplication {
     private static final Logger logger = LoggerFactory.getLogger(CasptoneAPIApplication.class);
-    private static final String[] HTTP_METHODS = {"GET", "POST", "PUT", "DELETE"};
+    private static final String[] HTTP_METHODS = {"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"};
     private static final String REXP_ALL = "*";
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         logger.info("Info message");
         logger.warn("Warn message");
         logger.error("Error message");
@@ -55,8 +55,8 @@ public class CasptoneAPIApplication {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping(REXP_ALL_PATH).allowedMethods(HTTP_METHODS).allowedOrigins(REXP_ALL)
-                        .allowedHeaders("*");
+                registry.addMapping(REXP_ALL_PATH).allowedMethods(REXP_ALL).allowedOrigins(REXP_ALL)
+                        .allowedHeaders(REXP_ALL);
             }
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
