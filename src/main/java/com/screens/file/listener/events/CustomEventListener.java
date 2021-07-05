@@ -60,7 +60,9 @@ public class CustomEventListener extends BaseService {
                         videoProperty.setTotalPerson(countHP);
                     }
                 }
+                System.out.println("videoProperty.getTypeVideo() 1: " + videoProperty.getTypeVideo());
                 if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
+                    System.out.println("videoProperty.getTypeVideo() 2: " + videoProperty.getTypeVideo());
                     EmotionDTO emotionDTO;
                     if((emotionDTO = DetectService.countEmotion(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != null){

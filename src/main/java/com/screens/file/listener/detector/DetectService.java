@@ -54,7 +54,7 @@ public class DetectService {
 //       fps video
         command += " " + FPS_ARGUMENT + " " + DETECT_EMOTION_FPS;
 //        output video
-        command += " " + SAVE_ARGUMENT + " " + OUTPUT_VIDEO_PATH + outputFileName;
+        command += " " + SAVE_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFileName;
 //        emotion model path
         command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_MODEL_PATH;
 //        emotion weight path
