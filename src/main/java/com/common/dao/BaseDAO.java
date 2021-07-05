@@ -21,13 +21,16 @@ public class BaseDAO {
     }
 
     public void closeConnection(){
-        try {
-            if(sqlSession.getConnection() != null){
-                sqlSession.getConnection().close();
+//        try {
+            if(sqlSession != null){
+                sqlSession.commit();
+//                if(sqlSession.getConnection() != null){
+//                    sqlSession.getConnection().close();
+//                }
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
 
     }
 }
