@@ -26,10 +26,10 @@ public class ProductDAO extends BaseDAO {
 
     public ResponseProductListForm getProductListByStoreId(ProductDTO productDTO) {
         try{
-            openConnection();
+            openSession();
             return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductListByStoreId",productDTO);
         }finally {
-            closeConnection();
+            closeSession();
         }
     }
 

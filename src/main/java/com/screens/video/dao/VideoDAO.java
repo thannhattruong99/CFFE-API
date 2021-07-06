@@ -42,6 +42,15 @@ public class VideoDAO extends BaseDAO {
         }
     }
 
+    public String getStackProductCameraMappingId(VideoProperty videoProperty) {
+        try{
+            openSession();
+            return sqlSession.selectOne("com.screens.video.dao.VidDAO.getStackProductCameraMappingId",videoProperty);
+        }finally {
+            closeSession();
+        }
+    }
+
     public boolean insertVideoProperty(VideoProperty videoProperty) {
         try{
             openSession();
