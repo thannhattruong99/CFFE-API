@@ -75,22 +75,6 @@ public class DetectService {
         return emotionDTO;
     }
 
-    private static void watch(final Process process) {
-        new Thread() {
-            public void run() {
-                BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                String line = null;
-                try {
-                    while ((line = input.readLine()) != null) {
-                        System.out.println(line);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-    }
-
     private static int readHotSpotConsole(Process proc) throws IOException {
         BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(proc.getInputStream()));
