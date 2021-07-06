@@ -38,22 +38,28 @@ public class CustomEventListener extends BaseService {
     private static final String CONTENT_TYPE_IMAGE = "";
     private static final String CONTENT_TYPE_VIDEO = "video/mp4";
 
+    /**
+     * EVENT LISTENER
+     * @param eventCreator
+     * @throws InterruptedException
+     */
     @Async
     @EventListener
     public void eventListener(EventCreator eventCreator) throws InterruptedException {
         if(eventCreatorMap == null){
             eventCreatorMap = new HashMap<>();
         }
-        System.out.println("Start do event 1");
+        // START EVENT
         eventCreator.setStatus(0);
         eventCreator.setMessage("Loading");
         eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
 
+        // DO EVENT
         List<String> videoErrorNameList = new ArrayList<>();
         for (VideoProperty videoProperty: eventCreator.getVideoPropertyList()) {
             try{
                 int countHP;
-                // TODO: detect video hot spot / emotion
+                // DETECT VIDEO HOT SPOT / EMOTION
                 if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
                     if((countHP = DetectService.countPerson(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != 0){
@@ -73,14 +79,12 @@ public class CustomEventListener extends BaseService {
                     }
                 }
 
-                // TODO: delete file input
+                // DELETE FILE INPUT
                 FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
 
+                // UPLOAD STORAGE CLOUD / INSERT DATABASE
                 if (videoProperty.getStatusId() != -1) {
-                    // TODO: upload video moi => cloud
                     uploadVideoDetectedToStorage(videoProperty);
-
-                    // TODO: insert tblHotspot / tblEmotion -> tblVideo
                     insertDatabase(videoProperty,videoErrorNameList,eventCreator);
                 }
             } catch (InterruptedException e) {
@@ -90,6 +94,7 @@ public class CustomEventListener extends BaseService {
             }
         }
 
+        // END OF EVENT
         eventCreator.setStatus(1);
         String msg = "";
         if (videoErrorNameList.size() >0){
@@ -102,13 +107,20 @@ public class CustomEventListener extends BaseService {
         eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
     }
 
+    public Map<String, EventCreator> getEventCreatorMap() {
+        return eventCreatorMap;
+    }
+
+    public void setEventCreatorMap(Map<String, EventCreator> eventCreatorMap) {
+        this.eventCreatorMap = eventCreatorMap;
+    }
+
     private void uploadVideoDetectedToStorage(VideoProperty videoProperty) {
         try {
             String outputPath = GCPHelper.uploadFile(OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID(),
                     VIDEO_FOLDER_CLOUD + org.springframework.util.StringUtils.cleanPath(videoProperty.getVideoNameUUID()),
                     CONTENT_TYPE_VIDEO);
             videoProperty.setVideoUrl(outputPath);
-//            FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
             FileHelper.deleteFile(OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
         } catch (IOException e) {
             System.out.println("Upload video toang: " + e.getMessage());
@@ -128,6 +140,7 @@ public class CustomEventListener extends BaseService {
             logger.error("Error at CustomEventListener: " + e.getMessage());
         }
     }
+
     private void setError(VideoProperty videoProperty, List<String> videoErrorNameList, EventCreator eventCreator) {
         videoProperty.setStatusId(-1);;
         videoErrorNameList.add(videoProperty.getVideoNameOriginal());
@@ -139,11 +152,4 @@ public class CustomEventListener extends BaseService {
         eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
     }
 
-    public Map<String, EventCreator> getEventCreatorMap() {
-        return eventCreatorMap;
-    }
-
-    public void setEventCreatorMap(Map<String, EventCreator> eventCreatorMap) {
-        this.eventCreatorMap = eventCreatorMap;
-    }
 }

@@ -54,6 +54,22 @@ public class FileService extends BaseService {
     private static final String NULL_STRING = "null";
 
     /**
+     * Get file transactrion
+     * @param eventId UUID of event
+     * @return Flux<FileTransaction>
+     */
+    public Flux<FileTransaction> getFileTransactions(String eventId) {
+        Flux<Long> interval = Flux.interval(Duration.ofSeconds(2));
+        // GET NEW DATA
+        EventCreator data = customEventListener.getEventCreatorMap().get(eventId);
+        Flux<FileTransaction> fileTransactionFlux = Flux.fromStream(
+                // GENERATE DATA
+                Stream.generate(() -> new FileTransaction(data.getMessage(), data.getStatus()))
+        );
+        return Flux.zip(interval, fileTransactionFlux).map(Tuple2::getT2);
+    }
+
+    /**
      * Upload Image To Storage
      * @param file Image
      * @return ResponseUploadImage
@@ -165,6 +181,7 @@ public class FileService extends BaseService {
         return dateFormat.format(cal.getTime());
     }
 
+    // TODO: CHECK VIDEO DUPLICATE
 //    private boolean duplicateVideo(List<VideoProperty> listVideoProperty) {
 //        //Check duplicate input
 //        for (VideoProperty videoProperty : listVideoProperty) {
@@ -255,24 +272,6 @@ public class FileService extends BaseService {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Get file transactrion
-     * @param eventId UUID of event
-     * @return Flux<FileTransaction>
-     */
-    public Flux<FileTransaction> getFileTransactions(String eventId) {
-        Flux<Long> interval = Flux.interval(Duration.ofSeconds(2));
-        // Lay data moi
-        EventCreator data = customEventListener.getEventCreatorMap().get(eventId);
-
-        Flux<FileTransaction> fileTransactionFlux = Flux.fromStream(
-                // generate new data.
-                Stream.generate(() -> new FileTransaction(data.getMessage(), data.getStatus()))
-        );
-
-        return Flux.zip(interval, fileTransactionFlux).map(Tuple2::getT2);
     }
 
 }

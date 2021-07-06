@@ -78,17 +78,16 @@ public class VideoDAO extends BaseDAO {
     }
 
     public boolean insertEmotion(VideoProperty videoProperty) {
-//        try{
-//            openSession();
-//            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertEmotion",videoProperty) > 0){
-//                this.sqlSession.commit();
-//                return true;
-//            }
-//            return false;
-//        }finally {
-//            closeSession();
-//        }
-        return true;
+        try{
+            openSession();
+            if(sqlSession.insert("com.screens.video.dao.VidDAO.insertEmotion",videoProperty) > 0){
+                this.sqlSession.commit();
+                return true;
+            }
+            return false;
+        }finally {
+            closeSession();
+        }
     }
 
     public boolean isDuplicate(VideoProperty videoProperty) {
