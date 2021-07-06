@@ -18,8 +18,17 @@ public class ProductDTO extends BaseDTO implements Serializable {
     private int categoryId;
     private List<Integer> categories;
     private int totalOfRecord;
+    private String storeId;
 
     public ProductDTO() {
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 
     public int getTotalOfRecord() {
