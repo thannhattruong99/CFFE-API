@@ -2,6 +2,7 @@ package com.screens.product.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
+import com.filter.dto.AuthorDTO;
 import com.screens.product.dao.ProductDAO;
 import com.screens.product.dto.ProductDTO;
 import com.screens.product.form.*;
@@ -31,6 +32,17 @@ public class ProductService extends BaseService {
             logger.error("Error Message: " + e.getMessage());
         }
         return responseProductDetailForm;
+    }
+
+    public ResponseProductListForm getProductListByStoreId(RequestGetProductListByStoreIdForm requestForm){
+        ResponseProductListForm responseProductListForm = null;
+        ProductDTO productDTO = convertGetProductListByStoreIdFormToDTO(requestForm);
+        try {
+            responseProductListForm = productDAO.getProductListByStoreId(productDTO);
+        } catch (PersistenceException e) {
+            logger.error("Error Message: " + e.getMessage());
+        }
+        return responseProductListForm;
     }
 
     public ResponseProductListForm getProductList(RequestGetProductListForm requestForm){
@@ -205,6 +217,19 @@ public class ProductService extends BaseService {
         if(requestForm.getFetchNext() <= 0){
             productDTO.setFetchNext(DEFAULT_FETCH_NEXT);
         }
+        return productDTO;
+    }
+
+    private ProductDTO convertGetProductListByStoreIdFormToDTO(RequestGetProductListByStoreIdForm requestForm) {
+        ProductDTO productDTO = new ProductDTO();
+        if(requestForm.getPageNum() > 0){
+            productDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
+        }
+        productDTO.setFetchNext(requestForm.getFetchNext());
+        if(requestForm.getFetchNext() <= 0){
+            productDTO.setFetchNext(DEFAULT_FETCH_NEXT);
+        }
+        productDTO.setStoreId(requestForm.getStoreId());
         return productDTO;
     }
 }

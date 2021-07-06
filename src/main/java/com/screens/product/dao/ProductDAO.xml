@@ -56,6 +56,68 @@
         </collection>
     </resultMap>
 
+    <select id="getProductListByStoreId" resultMap="getProductListByStoreId">
+        SELECT  A1.CategoryId,
+                CN.CategoryName,
+                A2.*
+        FROM
+            tblProductCategoryMapping A1
+                RIGHT JOIN(
+                SELECT SSS.*,TT.totalOfRecord
+                FROM
+                    (
+                        SELECT  S.ProductId,
+                                S.ProductName,
+                                S.ImageURL,
+                                S.Description,
+                                S.CreatedTime,
+                                S.UpdatedTime,
+                                S.ReasonInactive,
+                                S.StatusId,
+                                TS.StatusName
+                        FROM tblProduct S
+                                 LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                                 LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.ProductId = S.ProductId AND TSCM.StatusId = 1)
+                                 LEFT JOIN tblStack TST ON (TST.StackId = TSCM.StackId)
+                                 LEFT JOIN tblShelf TSH ON (TSH.ShelfId = TST.ShelfId)
+                        WHERE TSH.StoreId = #{storeId}
+                        GROUP BY ProductId
+                            LIMIT
+                                 #{offSet},
+                                 #{fetchNext}
+                    ) SSS,
+                    ( SELECT COUNT(TTT.ProductId) AS totalOfRecord
+                      FROM (SELECT S.ProductId
+                            FROM tblProduct S
+                                     LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                                     LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.ProductId = S.ProductId AND TSCM.StatusId = 1)
+                                     LEFT JOIN tblStack TST ON (TST.StackId = TSCM.StackId)
+                                     LEFT JOIN tblShelf TSH ON (TSH.ShelfId = TST.ShelfId)
+                            WHERE TSH.StoreId = #{storeId}
+                            GROUP BY ProductId) TTT) TT
+            ) A2 ON (A1.ProductId = A2.ProductId)
+                LEFT JOIN tblCategory CN ON(A1.CategoryId = CN.CategoryId)
+    </select>
+
+    <resultMap id="getProductListByStoreId" type="ResponseProductListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="products" ofType="ResponseProductDetailForm">
+            <result property="productId" column="ProductId"/>
+            <result property="productName" column="ProductName"/>
+            <result property="imageUrl" column="ImageURL"/>
+            <result property="description" column="Description"/>
+            <result property="createdTime" column="CreatedTime"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="reasonInactive" column="ReasonInactive"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="statusName" column="StatusName"/>
+            <collection property="categories" ofType="CategoryResponseSupporter">
+                <result property="categoryId" column="CategoryId"/>
+                <result property="categoryName" column="CategoryName"/>
+            </collection>
+        </collection>
+    </resultMap>
+
     <select id="getProductList" resultMap="getProductList">
         SELECT  A1.CategoryId,
                 CN.CategoryName,

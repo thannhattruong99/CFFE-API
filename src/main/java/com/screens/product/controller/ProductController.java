@@ -1,6 +1,7 @@
 package com.screens.product.controller;
 
 import com.common.form.ResponseCommonForm;
+import com.filter.dto.AuthorDTO;
 import com.screens.product.form.*;
 import com.screens.product.service.ProductService;
 import com.util.ResponseSupporter;
@@ -26,6 +27,7 @@ public class ProductController {
 
     private static final String MSG_009 = "MSG-009";
     private static final String MSG_023 = "MSG-023";
+    private static final String AUTHOR = "AUTHOR";
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/product")
@@ -66,6 +68,24 @@ public class ProductController {
             return ResponseSupporter.responseErrorResult(errorCodes);
         }
         // Return result
+        return ResponseSupporter.responseResult(res);
+    }
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/products-by-storeid")
+    public String getProductListByStoreId(
+            @Validated RequestGetProductListByStoreIdForm requestForm,
+            BindingResult result,
+            HttpServletRequest request){
+        if(result.hasErrors()){
+            return ResponseSupporter.responseErrorResult(result);
+        }
+        ResponseProductListForm res = productService.getProductListByStoreId(requestForm);
+        if(res == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseErrorResult(errorCodes);
+        }
         return ResponseSupporter.responseResult(res);
     }
 

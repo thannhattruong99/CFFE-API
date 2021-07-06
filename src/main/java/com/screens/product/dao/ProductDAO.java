@@ -24,6 +24,15 @@ public class ProductDAO extends BaseDAO {
         }
     }
 
+    public ResponseProductListForm getProductListByStoreId(ProductDTO productDTO) {
+        try{
+            openConnection();
+            return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getProductListByStoreId",productDTO);
+        }finally {
+            closeConnection();
+        }
+    }
+
     public ResponseProductListForm getProductList(ProductDTO productDTO) {
         try{
             openSession();
