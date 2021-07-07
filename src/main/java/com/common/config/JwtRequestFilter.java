@@ -35,8 +35,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final int ADMIN_ROLE = 1;
     private static final int MANAGER_ROLE = 2;
     private static final String USER_ID_STRING = "UserId";
-    private static final String USER_NAME_STRING = "UserName";
-    private static final String STORE_ID_STRING = "StoreId";
     private static final String ROLE_ID_STRING = "RoleId";
     private static final String AUTHORIZATION = "Authorization";
     private static final String UNAUTHORIZED = "Unauthorized";

@@ -30,9 +30,4 @@ public class AccountController {
         errorCodes.add(MSG_003);
         return ResponseSupporter.responseErrorResult(errorCodes);
     }
-
-    @GetMapping("")
-    public RedirectView init(){
-        return new RedirectView("/swagger-ui.html");
-    }
 }
