@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AccountDAO">
+    <select id="getAccountInformation" resultMap="getAccountInformation">
+        SELECT U.UserId, U.UserName, U.FullName, R.RoleId, USM.StoreId
+        FROM tblUser U
+        JOIN tblStatus STT ON U.StatusId != 2 AND STT.StatusId = U.StatusId
+        JOIN tblRole R ON R.RoleId = U.RoleId
+        LEFT JOIN tblUserStoreMapping USM ON USM.UserId = U.UserId AND USM.StatusId = 1
+        LEFT JOIN tblStore ST ON USM.StoreId = ST.StoreId
+        WHERE U.UserName = #{username}
+    </select>
+    <select id="login" resultMap="login">
+        SELECT U.UserId, U.UserName, U.FullName, U.ImageURL ,STT.StatusId, STT.StatusName, R.RoleId, R.RoleName, USM.StoreId, ST.StoreName FROM tblUser U
+        JOIN tblStatus STT ON U.StatusId != 2 AND STT.StatusId = U.StatusId
+        JOIN tblRole R ON R.RoleId = U.RoleId
+        LEFT JOIN tblUserStoreMapping USM ON USM.UserId = U.UserId AND USM.StatusId = 1
+        LEFT JOIN tblStore ST ON USM.StoreId = ST.StoreId
+        WHERE U.UserName = #{username} AND U.Password = #{password}
+    </select>
+    <resultMap id="getAccountInformation" type="AccountDTO">
+        <result property="userName" column="UserName"/>
+        <result property="fullName" column="FullName"/>
+        <result property="password" column="Password"/>
+        <result property="storeId" column="StoreId"/>
+    </resultMap>
+    <resultMap id="login" type="ResponseLoginForm">
+        <result property="userId" column="UserId"/>
+        <result property="userName" column="UserName"/>
+        <result property="fullName" column="FullName"/>
+        <result property="statusId" column="StatusId"/>
+        <result property="statusName" column="StatusName"/>
+        <result property="roleId" column="RoleId"/>
+        <result property="roleName" column="RoleName"/>
+        <result property="storeId" column="StoreId"/>
+        <result property="storeName" column="StoreName"/>
+    </resultMap>
+</mapper>

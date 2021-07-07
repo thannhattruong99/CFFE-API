@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CityDAO">
+    <select id="getCityAndDistrict" resultMap="getCityAndDistrict">
+        SELECT C.CityId, C.CityName, D.DistrictId, D.DistrictName
+        FROM tblDistrict D
+                 JOIN tblCity C
+                      ON D.CityId = C.CityId
+        ORDER BY C.CityId
+    </select>
+    <resultMap id="getCityAndDistrict" type="CityResponseSupporter">
+    <result property="cityId" column="CityId"/>
+    <result property="cityName" column="CityName"/>
+    <collection property="districts" ofType="DistrictResponseSupporter">
+        <id property="districtId" column="DistrictId" />
+        <result property="districtName" column="DistrictName"/>
+    </collection>
+    </resultMap>
+</mapper>

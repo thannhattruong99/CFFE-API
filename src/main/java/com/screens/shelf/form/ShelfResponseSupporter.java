@@ -7,6 +7,7 @@ public class ShelfResponseSupporter {
     private String updatedTime;
     private String statusId;
     private String statusName;
+    private String description;
 
     public ShelfResponseSupporter() {
     }
@@ -58,4 +59,8 @@ public class ShelfResponseSupporter {
     public void setStatusName(String statusName) {
         this.statusName = statusName;
     }
+
+    public String getDescription() { return description; }
+
+    public void setDescription(String description) { this.description = description; }
 }

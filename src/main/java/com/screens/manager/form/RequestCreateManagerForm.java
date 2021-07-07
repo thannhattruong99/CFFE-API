@@ -1,6 +1,5 @@
 package com.screens.manager.form;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.lang.Nullable;
 
@@ -18,14 +17,14 @@ public class RequestCreateManagerForm {
     @NotEmpty(message = "MSG-044")
     @Email(message = "MSG-045")
     private String email;
-    @DateTimeFormat
     @NotEmpty(message = "MSG-047")
+    @Pattern(regexp = "^\\d\\d\\d\\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])",message = "MSG-117")
     private String birthDate;
     @Min(value= 0, message = "MSG-054")
     @Max(value = 2, message = "MSG-054")
     private int gender;
     @Nullable
-    private byte[] image;
+    private String imageURL;
     @NotEmpty(message = "MSG-036")
     @Size(min = 1, max = 250, message = "MSG-037")
     private String address;
@@ -75,12 +74,13 @@ public class RequestCreateManagerForm {
         this.gender = gender;
     }
 
-    public byte[] getImage() {
-        return image;
+    @Nullable
+    public String getImageURL() {
+        return imageURL;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setImageURL(@Nullable String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getAddress() {

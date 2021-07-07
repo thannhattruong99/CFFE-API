@@ -1,7 +1,6 @@
 package com.screens.store.form;
 
 import org.springframework.lang.Nullable;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -10,6 +9,9 @@ import java.io.Serializable;
 public class RequestUpdateInfoForm implements Serializable {
     @NotEmpty(message = "MSG-069")
     private String storeId;
+
+    @Nullable
+    private String imageUrl;
 
     @Nullable
     @Size(min = 1, max = 100, message = "MSG-015")
@@ -26,8 +28,12 @@ public class RequestUpdateInfoForm implements Serializable {
     @Nullable
     private int districtId;
 
+
+
     public RequestUpdateInfoForm() {
     }
+
+
 
     public String getStoreId() {
         return storeId;
@@ -46,14 +52,14 @@ public class RequestUpdateInfoForm implements Serializable {
         this.storeName = storeName;
     }
 
-//    @Nullable
-//    public MultipartFile getImageUrl() {
-//        return imageUrl;
-//    }
-//
-//    public void setImageUrl(@Nullable MultipartFile imageUrl) {
-//        this.imageUrl = imageUrl;
-//    }
+    @Nullable
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(@Nullable String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     @Nullable
     public String getAddress() {

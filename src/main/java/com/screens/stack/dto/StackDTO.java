@@ -1,6 +1,8 @@
 package com.screens.stack.dto;
 
-public class StackDTO {
+import com.common.dto.BaseDTO;
+
+public class StackDTO extends BaseDTO {
     private String stackId;
     private int position;
     private String createTime;
@@ -8,10 +10,73 @@ public class StackDTO {
     private String reasonInactive;
     private String shelfId;
     private String shelfName;
+    private String productId;
     private ProductDTO productDTO;
+    private String cameraId;
     private CameraDTO cameraDTO;
+    private int statusId;
+    private String statusName;
+    private int action;
+    private int totalOfRecord;
+    private String storeId;
 
     public StackDTO() {
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public int getTotalOfRecord() {
+        return totalOfRecord;
+    }
+
+    public void setTotalOfRecord(int totalOfRecord) {
+        this.totalOfRecord = totalOfRecord;
+    }
+
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getCameraId() {
+        return cameraId;
+    }
+
+    public void setCameraId(String cameraId) {
+        this.cameraId = cameraId;
+    }
+
+    public int getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     public String getStackId() {

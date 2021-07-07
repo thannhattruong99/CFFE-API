@@ -2,6 +2,11 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+    <settings>
+        <setting name="cacheEnabled" value="false"/>
+        <setting name="localCacheScope" value="STATEMENT"/>
+    </settings>
+
     <typeAliases>
         <typeAlias alias="ResponseManagerListForm" type="com.screens.manager.form.ResponseManagerListForm"/>
         <typeAlias alias="ManagerResponseSupporter" type="com.screens.manager.form.ManagerResponseSupporter"/>
@@ -23,27 +28,63 @@
         <typeAlias alias="ResponseStackDetailForm" type="com.screens.stack.form.ResponseStackDetailForm"/>
         <typeAlias alias="ProductResponseSupporter" type="com.screens.stack.form.ProductResponseSupporter"/>
         <typeAlias alias="CameraResponseSupporter" type="com.screens.stack.form.CameraResponseSupporter"/>
+        <typeAlias alias="CameraListResponseSupporter" type="com.screens.camera.form.CameraListResponseSupporter"/>
+        <typeAlias alias="ResponseStackListForm" type="com.screens.stack.form.ResponseStackListForm"/>
+        <typeAlias alias="ResponseCategoryDetailForm" type="com.screens.category.form.ResponseCategoryDetailForm"/>
+        <typeAlias alias="ResponseCameraListForm" type="com.screens.camera.form.ResponseCameraListForm"/>
+        <typeAlias alias="ResponseCameraDetailForm" type="com.screens.camera.form.ResponseCameraDetailForm"/>
         <typeAlias alias="ShelfDTO" type="com.screens.shelf.dto.ShelfDTO"/>
+        <typeAlias alias="CameraDTO" type="com.screens.camera.dto.CameraDTO"/>
+        <typeAlias alias="StackDTO" type="com.screens.stack.dto.StackDTO"/>
+        <typeAlias alias="ProductDTO" type="com.screens.product.dto.ProductDTO"/>
+        <typeAlias alias="CategoryDTO" type="com.screens.category.dto.CategoryDTO"/>
+        <typeAlias alias="VideoDTO" type="com.screens.video.dto.VideoDTO"/>
+        <typeAlias alias="ResponseProductDetailForm" type="com.screens.product.form.ResponseProductDetailForm"/>
+        <typeAlias alias="ResponseProductListForm" type="com.screens.product.form.ResponseProductListForm"/>
+        <typeAlias alias="CategoryResponseSupporter" type="com.screens.product.form.CategoryResponseSupporter"/>
+        <typeAlias alias="ResponseCategoryListForm" type="com.screens.category.form.ResponseCategoryListForm"/>
+        <typeAlias alias="ResponseLoginForm" type="com.authentication.form.ResponseLoginForm"/>
+        <typeAlias alias="ResponseCountVideosForm" type="com.screens.video.form.ResponseCountVideosForm"/>
+        <typeAlias alias="ResponseEmotionVideosForm" type="com.screens.video.form.ResponseEmotionVideosForm"/>
+        <typeAlias alias="ShelfVideoResponseSupporter" type="com.screens.video.form.ShelfVideoResponseSupporter"/>
+        <typeAlias alias="StoreCountResponseSupporter" type="com.screens.video.form.StoreCountResponseSupporter"/>
+        <typeAlias alias="StoreEmotionResponseSupporter" type="com.screens.video.form.StoreEmotionResponseSupporter"/>
+        <typeAlias alias="VideoResponseSupporter" type="com.screens.video.form.VideoResponseSupporter"/>
+        <typeAlias alias="AccountDTO" type="com.authentication.dto.AccountDTO"/>
+        <typeAlias alias="EventCreator" type="com.screens.file.listener.events.EventCreator"/>
+        <typeAlias alias="VideoProperty" type="com.screens.file.dto.VideoProperty"/>
+        <typeAlias alias="ResponseAllProductForm" type="com.screens.product.form.ResponseAllProductForm"/>
+        <typeAlias alias="ProductShortResponseSupporter" type="com.screens.product.form.ProductShortResponseSupporter"/>
+        <typeAlias alias="ResponseShelvesByStoreId" type="com.screens.shelf.form.ResponseShelvesByStoreId"/>
+        <typeAlias alias="ShelfSortSupporter" type="com.screens.shelf.form.ShelfSortSupporter"/>
+        <typeAlias alias="HotSpotResponseSupporter" type="com.screens.video.form.HotSpotResponseSupporter"/>
+        <typeAlias alias="EmotionResponseSupporter" type="com.screens.video.form.EmotionResponseSupporter"/>
     </typeAliases>
 
     <environments default="development">
         <environment id="development">
-            <transactionManager type="JDBC" />
+            <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.cj.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://35.247.184.122:3306/CFFA_Database" />
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://34.87.111.109:3306/CFFE_Database" />
                 <property name="username" value="luanhm" />
                 <property name="password" value="luanhm" />
+                <property name="poolPingQuery" value="/* ping */ SELECT 1"/>
+                <property name="poolPingEnabled" value="true"/>
             </dataSource>
         </environment>
     </environments>
 
     <mappers>
-        <mapper resource="com/screens/manager/dao/sql/ManagerDAO.xml"/>
-        <mapper resource="com/screens/store/dao/sql/StoreDAO.xml"/>
-        <mapper resource="com/screens/city/dao/sql/CityDAO.xml"/>
-        <mapper resource="com/screens/shelf/dao/sql/ShelfDAO.xml"/>
-        <mapper resource="com/screens/camera/dao/sql/CameraDAO.xml"/>
-        <mapper resource="com/screens/stack/dao/sql/StackDAO.xml"/>
+        <mapper resource="com/screens/manager/dao/ManagerDAO.xml"/>
+        <mapper resource="com/screens/store/dao/StoreDAO.xml"/>
+        <mapper resource="com/screens/city/dao/CityDAO.xml"/>
+        <mapper resource="com/screens/shelf/dao/ShelfDAO.xml"/>
+        <mapper resource="com/screens/camera/dao/CameraDAO.xml"/>
+        <mapper resource="com/screens/stack/dao/StackDAO.xml"/>
+        <mapper resource="com/screens/category/dao/CategoryDAO.xml"/>
+        <mapper resource="com/screens/product/dao/ProductDAO.xml"/>
+        <mapper resource="com/screens/video/dao/VidDAO.xml"/>
+        <mapper resource="com/authentication/dao/AccountDAO.xml"/>
     </mappers>
 </configuration>

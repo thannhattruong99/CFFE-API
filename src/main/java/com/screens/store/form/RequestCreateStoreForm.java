@@ -1,38 +1,25 @@
 package com.screens.store.form;
 
-import net.bytebuddy.implementation.bind.annotation.Empty;
 import org.springframework.lang.Nullable;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class RequestCreateStoreForm implements Serializable {
-    @NotEmpty
+    @NotEmpty(message = "MSG-106")
     private String storeName;
 
     @Nullable
-    private MultipartFile imageUrl;
+    private String imageUrl;
 
-    @NotEmpty
+    @NotEmpty(message = "MSG-107")
     private String address;
-
-    @NotEmpty
-    private String analyzedTime;
 
     @NotNull
     private int districtId;
 
     public RequestCreateStoreForm() {
-    }
-
-    public String getAnalyzedTime() {
-        return analyzedTime;
-    }
-
-    public void setAnalyzedTime(String analyzedTime) {
-        this.analyzedTime = analyzedTime;
     }
 
     public String getStoreName() {
@@ -43,11 +30,11 @@ public class RequestCreateStoreForm implements Serializable {
         this.storeName = storeName;
     }
 
-    public MultipartFile getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(MultipartFile imageUrl) {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 

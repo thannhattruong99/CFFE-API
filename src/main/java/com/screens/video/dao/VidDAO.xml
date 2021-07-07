@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.screens.video.dao.VidDAO">
+
+    <select id="getShelfCameraMappingId" resultType="java.lang.String">
+        SELECT ShelfCameraMappingId
+        FROM tblShelfCameraMapping
+        WHERE CameraId = #{cameraId}
+        AND AddedTime &lt;= #{startedTime}
+        AND (CASE WHEN RemovedTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
+            ELSE RemovedTime END)  &gt;= #{endedTime}
+        ORDER BY AddedTime DESC
+        LIMIT 1
+    </select>
+
+    <select id="getStackProductCameraMappingId" resultType="java.lang.String">
+        SELECT StackProductCameraMappingId
+        FROM tblStackProductCameraMapping
+        WHERE CameraId = #{cameraId}
+          AND AddedCameraTime &lt;= #{startedTime}
+          AND (CASE WHEN RemovedCameraTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
+                    ELSE RemovedCameraTime END)  &gt;= #{endedTime}
+        ORDER BY AddedCameraTime DESC
+            LIMIT 1
+    </select>
+
+<!--    <select id="countByCameraIdAndTime" resultType="int">-->
+<!--        -->
+<!--    </select>-->
+
+    <select id="getVideoCountList" resultMap="getVideoCountList">
+        SELECT TV.VideoId,
+               TV.VideoName,
+               TV.VideoURL,
+               TV.StartedTime,
+               TV.EndedTime,
+               TV.StatusId,
+               TS.ShelfId,
+               TS.ShelfName,
+               TT.StoreId,
+               TT.StoreName,
+                THS.HotspotId,
+                THS.StartedTime,
+                THS.EndedTime,
+                THS.TotalPeople,
+                THS.Description,
+               TTTT.totalOfRecord
+        FROM tblVideo TV
+                 LEFT JOIN tblShelfCameraMapping TSCM ON (TSCM.ShelfCameraMappingId = TV.ShelfCameraMappingId)
+                 LEFT JOIN tblShelf TS ON (TS.ShelfId = TSCM.ShelfId)
+                 LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
+                 LEFT JOIN tblHotSpot THS ON (TSCM.ShelfCameraMappingId = THS.ShelfCameraMappingId AND TV.StartedTime = THS.StartedTime),
+             (
+                 SELECT COUNT(TV.VideoId) AS totalOfRecord
+                 FROM tblVideo TV
+                          LEFT JOIN tblShelfCameraMapping TSCM ON (TSCM.ShelfCameraMappingId = TV.ShelfCameraMappingId)
+                          LEFT JOIN tblShelf TS ON (TS.ShelfId = TSCM.ShelfId)
+                          LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
+                 WHERE
+                    TV.StartedTime &gt;= #{dayStart}
+                    AND TV.EndedTime &lt;= #{dayEnd}
+                <if test="storeId != null">
+                    AND TS.StoreId = #{storeId}
+                    <if test="shelfId != null">
+                        AND TS.ShelfId = #{shelfId}
+                    </if>
+                </if>
+             ) TTTT
+        WHERE
+            TV.StartedTime &gt;= #{dayStart}
+            AND TV.EndedTime &lt;= #{dayEnd}
+            <if test="storeId != null">
+                AND TS.StoreId = #{storeId}
+                <if test="shelfId != null">
+                    AND TS.ShelfId = #{shelfId}
+                </if>
+            </if>
+        ORDER BY
+                 TV.StartedTime DESC
+    </select>
+
+    <resultMap id="getVideoCountList" type="ResponseCountVideosForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreCountResponseSupporter">
+            <id property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <collection property="shelves" ofType="ShelfVideoResponseSupporter">
+                <id property="shelfId" column="ShelfId"/>
+                <result property="shelfName" column="ShelfName"/>
+                <collection property="videos" ofType="VideoResponseSupporter">
+                    <id property="videoId" column="VideoId"/>
+                    <result property="videoName" column="VideoName"/>
+                    <result property="videoUrl" column="VideoURL"/>
+                    <result property="startedTime" column="StartedTime"/>
+                    <result property="endedTime" column="EndedTime"/>
+                    <result property="statusId" column="StatusId"/>
+                    <collection property="hotSpot" ofType="HotSpotResponseSupporter">
+                        <result property="hotspotId" column="HotspotId"/>
+                        <result property="startedTime" column="StartedTime"/>
+                        <result property="endedTime" column="EndedTime"/>
+                        <result property="TotalPeople" column="TotalPeople"/>
+                        <result property="description" column="description"/>
+                    </collection>
+                </collection>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+
+    <select id="getVideoEmotionList" resultMap="getVideoEmotionList">
+        SELECT TV.VideoId,
+                TV.VideoName,
+                TV.VideoURL,
+                TV.StartedTime,
+                TV.EndedTime,
+                TV.StatusId,
+                TS.ShelfId,
+                TS.ShelfName,
+                TT.StoreId,
+                TT.StoreName,
+                TSCM.ProductId,
+                THS.EmotionId,
+                THS.StartedTime,
+                THS.EndedTime,
+                THS.Angry,
+                THS.Disgust,
+                THS.Fear,
+                THS.Happy,
+                THS.Sad,
+                THS.Surprise,
+                THS.Neutral,
+                THS.Description,
+                TTTT.totalOfRecord
+        FROM tblVideo TV
+            LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.StackProductCameraMappingId = TV.StackProductCameraMappingId)
+            LEFT JOIN tblStack TTS ON (TTS.StackId = TSCM.StackId)
+            LEFT JOIN tblShelf TS ON (TS.ShelfId = TTS.ShelfId)
+            LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
+            LEFT JOIN tblEmotion THS ON (TSCM.StackProductCameraMappingId = THS.StackProductCameraMappingId AND TV.StartedTime = THS.StartedTime),
+            (
+                SELECT COUNT(TV.VideoId) AS totalOfRecord
+                FROM tblVideo TV
+                    LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.StackProductCameraMappingId = TV.StackProductCameraMappingId)
+                    LEFT JOIN tblStack TTS ON (TTS.StackId = TSCM.StackId)
+                    LEFT JOIN tblShelf TS ON (TS.ShelfId = TTS.ShelfId)
+                    LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
+                WHERE
+                    TSCM.ProductId = #{productId}
+                    <if test="storeId != null">
+                        AND TS.StoreId = #{storeId}
+                    </if>
+                    AND TV.StartedTime &gt;= #{dayStart}
+                    AND TV.EndedTime &lt;= #{dayEnd}
+            ) TTTT
+        WHERE
+            TSCM.ProductId = #{productId}
+            <if test="storeId != null">
+                AND TS.StoreId = #{storeId}
+            </if>
+            AND TV.StartedTime &gt;= #{dayStart}
+            AND TV.EndedTime &lt;= #{dayEnd}
+        ORDER BY TV.StartedTime DESC
+    </select>
+
+    <resultMap id="getVideoEmotionList" type="ResponseEmotionVideosForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreEmotionResponseSupporter">
+            <id property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <collection property="videos" ofType="VideoResponseSupporter">
+                <id property="videoId" column="VideoId"/>
+                <result property="videoName" column="VideoName"/>
+                <result property="videoUrl" column="VideoURL"/>
+                <result property="startedTime" column="StartedTime"/>
+                <result property="endedTime" column="EndedTime"/>
+                <result property="statusId" column="StatusId"/>
+                <collection property="emotion" ofType="EmotionResponseSupporter">
+                    <id property="emotionId" column="EmotionId"/>
+                    <result property="videoName" column="VideoName"/>
+                    <result property="startTime" column="StartedTime"/>
+                    <result property="angry" column="Angry"/>
+                    <result property="disgust" column="Disgust"/>
+                    <result property="fear" column="Fear"/>
+                    <result property="happy" column="Happy"/>
+                    <result property="sad" column="Sad"/>
+                    <result property="surprise" column="Surprise"/>
+                    <result property="neutral" column="Neutral"/>
+                    <result property="description" column="Description"/>
+                </collection>
+            </collection>
+        </collection>
+    </resultMap>
+
+<!--    <insert id="insertVideoProperty" parameterType="EventCreator">-->
+<!--        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,Duration,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values-->
+<!--        <foreach collection="videoPropertyList" item="element" index="index" open="(" separator="),("  close=")">-->
+<!--            #{element.videoName},#{element.videoUrl},#{element.startedTime},-->
+<!--            #{element.duration},#{element.shelfCameraMappingId},#{element.stackProductCameraMappingId},#{element.statusId}-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+    <insert id="insertVideoProperty" parameterType="VideoProperty">
+        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,EndedTime,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values
+            (#{videoNameOriginal},#{videoUrl},#{startedTime},
+            #{endedTime},#{shelfCameraMappingId},#{stackProductCameraMappingId},#{statusId})
+    </insert>
+
+    <insert id="insertHotSpot" parameterType="VideoProperty">
+        INSERT INTO tblHotSpot (StartedTime,EndedTime,TotalPeople,ShelfCameraMappingId) values
+        (#{startedTime},#{endedTime},#{totalPerson},#{shelfCameraMappingId})
+    </insert>
+
+    <insert id="insertEmotion" parameterType="VideoProperty">
+        INSERT INTO tblEmotion (StartedTime,EndedTime,Angry,Disgust,Fear,Happy,Sad,Surprise,Neutral,StackProductCameraMappingId) values
+            (#{startedTime},
+             #{endedTime},
+             #{emotions.numberOfAngry},
+             #{emotions.numberOfDisgust},
+             #{emotions.numberOfFear},
+             #{emotions.numberOfHappy},
+             #{emotions.numberOfSad},
+             #{emotions.numberOfSurprise},
+             #{emotions.numberOfNeutral},
+             #{stackProductCameraMappingId})
+    </insert>
+
+</mapper>

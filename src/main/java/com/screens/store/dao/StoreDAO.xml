@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.screens.store.dao.sql.StoreDAO">
+
+    <select id="getStoreList" resultMap="getStoreList">
+        SELECT
+            SUPQUE.totalOfRecord,
+            S.StoreId,
+            S.StoreName,
+            S.ImageURL,
+            S.Address,
+            S.ReasonInactive,
+            TD.DistrictId,
+            TD.DistrictName,
+            TC.CityId,
+            TC.CityName,
+            TU.Username,
+            TU.UserId,
+            S.UpdatedTime,
+            S.StatusId,
+            TS.StatusName
+        FROM tblStore S
+                LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId),
+            (SELECT COUNT(*) AS totalOfRecord
+            FROM tblStore S
+                LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId)
+            <where>
+                <if test="searchValue != null">
+                    <choose>
+                        <when test="searchField == 'city'">
+                            TC.CityName LIKE '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'district'">
+                            TD.DistrictName LIKE '%' #{searchValue} '%'
+                        </when>
+                        <when test="searchField == 'manager'">
+                            TU.Username LIKE '%' #{searchValue} '%'
+                        </when>
+                        <otherwise>
+                            S.StoreName LIKE '%' #{searchValue} '%'
+                        </otherwise>
+                    </choose>
+                </if>
+                <choose>
+                    <when test="statusId != 0">
+                        AND S.StatusId = #{statusId}
+                    </when>
+                </choose>
+                <choose>
+                    <when test="cityId != 0">
+                        AND TC.CityId = #{cityId}
+                    </when>
+                </choose>
+            </where>
+                 ) AS SUPQUE
+        <where>
+            <if test="searchValue != null">
+                <choose>
+                    <when test="searchField == 'city'">
+                        TC.CityName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'district'">
+                        TD.DistrictName LIKE '%' #{searchValue} '%'
+                    </when>
+                    <when test="searchField == 'manager'">
+                        TU.Username LIKE '%' #{searchValue} '%'
+                    </when>
+                    <otherwise>
+                        S.StoreName LIKE '%' #{searchValue} '%'
+                    </otherwise>
+                </choose>
+            </if>
+            <choose>
+                <when test="statusId != 0">
+                    AND S.StatusId = #{statusId}
+                </when>
+            </choose>
+            <choose>
+                <when test="cityId != 0">
+                    AND TC.CityId = #{cityId}
+                </when>
+            </choose>
+        </where>
+        ORDER BY
+        S.UpdatedTime DESC,
+        S.StoreName
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+
+    <resultMap id="getStoreList" type="ResponseStoreListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreResponseSupporter">
+            <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <result property="imageUrl" column="ImageURL"/>
+            <result property="managerUsername" column="Username"/>
+            <result property="managerUserId" column="UserId"/>
+            <result property="address" column="Address"/>
+            <result property="cityName" column="CityName"/>
+            <result property="cityId" column="CityId"/>
+            <result property="districtName" column="DistrictName"/>
+            <result property="districtId" column="DistrictId"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="status" column="StatusName"/>
+            <result property="reasonInactive" column="ReasonInactive"/>
+        </collection>
+    </resultMap>
+
+
+
+    <select id="getStoreListByProduct" resultMap="getStoreListByProduct">
+        SELECT
+            S.StoreId,
+            S.StoreName,
+            S.ImageURL,
+            S.Address,
+            S.ReasonInactive,
+            TD.DistrictId,
+            TD.DistrictName,
+            TC.CityId,
+            TC.CityName,
+            TU.Username,
+            TU.UserId,
+            S.UpdatedTime,
+            S.StatusId,
+            TS.StatusName,
+            TTT.totalOfRecord
+        FROM
+            (SELECT S.StoreId
+             FROM tblStackProductCameraMapping B1
+                      RIGHT JOIN tblStack B2 ON(B1.StackId = B2.StackId)
+                      RIGHT JOIN tblShelf B3 ON(B2.ShelfId = B3.ShelfId)
+                      RIGHT JOIN tblStore S ON(S.StoreId = B3.StoreId)
+             WHERE B1.ProductId = #{productId}
+               AND B1.RemoveProductTime IS NULL
+                <if test="statusId != 0">
+                    AND S.StatusId = #{statusId}
+                </if>
+             GROUP BY S.StoreId) A1
+                LEFT JOIN tblStore S ON(S.StoreId = A1.StoreId)
+                LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+                LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId),
+            (SELECT COUNT(*) AS totalOfRecord
+            FROM (SELECT S.StoreId AS STO_ID
+                      FROM tblStackProductCameraMapping B1
+                               RIGHT JOIN tblStack B2 ON(B1.StackId = B2.StackId)
+                               RIGHT JOIN tblShelf B3 ON(B2.ShelfId = B3.ShelfId)
+                               RIGHT JOIN tblStore S ON(S.StoreId = B3.StoreId)
+             WHERE B1.ProductId = #{productId}
+               AND B1.RemoveProductTime IS NULL
+                <if test="statusId != 0">
+                    AND S.StatusId = #{statusId}
+                </if>
+                      GROUP BY S.StoreId) TT ) TTT
+        ORDER BY
+            S.StoreName
+        LIMIT
+            #{offSet},
+            #{fetchNext}
+    </select>
+
+    <resultMap id="getStoreListByProduct" type="ResponseStoreListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreResponseSupporter">
+            <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <result property="imageUrl" column="ImageURL"/>
+            <result property="managerUsername" column="Username"/>
+            <result property="managerUserId" column="UserId"/>
+            <result property="address" column="Address"/>
+            <result property="cityName" column="CityName"/>
+            <result property="cityId" column="CityId"/>
+            <result property="districtName" column="DistrictName"/>
+            <result property="districtId" column="DistrictId"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="status" column="StatusName"/>
+            <result property="reasonInactive" column="ReasonInactive"/>
+        </collection>
+    </resultMap>
+
+
+
+
+    <select id="getStoreListShort" resultMap="getStoreListShort">
+        SELECT
+        SUPQUE.totalOfRecord,
+        S.StoreId,
+        S.StoreName
+        FROM tblStore S,
+            (SELECT COUNT(*) AS totalOfRecord
+            FROM tblStore S
+            <if test="all != true">WHERE S.statusId = 1 OR S.statusId = 3</if>
+            ) AS SUPQUE
+        <if test="all != true">WHERE S.statusId = 1 OR S.statusId = 3</if>
+        ORDER BY
+        S.StoreName
+    </select>
+
+    <resultMap id="getStoreListShort" type="ResponseStoreListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="stores" ofType="StoreResponseSupporter">
+            <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <result property="imageUrl" column="ImageURL"/>
+            <result property="managerUsername" column="Username"/>
+            <result property="managerUserId" column="UserId"/>
+            <result property="address" column="Address"/>
+            <result property="cityName" column="CityName"/>
+            <result property="cityId" column="CityId"/>
+            <result property="districtName" column="DistrictName"/>
+            <result property="districtId" column="DistrictId"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="statusId" column="StatusId"/>
+            <result property="status" column="StatusName"/>
+            <result property="reasonInactive" column="ReasonInactive"/>
+        </collection>
+    </resultMap>
+
+    <select id="getStoreDetail" resultMap="getStoreDetail">
+        SELECT S.StoreId,
+               S.StoreName,
+               S.ImageURL,
+               S.Address,
+               TD.DistrictId,
+               TD.DistrictName,
+               TC.CityId,
+               TC.CityName,
+               S.CreatedTime,
+               S.UpdatedTime,
+               S.ReasonInactive,
+               TU.UserId,
+               TU.Username,
+               TU.Fullname,
+               TU.imageURL AS MANAGER_IMG,
+               S.StatusId,
+               TS.StatusName
+        FROM tblStore S
+                 LEFT JOIN tblUserStoreMapping TUSM ON (S.StoreId = TUSM.StoreId AND TUSM.StatusId = 1)
+                 LEFT JOIN tblUser TU ON (TUSM.UserId = TU.UserId)
+                 LEFT JOIN tblDistrict TD ON (S.DistrictId = TD.DistrictId)
+                 LEFT JOIN tblCity TC ON (TD.CityId = TC.CityId)
+                 LEFT JOIN tblStatus TS ON (S.StatusId = TS.StatusId)
+        WHERE
+            S.StoreId = #{storeId}
+    </select>
+
+    <resultMap id="getStoreDetail" type="ResponseStoreDetailForm">
+        <result property="storeId" column="StoreId"/>
+        <result property="storeName" column="StoreName"/>
+        <result property="imageUrl" column="ImageURL"/>
+        <result property="managerName" column="Fullname"/>
+        <result property="managerUsername" column="Username"/>
+        <result property="managerId" column="UserId"/>
+        <result property="managerImage" column="MANAGER_IMG"/>
+        <result property="address" column="Address"/>
+        <result property="districtId" column="DistrictId"/>
+        <result property="districtName" column="DistrictName"/>
+        <result property="cityId" column="CityId"/>
+        <result property="cityName" column="CityName"/>
+        <result property="createdTime" column="CreatedTime"/>
+        <result property="updatedTime" column="UpdatedTime"/>
+        <result property="reasonInactive" column="ReasonInactive"/>
+        <result property="statusId" column="StatusId"/>
+        <result property="statusName" column="StatusName"/>
+    </resultMap>
+
+    <insert id="createStore"  parameterType="StoreDTO">
+        INSERT INTO tblStore (StoreName, ImageURL, Address, CreatedTime,
+                              UpdatedTime, DistrictId, StatusId)
+        VALUES (#{storeName},
+          #{imageUrl},
+          #{address},
+          convert_tz(now(),@@session.time_zone,'+07:00'),
+          convert_tz(now(),@@session.time_zone,'+07:00'),
+          #{districtId},
+          #{statusId})
+    </insert>
+
+    <update id="changeStatus" parameterType="StoreDTO">
+        UPDATE tblStore
+        SET StatusId = #{statusId},
+            ReasonInactive = #{reasonInactive},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StoreId = #{storeId}
+    </update>
+
+    <update id="changeUserStatus" parameterType="StoreDTO">
+        UPDATE tblUser
+        SET StatusId = #{statusId},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE UserId = #{userId}
+    </update>
+
+    <select id="getStoreStatus" resultMap="getStoreStatus">
+        SELECT S.StoreId,
+               S.StatusId
+        FROM tblStore S
+        WHERE
+            S.StoreId = #{storeId}
+    </select>
+
+    <resultMap id="getStoreStatus" type="ResponseStoreDetailForm">
+        <result property="storeId" column="StoreId"/>
+        <result property="statusId" column="StatusId"/>
+    </resultMap>
+
+    <update id="updateInfo" parameterType="StoreDTO">
+        UPDATE tblStore
+        SET
+            <if test="storeName != null">
+                StoreName = #{storeName},
+            </if>
+            <if test="imageUrl != null">
+                ImageURL = #{imageUrl},
+            </if>
+            <if test="address != null">
+                Address = #{address},
+            </if>
+            <if test="districtId != 0">
+                DistrictId = #{districtId},
+            </if>
+            UpdatedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StoreId = #{storeId}
+    </update>
+
+    <select id="checkAvailableManager" resultMap="checkAvailableManager">
+        SELECT COUNT(UserName) AS TotalOfRecord FROM tblUser WHERE UserId = #{userId} AND StatusId = 3
+    </select>
+
+    <resultMap id="checkAvailableManager" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkAvailableStore" resultMap="checkAvailableStore">
+        SELECT COUNT(StoreId) AS TotalOfRecord FROM tblStore WHERE StoreId = #{storeId} AND StatusId = 3
+    </select>
+
+    <resultMap id="checkAvailableStore" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkShelf" resultMap="checkShelf">
+        SELECT COUNT(ShelfId) AS TotalOfRecord
+        FROM tblShelf
+        WHERE StoreId = #{storeId} AND (StatusId = 3 OR StatusId = 1)
+    </select>
+
+    <resultMap id="checkShelf" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="countStoreById" resultMap="countStoreById">
+        SELECT COUNT(StoreId) AS TotalOfRecord FROM tblStore WHERE StoreId = #{storeId}
+    </select>
+
+    <resultMap id="countStoreById" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="countUserById" resultMap="countUserById">
+        SELECT COUNT(UserName) AS TotalOfRecord FROM tblUser WHERE UserId = #{userId}
+    </select>
+
+    <resultMap id="countUserById" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <select id="checkStoreManagerMapping" resultMap="checkStoreManagerMapping">
+        SELECT COUNT(UserStoreMappingId) AS TotalOfRecord
+        FROM tblUserStoreMapping
+        WHERE UserId = #{userId}
+            AND StoreId = #{storeId}
+            AND StatusId = 1
+    </select>
+
+    <resultMap id="checkStoreManagerMapping" type="StoreDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
+    <insert id="addMangerToStore"  parameterType="StoreDTO">
+        INSERT INTO tblUserStoreMapping (AddedTime, StoreId, UserId, StatusId)
+        VALUES (
+            convert_tz(now(),@@session.time_zone,'+07:00'),
+            #{storeId},
+            #{userId},
+            #{statusId}
+            )
+    </insert>
+
+    <update id="removeMangerFromStore" parameterType="StoreDTO">
+        UPDATE tblUserStoreMapping
+        SET
+            StatusId = 2,
+            RemovedTime = convert_tz(now(),@@session.time_zone,'+07:00')
+        WHERE StoreId = #{storeId}
+            AND UserId = #{userId}
+            AND StatusId = 1
+    </update>
+
+</mapper>

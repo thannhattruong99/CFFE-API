@@ -11,9 +11,9 @@ import javax.ws.rs.DefaultValue;
 import java.io.Serializable;
 
 public class RequestShelfListForm implements Serializable {
-    @NotEmpty(message = "MSG-041")
-    @Size(max = 30, message = "MSG-041")
-    private String userName;
+//    @NotEmpty(message = "MSG-041")
+//    @Size(max = 30, message = "MSG-041")
+//    private String userName;
     @NotEmpty(message = "MSG-069")
     private String storeId;
     @Nullable @DefaultValue("")
@@ -27,14 +27,6 @@ public class RequestShelfListForm implements Serializable {
     private int fetchNext;
 
     public RequestShelfListForm() {
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getStoreId() {

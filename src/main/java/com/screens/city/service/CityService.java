@@ -1,10 +1,9 @@
 package com.screens.city.service;
 
-import com.screens.city.dao.mapper.CityMapper;
+import com.screens.city.dao.CityDAO;
 import com.screens.city.form.CityDistrictResponseSupporter;
 import com.screens.city.form.CityResponseSupporter;
 import com.screens.city.form.DistrictResponseSupporter;
-import com.screens.manager.service.ManagerService;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +17,16 @@ import java.util.Map;
 
 @Service
 public class CityService {
+
     private static final Logger logger = LoggerFactory.getLogger(CityService.class);
+
     @Autowired
-    private CityMapper cityMapper;
+    private CityDAO cityDAO;
 
     public List<CityDistrictResponseSupporter> getCityDistrict(){
         List<CityDistrictResponseSupporter> responseForm = new ArrayList<>();
         try {
-            List<CityResponseSupporter> resultDAO = cityMapper.getCityDistrict();
+            List<CityResponseSupporter> resultDAO = cityDAO.getCityDistrict();
             if(resultDAO.size() <= 0){
                 return null;
             }
@@ -33,7 +34,6 @@ public class CityService {
         }catch (PersistenceException e){
             logger.error("Error at CityService: " + e.getMessage());
         }
-
         return responseForm;
     }
 
@@ -43,7 +43,6 @@ public class CityService {
             CityDistrictResponseSupporter cityDistrictSupporter = new CityDistrictResponseSupporter();
             cityDistrictSupporter.setCityId(String.valueOf(city.getCityId()));
             cityDistrictSupporter.setCityName(city.getCityName());
-
             districts = new HashMap<String, String>();
             for (DistrictResponseSupporter districtSupporter: city.getDistricts()) {
                 districts.put(String.valueOf(districtSupporter.getDistrictId()), districtSupporter.getDistrictName());

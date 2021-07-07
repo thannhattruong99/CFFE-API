@@ -1,18 +1,39 @@
 package com.screens.stack.form;
 
+import com.screens.product.form.CategoryResponseSupporter;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class ProductResponseSupporter implements Serializable {
     private String productId;
     private String productName;
+    private String imageUrl;
     private String description;
     private String createTime;
     private String updateTime;
     private String reasonInactive;
     private int statusId;
     private String statusName;
+    private List<CategoryResponseSupporter> categories;
 
     public ProductResponseSupporter() {
+    }
+
+    public List<CategoryResponseSupporter> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<CategoryResponseSupporter> categories) {
+        this.categories = categories;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getProductId() {

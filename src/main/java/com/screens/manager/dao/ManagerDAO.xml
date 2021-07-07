@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ManagerDAO">
+    <select id="getManagers" resultMap="getManagers">
+        SELECT TR.totalOfRecord AS totalOfRecord,
+               U.Fullname AS FullName,
+               U.UserId AS UserId,
+               U.Username AS UserName,
+               U.ImageURL AS ImageURL,
+               USM.StoreId AS StoreId,
+               ST.StoreName AS StoreName,
+               U.UpdatedTime AS UpdatedTime,
+               S.StatusName AS StatusName
+        FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
+                       JOIN tblRole R ON R.RoleId = U.roleId
+                       LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID AND USM.StatusId = 1
+                       LEFT JOIN tblStore ST ON USM.StoreId = ST.StoreId AND USM.StatusId = 1,
+            (SELECT COUNT(U.UserId) AS totalOfRecord FROM tblUser U JOIN tblStatus S ON U.statusID = S.StatusId
+            JOIN tblRole R ON R.RoleId = U.roleId
+            LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID AND USM.StatusId = 1
+            WHERE
+            UPPER(R.RoleName) = 'MANAGER'
+            <if test="searchValue != null">
+                <if test="searchField == 'managername'">
+                    AND  U.Fullname like '%' #{searchValue} '%'
+                </if>
+                <if test="searchField != 'managername'">
+                    AND  U.Username like '%' #{searchValue} '%'
+                </if>
+            </if>
+            <if test="status != null">
+                AND UPPER(S.StatusName) = #{status}
+            </if>
+            ) TR
+        WHERE
+            UPPER(R.RoleName) = 'MANAGER'
+            <if test="searchValue != null">
+                <if test="searchField == 'managername'">
+                    AND  U.Fullname like '%' #{searchValue} '%'
+                </if>
+                <if test="searchField != 'managername'">
+                    AND  U.Username like '%' #{searchValue} '%'
+                </if>
+            </if>
+            <if test="status != null">
+               AND UPPER(S.StatusName) = #{status}
+            </if>
+        ORDER BY U.UpdatedTime
+            DESC
+        LIMIT
+        #{offSet},
+        #{fetchNext}
+    </select>
+    <select id="getManagerDetail" resultMap="getManagerDetail">
+        SELECT
+            U.UserId,
+            U.Fullname,
+            U.Username,
+            U.ImageUrl,
+            U.Gender,
+            U.BirthDate,
+            U.IdentifyCard,
+            U.Phone,
+            U.Email,
+            USM.StoreId,
+            ST.StoreName,
+            U.Address,
+            C.CityId,
+            C.CityName,
+            D.DistrictId,
+            D.DistrictName,
+            U.CreatedTime,
+            U.UpdatedTime,
+            U.ReasonInactive,
+            S.StatusName
+        FROM tblUser U
+                 JOIN tblStatus S ON U.statusID = S.StatusId
+                 LEFT JOIN tblUserStoreMapping USM ON U.UserId = USM.UserID AND USM.StatusId = 1
+                 LEFT JOIN tblStore ST ON USM.StoreId = ST.StoreId AND USM.StatusId = 1
+                 JOIN tblDistrict D ON D.DistrictId = U.DistrictId
+                 JOIN tblCity C ON C.CityId = D.CityId
+        WHERE U.userName = #{userName}
+    </select>
+    <insert id="insertManger">
+        INSERT INTO tblUser(Fullname, Username, Password, RoleId, ImageURL, Gender,
+                            BirthDate, IdentifyCard, Phone, Email, Address, DistrictId, statusId, CreatedTime, UpdatedTime)
+        VALUES(#{fullName}, #{userName}, #{password}, #{roleId},#{imageURL}, #{gender}, #{birthDate}, #{identifyCard},
+               #{phone}, #{email}, #{address}, #{districtId}, #{statusId},
+               convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}))
+    </insert>
+    <select id="getTotalOfManagerLikeUserName" resultMap="getAffectedRows">
+        SELECT COUNT(UserName) AS TotalOfRecord
+        FROM tblUser
+        WHERE UserName REGEXP #{userNameRegexp} OR UserName = #{userName}
+    </select>
+    <update id="updateManagerInformation">
+        UPDATE tblUser
+        SET Fullname = #{fullName},
+            <if test="imageURL != null">
+                ImageURL = #{imageURL},
+            </if>
+            Gender = #{gender},
+            BirthDate = #{birthDate},
+            IdentifyCard = #{identifyCard},
+            Phone = #{phone},
+            Email = #{email},
+            Address= #{address},
+            DistrictId = #{districtId},
+            UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        WHERE UserName = #{userName}
+    </update>
+    <update id="resetPassword">
+        UPDATE tblUser SET Password = #{password} WHERE UserName = #{userName}
+    </update>
+    <select id="getEmailByUserName" resultMap="getEmailByUser">
+        SELECT Email FROM tblUser WHERE UserName = #{userName}
+    </select>
+    <select id="getStatusIdAndStoreIdByUserName" resultMap="getStatusIdAndStoreIdByUserName">
+        SELECT U.statusId
+        FROM tblUser U
+        WHERE U.UserName = #{userName}
+    </select>
+    <update id="updateManagerStatus">
+        UPDATE tblUser SET StatusId = #{statusId},
+        UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
+        <if test="statusId == 2">
+            , ReasonInactive = #{reasonInactive}
+        </if>
+        WHERE UserName = #{userName}
+    </update>
+    <select id="checkUserNameAndPassword" resultMap="checkUser">
+        SELECT COUNT(UserName) AS TotalOfRecord FROM tblUser WHERE UserName = #{userName} AND Password = #{password}
+    </select>
+    <update id="updatePassword">
+        UPDATE tblUser SET Password = #{newPassword} WHERE UserName = #{userName}
+    </update>
+    <resultMap id="getManagers" type="ResponseManagerListForm">
+        <result property="totalOfRecord" column="totalOfRecord"/>
+        <collection property="managers" ofType="ManagerResponseSupporter">
+            <id property="userName" column="UserName"/>
+            <result property="userId" column="UserId"/>
+            <result property="managerName" column="FullName"/>
+            <result property="imageURL" column="ImageURL"/>
+            <result property="storeId" column="StoreId"/>
+            <result property="storeName" column="StoreName"/>
+            <result property="updatedTime" column="UpdatedTime"/>
+            <result property="status" column="StatusName"/>
+        </collection>
+    </resultMap>
+    <resultMap id="getManagerDetail" type="ResponseManagerDetailForm">
+        <result property="userId" column="UserId"/>
+        <result property="fullName" column="Fullname"/>
+        <result property="userName" column="Username"/>
+        <result property="imageURL" column="imageURL"/>
+        <result property="gender" column="Gender"/>
+        <result property="birthDate" column="BirthDate"/>
+        <result property="identifyCard" column="IdentifyCard"/>
+        <result property="phone" column="Phone"/>
+        <result property="email" column="Email"/>
+        <result property="storeId" column="StoreId"/>
+        <result property="storeName" column="StoreName"/>
+        <result property="address" column="Address"/>
+        <result property="cityId" column="CityId"/>
+        <result property="cityName" column="CityName"/>
+        <result property="districtId" column="DistrictId"/>
+        <result property="districtName" column="DistrictName"/>
+        <result property="createdTime" column="CreatedTime"/>
+        <result property="updatedTime" column="UpdatedTime"/>
+        <result property="reasonInactive" column="ReasonInactive"/>
+        <result property="status" column="StatusName"/>
+    </resultMap>
+    <resultMap id="getAffectedRows" type="ManagerDTO">
+        <result property="affectedRecords" column="TotalOfRecord"/>
+    </resultMap>
+    <resultMap id="getEmailByUser" type="ManagerDTO">
+        <result property="email" column="Email"/>
+    </resultMap>
+    <resultMap id="getStatusIdAndStoreIdByUserName" type="ManagerDTO">
+        <result property="statusId" column="statusId"/>
+    </resultMap>
+    <resultMap id="checkUser" type="ManagerDTO">
+        <result property="affectedRecords" column="TotalOfRecord"/>
+    </resultMap>
+</mapper>
