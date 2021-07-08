@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import static com.util.MessageConstant.MSG_124;
 
 @Service
 public class ManagerService extends BaseService {
@@ -64,14 +67,18 @@ public class ManagerService extends BaseService {
                 String msgContent = "Username: " + managerDTO.getUserName() +
                                     "\nPassword: " + managerDTO.getPassword();
                 if(!EmailHelper.sendEmail(managerDTO.getEmail(), msgContent)){
-//                    return false;
+                    ArrayList<String> errorCodes = new ArrayList<>();
+                    errorCodes.add(MSG_124);
+                    responseForm.setErrorCodes(errorCodes);
                 }
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
             responseForm.setErrorCodes(catchSqlException(e.getMessage()));
         }catch (IOException e) {
-            System.out.println("Error at ManagerService: " + e.getMessage());
+            logger.error("Error at ManagerService: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error at ManagerService: " + e.getMessage());
         }
         return responseForm;
     }
@@ -108,13 +115,17 @@ public class ManagerService extends BaseService {
                     email = managerDAO.getEmailByUserName(managerDTO);
                 }
                 if(!EmailHelper.sendEmail(email, msgContent)){
-//                    return false;
+                    ArrayList<String> errorCodes = new ArrayList<>();
+                    errorCodes.add(MSG_124);
+                    responseForm.setErrorCodes(errorCodes);
                 }
             }
         }catch (PersistenceException e){
             logger.error("Error at ManagerService: " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error at ManagerService: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error at ManagerService: " + e.getMessage());
         }
         return responseForm;
     }

@@ -25,7 +25,6 @@ public class ResponseSupporter {
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             return ow.writeValueAsString(object);
         }catch (JsonProcessingException exception){
-            System.out.println("Parsing error: " + exception.getMessage());
             return exception.getMessage();
         }
     }
