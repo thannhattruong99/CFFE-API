@@ -106,3 +106,6 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/java,java-web,maven,windows,macos
 demo.iml
+sendgrid.env
+sendgrid.env
+sendgrid.env
