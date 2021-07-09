@@ -16,7 +16,7 @@ public class EmailHelper {
             = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     static final String SENDGRID_API_KEY = "SENDGRID_API_KEY";
-    static final String SENDGRID_SENDER = "funny1demo@gmail.com";
+    static final String SENDGRID_SENDER = "henrymaskhm1@gmail.com";
 
     public static boolean sendEmail(String toMail, String messageStr) throws Exception {
         // Set content for request.
@@ -27,8 +27,9 @@ public class EmailHelper {
         Mail mail = new Mail(from, subject, to, content);
 
         // Instantiates SendGrid client.
-        System.out.println("System.getenv(SENDGRID_API_KEY): " + System.getenv(SENDGRID_API_KEY));
-        SendGrid sendgrid = new SendGrid(System.getenv(SENDGRID_API_KEY));
+        System.out.println("System.getenv(SENDGRID_API_KEY): " + System.getenv());
+        System.out.println("System.getenv(SENDGRID_API_KEY): " + System.getenv("SENDGRID_API_KEY"));
+        SendGrid sendgrid = new SendGrid(System.getenv("SENDGRID_API_KEY"));
 
         // Instantiate SendGrid request.
         Request request = new Request();
