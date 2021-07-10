@@ -7,36 +7,50 @@ import java.util.List;
 
 public class EventCreator extends ApplicationEvent {
     private String eventId;
-    private String eventName;
-    private String relativeFilePath;
     private List<VideoProperty> videoPropertyList;
     private String message;
     private int status;
+    private int totalFile;
+    private int numberFileDone;
+    private List<String> fileSuccess;
+    private List<String> fileError;
 
-
-    public EventCreator(Object source, String eventName, String relativeFilePath) {
-        super(source);
-        this.eventName = eventName;
-        this.relativeFilePath = relativeFilePath;
-    }
-
-    //LuanNM
     public EventCreator(Object source,String eventId, List<VideoProperty> videoPropertyList) {
         super(source);
         this.eventId = eventId;
         this.videoPropertyList = videoPropertyList;
     }
 
-    public EventCreator(Object source, String eventId) {
-        super(source);
-        this.eventId = eventId;
+    public int getTotalFile() {
+        return totalFile;
     }
 
-    public EventCreator(Object source, String eventId, String eventName, String relativeFilePath) {
-        super(source);
-        this.eventId = eventId;
-        this.eventName = eventName;
-        this.relativeFilePath = relativeFilePath;
+    public void setTotalFile(int totalFile) {
+        this.totalFile = totalFile;
+    }
+
+    public int getNumberFileDone() {
+        return numberFileDone;
+    }
+
+    public void setNumberFileDone(int numberFileDone) {
+        this.numberFileDone = numberFileDone;
+    }
+
+    public List<String> getFileSuccess() {
+        return fileSuccess;
+    }
+
+    public void setFileSuccess(List<String> fileSuccess) {
+        this.fileSuccess = fileSuccess;
+    }
+
+    public List<String> getFileError() {
+        return fileError;
+    }
+
+    public void setFileError(List<String> fileError) {
+        this.fileError = fileError;
     }
 
     public String getMessage() {
@@ -71,19 +85,4 @@ public class EventCreator extends ApplicationEvent {
         this.eventId = eventId;
     }
 
-    public String getEventName() {
-        return eventName;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-    public String getRelativeFilePath() {
-        return relativeFilePath;
-    }
-
-    public void setRelativeFilePath(String relativeFilePath) {
-        this.relativeFilePath = relativeFilePath;
-    }
 }

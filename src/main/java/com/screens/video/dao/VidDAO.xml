@@ -4,25 +4,27 @@
 <mapper namespace="com.screens.video.dao.VidDAO">
 
     <select id="getShelfCameraMappingId" resultType="java.lang.String">
-        SELECT ShelfCameraMappingId
-        FROM tblShelfCameraMapping
-        WHERE CameraId = #{cameraId}
-        AND AddedTime &lt;= #{startedTime}
-        AND (CASE WHEN RemovedTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
-            ELSE RemovedTime END)  &gt;= #{endedTime}
-        ORDER BY AddedTime DESC
+        SELECT TS.ShelfCameraMappingId
+        FROM tblShelfCameraMapping TS
+            LEFT JOIN tblCamera TC ON (TC.CameraId = TS.CameraId)
+        WHERE TC.MACAddress = #{macAddress}
+        AND TS.AddedTime &lt;= #{startedTime}
+        AND (CASE WHEN TS.RemovedTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
+            ELSE TS.RemovedTime END)  &gt;= #{endedTime}
+        ORDER BY TS.AddedTime DESC
         LIMIT 1
     </select>
 
     <select id="getStackProductCameraMappingId" resultType="java.lang.String">
-        SELECT StackProductCameraMappingId
-        FROM tblStackProductCameraMapping
-        WHERE CameraId = #{cameraId}
-          AND AddedCameraTime &lt;= #{startedTime}
-          AND (CASE WHEN RemovedCameraTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
-                    ELSE RemovedCameraTime END)  &gt;= #{endedTime}
-        ORDER BY AddedCameraTime DESC
-            LIMIT 1
+        SELECT TS.StackProductCameraMappingId
+        FROM tblStackProductCameraMapping TS
+            LEFT JOIN tblCamera TC ON (TC.CameraId = TS.CameraId)
+        WHERE TC.MACAddress = #{macAddress}
+          AND TS.AddedCameraTime &lt;= #{startedTime}
+          AND (CASE WHEN TS.RemovedCameraTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
+                    ELSE TS.RemovedCameraTime END)  &gt;= #{endedTime}
+        ORDER BY TS.AddedCameraTime DESC
+        LIMIT 1
     </select>
 
 <!--    <select id="countByCameraIdAndTime" resultType="int">-->

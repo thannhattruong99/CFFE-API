@@ -13,6 +13,7 @@ public class VideoProperty implements Serializable {
     private String endedTime;
     private int duration;
     private String cameraId;
+    private String macAddress;
     private String shelfCameraMappingId;
     private String stackProductCameraMappingId;
     private int statusId;
@@ -21,6 +22,14 @@ public class VideoProperty implements Serializable {
     private EmotionDTO emotions;
 
     public VideoProperty() {
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public EmotionDTO getEmotions() {

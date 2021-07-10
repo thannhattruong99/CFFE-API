@@ -49,23 +49,27 @@ public class CustomEventListener extends BaseService {
         if(eventCreatorMap == null){
             eventCreatorMap = new HashMap<>();
         }
-        // START EVENT
-        eventCreator.setStatus(0);
-        eventCreator.setMessage("Loading");
-        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
+
+        int totalFile = eventCreator.getVideoPropertyList().size();
+        int numberFileDone = 0;
+        List<String> fileSuccess = new ArrayList<>();
+        List<String> fileError = new ArrayList<>();
+
+        updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
 
         // DO EVENT
         List<String> videoErrorNameList = new ArrayList<>();
         for (VideoProperty videoProperty: eventCreator.getVideoPropertyList()) {
             try{
                 int countHP;
+                boolean flag = true;
                 // DETECT VIDEO HOT SPOT / EMOTION
                 if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
                     if((countHP = DetectService.countPerson(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != 0){
                         videoProperty.setTotalPerson(countHP);
                     } else {
-                        setError(videoProperty,videoErrorNameList,eventCreator);
+                        flag = false;
                     }
                 }
                 if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
@@ -75,7 +79,7 @@ public class CustomEventListener extends BaseService {
                         videoProperty.setEmotions(emotionDTO);
                         System.out.println("OUTPUT DETECT: " + emotionDTO.toString());
                     } else {
-                        setError(videoProperty,videoErrorNameList,eventCreator);
+                        flag = false;
                     }
                 }
 
@@ -83,28 +87,31 @@ public class CustomEventListener extends BaseService {
                 FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
 
                 // UPLOAD STORAGE CLOUD / INSERT DATABASE
-                if (videoProperty.getStatusId() != -1) {
+                if (flag) {
                     uploadVideoDetectedToStorage(videoProperty);
                     insertDatabase(videoProperty,videoErrorNameList,eventCreator);
+
+                    fileSuccess.add(videoProperty.getVideoNameOriginal());
+                    numberFileDone++;
+                    updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
+                } else {
+                    fileError.add(videoProperty.getVideoNameOriginal());
+                    numberFileDone++;
+                    updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
                 }
+
+
             } catch (InterruptedException e) {
-                setError(videoProperty,videoErrorNameList,eventCreator);
+                fileError.add(videoProperty.getVideoNameOriginal());
+                numberFileDone++;
+                updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
             } catch (IOException e) {
-                setError(videoProperty,videoErrorNameList,eventCreator);
+                fileError.add(videoProperty.getVideoNameOriginal());
+                numberFileDone++;
+                updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
             }
         }
 
-        // END OF EVENT
-        eventCreator.setStatus(1);
-        String msg = "";
-        if (videoErrorNameList.size() >0){
-            msg = " - " + videoErrorNameList.size() +" error: ";
-            for (String name : videoErrorNameList) {
-                msg += "["+ name + "]";
-            }
-        }
-        eventCreator.setMessage("Success" + msg);
-        eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
     }
 
     public Map<String, EventCreator> getEventCreatorMap() {
@@ -141,14 +148,11 @@ public class CustomEventListener extends BaseService {
         }
     }
 
-    private void setError(VideoProperty videoProperty, List<String> videoErrorNameList, EventCreator eventCreator) {
-        videoProperty.setStatusId(-1);;
-        videoErrorNameList.add(videoProperty.getVideoNameOriginal());
-        String msg = "";
-        for (String name : videoErrorNameList) {
-            msg += "["+ name + "]";
-        }
-        eventCreator.setMessage("Loading - " + videoErrorNameList.size() +" error: " + msg );
+    private void updateEvent(EventCreator eventCreator, int totalFile, int numberFileDone, List<String> fileSuccess, List<String> fileError){
+        eventCreator.setTotalFile(totalFile);
+        eventCreator.setNumberFileDone(numberFileDone);
+        eventCreator.setFileSuccess(fileSuccess);
+        eventCreator.setFileError(fileError);
         eventCreatorMap.put(eventCreator.getEventId(),eventCreator);
     }
 

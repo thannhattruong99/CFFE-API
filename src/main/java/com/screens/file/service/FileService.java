@@ -64,7 +64,11 @@ public class FileService extends BaseService {
         EventCreator data = customEventListener.getEventCreatorMap().get(eventId);
         Flux<FileTransaction> fileTransactionFlux = Flux.fromStream(
                 // GENERATE DATA
-                Stream.generate(() -> new FileTransaction(data.getMessage(), data.getStatus()))
+                Stream.generate(() -> new FileTransaction(
+                        data.getTotalFile(),
+                        data.getNumberFileDone(),
+                        data.getFileSuccess(),
+                        data.getFileError()))
         );
         return Flux.zip(interval, fileTransactionFlux).map(Tuple2::getT2);
     }
@@ -148,10 +152,6 @@ public class FileService extends BaseService {
                 try {
                     String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
                     IsoFile isoFile = new IsoFile(filePath);
-//                    if ((isoFile.getBoxes() == null)) {
-//                        System.out.println("aaaaaaaaa");
-//                    }
-//                    System.out.println(isoFile.getBoxes().size());
                     if (isoFile.getMovieBox() == null) {
                         response.setErrorCodes(getError(MessageConstant.MSG_118));
                         return response;
@@ -248,7 +248,7 @@ public class FileService extends BaseService {
         videoProperty.setStatusId(ACTIVE_STATUS);
         String[] parts = originalFileName.split("_");
         videoProperty.setTypeVideo(Integer.parseInt(parts[0]));
-        videoProperty.setCameraId(parts[1]);
+        videoProperty.setMacAddress(parts[1]);
 
         try {
             if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
