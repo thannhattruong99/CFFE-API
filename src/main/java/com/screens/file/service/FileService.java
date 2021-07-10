@@ -148,6 +148,10 @@ public class FileService extends BaseService {
                 try {
                     String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
                     IsoFile isoFile = new IsoFile(filePath);
+//                    if ((isoFile.getBoxes() == null)) {
+//                        System.out.println("aaaaaaaaa");
+//                    }
+//                    System.out.println(isoFile.getBoxes().size());
                     if (isoFile.getMovieBox() == null) {
                         response.setErrorCodes(getError(MessageConstant.MSG_118));
                         return response;

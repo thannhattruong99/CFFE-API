@@ -169,6 +169,7 @@ public class CameraService extends BaseService {
         } else {
             cameraDTO.setImageURL(DEFAULT_IMAGE);
         }
+        cameraDTO.setMacAddress(requestForm.getMacAddress());
         cameraDTO.setIpAddress(requestForm.getIpAddress());
         cameraDTO.setRtspString(requestForm.getRtspString());
         cameraDTO.setTypeDetect(requestForm.getTypeDetect());
@@ -181,6 +182,7 @@ public class CameraService extends BaseService {
         cameraDTO.setCameraName(requestForm.getCameraName());
         if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
             cameraDTO.setImageURL(requestForm.getImageUrl());
+        cameraDTO.setMacAddress(requestForm.getMacAddress());
         cameraDTO.setIpAddress(requestForm.getIpAddress());
         cameraDTO.setRtspString(requestForm.getRtspString());
         cameraDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);

@@ -7,6 +7,7 @@ public class CameraResponseSupporter implements Serializable {
     private String cameraName;
     private String imageUrl;
     private String ipAddress;
+    private String macAddress;
     private String rtspString;
     private int typeDetect;
     private String createTime;
@@ -16,6 +17,14 @@ public class CameraResponseSupporter implements Serializable {
     private String statusName;
 
     public CameraResponseSupporter() {
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public String getImageUrl() {

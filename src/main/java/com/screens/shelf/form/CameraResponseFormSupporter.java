@@ -2,7 +2,8 @@ package com.screens.shelf.form;
 
 public class CameraResponseFormSupporter {
     private String cameraId;
-    private String ipAddress;;
+    private String ipAddress;
+    private String macAddress;
     private String cameraName;
     private String imageURL;
     private String rtspString;
@@ -10,6 +11,14 @@ public class CameraResponseFormSupporter {
     private String updatedTime;
 
     public CameraResponseFormSupporter() {
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public String getIpAddress() {

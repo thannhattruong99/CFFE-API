@@ -7,6 +7,7 @@ public class CameraDTO extends BaseDTO {
     private String cameraId;
     private String cameraName;
     private String imageURL;
+    private String macAddress;
     private String ipAddress;
     private String rtspString;
     private int typeDetect;
@@ -17,6 +18,14 @@ public class CameraDTO extends BaseDTO {
     private int totalOfRecord;
 
     public CameraDTO() {
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public int getTotalOfRecord() {

@@ -15,8 +15,26 @@ public class VideoDTO extends BaseDTO {
     private String dayStart;
     private String dayEnd;
     private String productId;
+    private String createdTime;
+    private String updatedTime;
 
     public VideoDTO() {
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public int getDuration() {

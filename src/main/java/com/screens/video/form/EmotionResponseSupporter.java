@@ -16,8 +16,26 @@ public class EmotionResponseSupporter implements Serializable {
     private int surprise;
     private int neutral;
     private String description;
+    private String createdTime;
+    private String updatedTime;
 
     public EmotionResponseSupporter() {
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getVideoName() {

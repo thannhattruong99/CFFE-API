@@ -6,6 +6,7 @@ public class ResponseCameraDetailForm {
     private String cameraId;
     private String cameraName;
     private String imageUrl;
+    private String macAddress;
     private String ipAddress;
     private String rtspString;
     private int typeDetect;
@@ -25,6 +26,14 @@ public class ResponseCameraDetailForm {
     private List<String> errorCodes;
 
     public ResponseCameraDetailForm() {
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public List<String> getErrorCodes() {

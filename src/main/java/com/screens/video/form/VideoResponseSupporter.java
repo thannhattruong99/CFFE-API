@@ -6,11 +6,29 @@ public class VideoResponseSupporter {
     private String videoUrl;
     private String startedTime;
     private String endedTime;
+    private String createdTime;
+    private String updatedTime;
     private int statusId;
     private EmotionResponseSupporter emotion;
     private HotSpotResponseSupporter hotSpot;
 
     public VideoResponseSupporter() {
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getEndedTime() {

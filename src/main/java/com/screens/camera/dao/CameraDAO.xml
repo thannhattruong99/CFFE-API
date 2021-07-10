@@ -19,7 +19,7 @@
         LIMIT #{offSet}, #{fetchNext}
     </select>
     <select id="getCameraList" resultMap="getCameraList">
-        SELECT TR.totalOfRecord, Camera.CameraId, Camera.CameraName, Camera.ImageURL, Camera.IpAddress, Camera.StoreId, Camera.StoreName, Camera.UpdatedTime, Camera.StatusId, Camera.StatusName
+        SELECT TR.totalOfRecord, Camera.CameraId, Camera.CameraName, Camera.ImageURL,Camera.MACAddress, Camera.IpAddress, Camera.StoreId, Camera.StoreName, Camera.UpdatedTime, Camera.StatusId, Camera.StatusName
         FROM
         (SELECT COUNT(TR.CameraId) AS totalOfRecord FROM
         (SELECT DISTINCT(Camera.CameraId) FROM
@@ -117,8 +117,8 @@
 
     </select>
     <insert id="createCamera">
-        INSERT INTO tblCamera(CameraName, ImageURL, IPAddress, RTSPString, TypeDetect, CreatedTime, UpdatedTime, StatusId)
-        VALUE(#{cameraName}, #{imageURL}, #{ipAddress}, #{rtspString}, #{typeDetect}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId})
+        INSERT INTO tblCamera(CameraName, ImageURL, MACAddress, IPAddress, RTSPString, TypeDetect, CreatedTime, UpdatedTime, StatusId)
+        VALUE(#{cameraName}, #{imageURL}, #{macAddress}, #{ipAddress}, #{rtspString}, #{typeDetect}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId})
     </insert>
     <update id="updateCamera">
         UPDATE tblCamera
@@ -127,6 +127,7 @@
                 ImageURL = #{imageURL},
             </if>
             IPAddress = #{ipAddress},
+            MACAddress = #{macAddress},
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime}),
             RTSPString = #{rtspString}
         WHERE CameraId = #{cameraId}
@@ -149,6 +150,7 @@
             C.CameraId,
             C.CameraName,
             C.ImageURL,
+            C.MACAddress,
             C.IPAddress,
             C.RTSPString,
             C.TypeDetect,
@@ -252,6 +254,7 @@
             <id property="cameraId" column="CameraId"/>
             <result property="cameraName" column="CameraName"/>
             <result property="imageURL" column="ImageURL"/>
+            <result property="macAddress" column="MACAddress"/>
             <result property="ipAddress" column="IPAddress"/>
             <result property="storeId" column="StoreId"/>
             <result property="storeName" column="StoreName"/>
@@ -267,6 +270,7 @@
         <result property="cameraId" column="CameraId"/>
         <result property="cameraName" column="CameraName"/>
         <result property="imageUrl" column="ImageURL"/>
+        <result property="macAddress" column="MACAddress"/>
         <result property="ipAddress" column="IpAddress"/>
         <result property="rtspString" column="RTSPString"/>
         <result property="typeDetect" column="TypeDetect"/>

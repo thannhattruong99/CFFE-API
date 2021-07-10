@@ -44,6 +44,7 @@
                STT.StatusName,
                CM.CameraId,
                CM.CameraName,
+               CM.MACAddress,
                CM.IPAddress,
                CM.RTSPString,
                CM.ImageURL,
@@ -180,6 +181,7 @@
             <id property="cameraId" column="CameraId"/>
             <result property="cameraName" column="CameraName"/>
             <result property="ipAddress" column="IPAddress"/>
+            <result property="macAddress" column="MACAddress"/>
             <result property="rtspString" column="RTSPString"/>
             <result property="imageURL" column="ImageURL"/>
             <result property="createdTime" column="CMCreatedTime"/>
