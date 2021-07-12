@@ -18,9 +18,9 @@ public class DetectService {
     private final static int OUTPUT_DISGUST = 1;
     private final static int OUTPUT_FEAR = 2;
     private final static int OUTPUT_HAPPY = 3;
-    private final static int OUTPUT_SAD = 4;
-    private final static int OUTPUT_SURPRISE = 5;
-    private final static int OUTPUT_NEUTRAL = 6;
+    private final static int OUTPUT_NEUTRAL = 4;
+    private final static int OUTPUT_SAD = 5;
+    private final static int OUTPUT_SURPRISE = 6;
 
     private static String createHotSpotCommand(String inputFilePath, String outputFilePath){
         String command = "";
