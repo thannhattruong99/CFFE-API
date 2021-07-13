@@ -35,10 +35,10 @@ public class PathConstant {
     public static final String OUTPUT_VIDEO_ARGUMENT = "--output";
 
 //    EMOTION
-    public static final String RUN_EMOTION_PATH = "realtime_emotion_detection/videoOffline.py";
+    public static final String RUN_EMOTION_PATH = "Facial-Emotion-Recognition/video_detect_mtcnn_vgg_model.py";
     public static final String VIDEO_ARGUMENT = "--video";
     public static final String SAVE_ARGUMENT = "--save";
-    public static final String EMOTION_WEIGHT_PATH = "realtime_emotion_detection/fer.h5";
+    public static final String EMOTION_WEIGHT_PATH = "emotion_weight.h5";
     public static final String EMOTION_MODEL_PATH = "realtime_emotion_detection/fer.json";
     public static final int DETECT_EMOTION_FPS = 2;
 

@@ -65,7 +65,7 @@ public class DetectService {
         //        output video
         command += " " + SAVE_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFileName;
         //        emotion model path
-        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_MODEL_PATH;
+//        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_MODEL_PATH;
         //        emotion weight path
         command += " " + WEIGHT_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_WEIGHT_PATH;
 
@@ -147,13 +147,13 @@ public class DetectService {
             return null;
         }
         String[] parts = outputDetect.split(",");
-        if (!validOuputEmotion(parts)) {
+        if (!validOutputEmotion(parts)) {
             return null;
         }
-        return convertOutputDectectToEmotionDTO(parts);
+        return convertOutputDetectToEmotionDTO(parts);
     }
 
-    private static boolean validOuputEmotion(String[] parts){
+    private static boolean validOutputEmotion(String[] parts){
         if (parts.length != NUMBER_EMOTION_TYPE) {
             return false;
         }
@@ -167,7 +167,7 @@ public class DetectService {
         return true;
     }
 
-    private static EmotionDTO convertOutputDectectToEmotionDTO(String[] parts) {
+    private static EmotionDTO convertOutputDetectToEmotionDTO(String[] parts) {
         EmotionDTO emotionDTO = new EmotionDTO();
         emotionDTO.setNumberOfAngry(Integer.parseInt(parts[OUTPUT_ANGRY]));
         emotionDTO.setNumberOfDisgust(Integer.parseInt(parts[OUTPUT_DISGUST]));
