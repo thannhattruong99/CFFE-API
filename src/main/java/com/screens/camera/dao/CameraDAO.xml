@@ -180,6 +180,7 @@
             C.CameraId,
             C.CameraName,
             C.ImageURL,
+            C.MACAddress,
             C.IPAddress,
             C.RTSPString,
             C.TypeDetect,
