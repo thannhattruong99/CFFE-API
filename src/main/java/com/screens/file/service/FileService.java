@@ -52,6 +52,7 @@ public class FileService extends BaseService {
     private static final String CONTENT_TYPE_IMAGE = "";
     private static final String CONTENT_TYPE_VIDEO = "video/mp4";
     private static final String NULL_STRING = "null";
+    private static final int TIME_RETURN_TRANSACTIONS = 5;
 
     /**
      * Get file transactrion
@@ -59,7 +60,7 @@ public class FileService extends BaseService {
      * @return Flux<FileTransaction>
      */
     public Flux<FileTransaction> getFileTransactions(String eventId) {
-        Flux<Long> interval = Flux.interval(Duration.ofSeconds(2));
+        Flux<Long> interval = Flux.interval(Duration.ofSeconds(TIME_RETURN_TRANSACTIONS));
         // GET NEW DATA
         EventCreator data = customEventListener.getEventCreatorMap().get(eventId);
         Flux<FileTransaction> fileTransactionFlux = Flux.fromStream(
