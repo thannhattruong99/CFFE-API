@@ -6,6 +6,7 @@ import com.screens.product.form.ResponseAllProductForm;
 import com.screens.product.form.ResponseProductDetailForm;
 import com.screens.product.form.ResponseProductListForm;
 import com.util.IDBHelper;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -46,21 +47,6 @@ public class ProductDAO extends BaseDAO {
         try{
             openSession();
             return sqlSession.selectOne("com.screens.product.dao.sql.ProductDAO.getAllProduct",productDTO);
-        }finally {
-            closeSession();
-        }
-    }
-
-    public boolean createProduct(ProductDTO productDTO) {
-        try{
-            openSession();
-            if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.createProduct",productDTO) > 0){
-                if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.productAddCategory",productDTO) > 0){
-                    this.sqlSession.commit();
-                    return true;
-                }
-            }
-            return false;
         }finally {
             closeSession();
         }
@@ -111,43 +97,66 @@ public class ProductDAO extends BaseDAO {
         }
     }
 
-    public boolean changeStatus(ProductDTO productDTO) {
-        try {
-            openSession();
-            if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.changeStatus",productDTO) > 0){
-                this.sqlSession.commit();
-                return true;
-            }
-            return false;
-        }finally {
-            closeSession();
-        }
-    }
-
-    public boolean updateInfo(ProductDTO productDTO) {
-        try {
-            openSession();
-            if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.updateInfo",productDTO) > 0){
-                this.sqlSession.commit();
-                return true;
-            }
-            return false;
-        }finally {
-            closeSession();
-        }
-    }
-
-    public boolean addCategories(ProductDTO productDTO) {
+    public boolean createProduct(ProductDTO productDTO) throws PersistenceException {
         try{
             openSession();
-            if(sqlSession.delete("com.screens.product.dao.sql.ProductDAO.removeCategories",productDTO) > 0){
-                if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.addCategories",productDTO) > 0){
-                    this.sqlSession.commit();
+            if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.createProduct",productDTO) > 0){
+                if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.productAddCategory",productDTO) > 0){
                     return true;
                 }
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
+            closeSession();
+        }
+    }
+
+    public boolean changeStatus(ProductDTO productDTO) throws PersistenceException {
+        try {
+            openSession();
+            if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.changeStatus",productDTO) > 0){
+                return true;
+            }
+            return false;
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
+            closeSession();
+        }
+    }
+
+    public boolean updateInfo(ProductDTO productDTO) throws PersistenceException {
+        try {
+            openSession();
+            if(sqlSession.update("com.screens.product.dao.sql.ProductDAO.updateInfo",productDTO) > 0){
+                return true;
+            }
+            return false;
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
+            closeSession();
+        }
+    }
+
+    public boolean addCategories(ProductDTO productDTO) throws PersistenceException {
+        try{
+            openSession();
+            if(sqlSession.delete("com.screens.product.dao.sql.ProductDAO.removeCategories",productDTO) > 0){
+                if(sqlSession.insert("com.screens.product.dao.sql.ProductDAO.addCategories",productDTO) > 0){
+                    return true;
+                }
+            }
+            return false;
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }

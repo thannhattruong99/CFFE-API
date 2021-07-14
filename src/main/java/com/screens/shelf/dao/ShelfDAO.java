@@ -7,6 +7,7 @@ import com.screens.shelf.form.ResponseShelfDetailForm;
 import com.screens.shelf.form.ResponseShelfListForm;
 import com.screens.shelf.form.ResponseShelvesByStoreId;
 import com.util.IDBHelper;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -43,36 +44,37 @@ public class ShelfDAO extends BaseDAO {
         }
     }
 
-    public boolean createShelf(ShelfDTO shelfDTO){
+    public boolean createShelf(ShelfDTO shelfDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.insert("ShelfDAO.createShelf", shelfDTO) > 0){
-
-                //set ShelfId into list of stack
                 for (StackDTO stack: shelfDTO.getStacks()) {
                     stack.setShelfId(shelfDTO.getShelfId());
                 }
-
                 if(sqlSession.insert("ShelfDAO.createStacks", shelfDTO.getStacks()) == shelfDTO.getStacks().size()){
-                    sqlSession.commit(true);
                     return true;
                 }
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean updateShelf(ShelfDTO shelfDTO){
+    public boolean updateShelf(ShelfDTO shelfDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.update("ShelfDAO.updateShelf", shelfDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
@@ -86,15 +88,17 @@ public class ShelfDAO extends BaseDAO {
         }
     }
 
-    public boolean updateShelfStatus(ShelfDTO shelfDTO){
+    public boolean updateShelfStatus(ShelfDTO shelfDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.update("ShelfDAO.updateShelfStatus", shelfDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
@@ -128,36 +132,40 @@ public class ShelfDAO extends BaseDAO {
 
     }
 
-    public boolean addShelfCameraIntoShelf(ShelfDTO shelfDTO){
+    public boolean addShelfCameraIntoShelf(ShelfDTO shelfDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.insert("ShelfDAO.createShelfCameraOnMapping", shelfDTO) > 0){
                 if(sqlSession.update("ShelfDAO.createShelfCameraOnCamera", shelfDTO) > 0){
                     if(sqlSession.update("ShelfDAO.createShelfCameraOnShelf", shelfDTO) > 0){
-                        sqlSession.commit(true);
                         return true;
                     }
                 }
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean removeShelfCameraFromShelf(ShelfDTO shelfDTO){
+    public boolean removeShelfCameraFromShelf(ShelfDTO shelfDTO) throws PersistenceException{
         try{
             openSession();
             if (sqlSession.update("ShelfDAO.removeShelfCameraFromMapping", shelfDTO) > 0){
                 if (sqlSession.update("ShelfDAO.removeShelfCameraFromCamera", shelfDTO) > 0){
                     if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
-                        sqlSession.commit(true);
                         return true;
                     }
                 }
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }

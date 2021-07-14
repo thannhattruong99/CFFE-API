@@ -7,6 +7,7 @@ import com.screens.camera.form.ResponseCameraDetailForm;
 import com.screens.camera.form.ResponseCameraListForm;
 import com.util.IDBHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -33,41 +34,47 @@ public class CameraDAO extends BaseDAO {
         }
     }
 
-    public boolean createCamera(CameraDTO cameraDTO){
+    public boolean createCamera(CameraDTO cameraDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.insert("CameraDAO.createCamera", cameraDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean updateCamera(CameraDTO cameraDTO){
+    public boolean updateCamera(CameraDTO cameraDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.update("CameraDAO.updateCamera", cameraDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean updateStatus(CameraDTO cameraDTO){
+    public boolean updateStatus(CameraDTO cameraDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.update("CameraDAO.updateStatus", cameraDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }

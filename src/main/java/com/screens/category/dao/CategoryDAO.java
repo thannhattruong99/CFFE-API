@@ -6,6 +6,7 @@ import com.screens.category.dto.CategoryDTO;
 import com.screens.category.form.ResponseCategoryDetailForm;
 import com.screens.category.form.ResponseCategoryListForm;
 import com.util.IDBHelper;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -34,15 +35,17 @@ public class CategoryDAO extends BaseDAO {
         }
     }
 
-    public boolean createCategory(CategoryDTO categoryDTO) {
+    public boolean createCategory(CategoryDTO categoryDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.insert("com.screens.category.dao.sql.CategoryDAO.createCategory",categoryDTO) > 0){
-                this.sqlSession.commit();
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
@@ -74,28 +77,32 @@ public class CategoryDAO extends BaseDAO {
 
     }
 
-    public boolean changeStatus(CategoryDTO categoryDTO) {
+    public boolean changeStatus(CategoryDTO categoryDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.changeStatus",categoryDTO) > 0){
-                this.sqlSession.commit();
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean updateInfo(CategoryDTO categoryDTO) {
+    public boolean updateInfo(CategoryDTO categoryDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.updateInfo",categoryDTO) > 0){
-                this.sqlSession.commit();
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
