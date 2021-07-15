@@ -22,6 +22,7 @@ import java.util.List;
 @Service
 public class ShelfService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(ShelfService.class);
+    private static final int MAX_CAMERA_ON_SHELF = 2;
 
     @Autowired
     private ShelfDAO shelfDAO;
@@ -268,9 +269,13 @@ public class ShelfService extends BaseService {
         }
 
         if(shelfDTO.getAction() == ADD_ACTION){
-            if(shelfResultDAO.getStatusId() != PENDING_STATUS || cameraResultDAO.getStatusId() != PENDING_STATUS ){
+            // TODO: xem lại chổ active khi add 1 camera
+            if(shelfResultDAO.getStatusId() == INACTIVE_STATUS || cameraResultDAO.getStatusId() != PENDING_STATUS ){
                 errorCodes.add(MessageConstant.MSG_087);
                 responseForm.setErrorCodes(errorCodes);
+            }
+            if (shelfDAO.countCameraByShelfId(shelfDTO) >= MAX_CAMERA_ON_SHELF) {
+                addErrorMessage(responseForm,MessageConstant.MSG_128);
             }
         }else if(shelfDTO.getAction() == REMOVE_ACTION){
             ShelfDTO mappingResultDAO = shelfDAO.getShelfCameraMappingStatus(shelfDTO);

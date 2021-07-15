@@ -117,6 +117,12 @@
         SELECT StatusId FROM tblShelfCameraMapping
         WHERE ShelfId = #{shelfId} AND cameraId = #{cameraId} AND StatusId = 1
     </select>
+    <select id="countCameraByShelfId" resultType="int">
+        SELECT COUNT(TSCM.CameraId)
+        FROM tblShelfCameraMapping TSCM
+        WHERE TSCM.ShelfId = #{shelfId}
+          AND TSCM.StatusId = 1
+    </select>
 <!-- add shelf camera into shelf   -->
     <update id="createShelfCameraOnShelf" flushCache="true">
         UPDATE tblShelf

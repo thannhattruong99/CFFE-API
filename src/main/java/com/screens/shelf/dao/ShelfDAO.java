@@ -151,12 +151,26 @@ public class ShelfDAO extends BaseDAO {
         }
     }
 
+    public int countCameraByShelfId(ShelfDTO shelfDTO) {
+        try{
+            openSession();
+            return sqlSession.selectOne("ShelfDAO.countCameraByShelfId", shelfDTO);
+        }finally {
+            closeSession();
+        }
+    }
+
     public boolean removeShelfCameraFromShelf(ShelfDTO shelfDTO) throws PersistenceException{
         try{
             openSession();
             if (sqlSession.update("ShelfDAO.removeShelfCameraFromMapping", shelfDTO) > 0){
                 if (sqlSession.update("ShelfDAO.removeShelfCameraFromCamera", shelfDTO) > 0){
-                    if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
+                    int count = sqlSession.selectOne("ShelfDAO.countCameraByShelfId", shelfDTO);
+                    if (count == 0){
+                        if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
+                            return true;
+                        }
+                    } else {
                         return true;
                     }
                 }
