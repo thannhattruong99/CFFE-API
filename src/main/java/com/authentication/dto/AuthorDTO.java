@@ -1,4 +1,4 @@
-package com.filter.dto;
+package com.authentication.dto;
 
 public class AuthorDTO {
     private String userId;

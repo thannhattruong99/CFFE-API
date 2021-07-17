@@ -1,7 +1,7 @@
 package com.screens.store.controller;
 
 import com.common.form.ResponseCommonForm;
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.screens.store.form.*;
 import com.screens.store.service.StoreService;
 import com.util.MessageConstant;

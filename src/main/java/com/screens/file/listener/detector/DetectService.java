@@ -62,12 +62,13 @@ public class DetectService {
         command += " " + VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFileName;
         //       fps video
         command += " " + FPS_ARGUMENT + " " + DETECT_EMOTION_FPS;
+        //      confidence
+        command += " " + CONFIDENCE_ARGUMENT + " " + CONFIDENCE;
         //        output video
         command += " " + SAVE_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFileName;
-        //        emotion model path
-//        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_MODEL_PATH;
         //        emotion weight path
         command += " " + WEIGHT_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_WEIGHT_PATH;
+
 
         return command;
     }

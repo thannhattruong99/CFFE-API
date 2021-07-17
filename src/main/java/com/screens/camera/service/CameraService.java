@@ -2,7 +2,7 @@ package com.screens.camera.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.screens.camera.dao.CameraDAO;
 import com.screens.camera.dto.CameraDTO;
 import com.screens.camera.form.*;

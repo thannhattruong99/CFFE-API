@@ -2,7 +2,7 @@ package com.screens.shelf.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.screens.file.listener.events.EventPublisher;
 import com.screens.shelf.dao.ShelfDAO;
 import com.screens.shelf.dto.ShelfDTO;

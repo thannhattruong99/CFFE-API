@@ -2,7 +2,7 @@ package com.screens.manager.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.screens.file.listener.events.EventPublisher;
 import com.screens.manager.dao.ManagerDAO;
 import com.screens.manager.dto.ManagerDTO;

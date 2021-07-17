@@ -1,7 +1,7 @@
 package com.screens.video.service;
 
 import com.common.service.BaseService;
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.screens.video.dao.VideoDAO;
 import com.screens.video.dto.VideoDTO;
 import com.screens.video.form.RequestGetVideoListForm;
@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.util.Calendar;
 
 @Service

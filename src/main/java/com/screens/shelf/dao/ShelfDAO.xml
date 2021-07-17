@@ -65,7 +65,7 @@
     </update>
     <insert id="createShelf" parameterType="ShelfDTO">
         <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
-            SELECT UUID() AS shelfId FROM tblShelf LIMIT 1
+            SELECT UUID() AS shelfId LIMIT 1
         </selectKey>
          INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId)
          VALUES (#{shelfId},

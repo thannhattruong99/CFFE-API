@@ -1,7 +1,7 @@
 package com.screens.manager.controller;
 
 import com.common.form.ResponseCommonForm;
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.screens.manager.form.*;
 import com.screens.manager.service.ManagerService;
 import com.util.ResponseSupporter;

@@ -2,7 +2,7 @@ package com.screens.store.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.screens.store.dao.StoreDAO;
 import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.*;

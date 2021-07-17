@@ -1,7 +1,7 @@
 package com.screens.shelf.controller;
 
 import com.common.form.ResponseCommonForm;
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.screens.shelf.form.*;
 import com.screens.shelf.service.ShelfService;
 import com.util.ResponseSupporter;

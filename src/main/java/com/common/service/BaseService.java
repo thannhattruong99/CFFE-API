@@ -1,7 +1,7 @@
 package com.common.service;
 
 import com.common.form.ResponseCommonForm;
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.util.MessageConstant;
 import org.apache.commons.lang3.StringUtils;
 

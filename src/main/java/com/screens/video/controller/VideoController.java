@@ -1,6 +1,6 @@
 package com.screens.video.controller;
 
-import com.filter.dto.AuthorDTO;
+import com.authentication.dto.AuthorDTO;
 import com.screens.video.form.RequestGetVideoListForm;
 import com.screens.video.form.ResponseGetVideoForm;
 import com.screens.video.service.VideoService;

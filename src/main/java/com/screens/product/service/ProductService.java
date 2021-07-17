@@ -2,7 +2,6 @@ package com.screens.product.service;
 
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
-import com.filter.dto.AuthorDTO;
 import com.screens.product.dao.ProductDAO;
 import com.screens.product.dto.ProductDTO;
 import com.screens.product.form.*;
