@@ -53,7 +53,7 @@ public class FileHelper implements Serializable {
      * @param suffixPath path on server
      * @return fileName of image on server
      */
-    public static String storeFileOnServer(MultipartFile file, String suffixPath) {
+    public static String storeFileOnServer(MultipartFile file, String suffixPath) throws Exception{
         String fileName = "";
         // Get full path directory on server
         String userDirectory = Paths.get("")
@@ -65,8 +65,8 @@ public class FileHelper implements Serializable {
         try {
             Files.createDirectories(fileStorageLocation);
         } catch (Exception ex) {
-            System.out.println("Could not create the directory where the uploaded files will be stored.");
-            return fileName;
+            // System.out.println("Could not create the directory where the uploaded files will be stored.");
+            throw ex;
         }
 
         // change file name by UUID
@@ -80,7 +80,8 @@ public class FileHelper implements Serializable {
             Path targetLocation = fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            System.out.println("Could not store file. Please try again!"+ ex);
+            // System.out.println("Could not store file. Please try again!"+ ex);
+            throw ex;
         }
         return fileName;
     }

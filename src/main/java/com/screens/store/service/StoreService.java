@@ -106,7 +106,7 @@ public class StoreService extends BaseService {
                 ResponseStoreDetailForm responseStoreDetailForm = storeDAO.getStoreStatus(storeDTO);
                 if ((responseStoreDetailForm.getStatusId() == 3) && (storeDTO.getStatusId() == 2)
                         && (StringUtils.isNotEmpty(storeDTO.getReasonInactive()))) {
-                    System.out.println("ACTION: STORE PENDING => INACTIVE");
+                    // System.out.println("ACTION: STORE PENDING => INACTIVE");
                     //check co ton tai shelf nao ko inactive hay khong
                     if (storeDAO.checkShelf(storeDTO)) {
                         storeDAO.changeStatus(storeDTO);
@@ -114,7 +114,7 @@ public class StoreService extends BaseService {
                         addErrorMessage(response,MessageConstant.MSG_081);
                     }
                 } else if ((responseStoreDetailForm.getStatusId() == 2) && (storeDTO.getStatusId() == 3)) {
-                    System.out.println("ACTION: STORE INACTIVE => PENDING");
+                    // System.out.println("ACTION: STORE INACTIVE => PENDING");
                     storeDAO.changeStatus(storeDTO);
                 } else {
                     addErrorMessage(response,MessageConstant.MSG_066);

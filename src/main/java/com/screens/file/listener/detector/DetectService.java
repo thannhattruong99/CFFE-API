@@ -43,7 +43,7 @@ public class DetectService {
         int numberOfPerson = 0;
         Runtime rt = Runtime.getRuntime();
         String command = createHotSpotCommand(inputFileName, outputFileName);
-        System.out.println("COMMAND: "  + command);
+        // System.out.println("COMMAND: "  + command);
         Process proc = rt.exec(command);
         numberOfPerson = readHotSpotConsole(proc);
         proc.isAlive();
@@ -78,7 +78,7 @@ public class DetectService {
         Runtime rt = Runtime.getRuntime();
         String command = createDetectEmotionCommand(inputFileName, outputFileName);
         Process proc = rt.exec(command);
-        System.out.println("COMMAND: "  + command);
+        // System.out.println("COMMAND: "  + command);
         emotionDTO = readEmotionConsole(proc);
         proc.isAlive();
         return emotionDTO;
@@ -92,18 +92,18 @@ public class DetectService {
                 InputStreamReader(proc.getErrorStream()));
 
         // Read the output from the command
-        System.out.println("Here is the standard output of the command:\n");
+        // System.out.println("Here is the standard output of the command:\n");
         StringBuilder stringBuilder = new StringBuilder();
 
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
+            // System.out.println(s);
             stringBuilder.append(s);
         }
         // Read any errors from the attempted command
-        //        System.out.println("Here is the standard error of the command (if any):\n");
+        //        // System.out.println("Here is the standard error of the command (if any):\n");
         //        while ((s = stdError.readLine()) != null) {
-        //            System.out.println(s);
+        //            // System.out.println(s);
         //            stringBuilder.append(s);
         //        }
 
@@ -128,7 +128,7 @@ public class DetectService {
                 InputStreamReader(proc.getErrorStream()));
 
         // Read the output from the command
-        System.out.println("Here is the standard output of the command:\n");
+        // System.out.println("Here is the standard output of the command:\n");
         String outputDetect = null;
         String s = null;
         while ((s = stdInput.readLine()) != null) {
@@ -136,13 +136,13 @@ public class DetectService {
         }
 
         // Read any errors from the attempted command
-        System.out.println("Here is the standard error of the command (if any):\n");
+        // System.out.println("Here is the standard error of the command (if any):\n");
         while ((s = stdError.readLine()) != null) {
-            System.out.println(s);
+            // System.out.println(s);
         }
 
         // parse string tobe EmotionDTO
-        System.out.println("output detect is : " + outputDetect);
+        // System.out.println("output detect is : " + outputDetect);
         if (StringUtils.isEmpty(outputDetect)){
             return null;
         }
