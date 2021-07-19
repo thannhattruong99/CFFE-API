@@ -1,7 +1,7 @@
 package com.util;
 
 public class PathConstant {
-    public final static String RESOURCE_PATH = "/classes/";
+    public final static String RESOURCE_PATH = "/target/classes/";
     public final static String IMAGE_FOLDER_CLOUD = "images/";
     public final static String IMAGE_FOLDER_SERVER = "images/";
     public final static String VIDEO_FOLDER_CLOUD = "videos/";
@@ -21,26 +21,30 @@ public class PathConstant {
     public static final String PROJECT_LOCAL_PATH = "CapstoneAPI";
 
 //    PYTHON COMMON OPTION
-    public static String PYTHON38 = "python3.8";
+    public static String PYTHON38 = "python3";
     public static final String FPS_ARGUMENT = "--fps";
     public static final String MODEL_ARGUMENT = "--model";
     public static final String WEIGHT_ARGUMENT = "--weight";
+    public static final String CONFIDENCE_ARGUMENT = "--confidence";
 
 //    HOT SPOT
-    public static final String PROTXT_ARGUMENT = "--prototxt";
-    public static final String RUN_COUNT_PEOPLE_PATH = "Counting-People/Run.py";
-    public static final String PROTXT_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.prototxt";
-    public static final String COUNT_MODEL_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.caffemodel";
-    public static final String INPUT_VIDEO_ARGUMENT = "--input";
-    public static final String OUTPUT_VIDEO_ARGUMENT = "--output";
+    public static final String HOTSPOT_RUN_PATH = "Counting-People/Run.py";
+    public static final String HOTSPOT_PROTXT_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.prototxt";
+    public static final String HOTSPOT_MODEL_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.caffemodel";
+    public static final String HOTSPOT_PROTXT_ARGUMENT = "--prototxt";
+    public static final String HOTSPOT_INPUT_ARGUMENT = "--input";
+    public static final String HOTSPOT_OUTPUT_ARGUMENT = "--output";
+    public static final String HOTSPOT_MAX_DISAPPEARED_ARGUMENT = "--max-disappeared";
+    public static final String HOTSPOT_MAX_DISTANCE_ARGUMENT = "--max-distance";
+    public static final String HOTSPOT_MAX_DISAPPEARED = "40";
+    public static final String HOTSPOT_MAX_DISTANCE = "50";
+
 
 //    EMOTION
-    public static final String RUN_EMOTION_PATH = "Facial-Emotion-Recognition/video_detect_mtcnn_vgg_model.py";
-    public static final String VIDEO_ARGUMENT = "--video";
-    public static final String SAVE_ARGUMENT = "--save";
-    public static final String CONFIDENCE_ARGUMENT = "--confidence";
+    public static final String EMOTION_RUN_PATH = "Facial-Emotion-Recognition/video_detect_mtcnn_vgg_model.py";
     public static final String EMOTION_WEIGHT_PATH = "emotion_weight.h5";
-    public static final String DETECT_EMOTION_FPS = "2";
-    public static final String CONFIDENCE = "0.5";
-
+    public static final String EMOTION_VIDEO_ARGUMENT = "--video";
+    public static final String EMOTION_SAVE_ARGUMENT = "--save";
+    public static final String EMOTION_CONFIDENCE = "0.5";
+    public static final String EMOTION_FPS = "2";
 }

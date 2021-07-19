@@ -4,12 +4,11 @@ import com.common.service.BaseService;
 import com.google.cloud.storage.StorageException;
 import com.screens.file.listener.detector.DetectService;
 import com.screens.file.dto.VideoProperty;
+import com.screens.file.listener.detector.DetectService;
 import com.screens.file.listener.detector.EmotionDTO;
-import com.screens.file.service.FileService;
 import com.screens.video.dao.VideoDAO;
 import com.util.FileHelper;
 import com.util.GCPHelper;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,6 @@ public class CustomEventListener extends BaseService {
 
     @Autowired
     private VideoDAO videoDAO;
-
 
     private static final String CONTENT_TYPE_IMAGE = "";
     private static final String CONTENT_TYPE_VIDEO = "video/mp4";

@@ -26,29 +26,28 @@ public class DetectService {
         String command = "";
         //      python version
         command += PYTHON38;
-        //        run file path
-        command += " " + FileHelper.getOutProjectPath() + RUN_COUNT_PEOPLE_PATH;
-        //        protxt file path
-        command += " " + PROTXT_ARGUMENT + " " + FileHelper.getOutProjectPath() + PROTXT_PATH;
-        //        count model path
-        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + COUNT_MODEL_PATH;
-        //        input video
-        command += " " + INPUT_VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFilePath;
-        //        output video
-        command += " " + OUTPUT_VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFilePath;
+        //      run file path
+        command += " " + FileHelper.getOutProjectPath() + HOTSPOT_RUN_PATH;
+        //      protxt file path
+        command += " " + HOTSPOT_PROTXT_ARGUMENT + " " + FileHelper.getOutProjectPath() + HOTSPOT_PROTXT_PATH;
+        //      count model path
+        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + HOTSPOT_MODEL_PATH;
+        //      input video
+        command += " " + HOTSPOT_INPUT_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFilePath;
+        //      output video
+        command += " " + HOTSPOT_OUTPUT_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFilePath;
+        //      max disappeared
+        command += " " + HOTSPOT_MAX_DISAPPEARED_ARGUMENT + " " + HOTSPOT_MAX_DISAPPEARED;
+        //      max distance
+        command += " " + HOTSPOT_MAX_DISTANCE_ARGUMENT + " " + HOTSPOT_MAX_DISTANCE;
         return command;
     }
 
     public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
-        int numberOfPerson = 0;
         Runtime rt = Runtime.getRuntime();
         String command = createHotSpotCommand(inputFileName, outputFileName);
-        // System.out.println("COMMAND: "  + command);
         Process proc = rt.exec(command);
-        numberOfPerson = readHotSpotConsole(proc);
-        proc.isAlive();
-
-        return numberOfPerson;
+        return readHotSpotConsole(proc);
     }
 
 
@@ -57,15 +56,15 @@ public class DetectService {
         //        python version
         command += PYTHON38;
         //        run file path
-        command += " " + FileHelper.getOutProjectPath() + RUN_EMOTION_PATH;
+        command += " " + FileHelper.getOutProjectPath() + EMOTION_RUN_PATH;
         //        input video
-        command += " " + VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFileName;
+        command += " " + EMOTION_VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFileName;
         //       fps video
-        command += " " + FPS_ARGUMENT + " " + DETECT_EMOTION_FPS;
+        command += " " + FPS_ARGUMENT + " " + EMOTION_FPS;
         //      confidence
-        command += " " + CONFIDENCE_ARGUMENT + " " + CONFIDENCE;
+        command += " " + CONFIDENCE_ARGUMENT + " " + EMOTION_CONFIDENCE;
         //        output video
-        command += " " + SAVE_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFileName;
+        command += " " + EMOTION_SAVE_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFileName;
         //        emotion weight path
         command += " " + WEIGHT_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_WEIGHT_PATH;
 
@@ -79,9 +78,7 @@ public class DetectService {
         Runtime rt = Runtime.getRuntime();
         String command = createDetectEmotionCommand(inputFileName, outputFileName);
         Process proc = rt.exec(command);
-        // System.out.println("COMMAND: "  + command);
         emotionDTO = readEmotionConsole(proc);
-        proc.isAlive();
         return emotionDTO;
     }
 
@@ -93,20 +90,12 @@ public class DetectService {
                 InputStreamReader(proc.getErrorStream()));
 
         // Read the output from the command
-        // System.out.println("Here is the standard output of the command:\n");
         StringBuilder stringBuilder = new StringBuilder();
 
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            // System.out.println(s);
             stringBuilder.append(s);
         }
-        // Read any errors from the attempted command
-        //        // System.out.println("Here is the standard error of the command (if any):\n");
-        //        while ((s = stdError.readLine()) != null) {
-        //            // System.out.println(s);
-        //            stringBuilder.append(s);
-        //        }
 
         return getHotSpotResult(stringBuilder);
     }
@@ -129,21 +118,13 @@ public class DetectService {
                 InputStreamReader(proc.getErrorStream()));
 
         // Read the output from the command
-        // System.out.println("Here is the standard output of the command:\n");
         String outputDetect = null;
         String s = null;
         while ((s = stdInput.readLine()) != null) {
             outputDetect = s;
         }
 
-        // Read any errors from the attempted command
-        // System.out.println("Here is the standard error of the command (if any):\n");
-        while ((s = stdError.readLine()) != null) {
-            // System.out.println(s);
-        }
-
         // parse string tobe EmotionDTO
-        // System.out.println("output detect is : " + outputDetect);
         if (StringUtils.isEmpty(outputDetect)){
             return null;
         }

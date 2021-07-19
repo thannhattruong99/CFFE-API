@@ -1,8 +1,8 @@
 package com.common.config;
 
 import com.authentication.dto.AccountDTO;
-import com.authentication.service.AccountService;
 import com.authentication.dto.AuthorDTO;
+import com.authentication.service.AccountService;
 import com.util.FileHelper;
 import com.util.StringHelper;
 import io.jsonwebtoken.Claims;

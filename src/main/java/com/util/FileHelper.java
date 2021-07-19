@@ -4,7 +4,10 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,23 +20,6 @@ import static com.util.PathConstant.*;
 
 public class FileHelper implements Serializable {
 
-    public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile)
-    throws  IOException{
-        Path uploadPath = Paths.get(uploadDir);
-
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ioe) {
-            throw new IOException("Could not save image file: " + fileName, ioe);
-        }
-    }
-
-    //TruongNT
     public static void deleteFile(String relativeFilePath) throws IOException {
         File file = new File(getResourcePath() + relativeFilePath);
         file.delete();

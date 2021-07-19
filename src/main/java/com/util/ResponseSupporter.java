@@ -64,13 +64,4 @@ public class ResponseSupporter {
         }
         return convertObjectToJSon(errorObject);
     }
-
-    private static String parseObjectToJson(Object object){
-        try {
-            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            return ow.writeValueAsString(object);
-        }catch (JsonProcessingException exception){
-            return exception.getMessage();
-        }
-    }
 }

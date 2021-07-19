@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public class GCPHelper {
 
-    private static String bucketName = "capstone_storeage";
+    private static final String BUCKET_NAME = "capstone_storeage";
 
     public static String uploadFile(String relativeFilePath, String fileCloudPath, String contentType) throws IOException, StorageException {
         Bucket bucket  = getBucket(bucketName);
@@ -26,7 +26,7 @@ public class GCPHelper {
     }
     private static Bucket getBucket(String bucketName) throws IOException {
         GoogleCredentials credentials = GoogleCredentials.fromStream(
-                new FileInputStream(ResourceUtils.getFile(FileHelper.getResourcePath() +"capstone-project-sm21-78b453757e26.json")))
+                new FileInputStream(ResourceUtils.getFile(FileHelper.getResourcePath() + "capstone-project-sm21-78b453757e26.json")))
                 .createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"));
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         Bucket bucket = storage.get(bucketName);

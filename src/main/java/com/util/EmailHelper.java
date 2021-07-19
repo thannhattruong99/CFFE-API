@@ -8,7 +8,6 @@ import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 
-import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class EmailHelper {
