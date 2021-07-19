@@ -1,10 +1,7 @@
 package com.util;
 
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.*;
 import com.google.common.collect.Lists;
 import org.springframework.util.ResourceUtils;
 
@@ -16,13 +13,17 @@ public class GCPHelper {
 
     private static String bucketName = "capstone_storeage";
 
-    public static String uploadFile(String relativeFilePath, String fileCloudPath, String contentType) throws IOException {
+    public static String uploadFile(String relativeFilePath, String fileCloudPath, String contentType) throws IOException, StorageException {
         Bucket bucket  = getBucket(bucketName);
         InputStream inputStream = new FileInputStream(FileHelper.getResourcePath() + relativeFilePath);
-        Blob blob = bucket.create(fileCloudPath, inputStream, contentType);
+        Blob blob = null;
+        try {
+            blob = bucket.create(fileCloudPath, inputStream, contentType);
+        } catch (StorageException e) {
+            throw e;
+        }
         return blob.getMediaLink();
     }
-
     private static Bucket getBucket(String bucketName) throws IOException {
         GoogleCredentials credentials = GoogleCredentials.fromStream(
                 new FileInputStream(ResourceUtils.getFile(FileHelper.getResourcePath() +"capstone-project-sm21-78b453757e26.json")))

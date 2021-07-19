@@ -1,6 +1,7 @@
 package com.screens.file.listener.events;
 
 import com.common.service.BaseService;
+import com.google.cloud.storage.StorageException;
 import com.screens.file.listener.detector.DetectService;
 import com.screens.file.dto.VideoProperty;
 import com.screens.file.listener.detector.EmotionDTO;
@@ -37,6 +38,8 @@ public class CustomEventListener extends BaseService {
 
     private static final String CONTENT_TYPE_IMAGE = "";
     private static final String CONTENT_TYPE_VIDEO = "video/mp4";
+    private static final String MSG_FAIL_CONNECTION = " is upload storage fail";
+    private static final String MSG_FAIL_DETECTION = " is detected fail";
 
     /**
      * EVENT LISTENER
@@ -61,6 +64,7 @@ public class CustomEventListener extends BaseService {
         List<String> videoErrorNameList = new ArrayList<>();
         for (VideoProperty videoProperty: eventCreator.getVideoPropertyList()) {
             try{
+                // System.out.println("START DETECT");
                 int countHP;
                 boolean flag = true;
                 // DETECT VIDEO HOT SPOT / EMOTION
@@ -77,7 +81,7 @@ public class CustomEventListener extends BaseService {
                     if((emotionDTO = DetectService.countEmotion(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != null){
                         videoProperty.setEmotions(emotionDTO);
-                        System.out.println("OUTPUT DETECT: " + emotionDTO.toString());
+                        // System.out.println("OUTPUT DETECT: " + emotionDTO.toString());
                     } else {
                         flag = false;
                     }
@@ -88,25 +92,28 @@ public class CustomEventListener extends BaseService {
 
                 // UPLOAD STORAGE CLOUD / INSERT DATABASE
                 if (flag) {
-                    uploadVideoDetectedToStorage(videoProperty);
-                    insertDatabase(videoProperty,videoErrorNameList,eventCreator);
+                    if (uploadVideoDetectedToStorage(videoProperty)) {
+                        insertDatabase(videoProperty,videoErrorNameList,eventCreator);
 
-                    fileSuccess.add(videoProperty.getVideoNameOriginal());
-                    numberFileDone++;
-                    updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
+                        fileSuccess.add(videoProperty.getVideoNameOriginal());
+                        numberFileDone++;
+                        updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
+                    } else {
+                        fileError.add(videoProperty.getVideoNameOriginal() + MSG_FAIL_CONNECTION);
+                    }
                 } else {
-                    fileError.add(videoProperty.getVideoNameOriginal());
+                    // System.out.println("DETECT FAIL");
+                    fileError.add(videoProperty.getVideoNameOriginal() + MSG_FAIL_DETECTION);
                     numberFileDone++;
                     updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
                 }
 
-
             } catch (InterruptedException e) {
-                fileError.add(videoProperty.getVideoNameOriginal());
+                fileError.add(videoProperty.getVideoNameOriginal()+ MSG_FAIL_DETECTION);
                 numberFileDone++;
                 updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
             } catch (IOException e) {
-                fileError.add(videoProperty.getVideoNameOriginal());
+                fileError.add(videoProperty.getVideoNameOriginal()+ MSG_FAIL_DETECTION);
                 numberFileDone++;
                 updateEvent(eventCreator,totalFile,numberFileDone,fileSuccess,fileError);
             }
@@ -122,15 +129,21 @@ public class CustomEventListener extends BaseService {
         this.eventCreatorMap = eventCreatorMap;
     }
 
-    private void uploadVideoDetectedToStorage(VideoProperty videoProperty) {
+    private boolean uploadVideoDetectedToStorage(VideoProperty videoProperty) {
         try {
             String outputPath = GCPHelper.uploadFile(OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID(),
                     VIDEO_FOLDER_CLOUD + org.springframework.util.StringUtils.cleanPath(videoProperty.getVideoNameUUID()),
                     CONTENT_TYPE_VIDEO);
             videoProperty.setVideoUrl(outputPath);
             FileHelper.deleteFile(OUTPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
+            return true;
         } catch (IOException e) {
-            System.out.println("Upload video toang: " + e.getMessage());
+            // System.out.println("Upload video toang: " + e.getMessage());
+            return false;
+        } catch (StorageException e) {
+            // update videoProperty.error
+            // System.out.println("Upload video toang: " + e.getMessage());
+            return false;
         }
     }
 

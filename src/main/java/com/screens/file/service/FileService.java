@@ -96,19 +96,21 @@ public class FileService extends BaseService {
             return response;
         }
 
-        // upload file to server
-        String fileName = FileHelper.storeFileOnServer(file, RESOURCE_PATH + IMAGE_FOLDER_SERVER);
-        if (fileName.isEmpty()) {
-            response.setErrorCodes(getError(MessageConstant.MSG_114));
-            return response;
-        }
-        // get file on server upload to storage
         try {
+            // UPLOAD FILE LOCAL => SERVER
+            String fileName = FileHelper.storeFileOnServer(file, RESOURCE_PATH + IMAGE_FOLDER_SERVER);
+            if (fileName.isEmpty()) {
+                response.setErrorCodes(getError(MessageConstant.MSG_114));
+                return response;
+            }
+            // UPLOAD FILE SERVER => STORAGE
             response.setFilePath(GCPHelper.uploadFile(IMAGE_FOLDER_SERVER + fileName,
                     IMAGE_FOLDER_CLOUD + StringUtils.cleanPath(fileName),CONTENT_TYPE_IMAGE));
             FileHelper.deleteFile(IMAGE_FOLDER_SERVER + fileName);
         } catch (IOException e) {
-            System.out.println("Toang roi ne: " + e.getMessage());
+            logger.error("Error at FileService: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error at FileService: " + e.getMessage());
         }
         return response;
     }
@@ -141,16 +143,15 @@ public class FileService extends BaseService {
             }
         }
 
-        // upload file to server
         List<VideoProperty> listVideoProperty = new ArrayList<>();
-        for(MultipartFile file : files) {
-            VideoProperty videoProperty = new VideoProperty();
-            String fileNameUUID = FileHelper.storeFileOnServer(file, RESOURCE_PATH + INPUT_VIDEO_PATH);
-            if (fileNameUUID.isEmpty()) {
-                response.setErrorCodes(getError(MessageConstant.MSG_114));
-                return response;
-            } else {
-                try {
+        try {
+            for(MultipartFile file : files) {
+                VideoProperty videoProperty = new VideoProperty();
+                String fileNameUUID = FileHelper.storeFileOnServer(file, RESOURCE_PATH + INPUT_VIDEO_PATH);
+                if (fileNameUUID.isEmpty()) {
+                    response.setErrorCodes(getError(MessageConstant.MSG_114));
+                    return response;
+                } else {
                     String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
                     IsoFile isoFile = new IsoFile(filePath);
                     if (isoFile.getMovieBox() == null) {
@@ -163,11 +164,12 @@ public class FileService extends BaseService {
                         return response;
                     }
                     listVideoProperty.add(videoProperty);
-                }catch (IOException e){
-                    logger.error("Error at FileService: " + e.getMessage());
                 }
-
             }
+        } catch (IOException e){
+            logger.error("Error at FileService: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error("Error at FileService: " + e.getMessage());
         }
 
 //        if (duplicateVideo(listVideoProperty)) {
@@ -254,7 +256,7 @@ public class FileService extends BaseService {
         try {
             if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
                 String shelfCameraMappingId = videoDAO.getShelfCameraMappingId(videoProperty);
-                System.out.println("shelfCameraMappingId = " + shelfCameraMappingId);
+                // System.out.println("shelfCameraMappingId = " + shelfCameraMappingId);
                 if (org.apache.commons.lang3.StringUtils.isNotEmpty(shelfCameraMappingId)
                 && !NULL_STRING.equalsIgnoreCase(shelfCameraMappingId)){
                     videoProperty.setShelfCameraMappingId(shelfCameraMappingId);
@@ -264,7 +266,7 @@ public class FileService extends BaseService {
             }
             if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
                 String stackProductCameraMappingId = videoDAO.getStackProductCameraMappingId(videoProperty);
-                System.out.println("stackProductCameraMappingId = " + stackProductCameraMappingId);
+                // System.out.println("stackProductCameraMappingId = " + stackProductCameraMappingId);
                 if (org.apache.commons.lang3.StringUtils.isNotEmpty(stackProductCameraMappingId)
                         && !NULL_STRING.equalsIgnoreCase(stackProductCameraMappingId)){
                     videoProperty.setStackProductCameraMappingId(stackProductCameraMappingId);

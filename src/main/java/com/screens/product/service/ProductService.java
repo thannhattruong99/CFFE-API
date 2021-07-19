@@ -88,7 +88,7 @@ public class ProductService extends BaseService {
                 ResponseProductDetailForm rs = productDAO.getProductStatus(productDTO);
                 if ((rs.getStatusId() == ACTIVE_STATUS) && (productDTO.getStatusId() == INACTIVE_STATUS)
                         && (StringUtils.isNotEmpty(productDTO.getReasonInactive()))){
-                    System.out.println("ACTION: ACTIVE => INACTIVE");
+                    // System.out.println("ACTION: ACTIVE => INACTIVE");
                     //check co product nao con tren any Stack hay ko
                     if (!productDAO.checkAnyStackHaveProduct(productDTO)){
                         productDAO.changeStatus(productDTO);
@@ -96,7 +96,7 @@ public class ProductService extends BaseService {
                         addErrorMessage(response, MessageConstant.MSG_097);
                     }
                 } else if((rs.getStatusId() == INACTIVE_STATUS) && (productDTO.getStatusId() == ACTIVE_STATUS)) {
-                    System.out.println("ACTION: INACTIVE => ACTIVE");
+                    // System.out.println("ACTION: INACTIVE => ACTIVE");
                     productDAO.changeStatus(productDTO);
                 } else {
                     addErrorMessage(response,MessageConstant.MSG_098);
