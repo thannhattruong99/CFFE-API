@@ -14,7 +14,7 @@ public class GCPHelper {
     private static final String BUCKET_NAME = "capstone_storeage";
 
     public static String uploadFile(String relativeFilePath, String fileCloudPath, String contentType) throws IOException, StorageException {
-        Bucket bucket  = getBucket(bucketName);
+        Bucket bucket  = getBucket(BUCKET_NAME);
         InputStream inputStream = new FileInputStream(FileHelper.getResourcePath() + relativeFilePath);
         Blob blob = null;
         try {

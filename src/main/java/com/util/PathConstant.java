@@ -1,7 +1,7 @@
 package com.util;
 
 public class PathConstant {
-    public final static String RESOURCE_PATH = "/target/classes/";
+    public final static String RESOURCE_PATH = "/classes/";
     public final static String IMAGE_FOLDER_CLOUD = "images/";
     public final static String IMAGE_FOLDER_SERVER = "images/";
     public final static String VIDEO_FOLDER_CLOUD = "videos/";
@@ -21,7 +21,7 @@ public class PathConstant {
     public static final String PROJECT_LOCAL_PATH = "CapstoneAPI";
 
 //    PYTHON COMMON OPTION
-    public static String PYTHON38 = "python3";
+    public static String PYTHON38 = "python3.8";
     public static final String FPS_ARGUMENT = "--fps";
     public static final String MODEL_ARGUMENT = "--model";
     public static final String WEIGHT_ARGUMENT = "--weight";
@@ -34,8 +34,8 @@ public class PathConstant {
     public static final String HOTSPOT_PROTXT_ARGUMENT = "--prototxt";
     public static final String HOTSPOT_INPUT_ARGUMENT = "--input";
     public static final String HOTSPOT_OUTPUT_ARGUMENT = "--output";
-    public static final String HOTSPOT_MAX_DISAPPEARED_ARGUMENT = "--max-disappeared";
-    public static final String HOTSPOT_MAX_DISTANCE_ARGUMENT = "--max-distance";
+    public static final String HOTSPOT_MAX_DISAPPEARED_ARGUMENT = "--maxDisappeared";
+    public static final String HOTSPOT_MAX_DISTANCE_ARGUMENT = "--maxDistance";
     public static final String HOTSPOT_MAX_DISAPPEARED = "40";
     public static final String HOTSPOT_MAX_DISTANCE = "50";
 
