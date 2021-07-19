@@ -68,7 +68,7 @@ public class CustomEventListener extends BaseService {
                 // DETECT VIDEO HOT SPOT / EMOTION
                 if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
                     if((countHP = DetectService.countPerson(videoProperty.getVideoNameUUID(),
-                            videoProperty.getVideoNameUUID())) != 0){
+                            videoProperty.getVideoNameUUID())) != -1){
                         videoProperty.setTotalPerson(countHP);
                     } else {
                         flag = false;
