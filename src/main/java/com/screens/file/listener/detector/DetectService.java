@@ -27,7 +27,7 @@ public class DetectService {
 
     //python version
     @Value("${python.version}")
-    private String PYTHON38;
+    private String python;
 
     //    PYTHON COMMON OPTION
     private static String FPS_ARGUMENT = "--fps";
@@ -37,15 +37,18 @@ public class DetectService {
 
     //    HOT SPOT CONFIG VALUE
     @Value("${hotspot.run.path}")
-    private String HOTSPOT_RUN_PATH;
+    private String hotspotRunPath;
     @Value("${hotspot.prototxt.path}")
-    private String HOTSPOT_PROTOTXT_PATH;
+    private String hotspotPrototxtPath;
     @Value("${hotspot.model.path}")
-    private String HOTSPOT_MODEL_PATH;
+    private String hotspotModelPath;
     @Value("${hotspot.max.disappeared}")
-    private String HOTSPOT_MAX_DISAPPEARED;
+    private String hotspotMaxDisappeared;
     @Value("${hotspot.max.distance}")
-    private String HOTSPOT_MAX_DISTANCE;
+    private String hotspotMaxDistance;
+    @Value("${hotspot.confidence}")
+    private String hotspotConfidence;
+
     // HOTSPOT ARGUMENT
     private static String HOTSPOT_PROTOTXT_ARGUMENT = "--prototxt";
     private static String HOTSPOT_INPUT_ARGUMENT = "--input";
@@ -55,13 +58,13 @@ public class DetectService {
 
     //    EMOTION CONFIG VALUE
     @Value("${emotion.run.path}")
-    public static String EMOTION_RUN_PATH;
+    public String emotionRunPath;
     @Value("${emotion.weight.path}")
-    public static String EMOTION_WEIGHT_PATH;
+    public String emotionWeightPath;
     @Value("${emotion.confidence}")
-    public static String EMOTION_CONFIDENCE;
+    public String emotionConfidence;
     @Value("${emotion.fps}")
-    public static String EMOTION_FPS;
+    public String emotionFPS;
     //    EMOTION ARGUMENT
     public static String EMOTION_VIDEO_ARGUMENT = "--video";
     public static String EMOTION_SAVE_ARGUMENT = "--save";
@@ -70,21 +73,23 @@ public class DetectService {
     private String createHotSpotCommand(String inputFilePath, String outputFilePath){
         String command = "";
         //      python version
-        command += PYTHON38;
+        command += python;
         //      run file path
-        command += " " + FileHelper.getOutProjectPath() + HOTSPOT_RUN_PATH;
+        command += " " + FileHelper.getOutProjectPath() + hotspotRunPath;
         //      protxt file path
-        command += " " + HOTSPOT_PROTOTXT_ARGUMENT + " " + FileHelper.getOutProjectPath() + HOTSPOT_PROTOTXT_PATH;
+        command += " " + HOTSPOT_PROTOTXT_ARGUMENT + " " + FileHelper.getOutProjectPath() + hotspotPrototxtPath;
         //      count model path
-        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + HOTSPOT_MODEL_PATH;
+        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + hotspotModelPath;
         //      input video
         command += " " + HOTSPOT_INPUT_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFilePath;
         //      output video
         command += " " + HOTSPOT_OUTPUT_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFilePath;
         //      max disappeared
-        command += " " + HOTSPOT_MAX_DISAPPEARED_ARGUMENT + " " + HOTSPOT_MAX_DISAPPEARED;
+        command += " " + HOTSPOT_MAX_DISAPPEARED_ARGUMENT + " " + hotspotMaxDisappeared;
         //      max distance
-        command += " " + HOTSPOT_MAX_DISTANCE_ARGUMENT + " " + HOTSPOT_MAX_DISTANCE;
+        command += " " + HOTSPOT_MAX_DISTANCE_ARGUMENT + " " + hotspotMaxDistance;
+        //      confidence
+        command += " " + CONFIDENCE_ARGUMENT + " " + hotspotConfidence;
         return command;
     }
 
@@ -99,19 +104,19 @@ public class DetectService {
     private String createDetectEmotionCommand(String inputFileName, String outputFileName){
         String command = "";
         //        python version
-        command += PYTHON38;
+        command += python;
         //        run file path
-        command += " " + FileHelper.getOutProjectPath() + EMOTION_RUN_PATH;
+        command += " " + FileHelper.getOutProjectPath() + emotionRunPath;
         //        input video
         command += " " + EMOTION_VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFileName;
         //       fps video
-        command += " " + FPS_ARGUMENT + " " + EMOTION_FPS;
+        command += " " + FPS_ARGUMENT + " " + emotionFPS;
         //      confidence
-        command += " " + CONFIDENCE_ARGUMENT + " " + EMOTION_CONFIDENCE;
+        command += " " + CONFIDENCE_ARGUMENT + " " + emotionConfidence;
         //        output video
         command += " " + EMOTION_SAVE_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFileName;
         //        emotion weight path
-        command += " " + WEIGHT_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_WEIGHT_PATH;
+        command += " " + WEIGHT_ARGUMENT + " " + FileHelper.getOutProjectPath() + emotionWeightPath;
 
 
         return command;
@@ -131,18 +136,11 @@ public class DetectService {
         BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(proc.getInputStream()));
 
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(proc.getErrorStream()));
-
         // Read the output from the command
         StringBuilder stringBuilder = new StringBuilder();
 
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            stringBuilder.append(s);
-        }
-
-        while ((s = stdError.readLine()) != null) {
             stringBuilder.append(s);
         }
 
@@ -162,9 +160,6 @@ public class DetectService {
     private EmotionDTO readEmotionConsole(Process proc) throws IOException {
         BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(proc.getInputStream()));
-
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(proc.getErrorStream()));
 
         // Read the output from the command
         String outputDetect = null;
