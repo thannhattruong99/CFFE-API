@@ -2,6 +2,8 @@ package com.screens.file.listener.detector;
 
 import com.util.FileHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,27 +11,70 @@ import java.io.InputStreamReader;
 
 import static com.util.PathConstant.*;
 
+@Component
 public class DetectService {
     private final static String PERSONS = "PERSONS:";
-//    PERSONS:
+//    Size of persons
     private final static int SIZE = 8;
     private final static int NUMBER_EMOTION_TYPE = 7;
-    private final static int OUTPUT_ANGRY = 0;
-    private final static int OUTPUT_DISGUST = 1;
-    private final static int OUTPUT_FEAR = 2;
-    private final static int OUTPUT_HAPPY = 3;
-    private final static int OUTPUT_NEUTRAL = 4;
-    private final static int OUTPUT_SAD = 5;
-    private final static int OUTPUT_SURPRISE = 6;
+    private static int OUTPUT_ANGRY = 0;
+    private static int OUTPUT_DISGUST = 1;
+    private static int OUTPUT_FEAR = 2;
+    private static int OUTPUT_HAPPY = 3;
+    private static int OUTPUT_NEUTRAL = 4;
+    private static int OUTPUT_SAD = 5;
+    private static int OUTPUT_SURPRISE = 6;
 
-    private static String createHotSpotCommand(String inputFilePath, String outputFilePath){
+    //python version
+    @Value("${python.version}")
+    private String PYTHON38;
+
+    //    PYTHON COMMON OPTION
+    private static String FPS_ARGUMENT = "--fps";
+    private static String MODEL_ARGUMENT = "--model";
+    private static String WEIGHT_ARGUMENT = "--weight";
+    private static String CONFIDENCE_ARGUMENT = "--confidence";
+
+    //    HOT SPOT CONFIG VALUE
+    @Value("${hotspot.run.path}")
+    private String HOTSPOT_RUN_PATH;
+    @Value("${hotspot.prototxt.path}")
+    private String HOTSPOT_PROTOTXT_PATH;
+    @Value("${hotspot.model.path}")
+    private String HOTSPOT_MODEL_PATH;
+    @Value("${hotspot.max.disappeared}")
+    private String HOTSPOT_MAX_DISAPPEARED;
+    @Value("${hotspot.max.distance}")
+    private String HOTSPOT_MAX_DISTANCE;
+    // HOTSPOT ARGUMENT
+    private static String HOTSPOT_PROTOTXT_ARGUMENT = "--prototxt";
+    private static String HOTSPOT_INPUT_ARGUMENT = "--input";
+    private static String HOTSPOT_OUTPUT_ARGUMENT = "--output";
+    private static String HOTSPOT_MAX_DISAPPEARED_ARGUMENT = "--maxDisappeared";
+    private static String HOTSPOT_MAX_DISTANCE_ARGUMENT = "--maxDistance";
+
+    //    EMOTION CONFIG VALUE
+    @Value("${emotion.run.path}")
+    public static String EMOTION_RUN_PATH;
+    @Value("${emotion.weight.path}")
+    public static String EMOTION_WEIGHT_PATH;
+    @Value("${emotion.confidence}")
+    public static String EMOTION_CONFIDENCE;
+    @Value("${emotion.fps}")
+    public static String EMOTION_FPS;
+    //    EMOTION ARGUMENT
+    public static String EMOTION_VIDEO_ARGUMENT = "--video";
+    public static String EMOTION_SAVE_ARGUMENT = "--save";
+
+
+    private String createHotSpotCommand(String inputFilePath, String outputFilePath){
         String command = "";
         //      python version
         command += PYTHON38;
         //      run file path
         command += " " + FileHelper.getOutProjectPath() + HOTSPOT_RUN_PATH;
         //      protxt file path
-        command += " " + HOTSPOT_PROTXT_ARGUMENT + " " + FileHelper.getOutProjectPath() + HOTSPOT_PROTXT_PATH;
+        command += " " + HOTSPOT_PROTOTXT_ARGUMENT + " " + FileHelper.getOutProjectPath() + HOTSPOT_PROTOTXT_PATH;
         //      count model path
         command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + HOTSPOT_MODEL_PATH;
         //      input video
@@ -43,7 +88,7 @@ public class DetectService {
         return command;
     }
 
-    public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
+    public int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
         Runtime rt = Runtime.getRuntime();
         String command = createHotSpotCommand(inputFileName, outputFileName);
         Process proc = rt.exec(command);
@@ -51,7 +96,7 @@ public class DetectService {
     }
 
 
-    private static String createDetectEmotionCommand(String inputFileName, String outputFileName){
+    private String createDetectEmotionCommand(String inputFileName, String outputFileName){
         String command = "";
         //        python version
         command += PYTHON38;
@@ -73,7 +118,7 @@ public class DetectService {
     }
 
     // LuanNM temp
-    public static EmotionDTO countEmotion(String inputFileName, String outputFileName) throws InterruptedException, IOException {
+    public EmotionDTO countEmotion(String inputFileName, String outputFileName) throws InterruptedException, IOException {
         EmotionDTO emotionDTO = null;
         Runtime rt = Runtime.getRuntime();
         String command = createDetectEmotionCommand(inputFileName, outputFileName);
@@ -82,7 +127,7 @@ public class DetectService {
         return emotionDTO;
     }
 
-    private static int readHotSpotConsole(Process proc) throws IOException {
+    private int readHotSpotConsole(Process proc) throws IOException {
         BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(proc.getInputStream()));
 
@@ -97,10 +142,14 @@ public class DetectService {
             stringBuilder.append(s);
         }
 
+        while ((s = stdError.readLine()) != null) {
+            stringBuilder.append(s);
+        }
+
         return getHotSpotResult(stringBuilder);
     }
 
-    public static int getHotSpotResult(StringBuilder stringBuilder){
+    public int getHotSpotResult(StringBuilder stringBuilder){
         int index = stringBuilder.indexOf(PERSONS) + SIZE;
         stringBuilder.delete(0, index);
         try {
@@ -110,7 +159,7 @@ public class DetectService {
         }
     }
 
-    private static EmotionDTO readEmotionConsole(Process proc) throws IOException {
+    private EmotionDTO readEmotionConsole(Process proc) throws IOException {
         BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(proc.getInputStream()));
 
@@ -135,7 +184,7 @@ public class DetectService {
         return convertOutputDetectToEmotionDTO(parts);
     }
 
-    private static boolean validOutputEmotion(String[] parts){
+    private boolean validOutputEmotion(String[] parts){
         if (parts.length != NUMBER_EMOTION_TYPE) {
             return false;
         }
@@ -149,7 +198,7 @@ public class DetectService {
         return true;
     }
 
-    private static EmotionDTO convertOutputDetectToEmotionDTO(String[] parts) {
+    private EmotionDTO convertOutputDetectToEmotionDTO(String[] parts) {
         EmotionDTO emotionDTO = new EmotionDTO();
         emotionDTO.setNumberOfAngry(Integer.parseInt(parts[OUTPUT_ANGRY]));
         emotionDTO.setNumberOfDisgust(Integer.parseInt(parts[OUTPUT_DISGUST]));

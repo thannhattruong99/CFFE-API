@@ -15,36 +15,9 @@ public class PathConstant {
     public static final String MSG_RELATIVE_PATH = "messages/msg";
     public static final String REXP_RESOURCE_PATH = "/resources/**";
     public static final String REXP_ALL_PATH = "/**";
-    public static final String DEFAULT_INCLUDE_PATTERN = "http://35.240.143.111:9091/*";
+    public static final String SERVER_PATTERN = "http://35.240.143.111:9091/*";
     public static final String LOCAL_PATTERN = "http://localhost:9091/*";
     public static final String PROJECT_SERVER_PATH = "CapstoneAPI/target";
     public static final String PROJECT_LOCAL_PATH = "CapstoneAPI";
 
-//    PYTHON COMMON OPTION
-    public static String PYTHON38 = "python3.8";
-    public static final String FPS_ARGUMENT = "--fps";
-    public static final String MODEL_ARGUMENT = "--model";
-    public static final String WEIGHT_ARGUMENT = "--weight";
-    public static final String CONFIDENCE_ARGUMENT = "--confidence";
-
-//    HOT SPOT
-    public static final String HOTSPOT_RUN_PATH = "Counting-People/Run.py";
-    public static final String HOTSPOT_PROTXT_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.prototxt";
-    public static final String HOTSPOT_MODEL_PATH = "Counting-People/mobilenet_ssd/MobileNetSSD_deploy.caffemodel";
-    public static final String HOTSPOT_PROTXT_ARGUMENT = "--prototxt";
-    public static final String HOTSPOT_INPUT_ARGUMENT = "--input";
-    public static final String HOTSPOT_OUTPUT_ARGUMENT = "--output";
-    public static final String HOTSPOT_MAX_DISAPPEARED_ARGUMENT = "--maxDisappeared";
-    public static final String HOTSPOT_MAX_DISTANCE_ARGUMENT = "--maxDistance";
-    public static final String HOTSPOT_MAX_DISAPPEARED = "40";
-    public static final String HOTSPOT_MAX_DISTANCE = "50";
-
-
-//    EMOTION
-    public static final String EMOTION_RUN_PATH = "Facial-Emotion-Recognition/video_detect_mtcnn_vgg_model.py";
-    public static final String EMOTION_WEIGHT_PATH = "emotion_weight.h5";
-    public static final String EMOTION_VIDEO_ARGUMENT = "--video";
-    public static final String EMOTION_SAVE_ARGUMENT = "--save";
-    public static final String EMOTION_CONFIDENCE = "0.5";
-    public static final String EMOTION_FPS = "2";
 }

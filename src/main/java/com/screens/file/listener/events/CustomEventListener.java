@@ -32,6 +32,9 @@ public class CustomEventListener extends BaseService {
     private Map<String, EventCreator> eventCreatorMap;
 
     @Autowired
+    private DetectService detectService;
+
+    @Autowired
     private VideoDAO videoDAO;
 
     private static final String CONTENT_TYPE_IMAGE = "";
@@ -67,7 +70,7 @@ public class CustomEventListener extends BaseService {
                 boolean flag = true;
                 // DETECT VIDEO HOT SPOT / EMOTION
                 if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
-                    if((countHP = DetectService.countPerson(videoProperty.getVideoNameUUID(),
+                    if((countHP = detectService.countPerson(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != -1){
                         videoProperty.setTotalPerson(countHP);
                     } else {
@@ -76,7 +79,7 @@ public class CustomEventListener extends BaseService {
                 }
                 if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
                     EmotionDTO emotionDTO;
-                    if((emotionDTO = DetectService.countEmotion(videoProperty.getVideoNameUUID(),
+                    if((emotionDTO = detectService.countEmotion(videoProperty.getVideoNameUUID(),
                             videoProperty.getVideoNameUUID())) != null){
                         videoProperty.setEmotions(emotionDTO);
                         // System.out.println("OUTPUT DETECT: " + emotionDTO.toString());
