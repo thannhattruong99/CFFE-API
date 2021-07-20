@@ -27,9 +27,23 @@
         LIMIT 1
     </select>
 
-<!--    <select id="countByCameraIdAndTime" resultType="int">-->
-<!--        -->
-<!--    </select>-->
+    <select id="countVideoByMacAndTimeType1" resultType="int">
+        SELECT COUNT(TV.VideoId) AS TOTALRECORD
+        FROM tblVideo TV
+                 LEFT JOIN tblShelfCameraMapping TSCM ON (TSCM.ShelfCameraMappingId = TV.ShelfCameraMappingId)
+                 LEFT JOIN tblCamera TC ON (TSCM.CameraId = TC.CameraId)
+        WHERE TV.StartedTime = #{startedTime}
+          AND TC.MACAddress = #{macAddress}
+    </select>
+
+    <select id="countVideoByMacAndTimeType2" resultType="int">
+        SELECT COUNT(TV.VideoId) AS TOTALRECORD
+        FROM tblVideo TV
+                 LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.StackProductCameraMappingId = TV.StackProductCameraMappingId)
+                 LEFT JOIN tblCamera TC ON (TSCM.CameraId = TC.CameraId)
+        WHERE TV.StartedTime = #{startedTime}
+          AND TC.MACAddress = #{macAddress}
+    </select>
 
     <select id="getVideoCountList" resultMap="getVideoCountList">
         SELECT TV.VideoId,
