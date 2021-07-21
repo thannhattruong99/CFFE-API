@@ -97,10 +97,23 @@ public class VideoDAO extends BaseDAO {
         }
     }
 
-    public boolean isDuplicate(VideoProperty videoProperty) {
+    public boolean isDuplicateVideoShelf(VideoProperty videoProperty) {
         try{
             openSession();
-            int count = sqlSession.selectOne("com.screens.video.dao.VidDAO.countByCameraIdAndTime",videoProperty);
+            int count = sqlSession.selectOne("com.screens.video.dao.VidDAO.countVideoByMacAndTimeType1",videoProperty);
+            if (count > 0) {
+                return true;
+            }
+            return false;
+        }finally {
+            closeSession();
+        }
+    }
+
+    public boolean isDuplicateVideoStack(VideoProperty videoProperty) {
+        try{
+            openSession();
+            int count = sqlSession.selectOne("com.screens.video.dao.VidDAO.countVideoByMacAndTimeType2",videoProperty);
             if (count > 0) {
                 return true;
             }

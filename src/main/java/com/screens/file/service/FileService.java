@@ -170,10 +170,10 @@ public class FileService extends BaseService {
             logger.error("Error at FileService: " + e.getMessage());
         }
 
-//        if (duplicateVideo(listVideoProperty)) {
-//            response.setErrorCodes(getError(MessageConstant.MSG_123));
-//            return response;
-//        }
+        if (duplicateVideo(listVideoProperty)) {
+            response.setErrorCodes(getError(MessageConstant.MSG_123));
+            return response;
+        }
 
         response.setVideoPropertyList(listVideoProperty);
         response.setIdEvent(UUID.randomUUID() + "-" + getTime());
@@ -187,30 +187,37 @@ public class FileService extends BaseService {
     }
 
     // TODO: CHECK VIDEO DUPLICATE
-//    private boolean duplicateVideo(List<VideoProperty> listVideoProperty) {
-//        //Check duplicate input
-//        for (VideoProperty videoProperty : listVideoProperty) {
-//            int count = 1;
-//            String cameraId = videoProperty.getCameraId();
-//            String startTime = videoProperty.getStartedTime();
-//            for (VideoProperty videoProperty2 : listVideoProperty) {
-//                if ((cameraId.equalsIgnoreCase(videoProperty2.getCameraId()))
-//                    && (startTime.equalsIgnoreCase(videoProperty2.getStartedTime()))){
-//                    count++;
-//                }
-//            }
-//            if (count > 1) {
-//                return true;
-//            }
-//        }
-//        //Check duplicate database
-//        for (VideoProperty videoProperty : listVideoProperty) {
-//            if (videoDAO.isDuplicate(videoProperty)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    private boolean duplicateVideo(List<VideoProperty> listVideoProperty) {
+        //Check duplicate input
+        for (VideoProperty videoProperty : listVideoProperty) {
+            int count = 0;
+            String macAddress = videoProperty.getMacAddress();
+            String startTime = videoProperty.getStartedTime();
+            for (VideoProperty videoProperty2 : listVideoProperty) {
+                if ((macAddress.equalsIgnoreCase(videoProperty2.getMacAddress()))
+                    && (startTime.equalsIgnoreCase(videoProperty2.getStartedTime()))){
+                    count++;
+                }
+            }
+            if (count > 1) {
+                return true;
+            }
+        }
+        //Check duplicate database
+        for (VideoProperty videoProperty : listVideoProperty) {
+            if (DETECT_HOT_SPOT == videoProperty.getTypeVideo()) {
+                if (videoDAO.isDuplicateVideoShelf(videoProperty)) {
+                    return true;
+                }
+            }
+            if (DETECT_EMOTION == videoProperty.getTypeVideo()) {
+                if (videoDAO.isDuplicateVideoStack(videoProperty)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     private boolean validVideoName(MultipartFile file) {
         String fileName = file.getOriginalFilename();
