@@ -78,7 +78,8 @@
                           LEFT JOIN tblShelf TS ON (TS.ShelfId = TSCM.ShelfId)
                           LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
                  WHERE
-                    TV.StartedTime &gt;= #{dayStart}
+                    TS.ShelfId IS NOT NULL
+                    AND TV.StartedTime &gt;= #{dayStart}
                     AND TV.EndedTime &lt;= #{dayEnd}
                 <if test="storeId != null">
                     AND TS.StoreId = #{storeId}
@@ -88,7 +89,8 @@
                 </if>
              ) TTTT
         WHERE
-            TV.StartedTime &gt;= #{dayStart}
+            TS.ShelfId IS NOT NULL
+            AND TV.StartedTime &gt;= #{dayStart}
             AND TV.EndedTime &lt;= #{dayEnd}
             <if test="storeId != null">
                 AND TS.StoreId = #{storeId}
