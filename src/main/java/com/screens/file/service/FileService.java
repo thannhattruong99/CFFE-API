@@ -147,17 +147,19 @@ public class FileService extends BaseService {
                 VideoProperty videoProperty = new VideoProperty();
                 String fileNameUUID = FileHelper.storeFileOnServer(file, RESOURCE_PATH + INPUT_VIDEO_PATH);
                 if (fileNameUUID.isEmpty()) {
+                    rollBackVideo(listVideoProperty);
                     response.setErrorCodes(getError(MessageConstant.MSG_114));
                     return response;
                 } else {
                     String filePath = FileHelper.getResourcePath() + INPUT_VIDEO_PATH + fileNameUUID;
                     IsoFile isoFile = new IsoFile(filePath);
                     if (isoFile.getMovieBox() == null) {
+                        rollBackVideo(listVideoProperty);
                         response.setErrorCodes(getError(MessageConstant.MSG_118));
                         return response;
                     }
                     if (!getVideoProperties(videoProperty, fileNameUUID, file.getOriginalFilename())){
-                        //TODO: Xoa het video tren server (listVideoProperty)
+                        rollBackVideo(listVideoProperty);
                         response.setErrorCodes(getError(MessageConstant.MSG_122));
                         return response;
                     }
@@ -171,6 +173,7 @@ public class FileService extends BaseService {
         }
 
         if (duplicateVideo(listVideoProperty)) {
+            rollBackVideo(listVideoProperty);
             response.setErrorCodes(getError(MessageConstant.MSG_123));
             return response;
         }
@@ -178,6 +181,16 @@ public class FileService extends BaseService {
         response.setVideoPropertyList(listVideoProperty);
         response.setIdEvent(UUID.randomUUID() + "-" + getTime());
         return response;
+    }
+
+    private void rollBackVideo(List<VideoProperty> listVideoProperty) {
+        try {
+            for (VideoProperty videoProperty : listVideoProperty){
+                FileHelper.deleteFile(INPUT_VIDEO_PATH + videoProperty.getVideoNameUUID());
+            }
+        } catch (IOException e) {
+            logger.error("Error at FileService: " + e.getMessage());
+        }
     }
 
     private String getTime() {

@@ -9,7 +9,7 @@ public class RequestCreateCameraForm {
     private String cameraName;
     @Nullable
     private String imageUrl;
-    @NotEmpty(message = "MSG-125") @Pattern(regexp = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})|([0-9a-fA-F]{4}\\.[0-9a-fA-F]{4}\\.[0-9a-fA-F]{4})$", message = "MSG-126")
+    @NotEmpty(message = "MSG-125") @Pattern(regexp = "^([0-9A-Fa-f]{2}[-]){5}([0-9A-Fa-f]{2})$", message = "MSG-126")
     private String macAddress;
     @NotEmpty(message = "MSG-031") @Pattern(regexp = "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$", message = "MSG-032")
     private String ipAddress;
