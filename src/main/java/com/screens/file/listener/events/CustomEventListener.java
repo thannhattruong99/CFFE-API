@@ -37,7 +37,6 @@ public class CustomEventListener extends BaseService {
     @Autowired
     private VideoDAO videoDAO;
 
-    private static final String CONTENT_TYPE_IMAGE = "";
     private static final String CONTENT_TYPE_VIDEO = "video/mp4";
     private static final String MSG_FAIL_CONNECTION = " is upload storage fail";
     private static final String MSG_FAIL_DETECTION = " is detected fail";
