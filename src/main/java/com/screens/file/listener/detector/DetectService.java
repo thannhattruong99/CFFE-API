@@ -57,7 +57,7 @@ public class DetectService {
     private static String HOTSPOT_OUTPUT_ARGUMENT = "--output";
     private static String HOTSPOT_MAX_DISAPPEARED_ARGUMENT = "--maxDisappeared";
     private static String HOTSPOT_MAX_DISTANCE_ARGUMENT = "--maxDistance";
-    private static String SKIP_FRAMSE_ARGUMENT = "----skip_frames";
+    private static String SKIP_FRAMES_ARGUMENT = "--skip_frames";
 
     //    EMOTION CONFIG VALUE
     @Value("${emotion.run.path}")
@@ -94,7 +94,7 @@ public class DetectService {
         //      confidence
         command += " " + CONFIDENCE_ARGUMENT + " " + hotspotConfidence;
         //      skip frames
-        command += " " + SKIP_FRAMSE_ARGUMENT + " " + skipframse;
+        command += " " + SKIP_FRAMES_ARGUMENT + " " + skipframse;
         return command;
     }
 
