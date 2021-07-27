@@ -1,8 +1,8 @@
 package com.screens.camera.service;
 
+import com.authentication.dto.AuthorDTO;
 import com.common.form.ResponseCommonForm;
 import com.common.service.BaseService;
-import com.filter.dto.AuthorDTO;
 import com.screens.camera.dao.CameraDAO;
 import com.screens.camera.dto.CameraDTO;
 import com.screens.camera.form.*;
@@ -169,6 +169,7 @@ public class CameraService extends BaseService {
         } else {
             cameraDTO.setImageURL(DEFAULT_IMAGE);
         }
+        cameraDTO.setMacAddress(requestForm.getMacAddress());
         cameraDTO.setIpAddress(requestForm.getIpAddress());
         cameraDTO.setRtspString(requestForm.getRtspString());
         cameraDTO.setTypeDetect(requestForm.getTypeDetect());
@@ -181,6 +182,7 @@ public class CameraService extends BaseService {
         cameraDTO.setCameraName(requestForm.getCameraName());
         if (StringUtils.isNotEmpty(requestForm.getImageUrl()))
             cameraDTO.setImageURL(requestForm.getImageUrl());
+        cameraDTO.setMacAddress(requestForm.getMacAddress());
         cameraDTO.setIpAddress(requestForm.getIpAddress());
         cameraDTO.setRtspString(requestForm.getRtspString());
         cameraDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);

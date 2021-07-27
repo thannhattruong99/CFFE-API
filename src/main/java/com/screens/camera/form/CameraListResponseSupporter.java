@@ -4,6 +4,7 @@ public class CameraListResponseSupporter {
     private String cameraId;
     private String cameraName;
     private String imageURL;
+    private String macAddress;
     private String ipAddress;
     private String storeId;
     private String storeName;
@@ -12,6 +13,14 @@ public class CameraListResponseSupporter {
     private String statusName;
 
     public CameraListResponseSupporter() {
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public String getStoreName() {

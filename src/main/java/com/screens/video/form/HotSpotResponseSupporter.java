@@ -8,8 +8,26 @@ public class HotSpotResponseSupporter implements Serializable {
     private String endedTime;
     private int TotalPeople;
     private String description;
+    private String createdTime;
+    private String updatedTime;
 
     public HotSpotResponseSupporter() {
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(String updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getHotspotId() {

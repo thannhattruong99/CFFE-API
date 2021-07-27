@@ -10,6 +10,7 @@ public class MessageConstant {
     public static final String MSG_029 = "MSG-029";
     public static final String MSG_035 = "MSG-035";
     public static final String MSG_041 = "MSG-041";
+    public static final String MSG_059 = "MSG-059";
     public static final String MSG_063 = "MSG-063";
     public static final String MSG_066 = "MSG-066";
     public static final String MSG_068 = "MSG-068";
@@ -49,4 +50,6 @@ public class MessageConstant {
     public static final String MSG_121 = "MSG-121";
     public static final String MSG_122 = "MSG-122";
     public static final String MSG_123 = "MSG-123";
+    public static final String MSG_124 = "MSG-124";
+    public static final String MSG_128 = "MSG-128";
 }

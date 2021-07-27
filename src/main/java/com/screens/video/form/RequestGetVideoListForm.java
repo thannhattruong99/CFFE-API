@@ -1,12 +1,10 @@
 package com.screens.video.form;
 
-import com.common.form.RequestGetBaseForm;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
 
 public class RequestGetVideoListForm {
     @Nullable

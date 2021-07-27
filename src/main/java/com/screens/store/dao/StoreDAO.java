@@ -5,6 +5,7 @@ import com.screens.store.dto.StoreDTO;
 import com.screens.store.form.ResponseStoreDetailForm;
 import com.screens.store.form.ResponseStoreListForm;
 import com.util.IDBHelper;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -58,75 +59,85 @@ public class StoreDAO extends BaseDAO {
         }
     }
 
-    public boolean createStore(StoreDTO storeDTO) {
+    public boolean createStore(StoreDTO storeDTO) throws PersistenceException {
         try {
             openSession();
             if(sqlSession.insert("com.screens.store.dao.sql.StoreDAO.createStore",storeDTO) > 0){
-                this.sqlSession.commit();
                 return true;
             }
             return false;
-        }finally {
+        }catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean changeStatus(StoreDTO storeDTO) {
+    public boolean changeStatus(StoreDTO storeDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeStatus",storeDTO) > 0){
-                this.sqlSession.commit();
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean updateInfo(StoreDTO storeDTO) {
+    public boolean updateInfo(StoreDTO storeDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.updateInfo",storeDTO) > 0){
-                this.sqlSession.commit();
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean addManager(StoreDTO storeDTO) {
+    public boolean addManager(StoreDTO storeDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeStatus",storeDTO) > 0){
                 if (sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeUserStatus",storeDTO) > 0) {
                     if (sqlSession.insert("com.screens.store.dao.sql.StoreDAO.addMangerToStore",storeDTO) > 0) {
-                        this.sqlSession.commit();
                         return true;
                     }
                 }
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean removeManager(StoreDTO storeDTO) {
+    public boolean removeManager(StoreDTO storeDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeStatus",storeDTO) > 0){
                 if (sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeUserStatus",storeDTO) > 0) {
                     if (sqlSession.update("com.screens.store.dao.sql.StoreDAO.removeMangerFromStore",storeDTO) > 0) {
-                        this.sqlSession.commit();
                         return true;
                     }
                 }
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }

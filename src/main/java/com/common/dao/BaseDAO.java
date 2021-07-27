@@ -5,8 +5,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.TransactionIsolationLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.SQLException;
-
 public class BaseDAO {
     protected SqlSession sqlSession;
     IDBHelper idbHelper;

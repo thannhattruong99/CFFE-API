@@ -44,6 +44,7 @@
                STT.StatusName,
                CM.CameraId,
                CM.CameraName,
+               CM.MACAddress,
                CM.IPAddress,
                CM.RTSPString,
                CM.ImageURL,
@@ -64,7 +65,7 @@
     </update>
     <insert id="createShelf" parameterType="ShelfDTO">
         <selectKey keyProperty="shelfId" resultType="string" order="BEFORE">
-            SELECT UUID() AS shelfId FROM tblShelf LIMIT 1
+            SELECT UUID() AS shelfId LIMIT 1
         </selectKey>
          INSERT INTO tblShelf(shelfId, shelfName, Description, numberStacks, createdTime, UpdatedTime, statusId, StoreId)
          VALUES (#{shelfId},
@@ -115,6 +116,12 @@
     <select id="getShelfCameraMappingStatus" resultMap="getStatus">
         SELECT StatusId FROM tblShelfCameraMapping
         WHERE ShelfId = #{shelfId} AND cameraId = #{cameraId} AND StatusId = 1
+    </select>
+    <select id="countCameraByShelfId" resultType="int">
+        SELECT COUNT(TSCM.CameraId)
+        FROM tblShelfCameraMapping TSCM
+        WHERE TSCM.ShelfId = #{shelfId}
+          AND TSCM.StatusId = 1
     </select>
 <!-- add shelf camera into shelf   -->
     <update id="createShelfCameraOnShelf" flushCache="true">
@@ -180,6 +187,7 @@
             <id property="cameraId" column="CameraId"/>
             <result property="cameraName" column="CameraName"/>
             <result property="ipAddress" column="IPAddress"/>
+            <result property="macAddress" column="MACAddress"/>
             <result property="rtspString" column="RTSPString"/>
             <result property="imageURL" column="ImageURL"/>
             <result property="createdTime" column="CMCreatedTime"/>

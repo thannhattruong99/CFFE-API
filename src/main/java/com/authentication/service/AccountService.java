@@ -42,13 +42,12 @@ public class AccountService extends BaseService {
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("UserId", resultDAO.getUserId());
                 claims.put("UserName", resultDAO.getUserName());
-//                claims.put("StoreId", resultDAO.getStoreId());
                 claims.put("RoleId", resultDAO.getRoleId());
                 resultDAO.setToken(jwtTokenHelper.generateToken(claims, request.getUsername()));
             }
 
         }catch (PersistenceException e){
-            logger.error("Error at ManagerService: " + e.getMessage());
+            logger.error("Error at AccountService: " + e.getMessage());
         }
         return resultDAO;
     }

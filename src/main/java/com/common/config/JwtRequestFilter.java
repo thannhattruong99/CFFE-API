@@ -1,8 +1,8 @@
 package com.common.config;
 
 import com.authentication.dto.AccountDTO;
+import com.authentication.dto.AuthorDTO;
 import com.authentication.service.AccountService;
-import com.filter.dto.AuthorDTO;
 import com.util.FileHelper;
 import com.util.StringHelper;
 import io.jsonwebtoken.Claims;
@@ -15,7 +15,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 

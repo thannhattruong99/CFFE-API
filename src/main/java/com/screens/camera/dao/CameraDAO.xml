@@ -19,11 +19,11 @@
         LIMIT #{offSet}, #{fetchNext}
     </select>
     <select id="getCameraList" resultMap="getCameraList">
-        SELECT TR.totalOfRecord, Camera.CameraId, Camera.CameraName, Camera.ImageURL, Camera.IpAddress, Camera.StoreId, Camera.StoreName, Camera.UpdatedTime, Camera.StatusId, Camera.StatusName
+        SELECT TR.totalOfRecord, Camera.CameraId, Camera.CameraName, Camera.ImageURL,Camera.MACAddress, Camera.IpAddress, Camera.StoreId, Camera.StoreName, Camera.UpdatedTime, Camera.StatusId, Camera.StatusName
         FROM
         (SELECT COUNT(TR.CameraId) AS totalOfRecord FROM
         (SELECT DISTINCT(Camera.CameraId) FROM
-        (SELECT C.CameraId, C.CameraName, ST.StoreId, C.StatusId
+        (SELECT C.CameraId, C.CameraName, ST.StoreId, C.StatusId, C.MACAddress
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
         JOIN tblStackProductCameraMapping
         SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
@@ -34,7 +34,7 @@
         LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1
         LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2
         UNION
-        SELECT C.CameraId, C.CameraName, ST2.StoreId, C.StatusId
+        SELECT C.CameraId, C.CameraName, ST2.StoreId, C.StatusId, C.MACAddress
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
         LEFT JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
         LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
@@ -66,10 +66,10 @@
         </where>
         ) AS TR) TR,
 
-        (SELECT Camera.CameraId, Camera.CameraName, Camera.ImageURL, Camera.IpAddress, Camera.StoreId, Camera.StoreName, Camera.UpdatedTime, Camera.StatusId, Camera.StatusName
+        (SELECT Camera.CameraId, Camera.MACAddress, Camera.CameraName, Camera.ImageURL, Camera.IpAddress, Camera.StoreId, Camera.StoreName, Camera.UpdatedTime, Camera.StatusId, Camera.StatusName
         FROM
         (
-        SELECT C.CameraId, C.CameraName, C.ImageURL, C.IPAddress, C.TypeDetect, ST.StoreId, ST.StoreName, C.UpdatedTime, C.StatusId, STT.StatusName
+        SELECT C.CameraId, C.MACAddress, C.CameraName, C.ImageURL, C.IPAddress, C.TypeDetect, ST.StoreId, ST.StoreName, C.UpdatedTime, C.StatusId, STT.StatusName
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
         JOIN tblStackProductCameraMapping
         SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
@@ -80,7 +80,7 @@
         LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1
         LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2
         UNION
-        SELECT C.CameraId, C.CameraName, C.ImageURL, C.IPAddress, C.TypeDetect, ST2.StoreId, ST2.StoreName,C.UpdatedTime, C.StatusId, STT.StatusName
+        SELECT C.CameraId, C.MACAddress ,C.CameraName, C.ImageURL, C.IPAddress, C.TypeDetect, ST2.StoreId, ST2.StoreName,C.UpdatedTime, C.StatusId, STT.StatusName
         FROM tblCamera C JOIN tblStatus STT ON C.StatusId = STT.StatusId
         LEFT JOIN tblStackProductCameraMapping SPCM ON SPCM.CameraId = C.CameraId AND SPCM.StatusId = 1
         LEFT JOIN tblStack STK ON SPCM.StackId = STK.StackId AND STK.StatusId = 1
@@ -117,8 +117,8 @@
 
     </select>
     <insert id="createCamera">
-        INSERT INTO tblCamera(CameraName, ImageURL, IPAddress, RTSPString, TypeDetect, CreatedTime, UpdatedTime, StatusId)
-        VALUE(#{cameraName}, #{imageURL}, #{ipAddress}, #{rtspString}, #{typeDetect}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId})
+        INSERT INTO tblCamera(CameraName, ImageURL, MACAddress, IPAddress, RTSPString, TypeDetect, CreatedTime, UpdatedTime, StatusId)
+        VALUE(#{cameraName}, #{imageURL}, #{macAddress}, #{ipAddress}, #{rtspString}, #{typeDetect}, convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}), #{statusId})
     </insert>
     <update id="updateCamera">
         UPDATE tblCamera
@@ -127,6 +127,7 @@
                 ImageURL = #{imageURL},
             </if>
             IPAddress = #{ipAddress},
+            MACAddress = #{macAddress},
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime}),
             RTSPString = #{rtspString}
         WHERE CameraId = #{cameraId}
@@ -149,6 +150,7 @@
             C.CameraId,
             C.CameraName,
             C.ImageURL,
+            C.MACAddress,
             C.IPAddress,
             C.RTSPString,
             C.TypeDetect,
@@ -178,6 +180,7 @@
             C.CameraId,
             C.CameraName,
             C.ImageURL,
+            C.MACAddress,
             C.IPAddress,
             C.RTSPString,
             C.TypeDetect,
@@ -252,6 +255,7 @@
             <id property="cameraId" column="CameraId"/>
             <result property="cameraName" column="CameraName"/>
             <result property="imageURL" column="ImageURL"/>
+            <result property="macAddress" column="MACAddress"/>
             <result property="ipAddress" column="IPAddress"/>
             <result property="storeId" column="StoreId"/>
             <result property="storeName" column="StoreName"/>
@@ -267,6 +271,7 @@
         <result property="cameraId" column="CameraId"/>
         <result property="cameraName" column="CameraName"/>
         <result property="imageUrl" column="ImageURL"/>
+        <result property="macAddress" column="MACAddress"/>
         <result property="ipAddress" column="IpAddress"/>
         <result property="rtspString" column="RTSPString"/>
         <result property="typeDetect" column="TypeDetect"/>

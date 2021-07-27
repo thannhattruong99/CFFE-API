@@ -2,6 +2,8 @@ package com.screens.file.listener.detector;
 
 import com.util.FileHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,108 +11,143 @@ import java.io.InputStreamReader;
 
 import static com.util.PathConstant.*;
 
+@Component
 public class DetectService {
     private final static String PERSONS = "PERSONS:";
-//    PERSONS:
+//    Size of persons
     private final static int SIZE = 8;
     private final static int NUMBER_EMOTION_TYPE = 7;
-    private final static int OUTPUT_ANGRY = 0;
-    private final static int OUTPUT_DISGUST = 1;
-    private final static int OUTPUT_FEAR = 2;
-    private final static int OUTPUT_HAPPY = 3;
-    private final static int OUTPUT_SAD = 4;
-    private final static int OUTPUT_SURPRISE = 5;
-    private final static int OUTPUT_NEUTRAL = 6;
+    private static int OUTPUT_ANGRY = 0;
+    private static int OUTPUT_DISGUST = 1;
+    private static int OUTPUT_FEAR = 2;
+    private static int OUTPUT_HAPPY = 3;
+    private static int OUTPUT_NEUTRAL = 4;
+    private static int OUTPUT_SAD = 5;
+    private static int OUTPUT_SURPRISE = 6;
 
-    private static String createHotSpotCommand(String inputFilePath, String outputFilePath){
+    //python version
+    @Value("${python.version}")
+    private String python;
+
+    //    PYTHON COMMON OPTION
+    private static String FPS_ARGUMENT = "--fps";
+    private static String MODEL_ARGUMENT = "--model";
+    private static String WEIGHT_ARGUMENT = "--weight";
+    private static String CONFIDENCE_ARGUMENT = "--confidence";
+
+    //    HOT SPOT CONFIG VALUE
+    @Value("${hotspot.run.path}")
+    private String hotspotRunPath;
+    @Value("${hotspot.prototxt.path}")
+    private String hotspotPrototxtPath;
+    @Value("${hotspot.model.path}")
+    private String hotspotModelPath;
+    @Value("${hotspot.max.disappeared}")
+    private String hotspotMaxDisappeared;
+    @Value("${hotspot.max.distance}")
+    private String hotspotMaxDistance;
+    @Value("${hotspot.confidence}")
+    private String hotspotConfidence;
+
+    // HOTSPOT ARGUMENT
+    private static String HOTSPOT_PROTOTXT_ARGUMENT = "--prototxt";
+    private static String HOTSPOT_INPUT_ARGUMENT = "--input";
+    private static String HOTSPOT_OUTPUT_ARGUMENT = "--output";
+    private static String HOTSPOT_MAX_DISAPPEARED_ARGUMENT = "--maxDisappeared";
+    private static String HOTSPOT_MAX_DISTANCE_ARGUMENT = "--maxDistance";
+
+    //    EMOTION CONFIG VALUE
+    @Value("${emotion.run.path}")
+    public String emotionRunPath;
+    @Value("${emotion.weight.path}")
+    public String emotionWeightPath;
+    @Value("${emotion.confidence}")
+    public String emotionConfidence;
+    @Value("${emotion.fps}")
+    public String emotionFPS;
+    //    EMOTION ARGUMENT
+    public static String EMOTION_VIDEO_ARGUMENT = "--video";
+    public static String EMOTION_SAVE_ARGUMENT = "--save";
+
+
+    private String createHotSpotCommand(String inputFilePath, String outputFilePath){
         String command = "";
         //      python version
-        command += PYTHON38;
-        //        run file path
-        command += " " + FileHelper.getOutProjectPath() + RUN_COUNT_PEOPLE_PATH;
-        //        protxt file path
-        command += " " + PROTXT_ARGUMENT + " " + FileHelper.getOutProjectPath() + PROTXT_PATH;
-        //        count model path
-        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + COUNT_MODEL_PATH;
-        //        input video
-        command += " " + INPUT_VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFilePath;
-        //        output video
-        command += " " + OUTPUT_VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFilePath;
+        command += python;
+        //      run file path
+        command += " " + FileHelper.getOutProjectPath() + hotspotRunPath;
+        //      protxt file path
+        command += " " + HOTSPOT_PROTOTXT_ARGUMENT + " " + FileHelper.getOutProjectPath() + hotspotPrototxtPath;
+        //      count model path
+        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + hotspotModelPath;
+        //      input video
+        command += " " + HOTSPOT_INPUT_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFilePath;
+        //      output video
+        command += " " + HOTSPOT_OUTPUT_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFilePath;
+        //      max disappeared
+        command += " " + HOTSPOT_MAX_DISAPPEARED_ARGUMENT + " " + hotspotMaxDisappeared;
+        //      max distance
+        command += " " + HOTSPOT_MAX_DISTANCE_ARGUMENT + " " + hotspotMaxDistance;
+        //      confidence
+        command += " " + CONFIDENCE_ARGUMENT + " " + hotspotConfidence;
         return command;
     }
 
-    public static int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
-        int numberOfPerson = 0;
+    public int countPerson(String inputFileName, String outputFileName) throws InterruptedException, IOException {
         Runtime rt = Runtime.getRuntime();
         String command = createHotSpotCommand(inputFileName, outputFileName);
-        System.out.println("COMMAND: "  + command);
         Process proc = rt.exec(command);
-        numberOfPerson = readHotSpotConsole(proc);
-        proc.isAlive();
-
-        return numberOfPerson;
+        return readHotSpotConsole(proc);
     }
 
 
-    private static String createDetectEmotionCommand(String inputFileName, String outputFileName){
+    private String createDetectEmotionCommand(String inputFileName, String outputFileName){
         String command = "";
         //        python version
-        command += PYTHON38;
+        command += python;
         //        run file path
-        command += " " + FileHelper.getOutProjectPath() + RUN_EMOTION_PATH;
+        command += " " + FileHelper.getOutProjectPath() + emotionRunPath;
         //        input video
-        command += " " + VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFileName;
+        command += " " + EMOTION_VIDEO_ARGUMENT + " " + FileHelper.getResourcePath() + INPUT_VIDEO_PATH + inputFileName;
         //       fps video
-        command += " " + FPS_ARGUMENT + " " + DETECT_EMOTION_FPS;
+        command += " " + FPS_ARGUMENT + " " + emotionFPS;
+        //      confidence
+        command += " " + CONFIDENCE_ARGUMENT + " " + emotionConfidence;
         //        output video
-        command += " " + SAVE_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFileName;
-        //        emotion model path
-        command += " " + MODEL_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_MODEL_PATH;
+        command += " " + EMOTION_SAVE_ARGUMENT + " " + FileHelper.getResourcePath() + OUTPUT_VIDEO_PATH + outputFileName;
         //        emotion weight path
-        command += " " + WEIGHT_ARGUMENT + " " + FileHelper.getOutProjectPath() + EMOTION_WEIGHT_PATH;
+        command += " " + WEIGHT_ARGUMENT + " " + FileHelper.getOutProjectPath() + emotionWeightPath;
+
 
         return command;
     }
 
     // LuanNM temp
-    public static EmotionDTO countEmotion(String inputFileName, String outputFileName) throws InterruptedException, IOException {
+    public EmotionDTO countEmotion(String inputFileName, String outputFileName) throws InterruptedException, IOException {
         EmotionDTO emotionDTO = null;
         Runtime rt = Runtime.getRuntime();
         String command = createDetectEmotionCommand(inputFileName, outputFileName);
         Process proc = rt.exec(command);
-        System.out.println("COMMAND: "  + command);
         emotionDTO = readEmotionConsole(proc);
-        proc.isAlive();
         return emotionDTO;
     }
 
-    private static int readHotSpotConsole(Process proc) throws IOException {
+    private int readHotSpotConsole(Process proc) throws IOException {
         BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(proc.getInputStream()));
 
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(proc.getErrorStream()));
-
         // Read the output from the command
-        System.out.println("Here is the standard output of the command:\n");
         StringBuilder stringBuilder = new StringBuilder();
 
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
             stringBuilder.append(s);
         }
-        // Read any errors from the attempted command
-        //        System.out.println("Here is the standard error of the command (if any):\n");
-        //        while ((s = stdError.readLine()) != null) {
-        //            System.out.println(s);
-        //            stringBuilder.append(s);
-        //        }
 
         return getHotSpotResult(stringBuilder);
     }
 
-    public static int getHotSpotResult(StringBuilder stringBuilder){
+    public int getHotSpotResult(StringBuilder stringBuilder){
         int index = stringBuilder.indexOf(PERSONS) + SIZE;
         stringBuilder.delete(0, index);
         try {
@@ -120,40 +157,29 @@ public class DetectService {
         }
     }
 
-    private static EmotionDTO readEmotionConsole(Process proc) throws IOException {
+    private EmotionDTO readEmotionConsole(Process proc) throws IOException {
         BufferedReader stdInput = new BufferedReader(new
                 InputStreamReader(proc.getInputStream()));
 
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(proc.getErrorStream()));
-
         // Read the output from the command
-        System.out.println("Here is the standard output of the command:\n");
         String outputDetect = null;
         String s = null;
         while ((s = stdInput.readLine()) != null) {
             outputDetect = s;
         }
 
-        // Read any errors from the attempted command
-        System.out.println("Here is the standard error of the command (if any):\n");
-        while ((s = stdError.readLine()) != null) {
-            System.out.println(s);
-        }
-
         // parse string tobe EmotionDTO
-        System.out.println("output detect is : " + outputDetect);
         if (StringUtils.isEmpty(outputDetect)){
             return null;
         }
         String[] parts = outputDetect.split(",");
-        if (!validOuputEmotion(parts)) {
+        if (!validOutputEmotion(parts)) {
             return null;
         }
-        return convertOutputDectectToEmotionDTO(parts);
+        return convertOutputDetectToEmotionDTO(parts);
     }
 
-    private static boolean validOuputEmotion(String[] parts){
+    private boolean validOutputEmotion(String[] parts){
         if (parts.length != NUMBER_EMOTION_TYPE) {
             return false;
         }
@@ -167,7 +193,7 @@ public class DetectService {
         return true;
     }
 
-    private static EmotionDTO convertOutputDectectToEmotionDTO(String[] parts) {
+    private EmotionDTO convertOutputDetectToEmotionDTO(String[] parts) {
         EmotionDTO emotionDTO = new EmotionDTO();
         emotionDTO.setNumberOfAngry(Integer.parseInt(parts[OUTPUT_ANGRY]));
         emotionDTO.setNumberOfDisgust(Integer.parseInt(parts[OUTPUT_DISGUST]));

@@ -17,6 +17,7 @@
             TC.CameraId AS STACK_CameraId,
             TC.CameraName AS CAM_CameraName,
             TC.ImageURL AS CAM_ImageURL,
+            TC.MACAddress AS CAM_MACAddress,
             TC.IPAddress AS CAM_IPAddress,
             TC.RTSPString AS CAM_RTSPString,
             TC.TypeDetect AS CAM_TypeDetect,
@@ -89,6 +90,7 @@
                 <result property="cameraId" column="STACK_CameraId"/>
                 <result property="cameraName" column="CAM_CameraName"/>
                 <result property="imageUrl" column="CAM_ImageURL"/>
+                <result property="macAddress" column="CAM_MACAddress"/>
                 <result property="ipAddress" column="CAM_IPAddress"/>
                 <result property="rtspString" column="CAM_RTSPString"/>
                 <result property="typeDetect" column="CAM_TypeDetect"/>
@@ -117,13 +119,6 @@
     </resultMap>
 
 
-
-
-
-
-
-
-
     <select id="getStackListByProductIdStoreId" resultMap="getStackListByProductIdStoreId">
         SELECT A1.CategoryId,
         CN.CategoryName,
@@ -143,6 +138,7 @@
             TC.CameraId AS STACK_CameraId,
             TC.CameraName AS CAM_CameraName,
             TC.ImageURL AS CAM_ImageURL,
+            TC.MACAddress AS CAM_MACAddress,
             TC.IPAddress AS CAM_IPAddress,
             TC.RTSPString AS CAM_RTSPString,
             TC.TypeDetect AS CAM_TypeDetect,
@@ -215,6 +211,7 @@
                 <result property="cameraId" column="STACK_CameraId"/>
                 <result property="cameraName" column="CAM_CameraName"/>
                 <result property="imageUrl" column="CAM_ImageURL"/>
+                <result property="macAddress" column="CAM_MACAddress"/>
                 <result property="ipAddress" column="CAM_IPAddress"/>
                 <result property="rtspString" column="CAM_RTSPString"/>
                 <result property="typeDetect" column="CAM_TypeDetect"/>
@@ -257,6 +254,7 @@
             TC.CameraId AS STACK_CameraId,
             TC.CameraName AS CAM_CameraName,
             TC.ImageURL AS CAM_ImageURL,
+            TC.MACAddress AS CAM_MACAddress,
             TC.IPAddress AS CAM_IPAddress,
             TC.RTSPString AS CAM_RTSPString,
             TC.TypeDetect AS CAM_TypeDetect,
@@ -302,6 +300,7 @@
             <result property="cameraName" column="CAM_CameraName"/>
             <result property="imageUrl" column="CAM_ImageURL"/>
             <result property="ipAddress" column="CAM_IPAddress"/>
+            <result property="macAddress" column="CAM_MACAddress"/>
             <result property="rtspString" column="CAM_RTSPString"/>
             <result property="typeDetect" column="CAM_TypeDetect"/>
             <result property="createTime" column="CAM_CreatedTime"/>

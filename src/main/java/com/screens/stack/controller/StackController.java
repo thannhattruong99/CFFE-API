@@ -1,7 +1,7 @@
 package com.screens.stack.controller;
 
+import com.authentication.dto.AuthorDTO;
 import com.common.form.ResponseCommonForm;
-import com.filter.dto.AuthorDTO;
 import com.screens.stack.dto.RequestGetStackListByProductForm;
 import com.screens.stack.form.*;
 import com.screens.stack.service.StackService;

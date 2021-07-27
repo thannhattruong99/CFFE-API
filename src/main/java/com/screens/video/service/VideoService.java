@@ -1,7 +1,7 @@
 package com.screens.video.service;
 
+import com.authentication.dto.AuthorDTO;
 import com.common.service.BaseService;
-import com.filter.dto.AuthorDTO;
 import com.screens.video.dao.VideoDAO;
 import com.screens.video.dto.VideoDTO;
 import com.screens.video.form.RequestGetVideoListForm;
@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.util.Calendar;
 
 @Service
@@ -32,6 +31,7 @@ public class VideoService extends BaseService {
     private static final String TIME_END_DAY = " 23:59:59";
     private static final int COUNT_TYPE_VIDEO = 1;
     private static final int EMOTION_TYPE_VIDEO = 2;
+    private static final int DAY_BEFORE = -10;
 
     @Autowired
     private VideoDAO videoDAO;
@@ -109,12 +109,12 @@ public class VideoService extends BaseService {
 
         // nhap start ko end => thoi diem hien tai
         if (StringUtils.isNotEmpty(requestForm.getDayStart()) && StringUtils.isEmpty(requestForm.getDayEnd())) {
-            videoDTO.setDayEnd(getTime(0)+TIME_END_DAY);
+            videoDTO.setDayEnd(getTime(0) + TIME_END_DAY);
         }
-        // start end null => lay 3 ngay ngan nhat
+        // start end null => lay DAY_BEFORE ngay ngan nhat
         if (StringUtils.isEmpty(requestForm.getDayStart()) && StringUtils.isEmpty(requestForm.getDayEnd())) {
-            videoDTO.setDayStart(getTime(-3)+TIME_BEGIN_DAY);
-            videoDTO.setDayEnd(getTime(0)+TIME_END_DAY);
+            videoDTO.setDayStart(getTime(DAY_BEFORE) + TIME_BEGIN_DAY);
+            videoDTO.setDayEnd(getTime(0) + TIME_END_DAY);
         }
         return videoDTO;
     }
@@ -129,10 +129,8 @@ public class VideoService extends BaseService {
     private boolean validDayType(String date){
         boolean valid = false;
         try {
-            // ResolverStyle.STRICT for 30, 31 days checking, and also leap year.
             LocalDate.parse(date,
                     DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-//                            .withResolverStyle(ResolverStyle.STRICT)
             );
             valid = true;
         } catch (DateTimeParseException e) {

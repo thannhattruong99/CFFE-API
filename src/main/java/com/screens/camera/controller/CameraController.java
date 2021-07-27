@@ -1,7 +1,7 @@
 package com.screens.camera.controller;
 
+import com.authentication.dto.AuthorDTO;
 import com.common.form.ResponseCommonForm;
-import com.filter.dto.AuthorDTO;
 import com.screens.camera.form.*;
 import com.screens.camera.service.CameraService;
 import com.util.ResponseSupporter;

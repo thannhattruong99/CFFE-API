@@ -5,6 +5,7 @@ import com.screens.manager.dto.ManagerDTO;
 import com.screens.manager.form.ResponseManagerDetailForm;
 import com.screens.manager.form.ResponseManagerListForm;
 import com.util.IDBHelper;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -32,15 +33,17 @@ public class ManagerDAO extends BaseDAO {
         }
     }
 
-    public boolean createManager(ManagerDTO managerDTO){
+    public boolean createManager(ManagerDTO managerDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.insert("ManagerDAO.insertManger", managerDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
@@ -55,28 +58,32 @@ public class ManagerDAO extends BaseDAO {
         }
     }
 
-    public boolean updateManagerInformation(ManagerDTO managerDTO){
+    public boolean updateManagerInformation(ManagerDTO managerDTO) throws PersistenceException{
         try {
             openSession();
             if(sqlSession.update("ManagerDAO.updateManagerInformation", managerDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean resetPassword(ManagerDTO managerDTO){
+    public boolean resetPassword(ManagerDTO managerDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.update("ManagerDAO.resetPassword", managerDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
@@ -100,15 +107,17 @@ public class ManagerDAO extends BaseDAO {
         }
     }
 
-    public boolean updateManagerStatus(ManagerDTO managerDTO){
+    public boolean updateManagerStatus(ManagerDTO managerDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.update("ManagerDAO.updateManagerStatus", managerDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
@@ -126,15 +135,17 @@ public class ManagerDAO extends BaseDAO {
         }
     }
 
-    public boolean updatePassword(ManagerDTO managerDTO){
+    public boolean updatePassword(ManagerDTO managerDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.update("ManagerDAO.updatePassword", managerDTO) > 0){
-                sqlSession.commit(true);
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }

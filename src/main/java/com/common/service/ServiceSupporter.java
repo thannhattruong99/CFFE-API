@@ -8,7 +8,8 @@ public enum ServiceSupporter {
     MSG_059("Duplicate entry CategoryName","MSG-059"),
     MSG_060("Duplicate entry ProductName","MSG-060"),
     MSG_061("Duplicate entry ShelfName","MSG-061"),
-    MSG_062("Duplicate entry StoreName","MSG-062");
+    MSG_062("Duplicate entry StoreName","MSG-062"),
+    MSG_127("Duplicate entry MACAddress","MSG-127");
 
     private String msgKey;
     private String msgCode;

@@ -4,30 +4,46 @@
 <mapper namespace="com.screens.video.dao.VidDAO">
 
     <select id="getShelfCameraMappingId" resultType="java.lang.String">
-        SELECT ShelfCameraMappingId
-        FROM tblShelfCameraMapping
-        WHERE CameraId = #{cameraId}
-        AND AddedTime &lt;= #{startedTime}
-        AND (CASE WHEN RemovedTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
-            ELSE RemovedTime END)  &gt;= #{endedTime}
-        ORDER BY AddedTime DESC
+        SELECT TS.ShelfCameraMappingId
+        FROM tblShelfCameraMapping TS
+            LEFT JOIN tblCamera TC ON (TC.CameraId = TS.CameraId)
+        WHERE TC.MACAddress = #{macAddress}
+        AND TS.AddedTime &lt;= #{startedTime}
+        AND (CASE WHEN TS.RemovedTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
+            ELSE TS.RemovedTime END)  &gt;= #{endedTime}
+        ORDER BY TS.AddedTime DESC
         LIMIT 1
     </select>
 
     <select id="getStackProductCameraMappingId" resultType="java.lang.String">
-        SELECT StackProductCameraMappingId
-        FROM tblStackProductCameraMapping
-        WHERE CameraId = #{cameraId}
-          AND AddedCameraTime &lt;= #{startedTime}
-          AND (CASE WHEN RemovedCameraTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
-                    ELSE RemovedCameraTime END)  &gt;= #{endedTime}
-        ORDER BY AddedCameraTime DESC
-            LIMIT 1
+        SELECT TS.StackProductCameraMappingId
+        FROM tblStackProductCameraMapping TS
+            LEFT JOIN tblCamera TC ON (TC.CameraId = TS.CameraId)
+        WHERE TC.MACAddress = #{macAddress}
+          AND TS.AddedCameraTime &lt;= #{startedTime}
+          AND (CASE WHEN TS.RemovedCameraTime IS NULL THEN convert_tz(now(),@@session.time_zone,'+07:00')
+                    ELSE TS.RemovedCameraTime END)  &gt;= #{endedTime}
+        ORDER BY TS.AddedCameraTime DESC
+        LIMIT 1
     </select>
 
-<!--    <select id="countByCameraIdAndTime" resultType="int">-->
-<!--        -->
-<!--    </select>-->
+    <select id="countVideoByMacAndTimeType1" resultType="int">
+        SELECT COUNT(TV.VideoId) AS TOTALRECORD
+        FROM tblVideo TV
+                 LEFT JOIN tblShelfCameraMapping TSCM ON (TSCM.ShelfCameraMappingId = TV.ShelfCameraMappingId)
+                 LEFT JOIN tblCamera TC ON (TSCM.CameraId = TC.CameraId)
+        WHERE TV.StartedTime = #{startedTime}
+          AND TC.MACAddress = #{macAddress}
+    </select>
+
+    <select id="countVideoByMacAndTimeType2" resultType="int">
+        SELECT COUNT(TV.VideoId) AS TOTALRECORD
+        FROM tblVideo TV
+                 LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.StackProductCameraMappingId = TV.StackProductCameraMappingId)
+                 LEFT JOIN tblCamera TC ON (TSCM.CameraId = TC.CameraId)
+        WHERE TV.StartedTime = #{startedTime}
+          AND TC.MACAddress = #{macAddress}
+    </select>
 
     <select id="getVideoCountList" resultMap="getVideoCountList">
         SELECT TV.VideoId,
@@ -36,6 +52,8 @@
                TV.StartedTime,
                TV.EndedTime,
                TV.StatusId,
+               TV.CreatedTime AS VID_CreatedTime,
+               TV.UpdatedTime AS VID_UpdatedTime,
                TS.ShelfId,
                TS.ShelfName,
                TT.StoreId,
@@ -45,6 +63,8 @@
                 THS.EndedTime,
                 THS.TotalPeople,
                 THS.Description,
+                THS.CreatedTime,
+                THS.UpdatedTime,
                TTTT.totalOfRecord
         FROM tblVideo TV
                  LEFT JOIN tblShelfCameraMapping TSCM ON (TSCM.ShelfCameraMappingId = TV.ShelfCameraMappingId)
@@ -58,7 +78,8 @@
                           LEFT JOIN tblShelf TS ON (TS.ShelfId = TSCM.ShelfId)
                           LEFT JOIN tblStore TT ON (TT.StoreId = TS.StoreId)
                  WHERE
-                    TV.StartedTime &gt;= #{dayStart}
+                    TS.ShelfId IS NOT NULL
+                    AND TV.StartedTime &gt;= #{dayStart}
                     AND TV.EndedTime &lt;= #{dayEnd}
                 <if test="storeId != null">
                     AND TS.StoreId = #{storeId}
@@ -68,7 +89,8 @@
                 </if>
              ) TTTT
         WHERE
-            TV.StartedTime &gt;= #{dayStart}
+            TS.ShelfId IS NOT NULL
+            AND TV.StartedTime &gt;= #{dayStart}
             AND TV.EndedTime &lt;= #{dayEnd}
             <if test="storeId != null">
                 AND TS.StoreId = #{storeId}
@@ -95,12 +117,16 @@
                     <result property="startedTime" column="StartedTime"/>
                     <result property="endedTime" column="EndedTime"/>
                     <result property="statusId" column="StatusId"/>
+                    <result property="createdTime" column="VID_CreatedTime"/>
+                    <result property="updatedTime" column="VID_UpdatedTime"/>
                     <collection property="hotSpot" ofType="HotSpotResponseSupporter">
                         <result property="hotspotId" column="HotspotId"/>
                         <result property="startedTime" column="StartedTime"/>
                         <result property="endedTime" column="EndedTime"/>
                         <result property="TotalPeople" column="TotalPeople"/>
                         <result property="description" column="description"/>
+                        <result property="createdTime" column="CreatedTime"/>
+                        <result property="updatedTime" column="UpdatedTime"/>
                     </collection>
                 </collection>
             </collection>
@@ -116,6 +142,8 @@
                 TV.StartedTime,
                 TV.EndedTime,
                 TV.StatusId,
+                TV.CreatedTime AS VID_CreatedTime,
+                TV.UpdatedTime AS VID_UpdatedTime,
                 TS.ShelfId,
                 TS.ShelfName,
                 TT.StoreId,
@@ -132,6 +160,8 @@
                 THS.Surprise,
                 THS.Neutral,
                 THS.Description,
+                THS.CreatedTime,
+                THS.UpdatedTime,
                 TTTT.totalOfRecord
         FROM tblVideo TV
             LEFT JOIN tblStackProductCameraMapping TSCM ON (TSCM.StackProductCameraMappingId = TV.StackProductCameraMappingId)
@@ -176,6 +206,8 @@
                 <result property="startedTime" column="StartedTime"/>
                 <result property="endedTime" column="EndedTime"/>
                 <result property="statusId" column="StatusId"/>
+                <result property="createdTime" column="VID_CreatedTime"/>
+                <result property="updatedTime" column="VID_UpdatedTime"/>
                 <collection property="emotion" ofType="EmotionResponseSupporter">
                     <id property="emotionId" column="EmotionId"/>
                     <result property="videoName" column="VideoName"/>
@@ -188,6 +220,8 @@
                     <result property="surprise" column="Surprise"/>
                     <result property="neutral" column="Neutral"/>
                     <result property="description" column="Description"/>
+                    <result property="createdTime" column="CreatedTime"/>
+                    <result property="updatedTime" column="UpdatedTime"/>
                 </collection>
             </collection>
         </collection>
@@ -202,18 +236,30 @@
 <!--    </insert>-->
 
     <insert id="insertVideoProperty" parameterType="VideoProperty">
-        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,EndedTime,ShelfCameraMappingId,StackProductCameraMappingId,StatusId) values
-            (#{videoNameOriginal},#{videoUrl},#{startedTime},
-            #{endedTime},#{shelfCameraMappingId},#{stackProductCameraMappingId},#{statusId})
+        INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,EndedTime,ShelfCameraMappingId,StackProductCameraMappingId,StatusId,CreatedTime,UpdatedTime) values
+            (#{videoNameOriginal},
+             #{videoUrl},
+             #{startedTime},
+             #{endedTime},
+             #{shelfCameraMappingId},
+             #{stackProductCameraMappingId},
+             #{statusId},
+             convert_tz(now(),@@session.time_zone,'+07:00'),
+             convert_tz(now(),@@session.time_zone,'+07:00'))
     </insert>
 
     <insert id="insertHotSpot" parameterType="VideoProperty">
-        INSERT INTO tblHotSpot (StartedTime,EndedTime,TotalPeople,ShelfCameraMappingId) values
-        (#{startedTime},#{endedTime},#{totalPerson},#{shelfCameraMappingId})
+        INSERT INTO tblHotSpot (StartedTime,EndedTime,TotalPeople,ShelfCameraMappingId,CreatedTime,UpdatedTime) values
+        (#{startedTime},
+         #{endedTime},
+         #{totalPerson},
+         #{shelfCameraMappingId},
+         convert_tz(now(),@@session.time_zone,'+07:00'),
+         convert_tz(now(),@@session.time_zone,'+07:00'))
     </insert>
 
     <insert id="insertEmotion" parameterType="VideoProperty">
-        INSERT INTO tblEmotion (StartedTime,EndedTime,Angry,Disgust,Fear,Happy,Sad,Surprise,Neutral,StackProductCameraMappingId) values
+        INSERT INTO tblEmotion (StartedTime,EndedTime,Angry,Disgust,Fear,Happy,Sad,Surprise,Neutral,StackProductCameraMappingId,CreatedTime,UpdatedTime) values
             (#{startedTime},
              #{endedTime},
              #{emotions.numberOfAngry},
@@ -223,7 +269,9 @@
              #{emotions.numberOfSad},
              #{emotions.numberOfSurprise},
              #{emotions.numberOfNeutral},
-             #{stackProductCameraMappingId})
+             #{stackProductCameraMappingId},
+             convert_tz(now(),@@session.time_zone,'+07:00'),
+             convert_tz(now(),@@session.time_zone,'+07:00'))
     </insert>
 
 </mapper>

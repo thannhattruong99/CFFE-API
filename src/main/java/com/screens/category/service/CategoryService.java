@@ -63,7 +63,7 @@ public class CategoryService extends BaseService {
                 addErrorMessage(response, MessageConstant.MSG_029);
             } else {
                 if ((res.getStatusId() == 1) && (categoryDTO.getStatusId() == 2)) {
-                    System.out.println("ACTION: CATEGORY ACTIVE => INACTIVE");
+                    // System.out.println("ACTION: CATEGORY ACTIVE => INACTIVE");
                     //check co ton tai PRODUCT nao hay khong
                     if (!categoryDAO.checkHaveProductUsing(categoryDTO)) {
                         categoryDAO.changeStatus(categoryDTO);
@@ -71,7 +71,7 @@ public class CategoryService extends BaseService {
                         addErrorMessage(response,MessageConstant.MSG_109);
                     }
                 } else if ((res.getStatusId() == 2) && (categoryDTO.getStatusId() == 1)) {
-                    System.out.println("ACTION: CATEGORY INACTIVE => ACTIVE");
+                    // System.out.println("ACTION: CATEGORY INACTIVE => ACTIVE");
                     categoryDAO.changeStatus(categoryDTO);
                 } else {
                     addErrorMessage(response,MessageConstant.MSG_110);

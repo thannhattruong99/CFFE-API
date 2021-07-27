@@ -5,6 +5,7 @@ import com.screens.stack.dto.StackDTO;
 import com.screens.stack.form.ResponseStackDetailForm;
 import com.screens.stack.form.ResponseStackListForm;
 import com.util.IDBHelper;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -50,20 +51,22 @@ public class StackDAO extends BaseDAO {
         }
     }
 
-    public boolean addProduct(StackDTO stackDTO) {
+    public boolean addProduct(StackDTO stackDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addProduct",stackDTO) > 0){
-                this.sqlSession.commit();
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean addCamera(StackDTO stackDTO) {
+    public boolean addCamera(StackDTO stackDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.activeStack",stackDTO) > 0) {
@@ -75,32 +78,36 @@ public class StackDAO extends BaseDAO {
                 }
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean removeProduct(StackDTO stackDTO) {
+    public boolean removeProduct(StackDTO stackDTO) throws PersistenceException {
         try{
             openSession();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.removeProduct",stackDTO) > 0){
-                this.sqlSession.commit();
                 return true;
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean removeCamera(StackDTO stackDTO) {
+    public boolean removeCamera(StackDTO stackDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addNewRecordMapping",stackDTO) > 0){
                 if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateCameraPending",stackDTO) > 0){
                     if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateStackPending",stackDTO) > 0){
                         if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.removeCamera",stackDTO) > 0){
-                            this.sqlSession.commit();
                             return true;
                         }
                     }
@@ -108,20 +115,25 @@ public class StackDAO extends BaseDAO {
                 }
             }
             return false;
-        }finally {
+        } catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }
 
-    public boolean changeStatus(StackDTO stackDTO) {
+    public boolean changeStatus(StackDTO stackDTO) throws PersistenceException{
         try{
             openSession();
             if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.changeStatus",stackDTO) > 0){
-                this.sqlSession.commit();
                 return true;
             }
             return false;
-        }finally {
+        }catch (PersistenceException persistenceException) {
+            this.sqlSession.rollback();
+            throw persistenceException;
+        } finally {
             closeSession();
         }
     }

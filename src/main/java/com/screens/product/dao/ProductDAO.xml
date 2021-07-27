@@ -244,7 +244,7 @@
 
     <insert id="createProduct"  parameterType="ProductDTO">
         <selectKey keyProperty="productId" resultType="String" order="BEFORE">
-            SELECT UUID() AS productId FROM tblProduct LIMIT 1
+            SELECT UUID() AS productId LIMIT 1
         </selectKey>
         INSERT INTO tblProduct (ProductId,ProductName, ImageURL, Description, CreatedTime,
                               UpdatedTime, StatusId)
