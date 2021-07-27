@@ -24,10 +24,10 @@ public class AccountDAO extends BaseDAO {
 
 
 
-    public ResponseLoginForm login(RequestLoginForm request){
+    public ResponseLoginForm login(AccountDTO accountDTO){
         try{
             openSession();
-            return sqlSession.selectOne("AccountDAO.login", request);
+            return sqlSession.selectOne("AccountDAO.login", accountDTO);
         }finally {
             closeSession();
         }

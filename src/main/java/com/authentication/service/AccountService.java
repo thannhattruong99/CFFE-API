@@ -6,6 +6,7 @@ import com.authentication.form.RequestLoginForm;
 import com.authentication.form.ResponseLoginForm;
 import com.common.config.JwtTokenHelper;
 import com.common.service.BaseService;
+import com.util.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,8 +38,10 @@ public class AccountService extends BaseService {
 
     public ResponseLoginForm checkLogin(RequestLoginForm request){
         ResponseLoginForm resultDAO = null;
+        AccountDTO accountDTO = new AccountDTO();
         try{
-            resultDAO = accountDAO.login(request);
+            convertRequestLoginFormToAccountDTO(request, accountDTO);
+            resultDAO = accountDAO.login(accountDTO);
             if(resultDAO != null){
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("UserId", resultDAO.getUserId());
@@ -46,9 +50,14 @@ public class AccountService extends BaseService {
                 resultDAO.setToken(jwtTokenHelper.generateToken(claims, request.getUsername()));
             }
 
-        }catch (PersistenceException e){
+        }catch (PersistenceException | NoSuchAlgorithmException e){
             logger.error("Error at AccountService: " + e.getMessage());
         }
         return resultDAO;
     }
+    private void convertRequestLoginFormToAccountDTO(RequestLoginForm request, AccountDTO accountDTO) throws NoSuchAlgorithmException {
+        accountDTO.setUserName(request.getUsername());
+        accountDTO.setPassword(StringHelper.toHexString(StringHelper.getSHA(request.getPassword())));
+    }
+
 }
