@@ -21,7 +21,7 @@ public class AccountController {
     private AccountService accountService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String createAuthenticationToken(@RequestBody RequestLoginForm authenticationRequest) {
+    public String login(@RequestBody RequestLoginForm authenticationRequest) {
 
         ResponseLoginForm response = accountService
                 .checkLogin(authenticationRequest);

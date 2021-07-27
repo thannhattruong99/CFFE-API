@@ -17,7 +17,7 @@
         JOIN tblRole R ON R.RoleId = U.RoleId
         LEFT JOIN tblUserStoreMapping USM ON USM.UserId = U.UserId AND USM.StatusId = 1
         LEFT JOIN tblStore ST ON USM.StoreId = ST.StoreId
-        WHERE U.UserName = BINARY  #{username} AND U.Password = BINARY  #{password}
+        WHERE U.UserName = BINARY  #{userName} AND U.Password = BINARY  #{password}
     </select>
     <resultMap id="getAccountInformation" type="AccountDTO">
         <result property="userName" column="UserName"/>

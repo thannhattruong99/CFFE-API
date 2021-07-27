@@ -85,7 +85,7 @@
     <insert id="insertManger">
         INSERT INTO tblUser(Fullname, Username, Password, RoleId, ImageURL, Gender,
                             BirthDate, IdentifyCard, Phone, Email, Address, DistrictId, statusId, CreatedTime, UpdatedTime)
-        VALUES(#{fullName}, #{userName}, #{password}, #{roleId},#{imageURL}, #{gender}, #{birthDate}, #{identifyCard},
+        VALUES(#{fullName}, #{userName}, #{hashPassword}, #{roleId},#{imageURL}, #{gender}, #{birthDate}, #{identifyCard},
                #{phone}, #{email}, #{address}, #{districtId}, #{statusId},
                convert_tz(now(),@@session.time_zone,#{createdTime}), convert_tz(now(),@@session.time_zone,#{createdTime}))
     </insert>
