@@ -143,7 +143,7 @@
 <!--    Remove shelfCamera from shelf-->
     <update id="removeShelfCameraFromShelf" flushCache="true">
         UPDATE tblShelf
-        SET StatusId = 3,
+        SET StatusId = #{statusId},
             UpdatedTime = convert_tz(now(),@@session.time_zone,#{updatedTime})
         WHERE ShelfId = #{shelfId}
     </update>
