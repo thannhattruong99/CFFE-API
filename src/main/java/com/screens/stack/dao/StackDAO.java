@@ -177,6 +177,19 @@ public class StackDAO extends BaseDAO {
         }
     }
 
+    public boolean checkCameraTypeEmotion(StackDTO stackDTO) {
+        try{
+            openSession();
+            StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkCameraTypeEmotion",stackDTO);
+            if(rs.getTotalOfRecord() <= 0){
+                return false;
+            }
+            return true;
+        }finally {
+            closeSession();
+        }
+    }
+
     public boolean checkStackHaveProduct(StackDTO stackDTO) {
         try {
             openSession();
