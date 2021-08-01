@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseService {
-    protected static final int DEFAULT_OFF_SET = 0;
     protected static final int DEFAULT_FETCH_NEXT = 15;
     protected static final int ADD_ACTION = 1;
     protected static final int REMOVE_ACTION = 2;

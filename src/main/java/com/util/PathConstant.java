@@ -15,7 +15,7 @@ public class PathConstant {
     public static final String MSG_RELATIVE_PATH = "messages/msg";
     public static final String REXP_RESOURCE_PATH = "/resources/**";
     public static final String REXP_ALL_PATH = "/**";
-    public static final String SERVER_PATTERN = "http://35.240.143.111:9091/*";
+    public static final String SERVER_PATTERN = "http://35.198.194.159:9091/*";
     public static final String LOCAL_PATTERN = "http://localhost:9091/*";
     public static final String PROJECT_SERVER_PATH = "CapstoneAPI/target";
     public static final String PROJECT_LOCAL_PATH = "CapstoneAPI";

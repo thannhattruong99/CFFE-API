@@ -18,13 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static com.util.MessageConstant.MSG_124;
 
 @Service
 public class ManagerService extends BaseService {
-
     private static final Logger logger = LoggerFactory.getLogger(ManagerService.class);
 
     @Autowired
@@ -60,9 +62,16 @@ public class ManagerService extends BaseService {
 
     public ResponseCommonForm createManger(RequestCreateManagerForm requestForm){
         ResponseCommonForm responseForm = new ResponseCommonForm();
+        if(isValidBirthDate(requestForm.getBirthDate())){
+            ArrayList<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MessageConstant.MSG_048);
+            responseForm.setErrorCodes(errorCodes);
+            return responseForm;
+        }
+
         ManagerDTO managerDTO = new ManagerDTO();
-        convertRequestCreateManagerFormToManagerDTO(requestForm, managerDTO);
         try {
+            convertRequestCreateManagerFormToManagerDTO(requestForm, managerDTO);
             if(managerDAO.createManager(managerDTO)){
                 String msgContent = "Username: " + managerDTO.getUserName() +
                                     "\nPassword: " + managerDTO.getPassword();
@@ -172,11 +181,15 @@ public class ManagerService extends BaseService {
 
     public ResponseCommonForm changePassword(RequestChangePasswordForm requestForm, AuthorDTO authorDTO){
         ManagerDTO managerDTO = new ManagerDTO();
-        convertRequestChangePasswordFormToManagerDTO(requestForm, managerDTO, authorDTO);
+        try {
+            convertRequestChangePasswordFormToManagerDTO(requestForm, managerDTO, authorDTO);
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("Error at ManagerService: " + e.getMessage());
+        }
         ResponseCommonForm responseForm = checkChangePasswordBusiness(requestForm, managerDTO);
         if(responseForm.getErrorCodes() == null){
             try {
-                    managerDAO.updatePassword(managerDTO);
+                managerDAO.updatePassword(managerDTO);
             }catch (PersistenceException e){
                 logger.error("Error at ManagerService: " + e.getMessage());
             }
@@ -184,10 +197,12 @@ public class ManagerService extends BaseService {
         return responseForm;
     }
 
-    private void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO){
+    private void convertRequestCreateManagerFormToManagerDTO(RequestCreateManagerForm requestForm, ManagerDTO managerDTO) throws NoSuchAlgorithmException {
         managerDTO.setFullName(requestForm.getFullName());
         managerDTO.setUserName(generateUserNameFromFullName(requestForm.getFullName()));
-        managerDTO.setPassword(StringHelper.generatePassword(PASSWORD_LENGTH));
+        String password = StringHelper.generatePassword(PASSWORD_LENGTH);
+        managerDTO.setPassword(password);
+        managerDTO.setHashPassword(StringHelper.toHexString(StringHelper.getSHA(password)));
         managerDTO.setRoleId(MANAGER_ROLE);
         if (StringUtils.isNotEmpty(requestForm.getImageURL())) {
             managerDTO.setImageURL(requestForm.getImageURL());
@@ -293,13 +308,13 @@ public class ManagerService extends BaseService {
         managerDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 
-    private void convertRequestChangePasswordFormToManagerDTO(RequestChangePasswordForm requestForm, ManagerDTO managerDTO, AuthorDTO authorDTO){
+    private void convertRequestChangePasswordFormToManagerDTO(RequestChangePasswordForm requestForm, ManagerDTO managerDTO, AuthorDTO authorDTO) throws NoSuchAlgorithmException {
         managerDTO.setUserName(requestForm.getUserName());
         if(authorDTO != null){
             managerDTO.setUserName(authorDTO.getUserName());
         }
-        managerDTO.setPassword(requestForm.getOldPassword());
-        managerDTO.setNewPassword(requestForm.getNewPassword());
+        managerDTO.setPassword(StringHelper.toHexString(StringHelper.getSHA(requestForm.getOldPassword())));
+        managerDTO.setNewPassword(StringHelper.toHexString(StringHelper.getSHA(requestForm.getNewPassword())));
     }
 
     private ResponseCommonForm checkChangePasswordBusiness(RequestChangePasswordForm requestForm, ManagerDTO managerDTO){
@@ -313,9 +328,18 @@ public class ManagerService extends BaseService {
                 logger.error("Error at ManagerService: " + e.getMessage());
             }
         }else{
-            addErrorMessage(responseForm,MessageConstant.MSG_076);
+            addErrorMessage(responseForm,MessageConstant.MSG_007);
         }
 
         return responseForm;
+    }
+
+//    birthdate < current date
+    private boolean isValidBirthDate(String inputDate){
+        DateTimeFormatter dtf= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        inputDate = inputDate.trim() + " 00:00:00";
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime convertInputDate = LocalDateTime.parse(inputDate, dtf);
+        return convertInputDate.compareTo(now) == 1;
     }
 }

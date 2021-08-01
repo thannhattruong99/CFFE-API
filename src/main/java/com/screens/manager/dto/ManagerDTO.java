@@ -9,6 +9,7 @@ public class ManagerDTO extends BaseDTO implements Serializable {
     private String fullName;
     private String userName;
     private String password;
+    private String hashPassword;
     private int roleId;
     private String imageURL;
     private int gender;
@@ -33,6 +34,14 @@ public class ManagerDTO extends BaseDTO implements Serializable {
 
 
     public ManagerDTO() {
+    }
+
+    public String getHashPassword() {
+        return hashPassword;
+    }
+
+    public void setHashPassword(String hashPassword) {
+        this.hashPassword = hashPassword;
     }
 
     public String getNewPassword() {
