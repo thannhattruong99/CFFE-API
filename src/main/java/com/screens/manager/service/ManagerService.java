@@ -110,8 +110,9 @@ public class ManagerService extends BaseService {
     public ResponseCommonForm resetManagerPassword(RequestResetPasswordForm requestForm, AuthorDTO authorDTO){
         ResponseCommonForm responseForm = new ResponseCommonForm();
         ManagerDTO managerDTO = new ManagerDTO();
-        convertRequestResetPasswordToManagerDTO(requestForm, managerDTO, authorDTO);
+
         try {
+            convertRequestResetPasswordToManagerDTO(requestForm, managerDTO, authorDTO);
             if(!managerDAO.resetPassword(managerDTO)){
                 addErrorMessage(responseForm,MessageConstant.MSG_063);
             }else{
@@ -291,12 +292,13 @@ public class ManagerService extends BaseService {
         managerDTO.setUpdatedTime(TIME_ZONE_VIETNAMESE);
     }
 
-    private void convertRequestResetPasswordToManagerDTO(RequestResetPasswordForm requestForm, ManagerDTO managerDTO, AuthorDTO authorDTO){
+    private void convertRequestResetPasswordToManagerDTO(RequestResetPasswordForm requestForm, ManagerDTO managerDTO, AuthorDTO authorDTO) throws NoSuchAlgorithmException {
         managerDTO.setUserName(requestForm.getUserName());
         if(authorDTO != null){
             managerDTO.setUserName(authorDTO.getUserName());
         }
-        managerDTO.setPassword(StringHelper.generatePassword(PASSWORD_LENGTH));
+        String newPassword = StringHelper.generatePassword(PASSWORD_LENGTH);
+        managerDTO.setPassword(StringHelper.toHexString(StringHelper.getSHA(newPassword)));
     }
 
     private void convertRequestUpdateStatusFormToManagerDTO(RequestUpdateManagerStatusForm requestForm, ManagerDTO managerDTO){
