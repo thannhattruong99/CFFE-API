@@ -165,12 +165,7 @@ public class ShelfDAO extends BaseDAO {
             openSession();
             if (sqlSession.update("ShelfDAO.removeShelfCameraFromMapping", shelfDTO) > 0){
                 if (sqlSession.update("ShelfDAO.removeShelfCameraFromCamera", shelfDTO) > 0){
-                    int count = sqlSession.selectOne("ShelfDAO.countCameraByShelfId", shelfDTO);
-                    if (count == 0){
-                        if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
-                            return true;
-                        }
-                    } else {
+                    if(sqlSession.update("ShelfDAO.removeShelfCameraFromShelf", shelfDTO) > 0){
                         return true;
                     }
                 }
