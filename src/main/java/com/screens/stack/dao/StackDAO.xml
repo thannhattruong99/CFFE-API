@@ -463,6 +463,16 @@
         <result property="totalOfRecord" column="TotalOfRecord"/>
     </resultMap>
 
+    <select id="checkCameraTypeEmotion" resultMap="checkCameraTypeEmotion">
+        SELECT COUNT(CameraId) AS TotalOfRecord
+        FROM tblCamera
+        WHERE CameraId = #{cameraId} AND TypeDetect = 2
+    </select>
+
+    <resultMap id="checkCameraTypeEmotion" type="StackDTO">
+        <result property="totalOfRecord" column="TotalOfRecord"/>
+    </resultMap>
+
     <select id="checkProductExist" resultMap="checkProductExist">
         SELECT COUNT(ProductId) AS TotalOfRecord
         FROM tblProduct

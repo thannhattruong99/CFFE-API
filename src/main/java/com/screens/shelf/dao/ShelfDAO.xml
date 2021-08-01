@@ -110,8 +110,8 @@
     <select id="getShelfStatus" resultMap="getStatus">
         SELECT StatusId FROM tblShelf WHERE ShelfId = #{shelfId} AND StatusId != 2 AND StoreId = #{storeId}
     </select>
-    <select id="getCameraStatus" resultMap="getStatus">
-        SELECT StatusId FROM tblCamera WHERE cameraId = #{cameraId} AND StatusId != 2 AND typeDetect = 1
+    <select id="getCameraStatus" resultMap="getStatusCam">
+        SELECT StatusId,TypeDetect FROM tblCamera WHERE cameraId = #{cameraId} AND StatusId != 2 AND typeDetect = 1
     </select>
     <select id="getShelfCameraMappingStatus" resultMap="getStatus">
         SELECT StatusId FROM tblShelfCameraMapping
@@ -204,6 +204,10 @@
     </resultMap>
     <resultMap id="getStatus" type="ShelfDTO">
         <result property="statusId" column="StatusId"/>
+    </resultMap>
+    <resultMap id="getStatusCam" type="ShelfDTO">
+        <result property="statusId" column="StatusId"/>
+        <result property="typeDetect" column="TypeDetect"/>
     </resultMap>
     <select id="getShelveByStoreId" resultMap="getShelveByStoreId">
         SELECT S.ShelfId,
