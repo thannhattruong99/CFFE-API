@@ -118,7 +118,7 @@ public class ManagerService extends BaseService {
             }else{
                 String email = "";
                 String msgContent = "Username: " + managerDTO.getUserName() +
-                        "\nPassword: " + managerDTO.getPassword();
+                        "\nPassword: " + managerDTO.getNewPassword();
                 if(!StringHelper.isNullOrEmpty(requestForm.getEmail())){
                     email = requestForm.getEmail();
                 }else{
@@ -298,6 +298,7 @@ public class ManagerService extends BaseService {
             managerDTO.setUserName(authorDTO.getUserName());
         }
         String newPassword = StringHelper.generatePassword(PASSWORD_LENGTH);
+        managerDTO.setNewPassword(newPassword);
         managerDTO.setPassword(StringHelper.toHexString(StringHelper.getSHA(newPassword)));
     }
 

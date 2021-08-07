@@ -1,5 +1,9 @@
 package com.util;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
 public class PathConstant {
     public final static String RESOURCE_PATH = "/classes/";
     public final static String IMAGE_FOLDER_CLOUD = "images/";
@@ -15,9 +19,10 @@ public class PathConstant {
     public static final String MSG_RELATIVE_PATH = "messages/msg";
     public static final String REXP_RESOURCE_PATH = "/resources/**";
     public static final String REXP_ALL_PATH = "/**";
-    public static final String SERVER_PATTERN = "http://35.198.194.159:9091/*";
     public static final String LOCAL_PATTERN = "http://localhost:9091/*";
     public static final String PROJECT_SERVER_PATH = "CapstoneAPI/target";
     public static final String PROJECT_LOCAL_PATH = "CapstoneAPI";
+    @Value("${server.access.path.pattern}")
+    public static String SERVER_PATTERN;
 
 }
