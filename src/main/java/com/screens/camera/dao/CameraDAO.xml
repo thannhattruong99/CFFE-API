@@ -115,6 +115,9 @@
                 <if test="statusId == 0">
                      OR Camera.StatusId = 3
                 </if>
+                <if test="statusId == 3">
+                    OR Camera.StatusId = 3
+                </if>
             </if>
             <if test="role == 0">
                 <if test="storeId != null">
