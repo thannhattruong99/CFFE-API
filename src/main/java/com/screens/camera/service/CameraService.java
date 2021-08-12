@@ -141,9 +141,10 @@ public class CameraService extends BaseService {
     private void convertRequestCameraListFormToCameraDTO(RequestCameraListForm requestForm, CameraDTO cameraDTO, AuthorDTO authorDTO){
         if(!StringHelper.isNullOrEmpty(requestForm.getStoreId())){
             cameraDTO.setStoreId(requestForm.getStoreId());
-            if(authorDTO != null){
-                cameraDTO.setStoreId(authorDTO.getStoreId());
-            }
+        }
+        if(authorDTO != null){
+            cameraDTO.setStoreId(authorDTO.getStoreId());
+            cameraDTO.setRole(1);
         }
 
         if(!StringHelper.isNullOrEmpty(requestForm.getCameraName())){
