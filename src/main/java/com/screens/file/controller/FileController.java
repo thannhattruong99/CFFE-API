@@ -21,8 +21,6 @@ import reactor.core.publisher.Flux;
 @RequestMapping("/file")
 @SecurityRequirement(name = "basicAuth")
 public class FileController {
-    private static final String MSG_111 = "MSG-111";
-
     @Autowired
     private EventPublisher eventPublisher;
 

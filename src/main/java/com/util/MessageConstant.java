@@ -11,7 +11,6 @@ public class MessageConstant {
     public static final String MSG_035 = "MSG-035";
     public static final String MSG_041 = "MSG-041";
     public static final String MSG_048 = "MSG-048";
-    public static final String MSG_059 = "MSG-059";
     public static final String MSG_063 = "MSG-063";
     public static final String MSG_066 = "MSG-066";
     public static final String MSG_068 = "MSG-068";
