@@ -55,19 +55,12 @@
         LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2) ) AS Camera
         <where>
             <if test="role == 1">
+                (Camera.StoreId = #{storeId}
                 <if test="statusId == 0">
-                    Camera.StoreId = #{storeId}
-                    OR Camera.StatusId = 3
-                    OR Camera.StatusId = 2
+                    OR Camera.StatusId = 3 OR Camera.StatusId = 2)
                 </if>
-                <if test="statusId == 1">
-                    Camera.StoreId = #{storeId}
-                </if>
-                <if test="statusId == 2">
-                    Camera.StatusId = 2
-                </if>
-                <if test="statusId == 3">
-                    Camera.StatusId = 3
+                <if test="statusId != 0">
+                    OR Camera.StatusId = #{statusId})
                 </if>
             </if>
             <if test="role == 0">
@@ -121,19 +114,12 @@
         ) AS Camera) AS Camera
         <where>
             <if test="role == 1">
+                (Camera.StoreId = #{storeId}
                 <if test="statusId == 0">
-                    Camera.StoreId = #{storeId}
-                    OR Camera.StatusId = 3
-                    OR Camera.StatusId = 2
+                    OR Camera.StatusId = 3 OR Camera.StatusId = 2)
                 </if>
-                <if test="statusId == 1">
-                    Camera.StoreId = #{storeId}
-                </if>
-                <if test="statusId == 2">
-                    Camera.StatusId = 2
-                </if>
-                <if test="statusId == 3">
-                    Camera.StatusId = 3
+                <if test="statusId != 0">
+                    OR Camera.StatusId = #{statusId})
                 </if>
             </if>
             <if test="role == 0">
