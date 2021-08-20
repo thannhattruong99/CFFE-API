@@ -239,8 +239,8 @@
         INSERT INTO tblVideo (VideoName,VideoURL,StartedTime,EndedTime,ShelfCameraMappingId,StackProductCameraMappingId,StatusId,CreatedTime,UpdatedTime) values
             (#{videoNameOriginal},
              #{videoUrl},
-             STR_TO_DATE ( #{startedTime} , '%Y-%m-%d %H:%i:%s'),
-             STR_TO_DATE ( #{endedTime} , '%Y-%m-%d %H:%i:%s'),
+             ADDTIME( #{startedTime} , '7:0:0'),
+             ADDTIME( #{endedTime} , '7:0:0'),
              #{shelfCameraMappingId},
              #{stackProductCameraMappingId},
              #{statusId},
@@ -250,8 +250,8 @@
 
     <insert id="insertHotSpot" parameterType="VideoProperty">
         INSERT INTO tblHotSpot (StartedTime,EndedTime,TotalPeople,ShelfCameraMappingId,CreatedTime,UpdatedTime) values
-        (STR_TO_DATE ( #{startedTime} , '%Y-%m-%d %H:%i:%s'),
-         STR_TO_DATE ( #{endedTime} , '%Y-%m-%d %H:%i:%s'),
+        (ADDTIME( #{startedTime} , '7:0:0'),
+         ADDTIME( #{endedTime} , '7:0:0'),
          #{totalPerson},
          #{shelfCameraMappingId},
          convert_tz(now(),@@session.time_zone,'+07:00'),
@@ -260,8 +260,8 @@
 
     <insert id="insertEmotion" parameterType="VideoProperty">
         INSERT INTO tblEmotion (StartedTime,EndedTime,Angry,Disgust,Fear,Happy,Sad,Surprise,Neutral,StackProductCameraMappingId,CreatedTime,UpdatedTime) values
-            (STR_TO_DATE ( #{startedTime} , '%Y-%m-%d %H:%i:%s'),
-             STR_TO_DATE ( #{endedTime} , '%Y-%m-%d %H:%i:%s'),
+            (ADDTIME( #{startedTime} , '7:0:0'),
+             ADDTIME( #{endedTime} , '7:0:0'),
              #{emotions.numberOfAngry},
              #{emotions.numberOfDisgust},
              #{emotions.numberOfFear},
