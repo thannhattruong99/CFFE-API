@@ -50,7 +50,7 @@ public class FileService extends BaseService {
     private static final String CONTENT_TYPE_IMAGE = "";
     private static final String CONTENT_TYPE_VIDEO = "video/mp4";
     private static final String NULL_STRING = "null";
-    private static final int TIME_RETURN_TRANSACTIONS = 5;
+    private static final int TIME_RETURN_TRANSACTIONS = 3;
 
     /**
      * Get file transactrion
