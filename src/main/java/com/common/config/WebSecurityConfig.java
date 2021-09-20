@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean(name = "applicationAuthorities")
     public List<String> getApplicationAuthorities(){
-        List<String> adminAuthorities = FileHelper.loadResource(MANAGER_AUTHORITY_PATH);
+        List<String> adminAuthorities = FileHelper.loadResource(APPLICATION_AUTHORITY_PATH);
         return adminAuthorities;
     }
 
