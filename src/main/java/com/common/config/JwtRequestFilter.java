@@ -39,10 +39,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String UNAUTHORIZED = "Unauthorized";
 
 
-    private final List<String> adminAuthorities;
-    private final List<String> guestAuthorities;
-    private final List<String> managerAuthorities;
-    private final List<String> applicationAuthorities;
+    @Autowired
+    private List<String> adminAuthorities;
+    @Autowired
+    private List<String> guestAuthorities;
+    @Autowired
+    private List<String> managerAuthorities;
+    @Autowired
+    private List<String> applicationAuthorities;
 
     @Autowired
     private AccountService accountService;
@@ -50,16 +54,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenHelper jwtTokenHelper;
 
-    public JwtRequestFilter() {
-        adminAuthorities = FileHelper.loadResource(ADMIN_AUTHORITY_PATH);
-        managerAuthorities = FileHelper.loadResource(MANAGER_AUTHORITY_PATH);
-        applicationAuthorities = FileHelper.loadResource(APPLICATION_AUTHORITY_PATH);
-        guestAuthorities = FileHelper.loadResource(GUEST_AUTHORITY_PATH);
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(AUTHORIZATION);
+        System.out.println("TOI FILTER ROI NE");
 
         String username = null;
         String jwtToken = null;

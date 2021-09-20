@@ -261,7 +261,10 @@ public class ShelfService extends BaseService {
 //        check camera exist and available
         if(cameraResultDAO  == null){
             errorCodes.add(MessageConstant.MSG_086);
+        } else if (DETECT_HOT_SPOT != cameraResultDAO.getTypeDetect()) {
+            errorCodes.add(MessageConstant.MSG_129);
         }
+
 
         if(errorCodes.size() > 0){
             responseForm.setErrorCodes(errorCodes);

@@ -21,8 +21,17 @@ public class ShelfDTO extends BaseDTO {
     private int totalOfRecord;
     private String imageURL;
     private List<StackDTO> stacks;
+    private int TypeDetect;
 
     public ShelfDTO() {
+    }
+
+    public int getTypeDetect() {
+        return TypeDetect;
+    }
+
+    public void setTypeDetect(int typeDetect) {
+        TypeDetect = typeDetect;
     }
 
     public String getImageURL() {

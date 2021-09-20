@@ -16,8 +16,17 @@ public class CameraDTO extends BaseDTO {
     private String reasonInactive;
     private int statusId;
     private int totalOfRecord;
+    private int role;
 
     public CameraDTO() {
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 
     public String getMacAddress() {

@@ -11,7 +11,7 @@ public class RequestCreateManagerForm {
     private String fullName;
     @Pattern(regexp = "\\d{9,12}", message = "MSG-052")
     private String identifyCard;
-    @NotEmpty(message = "MSG-044")
+    @NotEmpty(message = "MSG-049")
     @Pattern(regexp = "[0]?[0-9]{9,12}", message = "MSG-042")
     private String phone;
     @NotEmpty(message = "MSG-044")

@@ -159,6 +159,10 @@ public class StackService extends BaseService {
                         // System.out.println("*** Camera NOT pending");
                         addErrorMessage(response,MessageConstant.MSG_093);
                     }
+                    // Check Camera is wrong type
+                    else if (!stackDAO.checkCameraTypeEmotion(stackDTO)){
+                        addErrorMessage(response,MessageConstant.MSG_129);
+                    }
                     // check stack co product
                     else if (!stackDAO.checkStackHaveProduct(stackDTO)){
                         // System.out.println("*** Stack not have product");

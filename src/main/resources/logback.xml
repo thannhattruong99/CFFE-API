@@ -36,9 +36,9 @@
         <appender-ref ref = "WARN_FILE"/>
         <appender-ref ref = "STDOUT"/>
     </root>
-<!--    <root level = "TRACE">-->
-<!--        <appender-ref ref = "STDOUT"/>-->
-<!--    </root>-->
+    <root level = "TRACE">
+        <appender-ref ref = "STDOUT"/>
+    </root>
     <root level = "DEBUG">
         <appender-ref ref = "STDOUT"/>
     </root>

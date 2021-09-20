@@ -54,9 +54,21 @@
         LEFT JOIN tblShelf SH2 ON SCM.ShelfId = SH2.ShelfId AND SH2.StatusId = 1
         LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2) ) AS Camera
         <where>
-            <if test="storeId != null">
-                Camera.StoreId = #{storeId}
+            <if test="role == 1">
+                (Camera.StoreId = #{storeId}
+                <if test="statusId == 0">
+                    OR Camera.StatusId = 3 OR Camera.StatusId = 2)
+                </if>
+                <if test="statusId != 0">
+                    OR Camera.StatusId = #{statusId})
+                </if>
             </if>
+            <if test="role == 0">
+                <if test="storeId != null">
+                    Camera.StoreId = #{storeId}
+                </if>
+            </if>
+
             <if test="cameraName != null">
                 AND Camera.CameraName like '%' #{cameraName} '%'
             </if>
@@ -101,9 +113,21 @@
         LEFT JOIN tblStore ST2 ON ST2.StoreId = SH2.StoreId AND ST2.StatusId != 2)
         ) AS Camera) AS Camera
         <where>
-            <if test="storeId != null">
-                Camera.StoreId = #{storeId}
+            <if test="role == 1">
+                (Camera.StoreId = #{storeId}
+                <if test="statusId == 0">
+                    OR Camera.StatusId = 3 OR Camera.StatusId = 2)
+                </if>
+                <if test="statusId != 0">
+                    OR Camera.StatusId = #{statusId})
+                </if>
             </if>
+            <if test="role == 0">
+                <if test="storeId != null">
+                    Camera.StoreId = #{storeId}
+                </if>
+            </if>
+
             <if test="cameraName != null">
                 AND Camera.CameraName like '%' #{cameraName} '%'
             </if>
