@@ -26,20 +26,20 @@
 
     <root level = "INFO">
         <appender-ref ref = "INFO_FILE"/>
-        <appender-ref ref = "STDOUT"/>
+<!--        <appender-ref ref = "STDOUT"/>-->
     </root>
     <root level = "ERROR">
         <appender-ref ref = "ERROR_FILE"/>
-        <appender-ref ref = "STDOUT"/>
+<!--        <appender-ref ref = "STDOUT"/>-->
     </root>
     <root level = "WARN">
         <appender-ref ref = "WARN_FILE"/>
-        <appender-ref ref = "STDOUT"/>
+<!--        <appender-ref ref = "STDOUT"/>-->
     </root>
 <!--    <root level = "TRACE">-->
 <!--        <appender-ref ref = "STDOUT"/>-->
 <!--    </root>-->
     <root level = "DEBUG">
-        <appender-ref ref = "STDOUT"/>
+<!--        <appender-ref ref = "STDOUT"/>-->
     </root>
 </configuration>

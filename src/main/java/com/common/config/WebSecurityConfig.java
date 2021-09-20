@@ -1,6 +1,7 @@
 package com.common.config;
 
 
+import com.util.FileHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.ws.rs.HttpMethod;
 
-import static com.util.PathConstant.REXP_ALL_PATH;
+import java.util.List;
+
+import static com.util.PathConstant.*;
 
 
 @Configuration
@@ -29,6 +32,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean(name = "adminAuthorities")
+    public List<String> getAdminAuthorities(){
+        List<String> adminAuthorities = FileHelper.loadResource(ADMIN_AUTHORITY_PATH);
+        return adminAuthorities;
+    }
+
+    @Bean(name = "guestAuthorities")
+    public List<String> getGuestAuthorities(){
+        List<String> adminAuthorities = FileHelper.loadResource(GUEST_AUTHORITY_PATH);
+        return adminAuthorities;
+    }
+
+    @Bean(name = "managerAuthorities")
+    public List<String> getManagerAuthorities(){
+        List<String> adminAuthorities = FileHelper.loadResource(MANAGER_AUTHORITY_PATH);
+        return adminAuthorities;
+    }
+
+    @Bean(name = "applicationAuthorities")
+    public List<String> getApplicationAuthorities(){
+        List<String> adminAuthorities = FileHelper.loadResource(MANAGER_AUTHORITY_PATH);
+        return adminAuthorities;
     }
 
     @Override
