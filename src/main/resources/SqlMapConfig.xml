@@ -66,9 +66,9 @@
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://34.87.147.53:3306/CFFE_Database" />
-                <property name="username" value="luanhm" />
-                <property name="password" value="luanhm" />
+                <property name="url" value="jdbc:mysql://database-1.cdn9enjspek0.ap-southeast-1.rds.amazonaws.com:3306/CFFE_Database" />
+                <property name="username" value="admin" />
+                <property name="password" value="Admin1999" />
                 <property name="poolPingQuery" value="/* ping */ SELECT 1"/>
                 <property name="poolPingEnabled" value="true"/>
             </dataSource>
