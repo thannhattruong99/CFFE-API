@@ -205,17 +205,18 @@ public class ProductService extends BaseService {
 
     private ProductDTO convertGetProductListFormToDTO(RequestGetProductListForm requestForm) {
         ProductDTO productDTO = new ProductDTO();
-        productDTO.setSearchValue(requestForm.getSearchValue().toLowerCase().trim());
-        productDTO.setSearchField(requestForm.getSearchField().toLowerCase().trim());
+        productDTO.setSearchValue(requestForm.getSearchValue());
+        productDTO.setSearchField(requestForm.getSearchField());
         productDTO.setStatusId(requestForm.getStatusId());
-        if(requestForm.getPageNum() > 0){
-            productDTO.setOffSet((requestForm.getPageNum() - 1) * requestForm.getFetchNext());
-        }
-        productDTO.setCategoryId(requestForm.getCategoryId());
         productDTO.setFetchNext(requestForm.getFetchNext());
         if(requestForm.getFetchNext() <= 0){
             productDTO.setFetchNext(DEFAULT_FETCH_NEXT);
         }
+        if(requestForm.getPageNum() > 0){
+            productDTO.setOffSet((requestForm.getPageNum() - 1) * productDTO.getFetchNext());
+        }
+        productDTO.setCategoryId(requestForm.getCategoryId());
+
         return productDTO;
     }
 
