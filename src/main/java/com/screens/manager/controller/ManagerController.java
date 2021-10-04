@@ -65,7 +65,7 @@ public class ManagerController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/manager/create", method = RequestMethod.POST)
-    public String createManager(@Validated @RequestBody RequestCreateManagerForm requestForm, //
+    public String createManager(@Validated RequestCreateManagerForm requestForm, //
                                 BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -82,7 +82,7 @@ public class ManagerController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/manager/update", method = RequestMethod.POST)
-    public String updateManagerInformation(@Validated @RequestBody RequestUpdateManagerForm requestForm, //
+    public String updateManagerInformation(@Validated RequestUpdateManagerForm requestForm, //
                                 BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
