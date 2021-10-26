@@ -1,6 +1,7 @@
 package com.screens.city.controller;
 
 import com.screens.city.form.CityDistrictResponseSupporter;
+import com.screens.city.form.CityResponseSupporter;
 import com.screens.city.service.CityService;
 import com.util.ResponseSupporter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,18 @@ public class CityController {
     @GetMapping(value = "/city-district-lst")
     public String getCityAndDistrict(){
         List<CityDistrictResponseSupporter> responseForm = cityService.getCityDistrict();
+        if(responseForm == null){
+            List<String> errorCodes = new ArrayList<>();
+            errorCodes.add(MSG_009);
+            return ResponseSupporter.responseResult(errorCodes);
+        }
+        return ResponseSupporter.responseResult(responseForm);
+    }
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/city-district-lst2")
+    public String getCityAndDistrict2(){
+        List<CityResponseSupporter> responseForm = cityService.getCityDistrict2();
         if(responseForm == null){
             List<String> errorCodes = new ArrayList<>();
             errorCodes.add(MSG_009);

@@ -37,6 +37,19 @@ public class CityService {
         return responseForm;
     }
 
+    public List<CityResponseSupporter> getCityDistrict2(){
+        try {
+            List<CityResponseSupporter> resultDAO = cityDAO.getCityDistrict();
+            if(resultDAO.size() > 0){
+                return resultDAO;
+
+            }
+        }catch (PersistenceException e){
+            logger.error("Error at CityService: " + e.getMessage());
+        }
+        return null;
+    }
+
     public void convertResultDAOToResponseResult(List<CityResponseSupporter> resultDAO, List<CityDistrictResponseSupporter> responseForm){
         Map<String, String> districts;
         for (CityResponseSupporter city: resultDAO) {
