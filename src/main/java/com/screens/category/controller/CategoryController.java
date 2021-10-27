@@ -10,9 +10,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +56,7 @@ public class CategoryController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/categories")
     public String getCategoryList(
-            @Validated RequestGetCategoryListForm requestForm,
+            @Valid RequestGetCategoryListForm requestForm,
             BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -69,7 +73,7 @@ public class CategoryController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/category/create")
     public String createCategory(
-            @Validated @RequestBody RequestCreateCategoryForm requestForm,
+            @Valid RequestCreateCategoryForm requestForm,
             BindingResult result,
             HttpServletRequest request) throws IOException {
         if(result.hasErrors()){
@@ -84,7 +88,7 @@ public class CategoryController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/category/update-status")
-    public String changeStatus(@Validated @RequestBody RequestChangeCategoryStatusForm requestForm,
+    public String changeStatus(@Valid RequestChangeCategoryStatusForm requestForm,
                                BindingResult result,
                                HttpServletRequest request){
 
@@ -100,7 +104,7 @@ public class CategoryController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/category/update")
-    public String updateCategoryInfo(@Validated @RequestBody RequestUpdateInfoCategoryForm requestForm,
+    public String updateCategoryInfo(@Valid RequestUpdateInfoCategoryForm requestForm,
                                     BindingResult result,
                                      HttpServletRequest request){
         if(result.hasErrors()){
@@ -112,5 +116,4 @@ public class CategoryController {
         }
         return ResponseSupporter.responseResult(true);
     }
-
 }

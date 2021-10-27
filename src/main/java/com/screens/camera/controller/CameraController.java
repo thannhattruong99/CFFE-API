@@ -9,13 +9,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class CameraController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/available-camera-lst", method = RequestMethod.GET)
-    public String getAvailableCameraList(@Validated RequestAvailableCameraListForm requestForm, BindingResult result){
+    public String getAvailableCameraList(@Valid RequestAvailableCameraListForm requestForm, BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
         }
@@ -50,7 +49,7 @@ public class CameraController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/cameras", method = RequestMethod.GET)
-    public String getCameras(@Validated RequestCameraListForm requestForm,
+    public String getCameras(@Valid RequestCameraListForm requestForm,
                              BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -69,7 +68,7 @@ public class CameraController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/camera", method = RequestMethod.GET)
-    public String getCameraDetail(@Validated RequestCameraDetailForm requestForm,
+    public String getCameraDetail(@Valid RequestCameraDetailForm requestForm,
                              BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -89,7 +88,7 @@ public class CameraController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/camera/create", method = RequestMethod.POST)
-    public String createCamera(@Validated @RequestBody RequestCreateCameraForm requestForm,
+    public String createCamera(@Valid RequestCreateCameraForm requestForm,
                                BindingResult result){
 
         if(result.hasErrors()){
@@ -107,7 +106,7 @@ public class CameraController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/camera/update", method = RequestMethod.POST)
-    public String updateCamera(@Validated @RequestBody RequestUpdateCameraForm requestForm,
+    public String updateCamera(@Valid RequestUpdateCameraForm requestForm,
                                BindingResult result){
 
         if(result.hasErrors()){
@@ -125,7 +124,7 @@ public class CameraController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/camera/update-status", method = RequestMethod.POST)
-    public String updateStatus(@Validated @RequestBody RequestUpdateCameraStatusForm requestForm,
+    public String updateStatus(@Valid RequestUpdateCameraStatusForm requestForm,
                                BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);

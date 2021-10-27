@@ -2,7 +2,6 @@ package com.screens.file.listener.events;
 
 import com.common.service.BaseService;
 import com.google.cloud.storage.StorageException;
-import com.screens.file.listener.detector.DetectService;
 import com.screens.file.dto.VideoProperty;
 import com.screens.file.listener.detector.DetectService;
 import com.screens.file.listener.detector.EmotionDTO;

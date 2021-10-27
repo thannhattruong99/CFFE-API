@@ -3,7 +3,6 @@ package com.common.config;
 import com.authentication.dto.AccountDTO;
 import com.authentication.dto.AuthorDTO;
 import com.authentication.service.AccountService;
-import com.util.FileHelper;
 import com.util.StringHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -24,8 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
-import static com.util.PathConstant.*;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {

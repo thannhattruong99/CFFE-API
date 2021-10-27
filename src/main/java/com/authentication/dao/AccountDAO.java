@@ -1,7 +1,6 @@
 package com.authentication.dao;
 
 import com.authentication.dto.AccountDTO;
-import com.authentication.form.RequestLoginForm;
 import com.authentication.form.ResponseLoginForm;
 import com.common.dao.BaseDAO;
 import com.util.IDBHelper;

@@ -9,13 +9,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class ShelfController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelves", method = RequestMethod.GET)
-    public String getShelves(@Validated RequestShelfListForm requestForm,
+    public String getShelves(@Valid RequestShelfListForm requestForm,
                              BindingResult result, HttpServletRequest request){
 
         if(result.hasErrors()){
@@ -52,7 +51,7 @@ public class ShelfController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelves-by-storeid", method = RequestMethod.GET)
-    public String getShelvesByStoreId(@Validated RequestShelvesByStoreId requestForm,
+    public String getShelvesByStoreId(@Valid RequestShelvesByStoreId requestForm,
                              BindingResult result, HttpServletRequest request){
 
         if(result.hasErrors()){
@@ -73,7 +72,7 @@ public class ShelfController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelf", method = RequestMethod.GET)
-    public String getShelfDetail(@Validated RequestShelfDetailForm requestForm, BindingResult result,
+    public String getShelfDetail(@Valid RequestShelfDetailForm requestForm, BindingResult result,
                                  HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -93,7 +92,7 @@ public class ShelfController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelf/create", method = RequestMethod.POST)
-    public String createShelf(@Validated @RequestBody RequestCreateShelfForm requestForm,
+    public String createShelf(@Valid RequestCreateShelfForm requestForm,
                               BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseResult(result);
@@ -111,7 +110,7 @@ public class ShelfController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelf/update", method = RequestMethod.POST)
-    public String updateShelf(@Validated @RequestBody RequestUpdateShelfForm requestForm,
+    public String updateShelf(@Valid RequestUpdateShelfForm requestForm,
                               BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -129,7 +128,7 @@ public class ShelfController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelf/update-status", method = RequestMethod.POST)
-    public String updateStatus(@Validated @RequestBody RequestUpdateShelfStatusForm requestForm,
+    public String updateStatus(@Valid RequestUpdateShelfStatusForm requestForm,
                                BindingResult result, HttpServletRequest request){
 
         if(result.hasErrors()){
@@ -148,7 +147,7 @@ public class ShelfController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/shelf/change-shelf-camera", method = RequestMethod.POST)
-    public String changeShelfCamera(@Validated @RequestBody RequestChangeShelfCameraForm requestForm,
+    public String changeShelfCamera(@Valid RequestChangeShelfCameraForm requestForm,
                                     BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseResult(result);

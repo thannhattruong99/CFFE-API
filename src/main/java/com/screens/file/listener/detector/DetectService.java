@@ -9,7 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static com.util.PathConstant.*;
+import static com.util.PathConstant.INPUT_VIDEO_PATH;
+import static com.util.PathConstant.OUTPUT_VIDEO_PATH;
 
 @Component
 public class DetectService {

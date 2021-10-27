@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,7 @@ public class ManagerController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/managers", method = RequestMethod.GET)
-    public String getManagers(@Validated RequestManagerListForm requestManagerListForm, //
+    public String getManagers(@Valid RequestManagerListForm requestManagerListForm, //
                              BindingResult result) {
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -65,7 +64,7 @@ public class ManagerController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/manager/create", method = RequestMethod.POST)
-    public String createManager(@Validated RequestCreateManagerForm requestForm, //
+    public String createManager(@Valid RequestCreateManagerForm requestForm, //
                                 BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -82,7 +81,7 @@ public class ManagerController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/manager/update", method = RequestMethod.POST)
-    public String updateManagerInformation(@Validated RequestUpdateManagerForm requestForm, //
+    public String updateManagerInformation(@Valid RequestUpdateManagerForm requestForm, //
                                 BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -101,7 +100,7 @@ public class ManagerController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/manager/reset-password")
-    public String resetPassword(@Validated RequestResetPasswordForm requestForm, //
+    public String resetPassword(@Valid RequestResetPasswordForm requestForm, //
                                        BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -118,7 +117,7 @@ public class ManagerController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/manager/update-status", method = RequestMethod.POST)
-    public String updateStatus(@Validated @RequestBody RequestUpdateManagerStatusForm requestForm, //
+    public String updateStatus(@Valid RequestUpdateManagerStatusForm requestForm, //
                                BindingResult result){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);
@@ -134,7 +133,7 @@ public class ManagerController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/manager/change-password", method = RequestMethod.POST)
-    public String changePassword(@Validated @RequestBody RequestChangePasswordForm requestForm,
+    public String changePassword(@Valid RequestChangePasswordForm requestForm,
                                  BindingResult result, HttpServletRequest request){
         if(result.hasErrors()){
             return ResponseSupporter.responseErrorResult(result);

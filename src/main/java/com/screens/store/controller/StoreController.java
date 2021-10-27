@@ -10,10 +10,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class StoreController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/stores")
-    public String getStoreList(@Validated RequestGetStoreListForm requestForm,
+    public String getStoreList(@Valid RequestGetStoreListForm requestForm,
                                BindingResult result,
                                HttpServletRequest request){
         // Check Validate
@@ -49,7 +49,7 @@ public class StoreController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/stores-by-product")
-    public String getStoreListByProduct(@Validated RequestGetStoreListByProductForm requestForm,
+    public String getStoreListByProduct(@Valid RequestGetStoreListByProductForm requestForm,
                                BindingResult result,
                                HttpServletRequest request){
         // Check Validate
@@ -72,7 +72,7 @@ public class StoreController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/operation-stores")
-    public String getStoreListShort(@Validated RequestGetStoreListShort requestForm,
+    public String getStoreListShort(@Valid RequestGetStoreListShort requestForm,
                                BindingResult result,
                                     HttpServletRequest request){
         // Check Validate
@@ -94,7 +94,7 @@ public class StoreController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/store")
     public String getStoreDetail(
-                               @Validated RequestGetStoreDetailForm requestForm,
+                               @Valid RequestGetStoreDetailForm requestForm,
                                BindingResult result,
                                HttpServletRequest request){
         // Check Validate
@@ -119,7 +119,7 @@ public class StoreController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/store/create")
     public String createStore(
-                               @Validated @RequestBody RequestCreateStoreForm requestForm,
+                               @Valid RequestCreateStoreForm requestForm,
                                BindingResult result,
                                HttpServletRequest request) {
         // Check Validate
@@ -138,7 +138,7 @@ public class StoreController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/store/update-status")
-    public String changeStatus(@Validated @RequestBody RequestChangeStoreStatusForm requestForm,
+    public String changeStatus(@Valid RequestChangeStoreStatusForm requestForm,
                                BindingResult result,
                                HttpServletRequest request){
         // Check Validate
@@ -157,7 +157,7 @@ public class StoreController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/store/update", method = RequestMethod.POST)
-    public String updateStoreInfo(@Validated @RequestBody RequestUpdateInfoForm requestForm,
+    public String updateStoreInfo(@Valid RequestUpdateInfoForm requestForm,
                                   BindingResult result,
                                   HttpServletRequest request){
         // Check Validate
@@ -176,7 +176,7 @@ public class StoreController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @RequestMapping(value = "/store/change-manager", method = RequestMethod.POST)
-    public String changeManager(@Validated @RequestBody RequestChangeManager requestForm,
+    public String changeManager(@Valid RequestChangeManager requestForm,
                                      BindingResult result,
                                 HttpServletRequest request){
         // Check Validate

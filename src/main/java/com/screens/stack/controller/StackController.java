@@ -11,9 +11,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +57,7 @@ public class StackController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/manager/store/shelf/stacks-by-shelf")
-    public String getStackListByShelf(@Validated RequestGetStackListForm requestForm,
+    public String getStackListByShelf(@Valid RequestGetStackListForm requestForm,
                                         BindingResult result,
                                         HttpServletRequest request){
         // Check Validate
@@ -74,7 +78,7 @@ public class StackController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/manager/store/shelf/stacks-by-product-store")
-    public String getStackListByProductIdStoreId(@Validated RequestGetStackListByProductForm requestForm,
+    public String getStackListByProductIdStoreId(@Valid RequestGetStackListByProductForm requestForm,
                                       BindingResult result,
                                                  HttpServletRequest request){
         // Check Validate
@@ -95,7 +99,7 @@ public class StackController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/manager/store/shelf/stack/update-product")
-    public String changeProduct(@Validated @RequestBody RequestAddProduct requestForm,
+    public String changeProduct(@Valid RequestAddProduct requestForm,
                                BindingResult result,
                                 HttpServletRequest request){
         // Check Validate
@@ -116,7 +120,7 @@ public class StackController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/manager/store/shelf/stack/update-camera")
-    public String changeCamera(@Validated @RequestBody RequestAddCamera requestForm,
+    public String changeCamera(@Valid RequestAddCamera requestForm,
                                 BindingResult result,
                                HttpServletRequest request){
         // Check Validate
@@ -135,7 +139,7 @@ public class StackController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/manager/store/shelf/stack/update-status")
-    public String updateStatus(@Validated @RequestBody RequestUpdateStatusForm requestForm,
+    public String updateStatus(@Valid RequestUpdateStatusForm requestForm,
                                BindingResult result,
                                HttpServletRequest request){
         // Check Validate
@@ -151,6 +155,4 @@ public class StackController {
         // Return result
         return ResponseSupporter.responseResult(true);
     }
-
-
 }
