@@ -17,43 +17,43 @@ public class StackDAO extends BaseDAO {
 
     public ResponseStackDetailForm getStackDetail(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackDetail",stackDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseStackDetailForm getStackStatus(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackStatus",stackDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseStackListForm getStackListByShelf(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByShelf",stackDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseStackListForm getStackListByProductIdStoreId(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.getStackListByProductIdStoreId",stackDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean addProduct(StackDTO stackDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addProduct",stackDTO) > 0){
                 return true;
             }
@@ -62,13 +62,13 @@ public class StackDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean addCamera(StackDTO stackDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.activeStack",stackDTO) > 0) {
                 if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.activeCamera",stackDTO) > 0){
                     if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.activeMapping",stackDTO) > 0){
@@ -82,13 +82,13 @@ public class StackDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean removeProduct(StackDTO stackDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.removeProduct",stackDTO) > 0){
                 return true;
             }
@@ -97,13 +97,13 @@ public class StackDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean removeCamera(StackDTO stackDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("com.screens.stack.dao.sql.StackDAO.addNewRecordMapping",stackDTO) > 0){
                 if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateCameraPending",stackDTO) > 0){
                     if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.updateStackPending",stackDTO) > 0){
@@ -119,13 +119,13 @@ public class StackDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean changeStatus(StackDTO stackDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("com.screens.stack.dao.sql.StackDAO.changeStatus",stackDTO) > 0){
                 return true;
             }
@@ -134,150 +134,150 @@ public class StackDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkProductActive(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkProductActive",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkStackPending(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackPending",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkCameraPending(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkCameraPending",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkCameraTypeEmotion(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkCameraTypeEmotion",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkStackHaveProduct(StackDTO stackDTO) {
         try {
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackHaveProduct",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean stackIsExistInStore(StackDTO stackDTO) {
         try {
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackExist",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean shelfIsExistInStore(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.shelfIsExistInStore",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkCameraExist(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkCameraExist",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkProductExist(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkProductExist",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkStackProductMapping(StackDTO stackDTO) {
         try {
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackProductMapping",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkStackCameraMapping(StackDTO stackDTO) {
         try{
-            openSession();
+            getSqlSession();
             StackDTO rs =  sqlSession.selectOne("com.screens.stack.dao.sql.StackDAO.checkStackCameraMapping",stackDTO);
             if(rs.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 }

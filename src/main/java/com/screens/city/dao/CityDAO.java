@@ -16,10 +16,10 @@ public class CityDAO extends BaseDAO {
 
     public List<CityResponseSupporter> getCityDistrict(){
         try{
-            openSession();
+            getSqlSession();
             return this.sqlSession.selectList("CityDAO.getCityAndDistrict");
         }finally {
-            closeSession();
+            commit();
         }
     }
 }

@@ -18,26 +18,26 @@ public class CategoryDAO extends BaseDAO {
 
     public ResponseCategoryDetailForm getCategoryDetail(CategoryDTO categoryDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.getCategoryDetail",categoryDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseCategoryListForm getCategoryList(CategoryDTO categoryDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.getCategoryList",categoryDTO);
 
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean createCategory(CategoryDTO categoryDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("com.screens.category.dao.sql.CategoryDAO.createCategory",categoryDTO) > 0){
                 return true;
             }
@@ -46,40 +46,40 @@ public class CategoryDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkHaveProductUsing(CategoryDTO categoryDTO){
         try{
-            openSession();
+            getSqlSession();
             CategoryDTO resultDAO = sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.checkProduct",categoryDTO);
             if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkCategoryExist(CategoryDTO categoryDTO){
         try{
-            openSession();
+            getSqlSession();
             CategoryDTO resultDAO = sqlSession.selectOne("com.screens.category.dao.sql.CategoryDAO.checkCategoryExist",categoryDTO);
             if(resultDAO.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
 
     }
 
     public boolean changeStatus(CategoryDTO categoryDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.changeStatus",categoryDTO) > 0){
                 return true;
             }
@@ -88,13 +88,13 @@ public class CategoryDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean updateInfo(CategoryDTO categoryDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("com.screens.category.dao.sql.CategoryDAO.updateInfo",categoryDTO) > 0){
                 return true;
             }
@@ -103,7 +103,7 @@ public class CategoryDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 }

@@ -17,51 +17,51 @@ public class StoreDAO extends BaseDAO {
 
     public ResponseStoreListForm getStoreList(StoreDTO storeDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreList",storeDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseStoreListForm getStoreListByProduct(StoreDTO storeDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreListByProduct",storeDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseStoreListForm getStoreListShort(StoreDTO storeDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreListShort",storeDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseStoreDetailForm getStoreDetail(StoreDTO storeDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreDetail",storeDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
     public ResponseStoreDetailForm getStoreStatus(StoreDTO storeDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.getStoreStatus",storeDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean createStore(StoreDTO storeDTO) throws PersistenceException {
         try {
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("com.screens.store.dao.sql.StoreDAO.createStore",storeDTO) > 0){
                 return true;
             }
@@ -70,13 +70,13 @@ public class StoreDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean changeStatus(StoreDTO storeDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeStatus",storeDTO) > 0){
                 return true;
             }
@@ -85,13 +85,13 @@ public class StoreDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean updateInfo(StoreDTO storeDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.updateInfo",storeDTO) > 0){
                 return true;
             }
@@ -100,13 +100,13 @@ public class StoreDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean addManager(StoreDTO storeDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeStatus",storeDTO) > 0){
                 if (sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeUserStatus",storeDTO) > 0) {
                     if (sqlSession.insert("com.screens.store.dao.sql.StoreDAO.addMangerToStore",storeDTO) > 0) {
@@ -119,13 +119,13 @@ public class StoreDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean removeManager(StoreDTO storeDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeStatus",storeDTO) > 0){
                 if (sqlSession.update("com.screens.store.dao.sql.StoreDAO.changeUserStatus",storeDTO) > 0) {
                     if (sqlSession.update("com.screens.store.dao.sql.StoreDAO.removeMangerFromStore",storeDTO) > 0) {
@@ -138,85 +138,85 @@ public class StoreDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkAvailableManager(StoreDTO storeDTO){
         try{
-            openSession();
+            getSqlSession();
             StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.checkAvailableManager",storeDTO);
             if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkAvailableStore(StoreDTO storeDTO){
         try{
-            openSession();
+            getSqlSession();
             StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.checkAvailableStore",storeDTO);
             if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkShelf(StoreDTO storeDTO){
         try{
-            openSession();
+            getSqlSession();
             StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.checkShelf",storeDTO);
             if(resultDAO.getTotalOfRecord() > 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean countStoreById(StoreDTO storeDTO) {
         try{
-            openSession();
+            getSqlSession();
             StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.countStoreById",storeDTO);
             if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean countUserById(StoreDTO storeDTO) {
         try {
-            openSession();
+            getSqlSession();
             StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.countUserById",storeDTO);
             if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean checkStoreManagerMapping(StoreDTO storeDTO) {
         try{
-            openSession();
+            getSqlSession();
             StoreDTO resultDAO = sqlSession.selectOne("com.screens.store.dao.sql.StoreDAO.checkStoreManagerMapping",storeDTO);
             if(resultDAO == null || resultDAO.getTotalOfRecord() <= 0){
                 return false;
             }
             return true;
         }finally {
-            closeSession();
+            commit();
         }
     }
 }

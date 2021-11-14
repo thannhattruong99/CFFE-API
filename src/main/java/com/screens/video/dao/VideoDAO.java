@@ -18,43 +18,43 @@ public class VideoDAO extends BaseDAO {
 
     public ResponseCountVideosForm getVideoCountList(VideoDTO videoDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.video.dao.VidDAO.getVideoCountList",videoDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseEmotionVideosForm getVideoEmotionList(VideoDTO videoDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.video.dao.VidDAO.getVideoEmotionList",videoDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public String getShelfCameraMappingId(VideoProperty videoProperty) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.video.dao.VidDAO.getShelfCameraMappingId",videoProperty);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public String getStackProductCameraMappingId(VideoProperty videoProperty) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("com.screens.video.dao.VidDAO.getStackProductCameraMappingId",videoProperty);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean insertVideoProperty(VideoProperty videoProperty) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("com.screens.video.dao.VidDAO.insertVideoProperty",videoProperty) > 0){
                 return true;
             }
@@ -63,13 +63,13 @@ public class VideoDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean insertHotSpot(VideoProperty videoProperty) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("com.screens.video.dao.VidDAO.insertHotSpot",videoProperty) > 0){
                 return true;
             }
@@ -78,13 +78,13 @@ public class VideoDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean insertEmotion(VideoProperty videoProperty) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("com.screens.video.dao.VidDAO.insertEmotion",videoProperty) > 0){
                 return true;
             }
@@ -93,33 +93,33 @@ public class VideoDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean isDuplicateVideoShelf(VideoProperty videoProperty) {
         try{
-            openSession();
+            getSqlSession();
             int count = sqlSession.selectOne("com.screens.video.dao.VidDAO.countVideoByMacAndTimeType1",videoProperty);
             if (count > 0) {
                 return true;
             }
             return false;
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean isDuplicateVideoStack(VideoProperty videoProperty) {
         try{
-            openSession();
+            getSqlSession();
             int count = sqlSession.selectOne("com.screens.video.dao.VidDAO.countVideoByMacAndTimeType2",videoProperty);
             if (count > 0) {
                 return true;
             }
             return false;
         }finally {
-            closeSession();
+            commit();
         }
     }
 

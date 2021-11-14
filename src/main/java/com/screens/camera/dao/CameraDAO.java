@@ -18,25 +18,25 @@ public class CameraDAO extends BaseDAO {
 
     public ResponseAvailableCameraListForm getAvailableCameraList(CameraDTO cameraDTO){
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("CameraDAO.getAvailableCameraList", cameraDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseCameraListForm getCameraList(CameraDTO cameraDTO){
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("CameraDAO.getCameraList", cameraDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean createCamera(CameraDTO cameraDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("CameraDAO.createCamera", cameraDTO) > 0){
                 return true;
             }
@@ -45,13 +45,13 @@ public class CameraDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean updateCamera(CameraDTO cameraDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("CameraDAO.updateCamera", cameraDTO) > 0){
                 return true;
             }
@@ -60,13 +60,13 @@ public class CameraDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean updateStatus(CameraDTO cameraDTO) throws PersistenceException {
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("CameraDAO.updateStatus", cameraDTO) > 0){
                 return true;
             }
@@ -75,31 +75,31 @@ public class CameraDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public CameraDTO countCameraById(CameraDTO cameraDTO){
         try {
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("CameraDAO.getCameraStatusById", cameraDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseCameraDetailForm getCameraDetailById(CameraDTO cameraDTO){
         try {
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("CameraDAO.getCameraDetailById", cameraDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public String getStoreIdByCamera(CameraDTO cameraDTO) {
         try{
-            openSession();
+            getSqlSession();
             String storeId;
             storeId = sqlSession.selectOne("CameraDAO.getStoreIdByShelfMapping", cameraDTO);
             if (StringUtils.isEmpty(storeId)){
@@ -107,7 +107,7 @@ public class CameraDAO extends BaseDAO {
             }
             return storeId;
         }finally {
-            closeSession();
+            commit();
         }
     }
 }

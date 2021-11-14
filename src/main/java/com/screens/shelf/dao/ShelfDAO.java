@@ -19,34 +19,34 @@ public class ShelfDAO extends BaseDAO {
 
     public ResponseShelfListForm getShelfList(ShelfDTO shelfDTO){
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("ShelfDAO.getShelves", shelfDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseShelvesByStoreId getShelveByStoreId(ShelfDTO shelfDTO){
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("ShelfDAO.getShelveByStoreId", shelfDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ResponseShelfDetailForm getShelfDetail(ShelfDTO shelfDTO){
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("ShelfDAO.getShelfDetail", shelfDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean createShelf(ShelfDTO shelfDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("ShelfDAO.createShelf", shelfDTO) > 0){
                 for (StackDTO stack: shelfDTO.getStacks()) {
                     stack.setShelfId(shelfDTO.getShelfId());
@@ -60,13 +60,13 @@ public class ShelfDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean updateShelf(ShelfDTO shelfDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("ShelfDAO.updateShelf", shelfDTO) > 0){
                 return true;
             }
@@ -75,22 +75,22 @@ public class ShelfDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public ShelfDTO getStatusId(ShelfDTO shelfDTO){
         try {
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("ShelfDAO.getStatusId", shelfDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean updateShelfStatus(ShelfDTO shelfDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.update("ShelfDAO.updateShelfStatus", shelfDTO) > 0){
                 return true;
             }
@@ -99,42 +99,42 @@ public class ShelfDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public ShelfDTO getShelfStatus(ShelfDTO shelfDTO){
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("ShelfDAO.getShelfStatus", shelfDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public ShelfDTO getCameraStatus(ShelfDTO shelfDTO){
         try {
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("ShelfDAO.getCameraStatus", shelfDTO);
         }finally {
-            closeSession();
+            commit();
         }
 
     }
 
     public ShelfDTO getShelfCameraMappingStatus(ShelfDTO shelfDTO){
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("ShelfDAO.getShelfCameraMappingStatus", shelfDTO);
         }finally {
-            closeSession();
+            commit();
         }
 
     }
 
     public boolean addShelfCameraIntoShelf(ShelfDTO shelfDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if(sqlSession.insert("ShelfDAO.createShelfCameraOnMapping", shelfDTO) > 0){
                 if(sqlSession.update("ShelfDAO.createShelfCameraOnCamera", shelfDTO) > 0){
                     if(sqlSession.update("ShelfDAO.createShelfCameraOnShelf", shelfDTO) > 0){
@@ -147,22 +147,22 @@ public class ShelfDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 
     public int countCameraByShelfId(ShelfDTO shelfDTO) {
         try{
-            openSession();
+            getSqlSession();
             return sqlSession.selectOne("ShelfDAO.countCameraByShelfId", shelfDTO);
         }finally {
-            closeSession();
+            commit();
         }
     }
 
     public boolean removeShelfCameraFromShelf(ShelfDTO shelfDTO) throws PersistenceException{
         try{
-            openSession();
+            getSqlSession();
             if (sqlSession.update("ShelfDAO.removeShelfCameraFromMapping", shelfDTO) > 0){
                 if (sqlSession.update("ShelfDAO.removeShelfCameraFromCamera", shelfDTO) > 0){
                     this.sqlSession.commit();
@@ -180,7 +180,7 @@ public class ShelfDAO extends BaseDAO {
             this.sqlSession.rollback();
             throw persistenceException;
         } finally {
-            closeSession();
+            commit();
         }
     }
 }

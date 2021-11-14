@@ -14,11 +14,11 @@ public class BaseDAO {
         this.idbHelper = idbHelper;
     }
 
-    public void openSession() {
+    public void getSqlSession() {
         this.sqlSession = idbHelper.makeConnection().openSession(TransactionIsolationLevel.READ_COMMITTED);
     }
 
-    public void closeSession(){
+    public void commit(){
         if(sqlSession != null){
             sqlSession.commit();
         }
